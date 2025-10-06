@@ -1,4 +1,4 @@
-# ASI Wallet - User Guide
+# ASI Wallet
 
 A modern, secure, and fully decentralized wallet for the ASI Chain network with an integrated Rholang IDE and enhanced deployment tracking.
 
