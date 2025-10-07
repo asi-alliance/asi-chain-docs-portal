@@ -8,7 +8,7 @@ The MettaCycle Faucet allows you to receive test ASI tokens for development and 
 **No signature required.**  
 The faucet never asks you to sign any transaction or to enter a seed phrase/private key.  
 If a signature prompt appears, double-check that you are on the official faucet:  
-[https://asi-testnet-faucet.singularitynet.io/](https://asi-testnet-faucet.singularitynet.io/).
+[https://faucet.dev.asichain.io](https://faucet.dev.asichain.io/).
 :::
 
 
@@ -17,7 +17,7 @@ If a signature prompt appears, double-check that you are on the official faucet:
 
 ### Step 1: Enter Your Address
 
-* **1.** Navigate to the [faucet page](https://asi-testnet-faucet.singularitynet.io/)
+* **1.** Navigate to the [faucet page](https://faucet.dev.asichain.io)
 * **2.** In the **Address** field, paste your ASI\:Chain wallet address
 * **3.** The address should be a valid network address (50–54 characters and starts with **1111**)
 
