@@ -33,7 +33,7 @@ export default defineConfig({
         text: 'Explorer',
         collapsed: true,
         items: [
-          { text: 'Node Image Source', link: '/explorer/' },
+          { text: 'Overview', link: '/explorer/' },
         ]
       },
       {
