@@ -30,6 +30,13 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Explorer',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/explorer/' },
+        ]
+      },
+      {
         text: 'YAML Configuration',
         collapsed: true,
         items: [

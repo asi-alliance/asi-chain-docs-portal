@@ -1,60 +1,153 @@
 # Network Nodes Configuration
 
 ## Network Overview
-This document contains the complete list of IP addresses and ports for all nodes in the ASI:Chain network, organized by machine deployment.
 
-## Machine 2: `54.175.6.183`
+This document contains the configuration for ASI Chain Devnet nodes. The network consists of validator nodes for transaction processing and observer nodes for read-only operations.
 
-### Genesis Bootstrap Node
-- **URL**: `http://54.175.6.183:40403`
-- **Type**: Bootstrap Node
+## Devnet Nodes
 
-### Validators (Machine 2)
-| Validator | URL | Port |
-|-----------|-----|------|
-| Validator 1 | `http://54.175.6.183:40413` | 40413 |
-| Validator 2 | `http://54.175.6.183:40423` | 40423 |
-| Validator 3 | `http://54.175.6.183:40433` | 40433 |
-| Validator 7 | `http://54.175.6.183:40473` | 40473 |
+### Primary Validator Node
+
+The primary validator node handles transaction processing and contract deployments.
+
+**Connection Details**:
+- **Host**: `54.175.6.183`
+- **HTTP Port**: `40413`
+- **gRPC Port**: `40401`
+- **HTTP URL**: `http://54.175.6.183:40413`
+- **gRPC URL**: `54.175.6.183:40401`
+
+**Use Cases**:
+- Transaction submission
+- Contract deployment
+- Write operations
 
 ### Observer Node
-- **URL**: `http://54.175.6.183:40453`
-- **Type**: Observer Node
 
-## Machine 3: `184.73.0.34`
+The observer node provides read-only access to the blockchain state.
 
-### Validators (Machine 3)
-| Validator | URL | Port |
-|-----------|-----|------|
-| Validator 4 | `http://184.73.0.34:40443` | 40443 |
-| Validator 6 | `http://184.73.0.34:40463` | 40463 |
+**Connection Details**:
+- **Host**: `54.175.6.183`
+- **HTTP Port**: `40453`
+- **gRPC Port**: `40451`
+- **HTTP URL**: `http://54.175.6.183:40453`
+- **gRPC URL**: `54.175.6.183:40451`
 
-## Network Topology Summary
+**Use Cases**:
+- Balance queries
+- Block exploration
+- Read-only operations
+- State inspection
 
-### Total Node Count
-- **1** Genesis Bootstrap Node
-- **6** Validator Nodes (Validators 1-4, 6-7)
-- **1** Observer Node
-- **Total**: 8 Nodes
+## Configuration Guide
 
-### Machine Distribution
-- **Machine 2** (`54.175.6.183`): 6 nodes (1 bootstrap + 4 validators + 1 observer)
-- **Machine 3** (`184.73.0.34`): 2 nodes (2 validators)
+### Wallet Configuration
 
-## Port Allocation Schema
+For the ASI Wallet, use these settings:
 
-### Machine 2 Ports (54.175.6.183)
+**Validator Node (for transactions)**:
 ```
-40403 - Genesis Bootstrap
-40413 - Validator 1
-40423 - Validator 2  
-40433 - Validator 3
-40453 - Observer
-40473 - Validator 7
+Host: 54.175.6.183
+gRPC Port: 40401
+HTTP Port: 40413
 ```
 
-### Machine 3 Ports (184.73.0.34)
+**Observer Node (read-only operations)**:
 ```
-40443 - Validator 4
-40463 - Validator 6
+Host: 54.175.6.183
+gRPC Port: 40451
+HTTP Port: 40453
 ```
+
+### Node Selection Strategy
+
+The wallet automatically routes operations based on type:
+- **Write Operations**: Routed to Validator node (40413)
+  - Token transfers
+  - Contract deployments
+  - State modifications
+- **Read Operations**: Routed to Observer node (40453)
+  - Balance checks
+  - Block queries
+  - State reads
+
+## Local Development
+
+For local development and testing, use localhost configuration:
+
+**Local Validator**:
+```
+URL: http://localhost:40413
+gRPC: localhost:40401
+```
+
+**Local Observer**:
+```
+URL: http://localhost:40453
+gRPC: localhost:40451
+```
+
+**Local Admin**:
+```
+URL: http://localhost:40405
+```
+
+## Network Access
+
+### Public Endpoints
+
+All Devnet nodes are publicly accessible and do not require authentication for basic operations.
+
+### Rate Limiting
+
+Please be mindful of network resources. For high-frequency operations, consider running your own local node.
+
+## Connection Examples
+
+### HTTP Request (Observer Node)
+
+```bash
+curl http://54.175.6.183:40453/api/blocks/1
+```
+
+### HTTP Request (Validator Node)
+
+```bash
+curl -X POST http://54.175.6.183:40413/api/deploy \
+  -H "Content-Type: application/json" \
+  -d '{"term": "new stdout(`rho:io:stdout`) in { stdout!(\"Hello\") }"}'
+```
+
+### gRPC Connection
+
+```bash
+grpcurl -plaintext 54.175.6.183:40401 list
+```
+
+## Troubleshooting
+
+### Connection Issues
+
+**Cannot connect to validator node**:
+- Verify the URL: `http://54.175.6.183:40413`
+- Check firewall settings
+- Ensure internet connectivity
+
+**Cannot connect to observer node**:
+- Verify the URL: `http://54.175.6.183:40453`
+- Try using HTTP instead of HTTPS
+- Check if port 40453 is accessible
+
+### Performance Issues
+
+**Slow response times**:
+- Use Observer node for read operations
+- Use Validator node only for write operations
+- Consider running a local node for development
+
+## Additional Resources
+
+- **Wallet Guide**: [/wallet/](/wallet/)
+- **Network Configuration**: [/network-configuration/](/network-configuration/)
+- **Faucet**: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
+- **Block Explorer**: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
