@@ -6,10 +6,10 @@ ASI:Chain is powered by a flexible Docker-based infrastructure that supports mul
 
 ## Docker Image
 
-All node types use a single official Docker image:
+All node types use the official ASI Chain Docker image:
 
 ```bash
-f1r3flyindustries/f1r3fly-scala-node:latest
+533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
 ```
 
 This image is referenced across all Docker Compose configurations, including:
@@ -29,7 +29,7 @@ Acts as the **initial entry point** to the network. It maintains a minimal peer 
 - Can be run as a standalone node or co-located with a validator
 - Configured via the `--bootstrap` flag or by starting first in the network
 
-**Note:** At least one bootstrap node is required for other nodes to join the network. If none is explicitly defined, a validator can also act as a bootstrap node.
+**Note:** At least one bootstrap node is required for other nodes to join the network. The bootstrap node is not a validator.
 
 ### Validator Node
 
@@ -38,8 +38,6 @@ Responsible for **consensus participation**, **block validation**, and **finaliz
 - Connects to a bootstrap node during startup using the `--bootstrap` flag
 - May also serve as a bootstrap node itself, if needed
 - Must be registered in the network at genesis via its public key
-
-**Important:** To include a validator at launch, its public key must be added to the [`testnet-wallets.txt`](https://github.com/asi-alliance/asi-chain/blob/master/chain/testnet-wallets.txt) configuration.
 
 ### Observer Node
 
@@ -53,14 +51,21 @@ A **read-only** node used for monitoring and accessing blockchain data.
 
 To form a functional ASI:Chain network:
 
-- At least **2 validator nodes** are required to maintain consensus
-- One of them should **also act as the bootstrap node** if no separate bootstrap node is defined
+- At least **3 validator nodes** are required to maintain consensus
+- One **bootstrap node** (which is not a validator)
 
 ## System Requirements
 
-- **RAM**: 16GB minimum (Docker Desktop needs 16GB allocated on macOS)
-- **CPU**: 4+ cores
-- **Storage**: 50GB free
+**Minimum Requirements:**
+- **RAM**: 16GB
+- **CPU**: 4 cores
+- **Storage**: 250GB+ free space
+- **Network**: Stable connection, no strict firewall
+
+**Recommended Requirements:**
+- **RAM**: 32GB
+- **CPU**: 8 cores
+- **Storage**: 250GB+ free space
 - **Network**: Stable connection, no strict firewall
 
 ## Software Requirements

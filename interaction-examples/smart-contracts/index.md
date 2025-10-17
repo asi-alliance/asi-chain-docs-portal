@@ -22,34 +22,37 @@ new stdout(`rho:io:stdout`) in {
 
 ## Deployment Process
 
-### Step 1: Deploy Contract
+### Step 1: Install CLI
 
-Use the RNode CLI to deploy your contract:
+First, build the Rust CLI from the repository:
 
 ```bash
-sudo docker compose -f "validator.yml" exec "validator" /opt/docker/bin/rnode \
-    --grpc-host localhost \
-    --grpc-port "40402" \
-    deploy \
-    --private-key "<YOUR-PRIVATE-KEY>" \
-    --phlo-limit 10000000 \
-    --phlo-price 1 \
-    --valid-after-block-number 0 \
-    --shard-id root \
-    "/opt/docker/examples/stdout.rho"
+git clone https://github.com/singnet/rust-client.git
+cd rust-client
+cargo build --release
+```
+
+### Step 2: Deploy Contract
+
+Use the Rust CLI to deploy your contract:
+
+```bash
+cargo run -- deploy -f ./<path to contract>/smartcontractname.rho --private-key <private key> -H <host> -p <port>
+```
+
+Example:
+```bash
+cargo run -- deploy -f ./examples/stdout.rho --private-key "<YOUR-PRIVATE-KEY>" -H localhost -p 40402
 ```
 
 ### Parameters Explanation
 
-- `--grpc-host localhost`: Connect to local node
-- `--grpc-port "40402"`: Internal gRPC port
+- `-f`: Path to your Rholang contract file
 - `--private-key`: Your validator's private key
-- `--phlo-limit`: Maximum computational resources (gas limit)
-- `--phlo-price`: Price per computational unit (gas price) 
-- `--valid-after-block-number`: Minimum block for execution
-- `--shard-id root`: Target shard for deployment
+- `-H`: Host address (localhost for local node)
+- `-p`: Port number (40402 for internal gRPC)
 
-### Step 2: Verify Deployment
+### Step 3: Verify Deployment
 
 **Expected Success Response**:
 ```
@@ -57,15 +60,17 @@ Response: Success!
 DeployId is: 304402206c435cee64d97d123f0c1b4552b3568698e64096a29fb50ec38f11a6c5f7758b022002e05322156bf5ed878ce20cef072cd8faf9e8bb15b58131f2fee06053b5d1c5
 ```
 
-### Step 3: Propose Block
+### Step 4: Propose Block
 
 After deployment, propose a block to include your contract:
 
 ```bash
-sudo docker compose -f "validator.yml" exec "validator" /opt/docker/bin/rnode \
-    --grpc-host localhost \
-    --grpc-port "40402" \
-    propose
+cargo run -- propose --private-key <private key> -H <host> -p <port>
+```
+
+Example:
+```bash
+cargo run -- propose --private-key "<YOUR-PRIVATE-KEY>" -H localhost -p 40402
 ```
 
 **Expected Success Response**:
@@ -87,19 +92,16 @@ Look for your contract output (e.g., "Hello, ASI:Chain!")
 
 ### Alternative: Custom Term Deployment
 
-You can also deploy custom Rholang code directly:
+You can also deploy custom Rholang code by creating a `.rho` file first:
 
+1. Create your contract file:
 ```bash
-sudo docker compose -f "validator.yml" exec "validator" /opt/docker/bin/rnode \
-    --grpc-host localhost \
-    --grpc-port "40402" \
-    deploy \
-    --private-key "<YOUR-PRIVATE-KEY>" \
-    --phlo-limit 10000000 \
-    --phlo-price 1 \
-    --valid-after-block-number 0 \
-    --shard-id root \
-    --term 'new stdout(`rho:io:stdout`) in { stdout!("Custom message") }'
+echo 'new stdout(`rho:io:stdout`) in { stdout!("Custom message") }' > custom.rho
+```
+
+2. Deploy it:
+```bash
+cargo run -- deploy -f ./custom.rho --private-key "<YOUR-PRIVATE-KEY>" -H localhost -p 40402
 ```
 
 ## Available Examples

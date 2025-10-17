@@ -15,7 +15,7 @@ container_name: validator1
 ## Command Section
 
 ```yaml
-command: ["--bootstrap=rnode://<PEER_ID>@<HOST>?protocol=40400&discovery=40404"]
+command: ["--bootstrap=rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404"]
 ```
 - Defines CLI arguments passed to `rnode`
 - Use to set bootstrap peer connection string
@@ -81,7 +81,7 @@ This is useful when adding a new external validator to avoid reusing static keys
 version: '3.9'
 services:
   rnode:
-    image: f1r3flyindustries/f1r3fly-scala-node:latest
+    image: 533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
     container_name: validator-custom
     ports:
       - "40400:40400"
@@ -90,7 +90,7 @@ services:
       - ./data/validator-custom:/var/lib/rnode/
       - ./conf/validator.conf:/var/lib/rnode/rnode.conf
     command:
-      - "--bootstrap=rnode://138410b5da898936ec1dc13fafd4893950eb191b@44.198.8.24?protocol=40400&discovery=40404"
+      - "--bootstrap=rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404"
 ```
 
 For full node configuration, see [Node Services & Parameters](/network-configuration/parameters/).

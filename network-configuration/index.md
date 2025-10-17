@@ -9,7 +9,7 @@ Current ASI:Chain testnet configuration and node topology.
 Technology stack: F1R3FLY-based blockchain implementation.
 
 ## Infrastructure Details
-All nodes are currently hosted on a single server with IP: **44.198.8.24**
+All nodes are currently hosted on a single server with IP: **54.152.57.201**
 
 ### Port Allocation Scheme
 Each node uses a range of 6 ports (404X0-404X5) with the following purposes:
@@ -24,32 +24,12 @@ Each node uses a range of 6 ports (404X0-404X5) with the following purposes:
 
 ### Bootstrap Node
 ```
-rnode://138410b5da898936ec1dc13fafd4893950eb191b@44.198.8.24?protocol=40400&discovery=40404
+rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404
 ```
 **Port range:** 40400-40405
 
-### Validator Nodes
-
-#### Validator 1
-- **Server:** 44.198.8.24
-- **Port range:** 40410-40415
-- **Protocol port:** 40410
-- **Discovery port:** 40414
-
-#### Validator 2
-- **Server:** 44.198.8.24
-- **Port range:** 40420-40425
-- **Protocol port:** 40420
-- **Discovery port:** 40424
-
-#### Validator 3
-- **Server:** 44.198.8.24
-- **Port range:** 40430-40435
-- **Protocol port:** 40430
-- **Discovery port:** 40434
-
 ### Observer Node (Read-only)
-- **Server:** 44.198.8.24
+- **Server:** 54.152.57.201
 - **Port range:** 40450-40455
 - **Protocol port:** 40450
 - **Discovery port:** 40454

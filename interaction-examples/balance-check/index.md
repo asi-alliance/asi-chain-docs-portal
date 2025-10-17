@@ -15,7 +15,7 @@ Use the `/explore-deploy` endpoint to query wallet state.
 curl -X POST http://localhost:40403/explore-deploy \
   -H 'Content-Type: application/json' \
   -d '{
-    "term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:revVault\") }"
+    "term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:asiVault\") }"
   }'
 ```
 

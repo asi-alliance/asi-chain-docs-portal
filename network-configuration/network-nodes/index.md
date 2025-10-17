@@ -11,11 +11,11 @@ This document contains the configuration for ASI Chain Devnet nodes. The network
 The primary validator node handles transaction processing and contract deployments.
 
 **Connection Details**:
-- **Host**: `54.175.6.183`
+- **Host**: `54.152.57.201`
 - **HTTP Port**: `40413`
 - **gRPC Port**: `40401`
-- **HTTP URL**: `http://54.175.6.183:40413`
-- **gRPC URL**: `54.175.6.183:40401`
+- **HTTP URL**: `http://54.152.57.201:40413`
+- **gRPC URL**: `54.152.57.201:40401`
 
 **Use Cases**:
 - Transaction submission
@@ -27,11 +27,11 @@ The primary validator node handles transaction processing and contract deploymen
 The observer node provides read-only access to the blockchain state.
 
 **Connection Details**:
-- **Host**: `54.175.6.183`
+- **Host**: `54.152.57.201`
 - **HTTP Port**: `40453`
 - **gRPC Port**: `40451`
-- **HTTP URL**: `http://54.175.6.183:40453`
-- **gRPC URL**: `54.175.6.183:40451`
+- **HTTP URL**: `http://54.152.57.201:40453`
+- **gRPC URL**: `54.152.57.201:40451`
 
 **Use Cases**:
 - Balance queries
@@ -47,14 +47,14 @@ For the ASI Wallet, use these settings:
 
 **Validator Node (for transactions)**:
 ```
-Host: 54.175.6.183
+Host: 54.152.57.201
 gRPC Port: 40401
 HTTP Port: 40413
 ```
 
 **Observer Node (read-only operations)**:
 ```
-Host: 54.175.6.183
+Host: 54.152.57.201
 gRPC Port: 40451
 HTTP Port: 40453
 ```
@@ -107,13 +107,13 @@ Please be mindful of network resources. For high-frequency operations, consider 
 ### HTTP Request (Observer Node)
 
 ```bash
-curl http://54.175.6.183:40453/api/blocks/1
+curl http://54.152.57.201:40453/api/blocks/1
 ```
 
 ### HTTP Request (Validator Node)
 
 ```bash
-curl -X POST http://54.175.6.183:40413/api/deploy \
+curl -X POST http://54.152.57.201:40413/api/deploy \
   -H "Content-Type: application/json" \
   -d '{"term": "new stdout(`rho:io:stdout`) in { stdout!(\"Hello\") }"}'
 ```
@@ -121,7 +121,7 @@ curl -X POST http://54.175.6.183:40413/api/deploy \
 ### gRPC Connection
 
 ```bash
-grpcurl -plaintext 54.175.6.183:40401 list
+grpcurl -plaintext 54.152.57.201:40401 list
 ```
 
 ## Troubleshooting
@@ -129,12 +129,12 @@ grpcurl -plaintext 54.175.6.183:40401 list
 ### Connection Issues
 
 **Cannot connect to validator node**:
-- Verify the URL: `http://54.175.6.183:40413`
+- Verify the URL: `http://54.152.57.201:40413`
 - Check firewall settings
 - Ensure internet connectivity
 
 **Cannot connect to observer node**:
-- Verify the URL: `http://54.175.6.183:40453`
+- Verify the URL: `http://54.152.57.201:40453`
 - Try using HTTP instead of HTTPS
 - Check if port 40453 is accessible
 

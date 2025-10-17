@@ -75,12 +75,12 @@ Navigate to [Settings page](https://wallet.dev.asichain.io/#/settings) and verif
 The Devnet configuration should be:
 
 **Validator Node (for transactions)**:
-- Host: `54.175.6.183`
+- Host: `54.152.57.201`
 - gRPC Port: `40401`
 - HTTP Port: `40413`
 
 **Observer Node (read-only operations)**:
-- Host: `54.175.6.183`
+- Host: `54.152.57.201`
 - gRPC Port: `40451`
 - HTTP Port: `40453`
 
@@ -352,16 +352,16 @@ The wallet supports two network configurations:
 **Devnet** is the primary network for development and testing:
 
 **Validator Node (for transactions)**:
-- Host: `54.175.6.183`
+- Host: `54.152.57.201`
 - gRPC Port: `40401`
 - HTTP Port: `40413`
-- HTTP URL: `http://54.175.6.183:40413`
+- HTTP URL: `http://54.152.57.201:40413`
 
 **Observer Node (read-only operations)**:
-- Host: `54.175.6.183`
+- Host: `54.152.57.201`
 - gRPC Port: `40451`
 - HTTP Port: `40453`
-- HTTP URL: `http://54.175.6.183:40453`
+- HTTP URL: `http://54.152.57.201:40453`
 
 **Actions**:
 - "Edit Configuration" button: Modify Devnet settings
@@ -388,58 +388,6 @@ View and manage private keys for all accounts:
 - "View Private Key" button for each account
 - Password protection for viewing private keys
 - Warning about keeping keys safe
-
-## Validator Configuration
-
-For users who want to run validator nodes, use the generated keys from the wallet.
-
-### Required Credentials
-
-From the [Generate Keys page](https://wallet.dev.asichain.io/#/keys), you need:
-- **Private Key**: 64-character hex key
-- **Public Key**: Full key with '04' prefix
-- **ASI Address**: 50-54 character address (for rewards)
-
-### Configuration Files
-
-**Environment Variables (`.env`)**:
-```env
-VALIDATOR_PRIVATE_KEY=<YOUR-PRIVATE-KEY>
-VALIDATOR_HOST=<YOUR-PUBLIC-IP-ADDRESS>
-```
-
-**Validator Configuration ([`conf/validator.conf`](https://github.com/asi-alliance/asi-chain/blob/main/chain/conf/validator.conf))**:
-```hocon
-casper {
-  validator-public-key = <YOUR-PUBLIC-KEY>
-  validator-private-key = <YOUR-PRIVATE-KEY>
-}
-```
-
-**Smart Contract Deployment**:
-```bash
-deploy \
-    --private-key "<YOUR-PRIVATE-KEY>" \
-    --phlo-limit 10000000 \
-    --phlo-price 1
-```
-
-### Key Mapping Reference
-
-| Wallet Field | Where to Use | Format |
-|--------------|--------------|--------|
-| Private Key | `.env`, `validator.conf`, deploy commands | 64 hex characters (no prefix) |
-| Public Key | `validator.conf` | Full key with '04' prefix |
-| ASI Address | Receiving validator rewards | 50-54 characters |
-
-### Key Format Examples
-
-| Key Type | Example Format |
-|----------|----------------|
-| **Private Key** | `56c37367ffdfa427a3770eabe5b6dd0791c30617eab01581deaf031ab96b317f` |
-| **Public Key** | `040c9da4e4c62c13770f2f83c0da857658072c5294e944fdcddcdb8a71100712c2...` |
-| **ETH Address** | `0x7ac3498d5ac4f0ffcc82739e49591a4b1246b273` |
-| **ASI Address** | `11112NmdWk7LRx1zQ18Q1L4rpssja2fTSo3JPBkfsRuZcbwdahCVSM` |
 
 ## Security Features
 

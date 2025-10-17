@@ -10,21 +10,27 @@ Standard operations for interacting with the ASI:Chain network after node deploy
 
 ## Available Operations
 
+### Install CLI
+
+First, build the Rust CLI from the repository:
+
+```bash
+git clone https://github.com/singnet/rust-client.git
+cd rust-client
+cargo build --release
+```
+
 ### Smart Contract Deployment
 
 Deploy Rholang contracts to validator nodes:
 
 ```bash
-sudo docker compose -f "validator.yml" exec "validator" /opt/docker/bin/rnode \
-    --grpc-host localhost \
-    --grpc-port "40402" \
-    deploy \
-    --private-key "<PRIVATE-KEY>" \
-    --phlo-limit 10000000 \
-    --phlo-price 1 \
-    --valid-after-block-number 0 \
-    --shard-id root \
-    "/opt/docker/examples/stdout.rho"
+cargo run -- deploy -f ./<path to contract>/smartcontractname.rho --private-key <private key> -H <host> -p <port>
+```
+
+Example:
+```bash
+cargo run -- deploy -f ./examples/stdout.rho --private-key "<PRIVATE-KEY>" -H localhost -p 40402
 ```
 
 ### Block History Query
@@ -42,7 +48,7 @@ Query wallet state using the explore-deploy endpoint:
 ```bash
 curl -X POST http://localhost:40403/explore-deploy \
   -H 'Content-Type: application/json' \
-  -d '{"term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:revVault\") }"}'
+  -d '{"term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:asiVault\") }"}'
 ```
 
 ### Node Status Verification

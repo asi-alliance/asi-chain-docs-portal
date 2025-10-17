@@ -79,16 +79,16 @@ ASI:Chain is a blockchain network based on F1R3FLY technology, designed for the 
 
 **Devnet is Live!** 🟢
 
-- Bootstrap Node: `rnode://138410b5da898936ec1dc13fafd4893950eb191b@44.198.8.24?protocol=40400&discovery=40404`
+- Bootstrap Node: `rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404`
 - Block Explorer : [https://explorer.dev.asichain.io](https://explorer.dev.asichain.io)
 - Wallet: [https://wallet.dev.asichain.io](https://wallet.dev.asichain.io)
-- Network: 1 Bootstrap + 4 Validators + 1 Observer
+- Network: 1 Bootstrap + 3 Validators + 1 Observer
 
 </div>
 
 ### Available Block Explorers
 ASI:Chain provides blockchain explorer for network monitoring:
-- **Explorer Network**: [https://explorer.dev.asichain.io](https://explorer.dev.asichain.io) 
+- **Explorer**: [https://explorer.dev.asichain.io](https://explorer.dev.asichain.io) 
 
 ### Getting Started
 Choose your path based on your needs:

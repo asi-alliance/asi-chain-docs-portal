@@ -1,18 +1,19 @@
 # Validator Node Setup
 
-This guide describes how you can connect to the ASI:Chain testnet and become a validator using prepared wallet keys.
-
-## Important Notice
-
-We are working on allowing you to create your own wallets and become a validator with your own credentials, but this feature is currently in development.
-
-**For now**: Use our prepared wallet keys from the [`testnet-wallets.txt`](https://github.com/asi-alliance/asi-chain/blob/master/chain/testnet-wallets.txt) file.
+This guide describes how you can connect to the ASI:Chain testnet and become a validator.
 
 ## System Requirements
 
-- **RAM**: 16GB minimum (Docker Desktop needs 16GB allocated on macOS)
-- **CPU**: 4+ cores
-- **Storage**: 50GB free
+**Minimum Requirements:**
+- **RAM**: 16GB
+- **CPU**: 4 cores
+- **Storage**: 250GB+ free space
+- **Network**: Stable connection, no strict firewall
+
+**Recommended Requirements:**
+- **RAM**: 32GB
+- **CPU**: 8 cores
+- **Storage**: 250GB+ free space
 - **Network**: Stable connection, no strict firewall
 
 ## Software Requirements
@@ -45,19 +46,15 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ## Setup
 
-### Generate Private and Public Keys
+### Create Your Wallet
 
-Use our wallet generator script to generate private and public keys for your wallet.
-
-These keys are required for managing your wallet and validator node.
-
-See more in the [wallet generator instruction](https://github.com/asi-alliance/asi-chain/blob/master/wallet-generator/README.md)
+1. Navigate to [ASI Wallet](https://wallet.dev.asichain.io)
+2. Create a new account or import an existing private key
+3. Save your private key and public key securely
+4. Request test tokens from the [Faucet](https://faucet.dev.asichain.io/)
 
 > [!CAUTION]
-> Connection of validators with new wallets is under development.
-
-> [!TIP]
-> Connection with new wallets is currently not available. **Use our prepared wallet keys sets from the [testnet-wallets.txt file](https://github.com/asi-alliance/asi-chain/blob/master/chain/testnet-wallets.txt)**
+> Keep your private key secure and never share it with anyone. There is no way to recover lost keys.
 
 ## Setup Process
 
@@ -83,9 +80,6 @@ VALIDATOR_PRIVATE_KEY=<YOUR-PRIVATE-KEY>
 VALIDATOR_HOST=<YOUR-PUBLIC-IP-ADDRESS>
 ```
 
-> [!TIP]
-> Use prepared wallet keys from the [testnet-wallets.txt file](https://github.com/asi-alliance/asi-chain/blob/master/chain/testnet-wallets.txt)
-
 ### Step 3: Configure Validator YAML
 
 Edit `validator.yml` to set up ports (or leave defaults):
@@ -110,8 +104,6 @@ casper {
   validator-private-key = <YOUR-PRIVATE-KEY>
 }
 ```
-
-**TIP**: **Use our prepared wallet keys sets from the [testnet-wallets.txt file](https://github.com/asi-alliance/asi-chain/blob/master/chain/testnet-wallets.txt)**
 
 ### Step 5: Launch Validator Node
 
@@ -143,19 +135,25 @@ This indicates your node has finished synchronization with the network.
 
 ## Testing Your Setup
 
+### Install CLI
+
+First, install the Rust CLI from the repository:
+
+```bash
+git clone https://github.com/singnet/rust-client.git
+cd rust-client
+cargo build --release
+```
+
 ### Deploy a Smart Contract
 
 ```bash
-sudo docker compose -f "validator.yml" exec "validator" /opt/docker/bin/rnode \
-    --grpc-host localhost \
-    --grpc-port "40402" \
-    deploy \
-    --private-key "<YOUR-PRIVATE-KEY>" \
-    --phlo-limit 10000000 \
-    --phlo-price 1 \
-    --valid-after-block-number 0 \
-    --shard-id root \
-    "/opt/docker/examples/stdout.rho"
+cargo run -- deploy -f ./<path to contract>/smartcontractname.rho --private-key <private key> -H <host> -p <port>
+```
+
+Example:
+```bash
+cargo run -- deploy -f ./examples/stdout.rho --private-key "<YOUR-PRIVATE-KEY>" -H localhost -p 40402
 ```
 
 Expected response:
@@ -167,10 +165,12 @@ DeployId is: 304402206c435cee64d97d123f0c1b4552b3568698e64096a29fb50ec38f11a6c5f
 ### Propose a Block
 
 ```bash
-sudo docker compose -f "validator.yml" exec "validator" /opt/docker/bin/rnode \
-    --grpc-host localhost \
-    --grpc-port "40402" \
-    propose
+cargo run -- propose --private-key <private key> -H <host> -p <port>
+```
+
+Example:
+```bash
+cargo run -- propose --private-key "<YOUR-PRIVATE-KEY>" -H localhost -p 40402
 ```
 
 Expected response:

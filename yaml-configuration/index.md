@@ -7,8 +7,8 @@ This section describes where the Docker Compose YAML files for ASI:Chain nodes c
 YAML configuration files are provided in the `docker/` directory of the official ASI:Chain repository:
 
 ```bash
-git clone https://github.com/F1R3FLY-io/f1r3fly.git
-cd f1r3fly/docker
+git clone https://github.com/asi-alliance/asi-chain.git
+cd asi-chain/docker
 ```
 
 The following YAML files define how different node types are launched:

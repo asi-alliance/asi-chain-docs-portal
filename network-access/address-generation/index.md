@@ -1,10 +1,10 @@
-# RNode Address Generation
+# ASI Address Generation
 
-This guide describes how to generate a wallet key pair required to run a validator or interact with the ASI:Chain network.
+This guide describes an alternative method to generate a wallet key pair required to run a validator or interact with the ASI:Chain network.
 
 ## Purpose
 
-RNode requires a public/private key pair for:
+ASI:Chain requires a public/private key pair for:
 - Bonding your validator
 - Signing blocks and deploys
 - Accessing wallet functionality
