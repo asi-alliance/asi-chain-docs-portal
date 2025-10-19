@@ -1,109 +1,195 @@
 ---
 layout: home
 title: ASI:Chain Documentation
-description: Complete guide for ASI:Chain blockchain network setup and operations
+description: Complete guide for ASI:Chain blockchain network
 hero:
   name: "ASI:Chain"
-  text: "Blockchain Network Documentation"
-  tagline: "Your comprehensive guide to joining and operating on the ASI:Chain network"
+  text: "DevNet Documentation"
+  tagline: "Build, test, and deploy on the ASI:Chain development network"
   image:
-    # src: /asi-chain-logo.png
     alt: ASI:Chain
   actions:
-    - theme: sponsor
-      text: Quick Start
-      link: /quick-start/
     - theme: brand
-      text: ASI Wallet
-      link: https://wallet.dev.asichain.io
+      text: Get Started
+      link: /quick-start/join-validator/
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/asi-alliance/asi-chain
+      text: General Overview
+      link: /general-overview/
+    - theme: sponsor
+      text: Get DevNet Tokens
+      link: /quick-start/get-asi/
+
 features:
-  - icon: 🚀
-    title: Quick Start Guide
-    details: Step-by-step guide to connect to ASI:Chain network
-    link: /quick-start/
-  - icon: 🔐
-    title: Wallet
-    details: Access the ASI:Chain wallet for managing your tokens and transactions
-    link: /wallet/
-  - icon: 💧
-    title: Faucet
-    details: Get test ASI tokens for development and testing on the network
-    link: /faucet/
-  - icon: 🔍
-    title: Explorer Network 
-    details: Original blockchain explorer for network data analysis and transaction monitoring
-    link: /explorer/
-  - icon: 🖥️
-    title: Node Image Source
-    details: Learn about the Docker image used for ASI:Chain nodes and how to obtain it
-    link: /node-image/
-   
-  - icon: 📋
-    title: YAML Configuration
-    details: Understand YAML configuration files and their parameters
-    link: /yaml-configuration/
-   
-  - icon: 🌐
-    title: Network Access
-    details: Explorer address and RPC endpoints for network interaction
-    link: /network-access/
-   
-  - icon: ⚙️
-    title: Network Configuration
-    details: Current network parameters, validator setup, and topology
-    link: /network-configuration/
-   
-  - icon: 🔧
-    title: Troubleshooting
-    details: Common errors and solutions when setting up nodes
-    link: /quick-start/troubleshooting/
-   
-  - icon: 💡
-    title: Interaction Examples
-    details: Practical examples of network interactions and smart contracts
-    link: /interaction-examples/
+  - title: Quick Start
+    details: Join DevNet as a validator or get test tokens to start building
+    link: /quick-start/join-validator/
+  
+  - title: DevNet Structure
+    details: Learn about network architecture, components, and how they work together
+    link: /shard-nodes/devnet-structure/
+  
+  - title: ASI Wallet
+    details: Manage accounts, deploy contracts, and interact with the blockchain
+    link: /wallet/usage/
+  
+  - title: Block Explorer
+    details: Monitor network activity, search transactions, and view statistics
+    link: /explorer/usage/
+  
+  - title: Get Test Tokens
+    details: Request DevNet ASI tokens from the faucet for testing
+    link: /quick-start/get-asi/
+  
+  - title: Useful Links
+    details: Quick access to all network endpoints, tools, and resources
+    link: /useful-links/
+  
+  - title: Node Setup
+    details: Configure and run validator or observer nodes
+    link: /shard-nodes/validator-image/
+  
+  - title: FAQ
+    details: Find answers to common questions about ASI:Chain DevNet
+    link: /faq/
 ---
-## Welcome to ASI:Chain
-ASI:Chain is a blockchain network based on F1R3FLY technology, designed for the ASI Alliance ecosystem. This documentation provides comprehensive guidance for:
-- Setting up observer and validator nodes
-- Understanding network configuration
-- Interacting with the blockchain
-- Deploying smart contracts
-- Troubleshooting common issues
+
+## Welcome to ASI:Chain DevNet
+
+ASI:Chain is a blockchain network built for the ASI Alliance ecosystem, powered by F1R3FLY technology. This documentation helps you get started with DevNet - our development and testing environment.
 
 ### Current Network Status
+
 <div class="tip custom-block" style="padding-top: 8px">
 
-**Devnet is Live!** 🟢
+**DevNet is Live**
 
-- Bootstrap Node: `rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404`
-- Block Explorer : [https://explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-- Wallet: [https://wallet.dev.asichain.io](https://wallet.dev.asichain.io)
-- Network: 1 Bootstrap + 3 Validators + 1 Observer
+- **Bootstrap Node:** `rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404`
+- **Block Explorer:** [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
+- **Wallet:** [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
+- **Faucet:** [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
+- **Configuration:** 1 Bootstrap + 3 Validators + 1 Observer
 
 </div>
 
-### Available Block Explorers
-ASI:Chain provides blockchain explorer for network monitoring:
-- **Explorer**: [https://explorer.dev.asichain.io](https://explorer.dev.asichain.io) 
+### Choose Your Path
 
-### Getting Started
-Choose your path based on your needs:
-1. **Want to validate blocks?** → [Set up a Validator Node](/node-image/validator/)
-2. **Just exploring?** → [View Block Explorer](https://explorer.dev.asichain.io) 
-3. **Need to manage tokens?** → [Access the Wallet](https://wallet.dev.asichain.io)
+<div class="vp-feature-grid">
 
-### Quick Links
-- [ASI:Chain Wallet](https://wallet.dev.asichain.io)
-- [Explorer Network 1 (Original)](https://explorer.dev.asichain.io)
-- [Generate RNode Address](/network-access/address-generation/)
-- [Network Parameters](/network-configuration/parameters/)
-- [Deploy Your First Smart Contract](/interaction-examples/smart-contracts/)
-- [Common Errors & Solutions](/quick-start/troubleshooting/)
+**Developers**
+- [Get test tokens](/quick-start/get-asi/) from the faucet
+- Use the [Wallet](https://wallet.dev.asichain.io) to deploy contracts
+- Read the [DevNet structure guide](/shard-nodes/devnet-structure/)
+
+**Validators**
+- Follow the [validator setup guide](/quick-start/join-validator/)
+- Learn about [validator node image](/shard-nodes/validator-image/)
+- Monitor your node performance
+
+**Users**
+- Create an account in the [Wallet](https://wallet.dev.asichain.io)
+- [Request tokens](/quick-start/get-asi/) to start transacting
+- Explore the network via [Block Explorer](https://explorer.dev.asichain.io)
+
+</div>
+
+### Key Resources
+
+- **Wallet:** [wallet.dev.asichain.io](https://wallet.dev.asichain.io) - Manage accounts and deploy contracts
+- **Block Explorer:** [explorer.dev.asichain.io](https://explorer.dev.asichain.io) - Monitor blockchain activity
+- **Faucet:** [faucet.dev.asichain.io](https://faucet.dev.asichain.io) - Get test tokens
+- **GitHub:** [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) - Source code
+- **Rust Client:** [singnet/rust-client](https://github.com/singnet/rust-client) - CLI tool
+
+### Documentation Sections
+
+Explore our comprehensive documentation:
+
+**General**
+- [Overview](/general-overview/) - Understand ASI:Chain ecosystem
+- [Useful Links](/useful-links/) - All endpoints and resources
+
+**Quick Start**
+- [Join as Validator](/quick-start/join-validator/) - Become a validator
+- [Join as Observer](/quick-start/join-observer/) - Run an observer (coming soon)
+- [Get DevNet Tokens](/quick-start/get-asi/) - Request test tokens
+
+**Shard & Nodes**
+- [DevNet Structure](/shard-nodes/devnet-structure/) - Network architecture
+- [Validator Node Image](/shard-nodes/validator-image/) - Validator setup
+- [Observer Node Image](/shard-nodes/observer-image/) - Observer setup
+- [Own Shard Setup](/shard-nodes/own-shard/) - Private shard (coming soon)
+
+**Tools**
+- [Wallet Usage](/wallet/usage/) - Complete wallet guide
+- [Custom Network](/wallet/custom-network/) - Connect to custom networks
+- [Explorer Usage](/explorer/usage/) - Block explorer guide
+- [Faucet Usage](/faucet/usage/) - Get test tokens
+
+**Help**
+- [FAQ](/faq/) - Frequently asked questions
+- [Troubleshooting](/quick-start/troubleshooting/) - Common issues and solutions
+
+### What is DevNet?
+
+DevNet is ASI:Chain's development network where:
+- **Test tokens have no real value** - Experiment freely
+- **Anyone can join** - Become a validator or just use the network
+- **Smart contracts** - Deploy and test Rholang contracts
+- **Live environment** - Full blockchain functionality for testing
+
+### Important Notes
+
+**Security Reminders:**
+- DevNet tokens have **NO real value**
+- Keep private keys secure - they cannot be recovered if lost
+- **Do not** use DevNet keys on mainnet (when available)
+- Always verify you're on official sites (check URLs)
+
+**Official Sites:**
+- Wallet: `wallet.dev.asichain.io`
+- Explorer: `explorer.dev.asichain.io`
+- Faucet: `faucet.dev.asichain.io`
+- Docs: Current site you're on
+
+### Getting Started in 3 Steps
+
+1. **Create a Wallet**
+   - Visit [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
+   - Create an account and save your keys
+
+2. **Get Test Tokens**
+   - Go to [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
+   - Request tokens using your address
+
+3. **Start Building**
+   - Deploy smart contracts
+   - Transfer tokens
+   - Explore the network
 
 ### Support
-For additional support and updates:
-- GitHub: [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain)
+
+Need help?
+- **Documentation:** Browse this site using the navigation
+- **FAQ:** Check the [FAQ section](/faq/) for common questions
+- **GitHub:** Report issues at [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain)
+- **Community:** Connect with other developers
+
+### Learn More
+
+**Key Concepts:**
+- [DevNet Structure](/shard-nodes/devnet-structure/) - How the network is organized
+- [Validator Guide](/quick-start/join-validator/) - Run your own validator
+- [Smart Contracts](/wallet/usage/) - Deploy with the wallet IDE
+
+**Technical Details:**
+- [Network Configuration](/shard-nodes/devnet-structure/) - Ports, IPs, topology
+- [Node Images](/shard-nodes/validator-image/) - Docker setup and config
+- [API Access](/useful-links/) - Endpoints and integration
+
+---
+
+<div class="tip custom-block">
+
+**Ready to start?** [Get test tokens](/quick-start/get-asi/) or [join as a validator](/quick-start/join-validator/).
+
+</div>
