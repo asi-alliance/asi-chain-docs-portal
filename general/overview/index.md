@@ -8,6 +8,8 @@ ASI:Chain is a blockchain network built for the ASI Alliance ecosystem, powered 
 
 ASI:Chain DevNet consists of several interconnected components that work together to provide a complete blockchain experience:
 
+![ASI:Chain Ecosystem Overview](/images/asi-chain-ecosystem-overview.png)
+
 ### 1. DevNet (Shard)
 
 The **DevNet** is the current development network (shard) where all testing and development activities take place.
@@ -73,8 +75,6 @@ The **Faucet** distributes test ASI tokens for development and testing.
 - No authentication required
 
 ## Network Architecture
-
-![ASI:Chain Ecosystem Overview](/images/asi-chain-ecosystem-overview.png)
 
 ```
                     ┌─────────────┐
