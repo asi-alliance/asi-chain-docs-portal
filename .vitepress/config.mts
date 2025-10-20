@@ -157,7 +157,11 @@ export default defineConfig({
     },
 
     editLink: {
+<<<<<<< Updated upstream
       pattern: 'https://github.com/asi-alliance/asi-chain-docs/edit/dev/:path',
+=======
+      pattern: 'https://github.com/asi-alliance/asi-chain-docs-portal/edit/dev/:path',
+>>>>>>> Stashed changes
       text: 'Edit this page on GitHub'
     },
 
