@@ -94,7 +94,7 @@ For DevNet, standard values are:
 
 ### What language do I use for smart contracts?
 
-Smart contracts on ASI:Chain are written in **Rholang**, a concurrent, functional programming language designed for blockchain.
+Smart contracts on ASI:Chain are written in [**Rholang**](https://rholang.org/), a concurrent, functional programming language designed for blockchain.
 
 ### Where can I learn Rholang?
 
