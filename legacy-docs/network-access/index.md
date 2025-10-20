@@ -37,4 +37,4 @@ HTTP API endpoints:
 - `/query`
 - WebSocket: `/ws`
 
-For instructions on generating your own validator keypair, see [Address Generation](/network-access/address-generation/).
+For instructions on generating your own validator keypair, see [Address Generation](/legacy-docs/network-access/address-generation/).

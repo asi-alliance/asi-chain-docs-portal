@@ -42,7 +42,7 @@ features:
   
   - title: Useful Links
     details: Quick access to all network endpoints, tools, and resources
-    link: /useful-links/
+    link: /general/useful-links/
   
   - title: Node Setup
     details: Configure and run validator or observer nodes
@@ -146,9 +146,9 @@ DevNet is ASI:Chain's development network where:
 - Always verify you're on official sites (check URLs)
 
 **Official Sites:**
-- Wallet: [`wallet.dev.asichain.io`](wallet.dev.asichain.io)
-- Explorer: [`explorer.dev.asichain.io`](explorer.dev.asichain.io)
-- Faucet: [`faucet.dev.asichain.io`](faucet.dev.asichain.io)
+- Wallet: [`wallet.dev.asichain.io`](https://wallet.dev.asichain.io)
+- Explorer: [`explorer.dev.asichain.io`](https://explorer.dev.asichain.io)
+- Faucet: [`faucet.dev.asichain.io`](https://faucet.dev.asichain.io)
 - Docs: Current site you're on
 
 ### Getting Started in 3 Steps

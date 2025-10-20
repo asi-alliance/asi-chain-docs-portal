@@ -58,4 +58,4 @@ casper {
 - Log level: `info`, `debug`, `warn`
 - Output targets: file, console
 
-For a visual overview, see [Network Topology](/network-configuration/topology/).
+For a visual overview, see [Network Topology](/legacy-docs/network-configuration/topology/).

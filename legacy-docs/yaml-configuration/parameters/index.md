@@ -93,4 +93,4 @@ services:
       - "--bootstrap=rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404"
 ```
 
-For full node configuration, see [Node Services & Parameters](/network-configuration/parameters/).
+For full node configuration, see [Node Services & Parameters](/legacy-docs/network-configuration/parameters/).

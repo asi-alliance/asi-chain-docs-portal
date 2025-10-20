@@ -54,7 +54,6 @@ Based on DevNet configuration:
 To understand the implementation, study the DevNet setup:
 - [DevNet Structure](/shard-nodes/devnet-structure/) - Network architecture
 - [Validator Node Image](/shard-nodes/validator-image/) - Node configuration
-- [Network Configuration](/network-configuration/) - Port and IP settings
 - [GitHub Repository](https://github.com/asi-alliance/asi-chain) - Source code and examples
 
 ## Bootstrap Connection Format

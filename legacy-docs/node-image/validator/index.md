@@ -181,8 +181,8 @@ Response: Success! Block 4dda69c62838e18abd3c131818e60110ac3caccc66ec05792cedb32
 ## Next Steps
 
 - [Troubleshoot common issues](/quick-start/troubleshooting/)
-- [Explore interaction examples](/interaction-examples/)
-- [Check network configuration](/network-configuration/)
+- [Explore interaction examples](/legacy-docs/interaction-examples/)
+- [Check network configuration](/legacy-docs/network-configuration/)
 
 ## Getting Help
 
