@@ -74,6 +74,8 @@ The **Faucet** distributes test ASI tokens for development and testing.
 
 ## Network Architecture
 
+![ASI:Chain Ecosystem Overview](/images/asi-chain-ecosystem-overview.png)
+
 ```
                     ┌─────────────┐
                     │  Bootstrap  │
