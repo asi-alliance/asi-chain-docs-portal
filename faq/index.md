@@ -75,7 +75,7 @@ Common reasons:
 
 ### How long do transactions take?
 
-Average block time is ~20 seconds. Your transaction should be confirmed within 1-3 blocks (20-60 seconds) under normal conditions.
+Average block time is ~20 seconds. Your transaction should be finalized within 1-3 blocks (20-60 seconds) under normal conditions.
 
 ### Can I cancel a transaction?
 
