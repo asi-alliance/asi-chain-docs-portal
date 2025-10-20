@@ -9,7 +9,6 @@ Validators are nodes that:
 - Validate and propose blocks
 - Sign transactions
 - Maintain network security
-- Earn rewards (in test tokens on DevNet)
 
 ## Prerequisites
 
