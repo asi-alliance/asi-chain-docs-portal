@@ -77,7 +77,6 @@ Observer nodes:
 
 - [DevNet Structure](/shard-nodes/devnet-structure/)
 - [Observer Node Image](/shard-nodes/observer-image/)
-- [Network Configuration](/network-configuration/)
 - [GitHub Repository](https://github.com/asi-alliance/asi-chain)
 
 ---

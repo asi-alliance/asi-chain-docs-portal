@@ -39,4 +39,4 @@ volumes:
 
 ## Next
 
-See [YAML Parameters & Examples](/yaml-configuration/parameters/) for detailed explanation of YAML fields and configuration use cases.
+See [YAML Parameters & Examples](/legacy-docs/yaml-configuration/parameters/) for detailed explanation of YAML fields and configuration use cases.

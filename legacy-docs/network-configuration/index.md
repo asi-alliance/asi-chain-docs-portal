@@ -93,8 +93,8 @@ See the [Validator Setup Guide](/quick-start/join-validator/) for detailed instr
 
 ## Documentation References
 
-- [Network Parameters](/network-configuration/parameters/) - Detailed consensus and configuration parameters
-- [Network Topology](/network-configuration/topology/) - Visual network layout and node roles
-- [Quick Start Guide](/quick-start/) - Validator connection procedures
+- [Network Parameters](/legacy-docs/network-configuration/parameters/) - Detailed consensus and configuration parameters
+- [Network Topology](/legacy-docs/network-configuration/topology/) - Visual network layout and node roles
+- [Quick Start Guide](/legacy-docs/quick-start/) - Validator connection procedures
 - [DevNet Structure](/shard-nodes/devnet-structure/) - Complete network architecture
 

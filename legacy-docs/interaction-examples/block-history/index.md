@@ -35,4 +35,4 @@ To visually explore block history, use:
 
 ---
 
-For smart contract deployment, see [Smart Contracts](/interaction-examples/smart-contracts/).
+For smart contract deployment, see [Smart Contracts](/legacy-docs/interaction-examples/smart-contracts/).

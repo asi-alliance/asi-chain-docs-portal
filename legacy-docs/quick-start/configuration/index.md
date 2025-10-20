@@ -76,5 +76,5 @@ services:
 ---
 
 See also:
-- [Quick Start Guide](/quick-start/)
-- [YAML Parameters](/yaml-configuration/parameters/)
+- [Quick Start Guide](/legacy-docs/quick-start/)
+- [YAML Parameters](/legacy-docs/yaml-configuration/parameters/)

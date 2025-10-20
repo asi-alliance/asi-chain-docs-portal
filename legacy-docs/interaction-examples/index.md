@@ -71,6 +71,6 @@ Web interface for network monitoring: [https://explorer.dev.asichain.io](https:/
 
 ## Documentation References
 
-- [Smart Contract Deployment](/interaction-examples/smart-contracts/)
-- [Block History Procedures](/interaction-examples/block-history/)
-- [Balance Query Methods](/interaction-examples/balance-check/)
+- [Smart Contract Deployment](/legacy-docs/interaction-examples/smart-contracts/)
+- [Block History Procedures](/legacy-docs/interaction-examples/block-history/)
+- [Balance Query Methods](/legacy-docs/interaction-examples/balance-check/)

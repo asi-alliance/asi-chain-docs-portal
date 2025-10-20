@@ -92,7 +92,6 @@ The wallet automatically routes operations to the appropriate node:
 
 **Editing Configuration**: Click "Edit Configuration" button to modify network settings if needed.
 
-For the complete list of available nodes and their endpoints, see [Network Nodes documentation](/network-configuration/network-nodes/).
 
 ### Step 3: Request Test Tokens
 
@@ -456,7 +455,7 @@ After setting up your wallet:
 1. **Request test tokens** from the [Faucet](https://faucet.dev.asichain.io)
 2. **Explore the network** via [Block Explorer](https://explorer.dev.asichain.io)
 3. **Try smart contract deployment** using the Deploy page or IDE
-4. **Configure validator node** if running network infrastructure (see [Validator Node Setup](/node-image/validator/))
+4. **Configure validator node** if running network infrastructure (see [Validator Node Setup](/legacy-docs/node-image/validator/))
 
 ## Important Security Reminders
 

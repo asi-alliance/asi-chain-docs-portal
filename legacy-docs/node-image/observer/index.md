@@ -11,7 +11,7 @@ Observer nodes are used to monitor the blockchain state without participating in
 
 ## Prerequisites
 
-Ensure you meet the basic requirements outlined in [Node Image Source](/node-image/).
+Ensure you meet the basic requirements outlined in [Node Image Source](/legacy-docs/node-image/).
 
 ## Setup Instructions
 
@@ -68,4 +68,4 @@ This indicates that your observer node is successfully syncing and communicating
 
 Once the observer is running, you can query the node using HTTP or WebSocket APIs to retrieve chain data.
 
-For validator setup, see [Validator Setup](/node-image/validator/).
+For validator setup, see [Validator Setup](/legacy-docs/node-image/validator/).

@@ -28,5 +28,5 @@ curl -X POST http://localhost:40403/explore-deploy \
 ---
 
 For more advanced interaction, see:
-- [Deploying Contracts](/interaction-examples/smart-contracts/)
-- [Viewing Blocks](/interaction-examples/block-history/)
+- [Deploying Contracts](/legacy-docs/interaction-examples/smart-contracts/)
+- [Viewing Blocks](/legacy-docs/interaction-examples/block-history/)

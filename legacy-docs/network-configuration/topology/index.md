@@ -60,4 +60,4 @@ This section visualizes the ASI:Chain DevNet topology and provides a brief descr
 - External validators can join the network by following the [validator setup guide](/quick-start/join-validator/)
 - All nodes communicate via peer-to-peer protocol
 
-Continue to [Quick Start Guide](/quick-start/) to learn how to join this topology.
+Continue to [Quick Start Guide](/legacy-docs/quick-start/) to learn how to join this topology.

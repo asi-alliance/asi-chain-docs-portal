@@ -147,7 +147,7 @@ grpcurl -plaintext 54.152.57.201:40401 list
 
 ## Additional Resources
 
-- **Wallet Guide**: [/wallet/](/wallet/)
-- **Network Configuration**: [/network-configuration/](/network-configuration/)
+- **Wallet Guide**: [/wallet/usage/](/wallet/usage/)
+- **Network Configuration**: [/legacy-docs/network-configuration/](/legacy-docs/network-configuration/)
 - **Faucet**: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
 - **Block Explorer**: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
