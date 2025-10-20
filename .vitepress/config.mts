@@ -3,6 +3,13 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "ASI:Chain Documentation",
   description: "Complete guide for ASI:Chain blockchain network",
+  vite: {
+    server: {
+      host: true,                 // слушать 0.0.0.0
+      port: 5000,
+      allowedHosts: ['tosssky.hopto.org'],
+    },
+  },
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
