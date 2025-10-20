@@ -184,7 +184,7 @@ Need help?
 **Technical Details:**
 - [Network Configuration](/shard-nodes/devnet-structure/) - Ports, IPs, topology
 - [Node Images](/shard-nodes/validator-image/) - Docker setup and config
-- [API Access](/useful-links/) - Endpoints and integration
+- [API Access](/general/useful-links/) - Endpoints and integration
 
 ---
 
