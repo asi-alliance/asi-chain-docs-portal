@@ -6,7 +6,7 @@ This section outlines the core parameters and services used in the ASI:Chain net
 
 - **Minimum Validators**: 3
 - **Bootstrap Node**: The bootstrap node is not a validator
-- **Validator Keys**: Stored in `wallet.txt` or specified via `.conf`
+- **Validator Keys**: Generated via wallet or configured in validator.conf
 - **Thresholds**:
   - `fault-tolerance-threshold = 0.99`
   - `synchrony-constraint-threshold`

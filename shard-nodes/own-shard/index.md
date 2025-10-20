@@ -1,192 +1,82 @@
 # Own Shard Setting Up
 
-**Status:** Coming Soon
+Documentation for setting up a private ASI:Chain shard is currently under development.
 
-Guide for setting up your own private ASI:Chain shard is currently under development.
+## Overview
 
-## What is a Private Shard?
+A private shard is an independent blockchain network that:
+- Operates separately from the public DevNet
+- Has its own genesis configuration
+- Requires minimum 3 validators to function
+- Uses the same Docker image as DevNet
+- Can be configured for enterprise or private testing
 
-A private shard is:
-- Independent blockchain network
-- Separate from DevNet
-- Fully controlled by you
-- Can have custom configuration
-- Used for private testing or production
+## Core Requirements
 
-## Why Run Your Own Shard?
+**Technical Prerequisites:**
+- Docker and Docker Compose installed
+- Multiple servers (minimum 4: bootstrap + 3 validators)
+- Network connectivity between servers
+- Understanding of blockchain node operations
 
-**Use Cases:**
-- **Enterprise Testing** - Private environment for company
-- **Development** - Isolated network for development
-- **Custom Rules** - Configure your own parameters
-- **Privacy** - Keep transactions private
-- **Performance Testing** - Test at scale without affecting DevNet
+**Resource Requirements per Node:**
+- CPU: 4-8 cores
+- RAM: 16-32 GB
+- Storage: 250+ GB
+- Stable network infrastructure
 
-## What Will Be Covered
+## Network Components
 
-When this guide is complete, it will include:
+A private shard requires:
 
-### 1. Infrastructure Setup
-- Server requirements
-- Network configuration
-- Security considerations
-- Resource planning
+1. **Bootstrap Node** - Network entry point (not a validator)
+2. **Validator Nodes** - Minimum 3 for consensus
+3. **Observer Node** - (Optional) For read access
+4. **Genesis Configuration** - Initial network parameters
 
-### 2. Genesis Configuration
-- Creating genesis block
-- Initial validator setup
-- Token distribution
-- Network parameters
+## Docker Image
 
-### 3. Node Deployment
-- Bootstrap node setup
-- Validator configuration
-- Observer nodes
-- Service deployment
-
-### 4. Network Management
-- Adding new validators
-- Monitoring and maintenance
-- Upgrades and updates
-- Backup strategies
-
-### 5. Integration
-- Wallet configuration
-- Explorer setup
-- Custom applications
-- API access
-
-## Prerequisites
-
-To run your own shard, you'll need:
-
-**Technical Knowledge:**
-- Docker and containerization
-- Linux server administration
-- Networking basics
-- Blockchain concepts
-
-**Infrastructure:**
-- Multiple servers (recommended)
-- High-performance storage
-- Reliable networking
-- Backup solutions
-
-**Resources:**
-- Sufficient budget for infrastructure
-- Team for operations
-- Development capabilities
-
-## In the Meantime
-
-While we prepare this guide:
-
-### Learn on DevNet
-
-Gain experience by:
-1. Running a validator on [DevNet](/quick-start/join-validator/)
-2. Understanding network operations
-3. Monitoring and troubleshooting
-4. Working with the tools
-
-### Review Source Code
-
-Explore the implementation:
-- [ASI Chain Repository](https://github.com/asi-alliance/asi-chain)
-- Docker compose configurations
-- Genesis setup examples
-- Network parameters
-
-### Plan Your Architecture
-
-Consider:
-- How many validators?
-- Public or private?
-- Performance requirements?
-- Security needs?
-- Integration points?
-
-## Components Needed
-
-For a complete private shard:
-
-**Infrastructure:**
-- Bootstrap node
-- Validator nodes (minimum 3)
-- Observer nodes
-- Load balancers
-
-**Services:**
-- Block explorer
-- Wallet interface  
-- Faucet (if needed)
-- API services
-
-**Tools:**
-- Monitoring system
-- Backup solution
-- CI/CD pipeline
-- Management scripts
-
-## Architecture Example
-
+Use the official ASI:Chain node image:
 ```
-                    ┌─────────────────┐
-                    │  Bootstrap Node │
-                    │   (Your Server) │
-                    └────────┬────────┘
-                             │
-            ┌────────────────┼────────────────┐
-            │                │                │
-            ▼                ▼                ▼
-    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-    │ Validator 1  │  │ Validator 2  │  │ Validator 3  │
-    │ (Your Server)│  │ (Your Server)│  │ (Your Server)│
-    └──────┬───────┘  └──────┬───────┘  └───────┬──────┘
-           │                 │                  │
-           └─────────────────┼──────────────────┘
-                             │
-                             ▼
-                    ┌─────────────────┐
-                    │  Observer Node  │
-                    │   (Your Server) │
-                    └────────┬────────┘
-                             │
-            ┌────────────────┼────────────────┐
-            │                │                │
-            ▼                ▼                ▼
-    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-    │   Explorer   │  │    Wallet    │  │   Your App   │
-    │  (Web App)   │  │  (Web App)   │  │   (Custom)   │
-    └──────────────┘  └──────────────┘  └──────────────┘
+533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
 ```
 
-## Estimated Timeline
+## Key Configuration Parameters
 
-This documentation is planned for release in Q1 2026 (tentative).
+Based on DevNet configuration:
+- **Consensus:** CBC Casper
+- **Fault Tolerance Threshold:** 0.99
+- **Minimum Validators:** 3
+- **Block Time:** ~20 seconds average
 
-## Questions?
+## Reference Materials
 
-For early questions about private shards:
+To understand the implementation, study the DevNet setup:
+- [DevNet Structure](/shard-nodes/devnet-structure/) - Network architecture
+- [Validator Node Image](/shard-nodes/validator-image/) - Node configuration
+- [Network Configuration](/network-configuration/) - Port and IP settings
+- [GitHub Repository](https://github.com/asi-alliance/asi-chain) - Source code and examples
 
-- **Technical Details:** Review [DevNet Structure](/shard-nodes/devnet-structure/)
-- **Node Setup:** See [Validator Image](/shard-nodes/validator-image/)
-- **GitHub:** Check repository for examples
-- **Community:** Connect with other developers
+## Bootstrap Connection Format
 
-## Stay Updated
+Bootstrap nodes use this URI format:
+```
+rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404
+```
 
-Check back regularly for updates to this guide.
+Where:
+- First part: Bootstrap node public key
+- IP address: Bootstrap server
+- protocol: Protocol server port
+- discovery: Kademlia discovery port
 
-## Related Documentation
+## Support
 
-While waiting for this guide:
-
-- [Join DevNet as Validator](/quick-start/join-validator/)
-- [DevNet Structure & Entities](/shard-nodes/devnet-structure/)
-- [Validator Node Image](/shard-nodes/validator-image/)
-- [Observer Node Image](/shard-nodes/observer-image/)
+For questions about private shards:
+- Review the public DevNet configuration in [GitHub](https://github.com/asi-alliance/asi-chain)
+- Check [DevNet Structure](/shard-nodes/devnet-structure/) for architecture details
+- See [Validator Setup](/quick-start/join-validator/) for node configuration examples
 
 ---
 
-This guide will be comprehensive when released. Stay tuned.
+**Note:** Detailed setup guide with step-by-step instructions will be added soon.

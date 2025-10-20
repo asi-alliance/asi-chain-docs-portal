@@ -59,7 +59,7 @@ curl http://localhost:40403/status
 
 ## Block Explorer Access
 
-Web interface for network monitoring: [http://44.198.8.24:5173/](http://44.198.8.24:5173/)
+Web interface for network monitoring: [https://explorer.dev.asichain.io](https://explorer.dev.asichain.io)
 
 ## Operation Requirements
 

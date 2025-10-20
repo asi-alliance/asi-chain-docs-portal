@@ -13,8 +13,8 @@ hero:
       text: Get Started
       link: /quick-start/join-validator/
     - theme: alt
-      text: General Overview
-      link: /general-overview/
+      text: View on GitHub
+      link: https://github.com/asi-alliance/asi-chain
     - theme: sponsor
       text: Get DevNet Tokens
       link: /quick-start/get-asi/
@@ -105,19 +105,19 @@ ASI:Chain is a blockchain network built for the ASI Alliance ecosystem, powered 
 Explore our comprehensive documentation:
 
 **General**
-- [Overview](/general-overview/) - Understand ASI:Chain ecosystem
-- [Useful Links](/useful-links/) - All endpoints and resources
+- [Overview](/general/overview/) - Understand ASI:Chain ecosystem
+- [Useful Links](/general/useful-links/) - All endpoints and resources
 
 **Quick Start**
 - [Join as Validator](/quick-start/join-validator/) - Become a validator
-- [Join as Observer](/quick-start/join-observer/) - Run an observer (coming soon)
+- [Join as Observer](/quick-start/join-observer/) - Run an observer
 - [Get DevNet Tokens](/quick-start/get-asi/) - Request test tokens
 
 **Shard & Nodes**
 - [DevNet Structure](/shard-nodes/devnet-structure/) - Network architecture
 - [Validator Node Image](/shard-nodes/validator-image/) - Validator setup
 - [Observer Node Image](/shard-nodes/observer-image/) - Observer setup
-- [Own Shard Setup](/shard-nodes/own-shard/) - Private shard (coming soon)
+- [Own Shard Setup](/shard-nodes/own-shard/) - Private shard
 
 **Tools**
 - [Wallet Usage](/wallet/usage/) - Complete wallet guide

@@ -290,24 +290,6 @@ They have full access to your account. Always:
 For production and mainnet: **Yes, absolutely.**
 For local development on DevNet: HTTP is acceptable.
 
-## Future Plans
-
-### When is mainnet launching?
-
-Mainnet launch date will be announced. Subscribe to official channels for updates.
-
-### Will DevNet always be available?
-
-DevNet is intended as a permanent test network for development and experimentation.
-
-### Can I propose new features?
-
-Yes! Visit the [GitHub repository](https://github.com/asi-alliance/asi-chain) to:
-- Open issues
-- Propose features
-- Submit pull requests
-- Join discussions
-
 ## Still Have Questions?
 
 If your question isn't answered here:

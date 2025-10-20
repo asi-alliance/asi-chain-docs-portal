@@ -1,65 +1,85 @@
 # Join DevNet as Observer
 
-**Status:** Coming Soon
-
-This guide for joining ASI:Chain DevNet as an observer node is currently under development.
-
-## What is an Observer Node?
-
-Observer nodes are read-only nodes that:
-- Synchronize with the blockchain
-- Do not participate in consensus
-- Provide read access to blockchain data
-- Useful for running explorers, APIs, or monitoring
-
-## Why Run an Observer?
-
-- **Lower Requirements** - No staking or validation required
-- **Read Access** - Query blockchain data directly
-- **Application Support** - Power your dApps with direct node access
-- **Network Monitoring** - Monitor network health and activity
-
-## Coming Soon
-
-We are currently finalizing the observer node documentation. This guide will include:
-
-- System requirements for observer nodes
-- Step-by-step setup instructions
-- Configuration examples
-- Connection to DevNet
-- API endpoint usage
-- Troubleshooting tips
-
-## In the Meantime
-
-While we prepare this guide, you can:
-
-1. **Use Public Endpoints** - Access the existing observer node at `54.152.57.201:40453`
-2. **Explore the Code** - Review the observer configuration in the [GitHub repository](https://github.com/asi-alliance/asi-chain)
-3. **Check Back Soon** - This guide will be available in the near future
+Documentation for running an observer node is currently under development.
 
 ## Public Observer Access
 
-For now, you can use the public observer node:
+While the self-hosted observer documentation is being prepared, you can use the ASI:Chain public observer node:
 
 **HTTP Endpoint:**
 ```
 http://54.152.57.201:40453
 ```
 
-**Use Cases:**
-- Query blocks: `curl http://54.152.57.201:40453/blocks`
-- Check balance: `curl -X POST http://54.152.57.201:40453/explore-deploy`
-- Monitor network status
+**gRPC Endpoint:**
+```
+54.152.57.201:40451
+```
 
-## Questions?
+### Usage Examples
 
-If you have specific questions about running an observer node, please:
+**Query Blocks:**
+```bash
+curl http://54.152.57.201:40453/blocks
+```
 
-- Check the [FAQ section](/faq/)
-- Visit the [GitHub repository](https://github.com/asi-alliance/asi-chain)
-- Review the [DevNet Structure](/shard-nodes/devnet-structure/) documentation
+**Explore Deploy:**
+```bash
+curl -X POST http://54.152.57.201:40453/explore-deploy \
+  -H 'Content-Type: application/json' \
+  -d '{"term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:asiVault\") }"}'
+```
+
+**Check Network Status:**
+```bash
+curl http://54.152.57.201:40453/status
+```
+
+## What is an Observer Node?
+
+Observer nodes:
+- Synchronize with the blockchain
+- Provide read access to blockchain data
+- Do **not** participate in consensus
+- Do **not** validate or propose blocks
+- Power external services like explorers and APIs
+
+## System Requirements
+
+**Minimum:**
+- CPU: 2 cores
+- RAM: 8 GB
+- Storage: 250+ GB
+
+**Recommended:**
+- CPU: 4 cores
+- RAM: 16 GB
+- Storage: 250+ GB
+
+## Use Cases
+
+### For Developers
+- Query blockchain data for applications
+- Build custom explorers or analytics tools
+- Test API integrations
+
+### For Infrastructure
+- Provide API access for dApps
+- Run blockchain indexing services
+- Monitor network health
+
+### For Data Analysis
+- Analyze blockchain history
+- Track network statistics
+- Research blockchain patterns
+
+## Related Documentation
+
+- [DevNet Structure](/shard-nodes/devnet-structure/)
+- [Observer Node Image](/shard-nodes/observer-image/)
+- [Network Configuration](/network-configuration/)
+- [GitHub Repository](https://github.com/asi-alliance/asi-chain)
 
 ---
 
-This page will be updated soon with complete observer node setup instructions.
+**Note:** Documentation for self-hosted observer setup will be available soon.

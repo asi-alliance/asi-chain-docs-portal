@@ -328,13 +328,6 @@ Validators use similar port ranges (404X0-404X5 pattern) but are not publicly ex
 **Block Size:** Configured limit
 **State Size:** Growing with usage
 
-### Future Plans
-
-- Additional shards
-- Cross-shard communication
-- Increased validator count
-- Performance optimizations
-
 ## Joining the Network
 
 ### As a User
