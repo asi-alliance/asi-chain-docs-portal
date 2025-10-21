@@ -73,6 +73,8 @@ ASI:Chain is a blockchain network built for the ASI Alliance ecosystem, powered 
 
 ### Choose Your Path
 
+![ASI:Chain Workflows](/images/asi-chain-workflows.png)
+
 <div class="vp-feature-grid">
 
 **Developers**

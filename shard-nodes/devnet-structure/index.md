@@ -166,46 +166,7 @@ gRPC: 54.152.57.201:40451
 
 ### Visual Diagram
 
-```
-                    ┌─────────────────┐
-                    │  Bootstrap Node │
-                    │  (Entry Point)  │
-                    │  54.152.57.201  │
-                    └────────┬────────┘
-                             │
-            ┌────────────────┼────────────────┐
-            │                │                │
-            ▼                ▼                ▼
-    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-    │ Validator 1  │  │ Validator 2  │  │ Validator 3  │
-    │  (Consensus) │  │  (Consensus) │  │  (Consensus) │
-    │     + ASI    │  │     + ASI    │  │  + External  │
-    └──────┬───────┘  └──────┬───────┘  └───────┬──────┘
-           │                 │                  │
-           └─────────────────┼──────────────────┘
-                             │
-                             ▼
-                    ┌─────────────────┐
-                    │  Observer Node  │
-                    │  (Read-Only)    │
-                    │  54.152.57.201  │
-                    └────────┬────────┘
-                             │
-            ┌────────────────┼────────────────┬─────────────┐
-            │                │                │             │
-            ▼                ▼                ▼             ▼
-    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-    │   Wallet     │  │   Explorer   │  │   Indexer    │  │   Faucet     │
-    │  (Web App)   │  │  (Web App)   │  │  (Service)   │  │  (Web App)   │
-    │  wallet.dev  │  │ explorer.dev │  │ indexer.dev  │  │  faucet.dev  │
-    └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘
-            │                │                              
-            └────────────────┤  Direct User Access
-                             ▼
-                        ┌──────────┐
-                        │  Users   │
-                        └──────────┘
-```
+![ASI:Chain Ecosystem Overview](/images/asi-chain-ecosystem-overview.png)
 
 ### Communication Flow
 

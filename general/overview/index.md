@@ -76,36 +76,7 @@ The **Faucet** distributes test ASI tokens for development and testing.
 
 ## Network Architecture
 
-```
-                    ┌─────────────┐
-                    │  Bootstrap  │
-                    │    Node     │
-                    └──────┬──────┘
-                           │
-          ┌────────────────┼────────────────┐
-          │                │                │
-          ▼                ▼                ▼
-    ┌───────────┐    ┌───────────┐    ┌───────────┐
-    │Validator 1│    │Validator 2│    │Validator 3│
-    │           │    │           │    │           │
-    └─────┬─────┘    └─────┬─────┘    └─────┬─────┘
-          │                │                │
-          └────────────────┼────────────────┘
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │  Observer   │
-                    │    Node     │
-                    └─────────────┘
-                           │
-          ┌────────────────┼────────────────┐
-          │                │                │
-          ▼                ▼                ▼
-    ┌───────────┐    ┌───────────┐    ┌───────────┐
-    │  Wallet   │    │ Explorer  │    │  Faucet   │
-    │(Web App)  │    │(Web App)  │    │(Web App)  │
-    └───────────┘    └───────────┘    └───────────┘
-```
+The network architecture is detailed in the [DevNet Structure & Entities](/shard-nodes/devnet-structure/) guide.
 
 ## How External Validators Connect
 
@@ -119,23 +90,45 @@ External participants can join the DevNet as validators:
 
 ## Use Cases
 
-### For Developers
-- Deploy and test smart contracts
-- Build decentralized applications
-- Experiment with Rholang programming
-- Test token transfers and transactions
+![ASI:Chain Workflows](/images/asi-chain-workflows.png)
 
-### For Validators
-- Participate in network consensus
-- Earn experience running blockchain infrastructure
-- Test validator setup and configuration
-- Contribute to network security
+### 1. Funds Transfers & Smart Contract Deployments
 
-### For Users
-- Manage digital assets
-- Transfer tokens between accounts
-- Monitor network activity
-- Explore blockchain data
+**Users and Developers** can interact with the DevNet through the Web Wallet:
+
+**Transaction Flow:**
+- User/Developer → Web Wallet → DevNet
+
+**Capabilities:**
+- Send ASI tokens between accounts
+- Deploy smart contracts written in Rholang
+- Execute contract functions
+- Monitor transaction status
+
+**Read Data:**
+- Check account balances
+- View transaction history through Block Explorer
+- Explorer → DevNet (read-only access)
+
+### 2. Running a DevNet Node
+
+**Node Operators** can join the network by running their own validator or observer node:
+
+**Setup Flow:**
+- Node Operator → Configure Node → Bootstrap Node → DevNet Network
+
+**Options:**
+- **Validator Node:** Participate in consensus and block production
+- **Observer Node:** Read-only access for monitoring and queries
+
+**Process:**
+1. Generate validator keys using the wallet
+2. Configure node with proper settings
+3. Connect to Bootstrap Node for network discovery
+4. Sync with Validators and Observers in the network
+5. Begin participating (validator) or observing (observer)
+
+See [Join DevNet as Validator](/quick-start/join-validator/) or [Join DevNet as Observer](/quick-start/join-observer/) for detailed setup guides.
 
 ## Technology Stack
 

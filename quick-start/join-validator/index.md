@@ -2,6 +2,8 @@
 
 This guide will help you join the ASI:Chain DevNet as a validator and participate in network consensus.
 
+![ASI:Chain Workflows](/images/asi-chain-workflows.png)
+
 ## What is a Validator?
 
 Validators are nodes that:
