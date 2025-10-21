@@ -132,20 +132,20 @@ See [Join DevNet as Validator](/quick-start/join-validator/) or [Join DevNet as 
 
 ## Technology Stack
 
-**Blockchain Core:** F1R3FLY-based RNode implementation
-**Smart Contracts:** Rholang language
-**Consensus:** CBC Casper
-**Infrastructure:** Docker-based deployment
-**Network:** Peer-to-peer communication
+- **Blockchain Core:** F1R3FLY-based RNode implementation
+- **Smart Contracts:** Rholang language
+- **Consensus:** CBC Casper
+- **Infrastructure:** Docker-based deployment
+- **Network:** Peer-to-peer communication
 
 ## Current Network Status
 
-**Network:** DevNet (Development Network)
-**Status:** Active
-**Bootstrap Node:** `54.152.57.201`
-**Total Validators:** 3 active validators
-**Block Time:** ~20 seconds average
-**Explorer:** [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
+- **Network:** DevNet (Development Network)
+- **Status:** Active
+- **Bootstrap Node:** `54.152.57.201`
+- **Total Validators:** 3 active validators
+- **Block Time:** ~20 seconds average
+- **Explorer:** [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
 
 ## Getting Started
 
