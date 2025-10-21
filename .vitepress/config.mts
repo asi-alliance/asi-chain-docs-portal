@@ -3,6 +3,9 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "ASI:Chain Documentation",
   description: "Complete guide for ASI:Chain blockchain network",
+  
+  css: ['custom.css'],
+  
   vite: {
     server: {
       host: true,                
@@ -10,7 +13,13 @@ export default defineConfig({
       allowedHosts: ['tosssky.hopto.org'],
     },
   },
+  
   themeConfig: {
+    logo: {
+      light: '/logo-light.svg',
+      dark: '/logo-dark.svg'
+    },
+    
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Quick Start', link: '/quick-start/join-validator/' },
@@ -18,7 +27,7 @@ export default defineConfig({
       { text: 'Explorer', link: 'https://explorer.dev.asichain.io' },
       { text: 'Faucet', link: 'https://faucet.dev.asichain.io' },
     ],
-    
+
     sidebar: [
       {
         text: 'General',
@@ -171,7 +180,10 @@ export default defineConfig({
   },
 
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+    ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap', rel: 'stylesheet' }],
     ['meta', { name: 'theme-color', content: '#5f67ee' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'en' }],
