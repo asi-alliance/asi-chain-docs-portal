@@ -3,9 +3,9 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "ASI:Chain Documentation",
   description: "Complete guide for ASI:Chain blockchain network",
-
+  
   css: ['custom.css'],
-
+  
   vite: {
     server: {
       host: true,                
@@ -13,13 +13,13 @@ export default defineConfig({
       allowedHosts: ['tosssky.hopto.org'],
     },
   },
-
+  
   themeConfig: {
     logo: {
       light: '/logo-light.svg',
       dark: '/logo-dark.svg'
     },
-
+    
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Quick Start', link: '/quick-start/join-validator/' },
@@ -84,70 +84,6 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Frequently Asked Questions', link: '/faq/' },
-        ]
-      },
-      {
-        text: '──────────',
-        items: []
-      },
-      {
-        text: 'Legacy Docs (Old Structure)',
-        collapsed: true,
-        items: [
-          {
-            text: 'Quick Start (Old)',
-            collapsed: true,
-            items: [
-              { text: 'Quick Start Guide', link: '/legacy-docs/quick-start/' },
-              { text: 'Message Exchange', link: '/legacy-docs/quick-start/messages/' },
-              { text: 'Configuration', link: '/legacy-docs/quick-start/configuration/' },
-            ]
-          },
-          {
-            text: 'Node Image (Old)',
-            collapsed: true,
-            items: [
-              { text: 'Node Image Source', link: '/legacy-docs/node-image/' },
-              { text: 'Validator Setup', link: '/legacy-docs/node-image/validator/' },
-              { text: 'Observer Setup', link: '/legacy-docs/node-image/observer/' },
-            ]
-          },
-          {
-            text: 'Network Configuration (Old)',
-            collapsed: true,
-            items: [
-              { text: 'Overview', link: '/legacy-docs/network-configuration/' },
-              { text: 'Network Nodes', link: '/legacy-docs/network-configuration/network-nodes/' },
-              { text: 'Parameters', link: '/legacy-docs/network-configuration/parameters/' },
-              { text: 'Topology', link: '/legacy-docs/network-configuration/topology/' },
-            ]
-          },
-          {
-            text: 'Network Access (Old)',
-            collapsed: true,
-            items: [
-              { text: 'Endpoints', link: '/legacy-docs/network-access/' },
-              { text: 'Address Generation', link: '/legacy-docs/network-access/address-generation/' },
-            ]
-          },
-          {
-            text: 'Interaction Examples (Old)',
-            collapsed: true,
-            items: [
-              { text: 'Overview', link: '/legacy-docs/interaction-examples/' },
-              { text: 'Smart Contracts', link: '/legacy-docs/interaction-examples/smart-contracts/' },
-              { text: 'Block History', link: '/legacy-docs/interaction-examples/block-history/' },
-              { text: 'Balance Check', link: '/legacy-docs/interaction-examples/balance-check/' },
-            ]
-          },
-          {
-            text: 'YAML Configuration (Old)',
-            collapsed: true,
-            items: [
-              { text: 'YAML File Source', link: '/legacy-docs/yaml-configuration/' },
-              { text: 'Parameters', link: '/legacy-docs/yaml-configuration/parameters/' },
-            ]
-          },
         ]
       },
     ],
