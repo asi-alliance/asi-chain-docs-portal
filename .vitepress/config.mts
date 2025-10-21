@@ -5,7 +5,7 @@ export default defineConfig({
   description: "Complete guide for ASI:Chain blockchain network",
   vite: {
     server: {
-      host: true,                 // слушать 0.0.0.0
+      host: true,                
       port: 5000,
       allowedHosts: ['tosssky.hopto.org'],
     },
