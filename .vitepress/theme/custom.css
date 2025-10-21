@@ -1,0 +1,111 @@
+/* ASI:Chain Documentation Custom Styles */
+
+/* Import Roboto Mono font for logo text */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+/* Logo styling */
+.VPNavBarTitle .title {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
+  font-size: 17.658px;
+  color: var(--Primary-Black, #000);
+}
+
+/* Custom logo component styles */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  flex-shrink: 0;
+}
+
+.logo-text {
+  color: var(--Primary-Black, #000);
+  font-family: "Roboto Mono", monospace;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  user-select: none;
+}
+
+/* Responsive logo sizes */
+.logo-container.size-small .logo-icon {
+  width: 24px;
+  height: 16px;
+}
+
+.logo-container.size-small .logo-text {
+  font-size: 14px;
+}
+
+.logo-container.size-medium .logo-icon {
+  width: 34px;
+  height: 23px;
+}
+
+.logo-container.size-medium .logo-text {
+  font-size: 17.658px;
+}
+
+.logo-container.size-large .logo-icon {
+  width: 45px;
+  height: 30px;
+}
+
+.logo-container.size-large .logo-text {
+  font-size: 20px;
+}
+
+/* Dark mode adjustments */
+.dark .logo-text {
+  color: var(--vp-c-text-1);
+}
+
+/* Header logo styling */
+.VPNavBarTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Ensure consistent spacing */
+.VPNavBarTitle .logo {
+  margin-right: 8px;
+}
+
+/* Typography consistency */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Button consistency */
+.VPButton {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+/* Code blocks */
+code, pre {
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Custom hero section */
+.VPHero .name {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .logo-container.size-large .logo-icon {
+    width: 34px;
+    height: 23px;
+  }
+  
+  .logo-container.size-large .logo-text {
+    font-size: 17.658px;
+  }
+}
