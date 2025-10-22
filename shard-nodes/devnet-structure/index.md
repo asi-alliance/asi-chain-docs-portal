@@ -120,16 +120,15 @@ gRPC: 54.152.57.201:40451
 
 **Purpose:** Index and organize blockchain data
 
-**Access:** [indexer.dev.asichain.io](https://indexer.dev.asichain.io)
+**Access:** [explorer.dev.asichain.io/indexer-status](https://explorer.dev.asichain.io/indexer-status)
 
 **Features:**
 - Fast data retrieval
 - Indexed transactions and blocks
-- API endpoints for applications
 - Historical data access
 - Efficient queries
 
-**Function:** Powers the Block Explorer and provides API access
+**Function:** Powers the Block Explorer.
 
 ### ASI Wallet
 

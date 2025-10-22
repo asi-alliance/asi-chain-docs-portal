@@ -73,7 +73,7 @@ Your transaction can have one of the following statuses:
 - **Documentation**: [docs.asichain.io](https://docs.asichain.io)
 - **Wallet**: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
 - **Block Explorer**: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-- **Network Indexer**: [indexer.dev.asichain.io](https://indexer.dev.asichain.io)
+- **Network Indexer**: [explorer.dev.asichain.io/indexer-status](https://explorer.dev.asichain.io/indexer-status)
 - **GitHub**: [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet)
 
 ---

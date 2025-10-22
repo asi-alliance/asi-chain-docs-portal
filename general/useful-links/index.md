@@ -20,9 +20,9 @@ Monitor real-time blockchain activity, search transactions, and view network sta
 Request test ASI tokens for development and testing.
 
 ### Indexer
-**URL:** [indexer.dev.asichain.io](https://indexer.dev.asichain.io)
+**URL:** [explorer.dev.asichain.io/indexer-status](https://explorer.dev.asichain.io/indexer-status)
 
-Access indexed blockchain data and API endpoints.
+Access indexed blockchain data.
 
 ## Network Endpoints
 

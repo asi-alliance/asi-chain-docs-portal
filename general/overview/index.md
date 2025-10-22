@@ -50,19 +50,7 @@ The **Block Explorer** provides real-time visibility into blockchain activity.
 - Network performance metrics
 - WebSocket-based live updates
 
-### 4. Indexer
-
-The **Indexer** maintains synchronized blockchain data for fast querying and analysis.
-
-**Access:** [indexer.dev.asichain.io](https://indexer.dev.asichain.io)
-
-**Purpose:**
-- Indexes blockchain data for quick retrieval
-- Powers the Block Explorer
-- Provides API endpoints for applications
-- Maintains transaction history
-
-### 5. Faucet
+### 4. Faucet
 
 The **Faucet** distributes test ASI tokens for development and testing.
 

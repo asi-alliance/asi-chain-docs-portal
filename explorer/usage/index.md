@@ -233,7 +233,7 @@ Click the funnel icon to access:
 
 - **Documentation**: [docs.asichain.io](https://docs.asichain.io)
 - **Wallet**: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
-- **Network Indexer**: [indexer.dev.asichain.io](https://indexer.dev.asichain.io)
+- **Network Indexer**: [explorer.dev.asichain.io/indexer-status](https://explorer.dev.asichain.io/indexer-status)
 - **Faucet**: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
 - **GitHub**: [asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer)
 
