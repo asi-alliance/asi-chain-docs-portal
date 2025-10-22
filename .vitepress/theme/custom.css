@@ -1,4 +1,4 @@
-/* ASI:Chain Documentation Custom Styles */
+/* ASI:Chain Docs Custom Styles */
 
 /* Import Roboto Mono font for logo text */
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
@@ -7,7 +7,7 @@
 .VPNavBarTitle .title {
   font-family: 'Roboto Mono', monospace;
   font-weight: 700;
-  font-size: 17.658px;
+  font-size: 14px !important;
   color: var(--Primary-Black, #000);
 }
 

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: "ASI:Chain Documentation",
+  title: "ASI:Chain Docs",
   description: "Complete guide for ASI:Chain blockchain network",
   
   css: ['custom.css'],
@@ -123,7 +123,7 @@ export default defineConfig({
     ['meta', { name: 'theme-color', content: '#5f67ee' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'en' }],
-    ['meta', { property: 'og:title', content: 'ASI:Chain Documentation' }],
+    ['meta', { property: 'og:title', content: 'ASI:Chain Docs' }],
     ['meta', { property: 'og:site_name', content: 'ASI:Chain Docs' }],
     ['meta', { property: 'og:url', content: 'https://docs.asi-chain.singularitynet.dev/' }],
   ]
