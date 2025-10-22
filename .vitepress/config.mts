@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: "Docs",
+  title: "ASI:Chain Docs",
   description: "Complete guide for ASI:Chain blockchain network",
   
   css: ['custom.css'],

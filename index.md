@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Docs
+title: Home
 description: Complete guide for ASI:Chain blockchain network
 hero:
   name: "ASI:Chain"
