@@ -63,6 +63,26 @@ Command-line interface for:
 - Proposing blocks
 - Interacting with the network
 
+### Block Explorer
+**GitHub:** [asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer)
+
+Web-based block explorer application.
+
+### Web Wallet
+**GitHub:** [asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet)
+
+Web wallet application for ASI:Chain.
+
+### Faucet
+**GitHub:** [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet)
+
+Faucet service for distributing test ASI tokens.
+
+### Wallet CLI
+**GitHub:** [asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli)
+
+Command-line wallet interface for ASI:Chain.
+
 ## Docker Images
 
 ### Official Node Image
