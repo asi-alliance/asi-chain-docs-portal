@@ -1,10 +1,8 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: "ASI:Chain Docs",
+  title: "Docs",
   description: "Complete guide for ASI:Chain blockchain network",
-  head: [['link', { rel: 'icon', href: 'favicon.ico' }]],
-  
   css: ['custom.css'],
   
   vite: {
@@ -117,7 +115,7 @@ export default defineConfig({
   },
 
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', href: 'favicon.ico' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap', rel: 'stylesheet' }],
