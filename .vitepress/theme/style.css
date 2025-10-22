@@ -136,4 +136,7 @@
 .DocSearch {
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
-
+/* 
+.title {
+  font-size: 14px !important;
+} */
