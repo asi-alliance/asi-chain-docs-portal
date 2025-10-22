@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "ASI:Chain Docs",
   description: "Complete guide for ASI:Chain blockchain network",
+  head: [['link', { rel: 'icon', href: 'favicon.ico' }]],
   
   css: ['custom.css'],
   
