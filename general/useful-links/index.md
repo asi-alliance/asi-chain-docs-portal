@@ -20,9 +20,9 @@ Monitor real-time blockchain activity, search transactions, and view network sta
 Request test ASI tokens for development and testing.
 
 ### Indexer
-**URL:** [indexer.dev.asichain.io](https://indexer.dev.asichain.io)
+**URL:** [explorer.dev.asichain.io/indexer-status](https://explorer.dev.asichain.io/indexer-status)
 
-Access indexed blockchain data and API endpoints.
+Access indexed blockchain data.
 
 ## Network Endpoints
 
@@ -62,6 +62,26 @@ Command-line interface for:
 - Deploying smart contracts
 - Proposing blocks
 - Interacting with the network
+
+### Block Explorer
+**GitHub:** [asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer)
+
+Web-based block explorer application.
+
+### Web Wallet
+**GitHub:** [asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet)
+
+Web wallet application for ASI:Chain.
+
+### Faucet
+**GitHub:** [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet)
+
+Faucet service for distributing test ASI tokens.
+
+### Wallet CLI
+**GitHub:** [asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli)
+
+Command-line wallet interface for ASI:Chain.
 
 ## Docker Images
 
