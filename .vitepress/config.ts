@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import CustomLanguages from "../config/languages";
 
 export default defineConfig({
   title: "ASI:Chain Docs",
@@ -112,6 +113,10 @@ export default defineConfig({
         timeStyle: 'medium'
       }
     }
+  },
+
+  markdown: {
+    languages: CustomLanguages
   },
 
   head: [
