@@ -5,7 +5,6 @@ export default defineConfig({
   title: "ASI:Chain Docs",
   description: "Complete guide for ASI:Chain blockchain network",
   css: ['custom.css'],
-  
   vite: {
     server: {
       host: true,                
@@ -13,7 +12,6 @@ export default defineConfig({
       allowedHosts: ['tosssky.hopto.org'],
     },
   },
-  
   themeConfig: {
     logo: {
       light: '/logo-light.svg',
@@ -26,6 +24,17 @@ export default defineConfig({
       { text: 'Wallet', link: 'https://wallet.dev.asichain.io' },
       { text: 'Explorer', link: 'https://explorer.dev.asichain.io' },
       { text: 'Faucet', link: 'https://faucet.dev.asichain.io' },
+      { text: 'Github', items: [
+        {
+          text: 'Explorer repository', link: "https://github.com/asi-alliance/asi-chain-explorer",
+        },
+        {
+          text: 'Wallet repository', link: "https://github.com/asi-alliance/asi-chain-wallet",
+        },
+        {
+          text: 'Faucet repository', link: "https://github.com/asi-alliance/asi-chain-faucet",
+        }
+      ]}
     ],
 
     sidebar: [
@@ -88,10 +97,6 @@ export default defineConfig({
       },
     ],
 
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/asi-alliance/asi-chain/' }
-    ],
-
     footer: {
       message: 'ASI:Chain DevNet - Development Network',
       copyright: 'Test tokens have no real value. For testing purposes only.'
@@ -114,11 +119,9 @@ export default defineConfig({
       }
     }
   },
-
   markdown: {
     languages: CustomLanguages
   },
-
   head: [
     ['link', { rel: 'icon', href: 'favicon.ico' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
