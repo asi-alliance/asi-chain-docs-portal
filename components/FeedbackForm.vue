@@ -6,8 +6,8 @@
                 <button @click="toggleFormVisibility">
                     <svg xmlns="http://www.w3.org/2000/svg" id="close-icon" height="15px" width="15px"
                         viewBox="0 0 20 20">
-                        <line x1="0" y1="00" x2="20" y2="20" stroke-linecap="round" stroke="#666666" />
-                        <line x1="0" y1="20" x2="20" y2="0" stroke-linecap="round" stroke="#666666" />
+                        <line x1="0" y1="00" x2="20" y2="20" stroke-linecap="round" />
+                        <line x1="0" y1="20" x2="20" y2="0" stroke-linecap="round" />
                     </svg>
                 </button>
             </div>
