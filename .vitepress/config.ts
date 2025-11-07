@@ -5,13 +5,7 @@ export default defineConfig({
   title: "ASI:Chain Docs",
   description: "Complete guide for ASI:Chain blockchain network",
   css: ['custom.css'],
-  vite: {
-    server: {
-      host: true,                
-      port: 5000,
-      allowedHosts: ['tosssky.hopto.org'],
-    },
-  },
+
   themeConfig: {
     logo: {
       light: '/logo-light.svg',

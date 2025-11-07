@@ -57,51 +57,14 @@ sudo apt install -y docker.io docker-compose
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
+---
 
+# Validator Setup Flow
 
-## Step 1: Create Your Wallet
+This section describes the standard process for deploying your validator on ASI:Chain DevNet.  
+You can either generate credentials automatically or use existing wallet credentials.
 
-First, you'll need a wallet with private and public keys.
-
-### Using ASI Wallet (Recommended)
-
-1. Visit [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
-2. Navigate to **Accounts** page
-3. Click **Create Account**
-4. Enter an account name
-5. **Save your private key securely** - you'll need it for validator setup
-6. Copy your public key as well
-
-> [!CAUTION]
-> **Keep your private key secure!** Never share it with anyone. There is no way to recover lost keys. Store it in a safe place, preferably offline.
-
-### Generate Keys Page
-
-You can also use the wallet's **Generate Keys** page:
-
-1. Go to [wallet.dev.asichain.io/#/keys](https://wallet.dev.asichain.io/#/keys)
-2. Click **Generate New Keypair**
-3. Save all displayed credentials:
-   - Private Key (64 hex characters)
-   - Public Key (130+ hex characters with '04' prefix)
-   - ASI Address (50-54 characters)
-
-
-
-## Step 2: Get Test Tokens
-
-Before running a validator, get test tokens from the faucet.
-
-1. Visit [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
-2. Paste your ASI address
-3. Click **FAUCET** button
-4. Wait for tokens to arrive (check status on faucet page)
-
-You can verify your balance in the wallet after receiving tokens.
-
-
-
-## Step 3: Clone Repository
+## Step 1: Clone Repository
 
 Clone the complete ASI:Chain repository with all submodules:
 
@@ -114,61 +77,9 @@ cd asi-chain/chain/validator
 Work from the `chain/validator/` directory for all validator operations.
 :::
 
+## Step 2: Configure Environment
 
-
-## Step 4: Build Docker Images
-
-All operations are performed from the `chain/validator` directory.
-
-### 4.1 Build Configurator Image
-
-The configurator automatically generates missing wallet credentials:
-
-```bash
-docker build -f configurator.Dockerfile -t configurator:latest ../..
-```
-
-::: info Build Context
-The build context must be set to the project root (`../..`) to access the wallet-generator utility.
-:::
-
-### 4.2 Build Connector Image
-
-The connector handles the bonding transaction to register your validator:
-
-```bash
-docker build -f connector.Dockerfile -t connector:latest .
-```
-
-### 4.3 Verify Images
-
-Confirm both images were created successfully:
-
-```bash
-docker image ls
-```
-
-Expected output should include:
-
-| REPOSITORY   | TAG    |
-|--------------|--------|
-| configurator | latest |
-| connector    | latest |
-
-### 4.4 Update Docker Compose Files
-
-The compose files reference public ECR images by default:
-- Configurator: `public.ecr.aws/f6y9h6x4/asi-chain/validator-configurator:latest`
-- Connector: `public.ecr.aws/f6y9h6x4/asi-chain/validator-connector:latest`
-- Node: `public.ecr.aws/f6y9h6x4/asi-chain/node:latest`
-
-You can use these public images directly, or build local images as described above and update the compose files to use `configurator:latest` and `connector:latest`.
-
-
-
-## Step 5: Configure Environment
-
-### 5.1 Prepare Configuration File
+### 2.1 Prepare Configuration File
 
 Copy the template configuration:
 
@@ -180,32 +91,7 @@ The template contains two sections:
 * **Chain config** — Network parameters (pre-filled, don't change unless connecting to different shard)
 * **Validator config** — Parameters you must configure
 
-### 5.2 Configure Validator Parameters
-
-Choose one of the following options:
-
-#### Option A: Generate New Wallet (Recommended)
-
-Leave validator parameters empty in `.env`. The configurator will:
-- Generate new credentials (`VALIDATOR_PRIVATE_KEY`, `VALIDATOR_PUBLIC_KEY`, `VALIDATOR_ADDRESS`)
-- Write them to the `.env` file
-- Display them in container logs
-
-::: warning Save Your Credentials
-Once generated, **save your credentials securely**. You'll need them to restart your validator.
-:::
-
-#### Option B: Use Existing Wallet
-
-If you already have wallet credentials from [Step 1](#step-1-create-your-wallet), provide all three parameters in `.env`:
-
-```env
-VALIDATOR_ADDRESS=<your-address>
-VALIDATOR_PUBLIC_KEY=<your-public-key>
-VALIDATOR_PRIVATE_KEY=<your-private-key>
-```
-
-### 5.3 Set Your Host
+### 2.2 Set Your Host
 
 Update the `VALIDATOR_HOST` in `.env` with your server's public IP address:
 
@@ -222,7 +108,7 @@ curl ifconfig.me
 Do NOT use `localhost` or `127.0.0.1` as your validator host. Use your server's **public IP address**.
 :::
 
-### 5.4 Understanding the Stake Parameter
+### 2.3 Understanding the Stake Parameter
 
 The `STAKE` parameter in `.env` determines the bonding amount (default: `100000000`).
 
@@ -231,9 +117,37 @@ The connector utility handles funding automatically:
 - If balance is insufficient, connector requests funds from the faucet
 - If faucet limits are exceeded and balance remains insufficient, connector exits with error
 
+## Step 3: Credential Setup 
 
+Choose **one** option:
 
-## Step 6: Run Configurator
+### Option A — **Auto-generate** (recommended for testing)
+
+Leave validator parameters empty in `.env`. The configurator will:
+
+* Generate new credentials (`VALIDATOR_PRIVATE_KEY`, `VALIDATOR_PUBLIC_KEY`, `VALIDATOR_ADDRESS`)
+* Write them to the `.env` file
+* Display them in container logs
+
+::: warning Save Your Credentials
+Once generated, **save your credentials securely**. 
+
+You'll need them to restart your validator.
+:::
+
+### Option B — **Use existing wallet credentials**
+
+Use credentials from the Wallet. Follow the Wallet documentation to create/export keys, then provide all three in `.env`:
+
+```env
+VALIDATOR_ADDRESS=<your-address>
+VALIDATOR_PUBLIC_KEY=<your-public-key>
+VALIDATOR_PRIVATE_KEY=<your-private-key>
+```
+
+Wallet: [wallet.dev.asichain.io](wallet.dev.asichain.io) (see [Wallet docs](/wallet/usage/) for account/key management)
+
+## Step 4: Run Configurator
 
 Execute the configurator to generate or validate credentials:
 
@@ -251,11 +165,7 @@ The configurator will:
 If new credentials were generated, you'll see them in the container logs. **Save these credentials immediately**.
 :::
 
-
-
-## Step 7: Start Validator
-
-### Standard Deployment (Recommended)
+## Step 5: Start Validator
 
 Run both bonding and validation with a single command:
 
@@ -269,7 +179,13 @@ This starts two services:
 
 The `-d` flag runs services in detached mode.
 
-::: info Bonding Process
+::: info Images & Bonding
+Compose files reference **public images** by default:
+
+* Configurator: `public.ecr.aws/f6y9h6x4/asi-chain/validator-configurator:latest`
+* Connector: `public.ecr.aws/f6y9h6x4/asi-chain/validator-connector:latest`
+* Node: `public.ecr.aws/f6y9h6x4/asi-chain/node:latest`
+
 The connector will:
 - Check your wallet balance
 - Request funds from faucet if needed
@@ -282,6 +198,7 @@ The connector will:
 If you prefer to bond separately before starting the validator:
 
 **Step 1: Run bonding utility**
+
 ```bash
 docker compose -f ./connector.yml up
 ```
@@ -291,15 +208,14 @@ Wait for confirmation: `Validator bonded successfully`
 The container will exit automatically after successful bonding.
 
 **Step 2: Start validator**
+
 ```bash
 docker compose -f ./validator.yml up -d
 ```
 
+## Step 6: Verify Synchronization
 
-
-## Step 8: Verify Synchronization
-
-### 8.1 Check Your Validator Logs
+### 6.1 Check Validator Logs
 
 Monitor your validator's synchronization progress:
 
@@ -307,11 +223,11 @@ Monitor your validator's synchronization progress:
 docker logs validator -f
 ```
 
-### 8.2 Check Network Status
+### 6.2 Check Network Status
 
 **Check the observer's latest finalized block:**
 ```
-http://54.235.138.68:40402/api/last-finalized-block
+http://54.235.138.68:40403/api/last-finalized-block
 ```
 
 If the response contains at least one block, the network is operational.
@@ -323,7 +239,7 @@ Replace with your validator's host and HTTP API port (40443):
 http://<YOUR_VALIDATOR_HOST>:40443/api/last-finalized-block
 ```
 
-### 8.3 Evaluate Synchronization
+### 6.3 Evaluate Synchronization
 
 - If your validator shows at least one block, synchronization has started
 - When your validator's last block approximately matches the observer's (within ~50 blocks), synchronization is successful
@@ -333,13 +249,11 @@ http://<YOUR_VALIDATOR_HOST>:40443/api/last-finalized-block
 Initial synchronization may take several minutes to hours depending on blockchain size and network speed.
 :::
 
-
-
-## Step 9: Transaction Deployment Verification
+## Step 7: Transaction Deployment Test
 
 Verify your validator can submit transactions to the network.
 
-### 9.1 Install Rust CLI Client
+### 7.1 Install Rust CLI Client
 
 Clone and build the Rust client:
 
@@ -349,7 +263,7 @@ cd rust-client
 cargo build --release
 ```
 
-### 9.2 Deploy Test Transaction
+### 7.2 Deploy Test Transaction
 
 From the `rust-client` directory, deploy a test transaction:
 
@@ -359,18 +273,17 @@ cargo run -- full-deploy -f ./rho_examples/stdout.rho --private-key <YOUR_PRIVAT
 
 Replace `<YOUR_PRIVATE_KEY>` with your validator's private key.
 
-::: success Expected Response
+Expected Response
 ```
 Response: Success!
 DeployId is: 304402206c435cee64d97d123f0c1b4552b3568698e64096a29fb50ec38f11a6c5f7758b022002e05322156bf5ed878ce20cef072cd8faf9e8bb15b58131f2fee06053b5d1c5
 ```
-:::
 
 This confirms your validator can successfully send transactions to the network.
 
 
 
-## Step 10: Monitor Your Validator
+## Step 8: Monitor & Maintain
 
 ### Check Container Status
 
@@ -525,40 +438,41 @@ See [Troubleshooting Guide](/quick-start/troubleshooting/) for detailed solution
 
 ## Network Endpoints
 
-- **Bootstrap Node:** `rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404`
-- **Observer API:** http://54.235.138.68:40402/api/last-finalized-block
-- **Faucet:** https://faucet.dev.asichain.io
-- **Wallet:** https://wallet.dev.asichain.io
-- **Explorer:** https://explorer.dev.asichain.io
+* **Bootstrap Node:** `rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404`
+* **Observer API:** `http://54.235.138.68:40403/api/last-finalized-block`
+* **Faucet:** `https://faucet.dev.asichain.io`
+* **Wallet:** `https://wallet.dev.asichain.io`
+* **Explorer:** `https://explorer.dev.asichain.io`
 
 
 
 ## Security Best Practices
 
 1. **Key Management**
-   - Store private keys securely, never in plain text
-   - Create encrypted backups
-   - Never share private keys
 
+   * Store private keys securely, never in plain text
+   * Create encrypted backups
+   * Never share private keys
 2. **Firewall Configuration**
-   - Only open necessary ports (40440-40445)
-   - Use UFW or iptables for port management
-   - Consider additional security layers
 
+   * Only open necessary ports (40440-40445)
+   * Use UFW or iptables for port management
+   * Consider additional security layers
 3. **Regular Updates**
-   - Keep Docker images updated
-   - Monitor security advisories
-   - Update validator software regularly
 
+   * Keep Docker images updated
+   * Monitor security advisories
+   * Update validator software regularly
 4. **Monitoring**
-   - Set up alerts for node downtime
-   - Monitor resource usage
-   - Track peer connections
 
+   * Set up alerts for node downtime
+   * Monitor resource usage
+   * Track peer connections
 5. **Backups**
-   - Regular backups of configuration files
-   - Secure storage of wallet credentials
-   - Test restore procedures
+
+   * Regular backups of configuration files
+   * Secure storage of wallet credentials
+   * Test restore procedures
 
 
 
@@ -585,6 +499,47 @@ Monitor these metrics regularly:
 - CPU load
 - Peer connections
 - Block synchronization status
+
+
+
+## Optional: Build Images from Source (Advanced)
+
+> Use this **only** if you want to build from sources. The main flow uses **public images** referenced in compose files.
+
+All operations are performed from the `chain/validator` directory.
+
+### Build Configurator Image
+
+```bash
+docker build -f configurator.Dockerfile -t configurator:latest ../..
+```
+
+::: info Build Context
+The build context must be the project root (`../..`) to access the wallet-generator utility.
+:::
+
+### Build Connector Image
+
+```bash
+docker build -f connector.Dockerfile -t connector:latest .
+```
+
+### Verify Images
+
+```bash
+docker image ls
+```
+
+Expected output should include:
+
+| REPOSITORY   | TAG    |
+| ------------ | ------ |
+| configurator | latest |
+| connector    | latest |
+
+### Use Local Images in Compose (optional)
+
+You can use these public images directly, or build local images as described above and update the compose files to use `configurator:latest` and `connector:latest`.
 
 
 
