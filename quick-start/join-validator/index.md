@@ -12,7 +12,7 @@ Validators are nodes that:
 - Sign transactions
 - Maintain network security
 
----
+
 
 ## Prerequisites
 
@@ -57,7 +57,7 @@ sudo apt install -y docker.io docker-compose
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
----
+
 
 ## Step 1: Create Your Wallet
 
@@ -86,7 +86,7 @@ You can also use the wallet's **Generate Keys** page:
    - Public Key (130+ hex characters with '04' prefix)
    - ASI Address (50-54 characters)
 
----
+
 
 ## Step 2: Get Test Tokens
 
@@ -99,7 +99,7 @@ Before running a validator, get test tokens from the faucet.
 
 You can verify your balance in the wallet after receiving tokens.
 
----
+
 
 ## Step 3: Clone Repository
 
@@ -114,7 +114,7 @@ cd asi-chain/chain/validator
 Work from the `chain/validator/` directory for all validator operations.
 :::
 
----
+
 
 ## Step 4: Build Docker Images
 
@@ -157,24 +157,14 @@ Expected output should include:
 
 ### 4.4 Update Docker Compose Files
 
-The compose files reference ECR images by default. Update them to use your local images.
+The compose files reference public ECR images by default:
+- Configurator: `public.ecr.aws/f6y9h6x4/asi-chain/validator-configurator:latest`
+- Connector: `public.ecr.aws/f6y9h6x4/asi-chain/validator-connector:latest`
+- Node: `public.ecr.aws/f6y9h6x4/asi-chain/node:latest`
 
-**In `configurator.yml`:**
-```yaml
-image: configurator:latest
-```
+You can use these public images directly, or build local images as described above and update the compose files to use `configurator:latest` and `connector:latest`.
 
-**In `connector.yml` (if using manual bonding):**
-```yaml
-image: connector:latest
-```
 
-**In `validator.yml` (connector service):**
-```yaml
-image: connector:latest
-```
-
----
 
 ## Step 5: Configure Environment
 
@@ -241,7 +231,7 @@ The connector utility handles funding automatically:
 - If balance is insufficient, connector requests funds from the faucet
 - If faucet limits are exceeded and balance remains insufficient, connector exits with error
 
----
+
 
 ## Step 6: Run Configurator
 
@@ -261,7 +251,7 @@ The configurator will:
 If new credentials were generated, you'll see them in the container logs. **Save these credentials immediately**.
 :::
 
----
+
 
 ## Step 7: Start Validator
 
@@ -305,7 +295,7 @@ The container will exit automatically after successful bonding.
 docker compose -f ./validator.yml up -d
 ```
 
----
+
 
 ## Step 8: Verify Synchronization
 
@@ -321,7 +311,7 @@ docker logs validator -f
 
 **Check the observer's latest finalized block:**
 ```
-http://54.152.57.201:40453/api/last-finalized-block
+http://54.235.138.68:40402/api/last-finalized-block
 ```
 
 If the response contains at least one block, the network is operational.
@@ -343,7 +333,7 @@ http://<YOUR_VALIDATOR_HOST>:40443/api/last-finalized-block
 Initial synchronization may take several minutes to hours depending on blockchain size and network speed.
 :::
 
----
+
 
 ## Step 9: Transaction Deployment Verification
 
@@ -378,7 +368,7 @@ DeployId is: 304402206c435cee64d97d123f0c1b4552b3568698e64096a29fb50ec38f11a6c5f
 
 This confirms your validator can successfully send transactions to the network.
 
----
+
 
 ## Step 10: Monitor Your Validator
 
@@ -400,7 +390,7 @@ docker logs validator --tail 50 -f
 
 Visit [explorer.dev.asichain.io](https://explorer.dev.asichain.io) and look for your validator's public key in the validators list.
 
----
+
 
 ## Stop Validator
 
@@ -426,7 +416,7 @@ rm -rf ./data
 ```
 :::
 
----
+
 
 ## Port Configuration
 
@@ -445,7 +435,7 @@ The validator uses the following ports (configured in `validator.yml`):
 Ensure these ports are open in your firewall for the validator to function properly.
 :::
 
----
+
 
 ## Configuration Files Reference
 
@@ -479,7 +469,7 @@ Ensure these ports are open in your firewall for the validator to function prope
 - `VALIDATOR_PUBLIC_KEY` — Public key for validator identity
 - `VALIDATOR_ADDRESS` — Validator wallet address
 
----
+
 
 ## Troubleshooting
 
@@ -531,17 +521,17 @@ docker logs validator-connector-job
 
 See [Troubleshooting Guide](/quick-start/troubleshooting/) for detailed solutions to common problems.
 
----
+
 
 ## Network Endpoints
 
 - **Bootstrap Node:** `rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404`
-- **Observer API:** http://54.152.57.201:40453/api/last-finalized-block
+- **Observer API:** http://54.235.138.68:40402/api/last-finalized-block
 - **Faucet:** https://faucet.dev.asichain.io
 - **Wallet:** https://wallet.dev.asichain.io
 - **Explorer:** https://explorer.dev.asichain.io
 
----
+
 
 ## Security Best Practices
 
@@ -570,7 +560,7 @@ See [Troubleshooting Guide](/quick-start/troubleshooting/) for detailed solution
    - Secure storage of wallet credentials
    - Test restore procedures
 
----
+
 
 ## Maintenance
 
@@ -596,7 +586,7 @@ Monitor these metrics regularly:
 - Peer connections
 - Block synchronization status
 
----
+
 
 ## Next Steps
 
@@ -607,7 +597,7 @@ Now that your validator is running:
 3. **Deploy Contracts** — Try deploying your own smart contracts via [Wallet](https://wallet.dev.asichain.io)
 4. **Join the Community** — Connect with other validators and developers
 
----
+
 
 ## Support
 
@@ -617,7 +607,3 @@ If you need help:
 - **GitHub Repository**: [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain)
 - **GitHub Issues**: Report issues on GitHub
 - **FAQ**: Check [FAQ section](/faq/) for common questions
-
----
-
-You are now running a validator on ASI:Chain DevNet and helping secure the network!
