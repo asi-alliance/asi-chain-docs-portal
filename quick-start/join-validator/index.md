@@ -12,6 +12,8 @@ Validators are nodes that:
 - Sign transactions
 - Maintain network security
 
+
+
 ## Prerequisites
 
 Before you begin, ensure you meet the system requirements and have necessary software installed.
@@ -37,181 +39,223 @@ Verify you have the required software:
 ```bash
 docker --version          # Need: 20.10+
 docker compose version    # Need: 2.0+
-java -version             # Need: OpenJDK 11 or 17
 git --version             # Need: 2.0+
-cargo --version           # Need: 1.70+
+cargo --version           # Need: 1.70+ (for transaction testing)
 ```
 
 ### Installation
 
 **macOS:**
 ```bash
-brew install openjdk@17 sbt rust
-export JAVA_HOME="/opt/homebrew/opt/openjdk@17"
-export PATH="$JAVA_HOME/bin:$PATH"
+brew install docker docker-compose rust
 ```
 
 **Ubuntu:**
 ```bash
 sudo apt update
-sudo apt install -y openjdk-17-jdk sbt docker.io docker-compose
+sudo apt install -y docker.io docker-compose
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-## Step 1: Create Your Wallet
+---
 
-First, you'll need a wallet with private and public keys.
+# Validator Setup Flow
 
-### Using ASI Wallet (Recommended)
+This section describes the standard process for deploying your validator on ASI:Chain DevNet.  
+You can either generate credentials automatically or use existing wallet credentials.
 
-1. Visit [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
-2. Navigate to **Accounts** page
-3. Click **Create Account**
-4. Enter an account name
-5. **Save your private key securely** - you'll need it for validator setup
-6. Copy your public key as well
+## Step 1: Clone Repository
 
-> [!CAUTION]
-> **Keep your private key secure!** Never share it with anyone. There is no way to recover lost keys. Store it in a safe place, preferably offline.
-
-### Generate Keys Page
-
-You can also use the wallet's **Generate Keys** page:
-
-1. Go to [wallet.dev.asichain.io/#/keys](https://wallet.dev.asichain.io/#/keys)
-2. Click **Generate New Keypair**
-3. Save all displayed credentials:
-   - Private Key (64 hex characters)
-   - Public Key (130+ hex characters with '04' prefix)
-   - ASI Address (50-54 characters)
-
-## Step 2: Get Test Tokens
-
-Before running a validator, get test tokens from the faucet.
-
-1. Visit [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
-2. Paste your ASI address
-3. Click **FAUCET** button
-4. Wait for tokens to arrive (check status on faucet page)
-
-You can verify your balance in the wallet after receiving tokens.
-
-## Step 3: Clone Repository
-
-Clone the ASI:Chain repository:
+Clone the complete ASI:Chain repository with all submodules:
 
 ```bash
 git clone https://github.com/asi-alliance/asi-chain.git
-cd asi-chain/chain
+cd asi-chain/chain/validator
 ```
 
-## Step 4: Configure Environment
+::: warning Important
+Work from the `chain/validator/` directory for all validator operations.
+:::
 
-Create your `.env` file:
+## Step 2: Prepare Configuration
+
+Copy the template configuration:
 
 ```bash
-cp .env.example .env
+cp conf/validator.env .env
 ```
 
-Edit the `.env` file with your credentials:
+The template contains two sections:
+* **Chain config** — Network parameters (pre-filled, don't change unless connecting to different shard)
+* **Validator config** — Automatically configured by the configurator in the next step
 
+### Understanding the Stake Parameter
+
+The `STAKE` parameter in `.env` determines the bonding amount (default: `100000000`).
+
+The connector utility handles funding automatically:
+- If wallet balance is sufficient for the stake amount, bonding proceeds
+- If balance is insufficient, connector requests funds from the faucet
+- If faucet limits are exceeded and balance remains insufficient, connector exits with error
+
+## Step 3: Run Configurator
+
+The configurator automatically sets up your validator environment. Choose **one** option:
+
+### Option A — **Auto-generate everything** (recommended for testing)
+
+Leave all validator parameters empty in `.env` and run:
+
+```bash
+docker compose -f ./configurator.yml up
+```
+
+The configurator will automatically:
+1. Detect your server's public IP and set `VALIDATOR_HOST`
+2. Generate new credentials (`VALIDATOR_PRIVATE_KEY`, `VALIDATOR_PUBLIC_KEY`, `VALIDATOR_ADDRESS`)
+3. Write all parameters to `.env`
+4. Display the generated values in container logs
+
+::: warning Save Your Credentials
+Once generated, **save your credentials securely**. You'll need them to restart your validator.
+:::
+
+::: tip How It Works
+The configurator uses `curl ifconfig.me` to detect your public IP automatically. If you need to use a different IP address, you can set `VALIDATOR_HOST` manually in `.env` before running the configurator.
+:::
+
+### Option B — **Use existing wallet credentials**
+
+If you want to use existing credentials from the Wallet:
+
+1. **Get credentials from Wallet:**
+   - Visit [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
+   - Create or access your account (see [Wallet docs](/wallet/usage/) for details)
+   - Export your credentials (private key, public key, and address)
+
+2. **Fill `.env` with your credentials:**
+   ```env
+   VALIDATOR_ADDRESS=<your-address>
+   VALIDATOR_PUBLIC_KEY=<your-public-key>
+   VALIDATOR_PRIVATE_KEY=<your-private-key>
+   ```
+
+3. **Run the configurator:**
+   ```bash
+   docker compose -f ./configurator.yml up
+   ```
+
+The configurator will:
+- Detect and set your `VALIDATOR_HOST` (or use the one you specified)
+- Write `VALIDATOR_HOST` to `.env`
+
+## Step 4: Verify Configuration
+
+After running the configurator, check your `.env` file:
+
+```bash
+cat .env
+```
+
+You should see all validator parameters filled:
 ```env
-VALIDATOR_PRIVATE_KEY=<YOUR-PRIVATE-KEY>
-VALIDATOR_HOST=<YOUR-PUBLIC-IP-ADDRESS>
+VALIDATOR_HOST=<your-ip>
+VALIDATOR_PRIVATE_KEY=<generated-or-provided>
+VALIDATOR_PUBLIC_KEY=<generated-or-provided>
+VALIDATOR_ADDRESS=<generated-or-provided>
 ```
 
-**Important:**
-- Use your **private key** from Step 1
-- Use your server's **public IP address** (not localhost)
+## Step 5: Start Validator
 
-To find your public IP:
-```bash
-curl ifconfig.me
-```
-
-## Step 5: Configure Validator YAML
-
-Edit `validator.yml` to configure ports (or leave defaults):
-
-```yaml
-ports:
-  - "40400:40400"  # Protocol server
-  - "40401:40401"  # Public gRPC API
-  - "40402:40402"  # Internal gRPC API
-  - "40403:40403"  # HTTP API
-  - "40404:40404"  # Kademlia discovery
-  - "40405:40405"  # Admin HTTP API
-```
-
-**Note:** These ports must be open in your firewall for the validator to function properly.
-
-## Step 6: Configure Validator Settings
-
-Edit `conf/validator.conf` and update the `casper` section with your keys:
-
-```hocon
-casper {
-  validator-public-key = <YOUR-PUBLIC-KEY>
-  validator-private-key = <YOUR-PRIVATE-KEY>
-}
-```
-
-Use the keys generated in Step 1.
-
-## Step 7: Update Bootstrap Connection
-
-Ensure your validator connects to the correct bootstrap node.
-
-In `validator.yml`, verify the bootstrap connection:
-
-```yaml
-command:
-  - "--bootstrap=rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404"
-```
-
-This should already be set correctly in the repository.
-
-## Step 8: Launch Validator
-
-Start your validator node:
+Run both bonding and validation with a single command:
 
 ```bash
-sudo docker compose -f validator.yml up -d
+docker compose -f ./validator.yml up -d
 ```
 
-The node will start and begin synchronizing with the network.
+This starts two services:
+1. **connector** — Utility container that sends the bonding transaction (runs once and exits)
+2. **validator** — Your validator node (runs continuously)
 
-## Step 9: Monitor Synchronization
+The `-d` flag runs services in detached mode.
 
-Check your validator logs:
+::: info Images & Bonding
+Compose files reference **public images** by default:
+
+* Configurator: `public.ecr.aws/f6y9h6x4/asi-chain/validator-configurator:latest`
+* Connector: `public.ecr.aws/f6y9h6x4/asi-chain/validator-connector:latest`
+* Node: `public.ecr.aws/f6y9h6x4/asi-chain/node:latest`
+
+The connector will:
+- Check your wallet balance
+- Request funds from faucet if needed
+- Send bonding transaction
+- Exit after successful bonding
+:::
+
+### Alternative: Manual Bonding
+
+If you prefer to bond separately before starting the validator:
+
+**Step 1: Run bonding utility**
 
 ```bash
-sudo docker logs validator -f
+docker compose -f ./connector.yml up
 ```
 
-### What to Look For
+Wait for confirmation: `Validator bonded successfully`
 
-**Successful synchronization indicators:**
+The container will exit automatically after successful bonding.
 
-```
-rnode.validator | Approved state for block Block #0 (b22fa19038...) with empty parents (supposedly genesis) is successfully restored.
-rnode.validator | Received ForkChoiceTipRequest from rnode.bootstrap
-rnode.validator | Sending tips [b22fa19038...] to rnode.bootstrap
-rnode.validator | Responded to protocol handshake request from rnode://...
-```
+**Step 2: Start validator**
 
-**Connection status:**
-```
-rnode.validator | Peers: 4
+```bash
+docker compose -f ./validator.yml up -d
 ```
 
-When you see these messages, your validator is synchronized and connected to the network.
+## Step 6: Verify Synchronization
 
-## Step 10: Test Your Setup
+### 6.1 Check Validator Logs
 
-### Install Rust CLI
+Monitor your validator's synchronization progress:
 
-First, install the Rust CLI client:
+```bash
+docker logs validator -f
+```
+
+### 6.2 Check Network Status
+
+**Check the observer's latest finalized block:**
+```
+http://54.235.138.68:40403/api/last-finalized-block
+```
+
+If the response contains at least one block, the network is operational.
+
+**Check your validator's latest finalized block:**
+
+Replace with your validator's host and HTTP API port (40443):
+```
+http://<YOUR_VALIDATOR_HOST>:40443/api/last-finalized-block
+```
+
+### 6.3 Evaluate Synchronization
+
+- If your validator shows at least one block, synchronization has started
+- When your validator's last block approximately matches the observer's (within ~50 blocks), synchronization is successful
+- If the validator is behind, allow time for it to catch up
+
+::: tip Synchronization Time
+Initial synchronization may take several minutes to hours depending on blockchain size and network speed.
+:::
+
+## Step 7: Transaction Deployment Test
+
+Verify your validator can submit transactions to the network.
+
+### 7.1 Install Rust CLI Client
+
+Clone and build the Rust client:
 
 ```bash
 git clone https://github.com/singnet/rust-client.git
@@ -219,54 +263,126 @@ cd rust-client
 cargo build --release
 ```
 
-### Deploy a Test Contract
+### 7.2 Deploy Test Transaction
 
-Navigate back to your validator directory and deploy a test contract:
+From the `rust-client` directory, deploy a test transaction:
 
 ```bash
-cargo run -- deploy -f ./examples/stdout.rho --private-key "<YOUR-PRIVATE-KEY>" -H localhost -p 40402
+cargo run -- full-deploy -f ./rho_examples/stdout.rho --private-key <YOUR_PRIVATE_KEY> -p 40442
 ```
 
-**Expected response:**
+Replace `<YOUR_PRIVATE_KEY>` with your validator's private key.
+
+Expected Response
 ```
 Response: Success!
 DeployId is: 304402206c435cee64d97d123f0c1b4552b3568698e64096a29fb50ec38f11a6c5f7758b022002e05322156bf5ed878ce20cef072cd8faf9e8bb15b58131f2fee06053b5d1c5
 ```
 
-### Propose a Block
+This confirms your validator can successfully send transactions to the network.
 
-After deploying, propose a block:
+
+
+## Step 8: Monitor & Maintain
+
+### Check Container Status
 
 ```bash
-cargo run -- propose --private-key "<YOUR-PRIVATE-KEY>" -H localhost -p 40402
+docker ps
 ```
 
-**Expected response:**
+You should see your validator container running.
+
+### View Recent Logs
+
+```bash
+docker logs validator --tail 50 -f
 ```
-Response: Success! Block 4dda69c62838e18abd3c131818e60110ac3caccc66ec05792cedb327a3bafff7 created and added.
-```
 
-## Verification
-
-After completing these steps, verify your validator is working:
-
-### 1. Check Block Explorer
+### Verify on Block Explorer
 
 Visit [explorer.dev.asichain.io](https://explorer.dev.asichain.io) and look for your validator's public key in the validators list.
 
-### 2. Monitor Logs
 
-Your validator should show ongoing activity:
+
+## Stop Validator
+
+To stop your validator:
+
 ```bash
-sudo docker logs validator -f --tail 50
+docker compose -f ./validator.yml stop
 ```
 
-### 3. Check Peer Connections
+This stops the container without deleting it, preserving state for future restarts.
 
-Your validator should maintain connections with other network participants:
+### Data Persistence
+
+The validator stores blockchain data in the `./data` directory. This data persists after stopping, which means:
+- You can restart the validator without re-synchronizing
+- The validator will resume from its last state
+- Blockchain data is preserved during container updates
+
+::: danger Complete Reset
+To completely restart with fresh synchronization, remove the data directory:
+```bash
+rm -rf ./data
 ```
-Peers: 4 or more
-```
+:::
+
+
+
+## Port Configuration
+
+The validator uses the following ports (configured in `validator.yml`):
+
+| Port  | Purpose |
+|-------|---------|
+| 40440 | Protocol port |
+| 40441 | API port gRPC external |
+| 40442 | API port gRPC internal |
+| 40443 | API port HTTP |
+| 40444 | Discovery port |
+| 40445 | API port admin HTTP |
+
+::: warning Firewall Configuration
+Ensure these ports are open in your firewall for the validator to function properly.
+:::
+
+
+
+## Configuration Files Reference
+
+| File | Description |
+|------|-------------|
+| `conf/validator.env` | Configuration template with chain and validator parameters |
+| `.env` | Active configuration file (created from template) |
+| `conf/validator.conf` | RNode configuration |
+| `conf/logback.xml` | Logging configuration |
+
+### Docker Compose Files
+
+| File | Purpose |
+|------|---------|
+| `configurator.yml` | Runs configurator for environment setup |
+| `validator.yml` | Main validator with automatic bonding |
+| `connector.yml` | Standalone bonding utility (optional) |
+
+### Key Parameters in .env
+
+**Chain Config:**
+- `BOOTSTRAP` — Bootstrap node connection string
+- `FAUCET_API_URL` — Testnet faucet URL for automatic funding
+- `BOOTSTRAP_PUBLIC_GRPC_PORT` — Bootstrap gRPC port (40401)
+- `OBSERVER_INTERNAL_GRPC_PORT` — Observer internal port (40452)
+- `STAKE` — Amount to stake when bonding (100000000)
+
+**Validator Config:**
+- `VALIDATOR_HOST` — Your validator's public IP address
+- `VALIDATOR_PRIVATE_KEY` — Private key for signing blocks
+- `VALIDATOR_PUBLIC_KEY` — Public key for validator identity
+- `VALIDATOR_ADDRESS` — Validator wallet address
+
+
 
 ## Troubleshooting
 
@@ -274,22 +390,22 @@ Peers: 4 or more
 
 **Check Docker status:**
 ```bash
-sudo docker ps -a
+docker ps -a
+docker logs validator
 ```
 
-**View logs:**
-```bash
-sudo docker logs validator
-```
+**Common issues:**
+- Ports already in use
+- Insufficient system resources
+- Network connectivity problems
 
 ### Synchronization Issues
 
 **Reset and restart:**
 ```bash
-sudo docker stop validator
-sudo docker rm validator
-rm -rf data/
-sudo docker compose -f validator.yml up -d
+docker compose -f ./validator.yml stop
+rm -rf ./data
+docker compose -f ./validator.yml up -d
 ```
 
 ### Connection Problems
@@ -301,67 +417,148 @@ sudo ufw status
 
 **Allow required ports:**
 ```bash
-sudo ufw allow 40400:40405/tcp
+sudo ufw allow 40440:40445/tcp
 ```
 
-### Common Errors
+### Connector Fails to Bond
+
+**Check wallet balance:**
+Visit [faucet.dev.asichain.io](https://faucet.dev.asichain.io) to get test tokens.
+
+**Check connector logs:**
+```bash
+docker logs validator-connector-job
+```
+
+### More Help
 
 See [Troubleshooting Guide](/quick-start/troubleshooting/) for detailed solutions to common problems.
+
+
+
+## Network Endpoints
+
+* **Bootstrap Node:** `rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404`
+* **Observer API:** `http://54.235.138.68:40403/api/last-finalized-block`
+* **Faucet:** `https://faucet.dev.asichain.io`
+* **Wallet:** `https://wallet.dev.asichain.io`
+* **Explorer:** `https://explorer.dev.asichain.io`
+
+
+
+## Security Best Practices
+
+1. **Key Management**
+
+   * Store private keys securely, never in plain text
+   * Create encrypted backups
+   * Never share private keys
+2. **Firewall Configuration**
+
+   * Only open necessary ports (40440-40445)
+   * Use UFW or iptables for port management
+   * Consider additional security layers
+3. **Regular Updates**
+
+   * Keep Docker images updated
+   * Monitor security advisories
+   * Update validator software regularly
+4. **Monitoring**
+
+   * Set up alerts for node downtime
+   * Monitor resource usage
+   * Track peer connections
+5. **Backups**
+
+   * Regular backups of configuration files
+   * Secure storage of wallet credentials
+   * Test restore procedures
+
+
+
+## Maintenance
+
+### Update Your Validator
+
+To update to the latest version:
+
+```bash
+cd asi-chain/chain/validator
+git pull origin main
+docker compose -f ./validator.yml down
+docker compose -f ./validator.yml pull
+docker compose -f ./validator.yml up -d
+```
+
+### Regular Checks
+
+Monitor these metrics regularly:
+- Disk space usage in `./data` directory
+- Memory consumption
+- Network bandwidth
+- CPU load
+- Peer connections
+- Block synchronization status
+
+
+
+## Optional: Build Images from Source (Advanced)
+
+> Use this **only** if you want to build from sources. The main flow uses **public images** referenced in compose files.
+
+All operations are performed from the `chain/validator` directory.
+
+### Build Configurator Image
+
+```bash
+docker build -f configurator.Dockerfile -t configurator:latest ../..
+```
+
+::: info Build Context
+The build context must be the project root (`../..`) to access the wallet-generator utility.
+:::
+
+### Build Connector Image
+
+```bash
+docker build -f connector.Dockerfile -t connector:latest .
+```
+
+### Verify Images
+
+```bash
+docker image ls
+```
+
+Expected output should include:
+
+| REPOSITORY   | TAG    |
+| ------------ | ------ |
+| configurator | latest |
+| connector    | latest |
+
+### Use Local Images in Compose (optional)
+
+You can use these public images directly, or build local images as described above and update the compose files to use `configurator:latest` and `connector:latest`.
+
+
 
 ## Next Steps
 
 Now that your validator is running:
 
-1. **Monitor Performance** - Keep an eye on logs and resource usage
-2. **Explore the Network** - Use the [Block Explorer](https://explorer.dev.asichain.io)
-3. **Deploy Contracts** - Try deploying your own smart contracts
-4. **Join the Community** - Connect with other validators and developers
+1. **Monitor Performance** — Keep an eye on logs and resource usage
+2. **Explore the Network** — Use the [Block Explorer](https://explorer.dev.asichain.io)
+3. **Deploy Contracts** — Try deploying your own smart contracts via [Wallet](https://wallet.dev.asichain.io)
+4. **Join the Community** — Connect with other validators and developers
 
-## Maintenance
 
-### Update Your Node
-
-To update to the latest version:
-
-```bash
-cd asi-chain/chain
-git pull origin main
-sudo docker compose -f validator.yml down
-sudo docker compose -f validator.yml pull
-sudo docker compose -f validator.yml up -d
-```
-
-### Backup Your Keys
-
-Regularly backup:
-- `.env` file
-- `conf/validator.conf`
-- Your private keys (stored securely offline)
-
-### Monitor Resources
-
-Keep track of:
-- Disk space usage
-- Memory consumption
-- Network bandwidth
-- CPU load
-
-## Security Best Practices
-
-1. **Firewall Configuration** - Only open necessary ports
-2. **Key Management** - Store private keys securely, never in plain text
-3. **Regular Updates** - Keep your node software up to date
-4. **Monitoring** - Set up alerts for node downtime
-5. **Backups** - Regular backups of configuration and keys
 
 ## Support
 
 If you need help:
 
 - **Documentation**: Browse this site for detailed guides
-- **GitHub Issues**: [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain)
+- **GitHub Repository**: [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain)
+- **GitHub Issues**: Report issues on GitHub
 - **FAQ**: Check [FAQ section](/faq/) for common questions
-
----
-
-You are now running a validator on ASI:Chain DevNet and helping secure the network.
