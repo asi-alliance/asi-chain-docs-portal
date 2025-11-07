@@ -77,9 +77,7 @@ cd asi-chain/chain/validator
 Work from the `chain/validator/` directory for all validator operations.
 :::
 
-## Step 2: Configure Environment
-
-### 2.1 Prepare Configuration File
+## Step 2: Prepare Configuration
 
 Copy the template configuration:
 
@@ -89,26 +87,9 @@ cp conf/validator.env .env
 
 The template contains two sections:
 * **Chain config** — Network parameters (pre-filled, don't change unless connecting to different shard)
-* **Validator config** — Parameters you must configure
+* **Validator config** — Automatically configured by the configurator in the next step
 
-### 2.2 Set Your Host
-
-Update the `VALIDATOR_HOST` in `.env` with your server's public IP address:
-
-```env
-VALIDATOR_HOST=<your-public-ip>
-```
-
-To find your public IP:
-```bash
-curl ifconfig.me
-```
-
-::: danger Important
-Do NOT use `localhost` or `127.0.0.1` as your validator host. Use your server's **public IP address**.
-:::
-
-### 2.3 Understanding the Stake Parameter
+### Understanding the Stake Parameter
 
 The `STAKE` parameter in `.env` determines the bonding amount (default: `100000000`).
 
@@ -117,53 +98,72 @@ The connector utility handles funding automatically:
 - If balance is insufficient, connector requests funds from the faucet
 - If faucet limits are exceeded and balance remains insufficient, connector exits with error
 
-## Step 3: Credential Setup 
+## Step 3: Run Configurator
 
-Choose **one** option:
+The configurator automatically sets up your validator environment. Choose **one** option:
 
-### Option A — **Auto-generate** (recommended for testing)
+### Option A — **Auto-generate everything** (recommended for testing)
 
-Leave validator parameters empty in `.env`. The configurator will:
-
-* Generate new credentials (`VALIDATOR_PRIVATE_KEY`, `VALIDATOR_PUBLIC_KEY`, `VALIDATOR_ADDRESS`)
-* Write them to the `.env` file
-* Display them in container logs
-
-::: warning Save Your Credentials
-Once generated, **save your credentials securely**. 
-
-You'll need them to restart your validator.
-:::
-
-### Option B — **Use existing wallet credentials**
-
-Use credentials from the Wallet. Follow the Wallet documentation to create/export keys, then provide all three in `.env`:
-
-```env
-VALIDATOR_ADDRESS=<your-address>
-VALIDATOR_PUBLIC_KEY=<your-public-key>
-VALIDATOR_PRIVATE_KEY=<your-private-key>
-```
-
-Wallet: [wallet.dev.asichain.io](wallet.dev.asichain.io) (see [Wallet docs](/wallet/usage/) for account/key management)
-
-## Step 4: Run Configurator
-
-Execute the configurator to generate or validate credentials:
+Leave all validator parameters empty in `.env` and run:
 
 ```bash
 docker compose -f ./configurator.yml up
 ```
 
-The configurator will:
-1. Read your `.env` file
-2. Check for missing required parameters
-3. Generate new wallet credentials if none exist
-4. Write generated parameters back to `.env`
+The configurator will automatically:
+1. Detect your server's public IP and set `VALIDATOR_HOST`
+2. Generate new credentials (`VALIDATOR_PRIVATE_KEY`, `VALIDATOR_PUBLIC_KEY`, `VALIDATOR_ADDRESS`)
+3. Write all parameters to `.env`
+4. Display the generated values in container logs
 
-::: tip What to Look For
-If new credentials were generated, you'll see them in the container logs. **Save these credentials immediately**.
+::: warning Save Your Credentials
+Once generated, **save your credentials securely**. You'll need them to restart your validator.
 :::
+
+::: tip How It Works
+The configurator uses `curl ifconfig.me` to detect your public IP automatically. If you need to use a different IP address, you can set `VALIDATOR_HOST` manually in `.env` before running the configurator.
+:::
+
+### Option B — **Use existing wallet credentials**
+
+If you want to use existing credentials from the Wallet:
+
+1. **Get credentials from Wallet:**
+   - Visit [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
+   - Create or access your account (see [Wallet docs](/wallet/usage/) for details)
+   - Export your credentials (private key, public key, and address)
+
+2. **Fill `.env` with your credentials:**
+   ```env
+   VALIDATOR_ADDRESS=<your-address>
+   VALIDATOR_PUBLIC_KEY=<your-public-key>
+   VALIDATOR_PRIVATE_KEY=<your-private-key>
+   ```
+
+3. **Run the configurator:**
+   ```bash
+   docker compose -f ./configurator.yml up
+   ```
+
+The configurator will:
+- Detect and set your `VALIDATOR_HOST` (or use the one you specified)
+- Write `VALIDATOR_HOST` to `.env`
+
+## Step 4: Verify Configuration
+
+After running the configurator, check your `.env` file:
+
+```bash
+cat .env
+```
+
+You should see all validator parameters filled:
+```env
+VALIDATOR_HOST=<your-ip>
+VALIDATOR_PRIVATE_KEY=<generated-or-provided>
+VALIDATOR_PUBLIC_KEY=<generated-or-provided>
+VALIDATOR_ADDRESS=<generated-or-provided>
+```
 
 ## Step 5: Start Validator
 
