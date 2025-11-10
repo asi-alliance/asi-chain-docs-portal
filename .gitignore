@@ -13,3 +13,6 @@ package-lock.json
 
 # System files
 Thumbs.db
+
+# Environment
+.env

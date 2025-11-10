@@ -6,9 +6,11 @@
   "scripts": {
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
-    "docs:preview": "vitepress preview ."
+    "docs:preview": "vitepress preview .",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
-    "vue": "^3.5.17"
+    "vue": "^3.5.17",
+    "patch-package": "^8.0.0"
   }
 }
