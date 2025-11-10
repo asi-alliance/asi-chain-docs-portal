@@ -40,18 +40,18 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('click', this.closeOnBackdropClicks)
+        window.addEventListener('click', this.closeOnBackdropClicks);
     },
     beforeUnmount() {
-        window.removeEventListener('click', this.closeOnBackdropClicks)
+        window.removeEventListener('click', this.closeOnBackdropClicks);
     },
     methods: {
         selectItem(item: OptionType): void {
             this.selectedItem = item;
-            this.$emit('select', item)
+            this.$emit('select', item);
         },
         toggleVisibility(): void {
-            this.isOptionsShown = !this.isOptionsShown
+            this.isOptionsShown = !this.isOptionsShown;
         },
         closeOnBackdropClicks(event: Event): void {
             if (event.target !== this.$refs.dropdownHolder
