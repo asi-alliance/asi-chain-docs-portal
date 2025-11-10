@@ -1,8 +1,20 @@
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+    readonly VITE_FEEDBACK_FORM_URL: string;
+}
+
+interface ImportMeta {
+    readonly env: ImportMetaEnv;
+}
+
+const { VITE_FEEDBACK_FORM_URL } = import.meta.env;
+
 interface APIEndpoints {
-    [APIKey: string]: string,
+    [APIKey: string]: string;
 }
 const endpoints: APIEndpoints = {
-    FEEDBACK: "https://huvfmeboq0.execute-api.us-east-1.amazonaws.com/rt-v2/user/message"// mainnet feedback endpoint
-}
+    FEEDBACK: VITE_FEEDBACK_FORM_URL,
+};
 
 export { endpoints };
