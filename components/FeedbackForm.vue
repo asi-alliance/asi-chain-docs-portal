@@ -75,6 +75,8 @@ const EMAIL_VALIDATION_REGEX: RegExp = new RegExp(
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 );
 
+const MINIMUM_FEEDBACK_LENGTH = 10;
+
 export default {
     data() {
         return {
@@ -100,6 +102,7 @@ export default {
             return !!this.name
                 && this.isEmailValid(this.email)
                 && !!this.feedback
+                && this.feedback?.trim().length >= MINIMUM_FEEDBACK_LENGTH
                 && !!this.category
         },
         isMobile(): boolean {
@@ -175,7 +178,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 100px;
+    width: 50px;
     position: fixed;
     bottom: 30px;
     right: 30px;
@@ -196,6 +199,7 @@ export default {
     right: 0;
     bottom: 0;
     position: absolute;
+    z-index: 5;
     transition: .3s all;
     box-shadow: 0 0 5px var(--vp-c-gray-soft);
 }
