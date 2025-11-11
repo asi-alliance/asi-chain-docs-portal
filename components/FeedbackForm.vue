@@ -80,7 +80,7 @@ export default {
     data() {
         return {
             isRequestHandling: false as boolean,
-            isRequestSent: true as boolean,
+            isRequestSent: false as boolean,
             isFormDisplayed: false as boolean,
             name: '' as string,
             email: '' as string,
