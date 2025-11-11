@@ -1,6 +1,6 @@
 <template>
     <div class="feedback-form-holder">
-        <div class="feedback-form" :class="{ 'gradient-border': !isMobile, 'hidden': !isFormDisplayed }">
+        <div class="feedback-form" :class="{ 'hidden': !isFormDisplayed }">
             <div class="form-header">
                 <h2>Feedback form</h2>
                 <button @click="toggleFormVisibility">
@@ -69,13 +69,12 @@ const enum FeedbackCategory {
     FEEDBACK = 'feedback',
 }
 
-const MOBILE_SCREEN_WIDTH_BREAKPOINT: number = 450; // px
-
 const EMAIL_VALIDATION_REGEX: RegExp = new RegExp(
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 );
 
 const MINIMUM_FEEDBACK_LENGTH = 10;
+const COMPLETED_SCREEN_TIMEOUT = 5000;
 
 export default {
     data() {
@@ -104,14 +103,7 @@ export default {
                 && !!this.feedback
                 && this.feedback?.trim().length >= MINIMUM_FEEDBACK_LENGTH
                 && !!this.category
-        },
-        isMobile(): boolean {
-            if (typeof window === 'undefined') {
-                return false;
-            }
-
-            return window.innerWidth < MOBILE_SCREEN_WIDTH_BREAKPOINT;
-        },
+        }
     },
     methods: {
         isEmailValid(value: string): boolean {
@@ -131,7 +123,7 @@ export default {
         },
         async showAlert(): Promise<void> {
             this.isRequestSent = true;
-            await new Promise(r => setTimeout(r, 2000));
+            await new Promise(r => setTimeout(r, COMPLETED_SCREEN_TIMEOUT));
             this.isRequestSent = false;
         },
         async sendFeedback(): Promise<void> {
@@ -182,7 +174,7 @@ export default {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    z-index: 150;
+    z-index: 14;
 }
 
 .gradient-border::before {
@@ -199,7 +191,7 @@ export default {
     right: 0;
     bottom: 0;
     position: absolute;
-    z-index: 5;
+    z-index: 16;
     transition: .3s all;
     box-shadow: 0 0 5px var(--vp-c-gray-soft);
 }
@@ -335,6 +327,7 @@ form {
 }
 
 .feedback-form-launcher {
+    z-index: 15;
     width: 100px;
     transition: .3s all;
 }
@@ -347,12 +340,12 @@ form {
 .ready-alert {
     width: 200px;
     position: absolute;
-    right: 100px;
+    right: 60px;
     bottom: 30px;
     padding: 10px;
     border-radius: 8px;
     color: var(--vp-c-green-1);
-    background-color: var(--vp-c-green-soft);
+    background-color: var(--vp-c-green-3);
     transition: .3s all;
 }
 
