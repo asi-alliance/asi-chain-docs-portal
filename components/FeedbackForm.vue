@@ -344,7 +344,7 @@ form {
     bottom: 30px;
     padding: 10px;
     border-radius: 8px;
-    color: var(--vp-c-green-1);
+    color: var(--vp-c-gray-3);
     background-color: var(--vp-c-green-3);
     transition: .3s all;
 }
@@ -360,7 +360,6 @@ form {
         right: 0;
         bottom: 0;
         width: 100%;
-        z-index: 1;
     }
 }
 </style>
