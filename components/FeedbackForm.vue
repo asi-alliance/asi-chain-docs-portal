@@ -351,7 +351,7 @@ form {
 
 @media (max-width: 450px) {
     .feedback-form {
-        width: 100%;
+        width: 100vw;
         border-radius: 8px 8px 0 0;
         box-shadow: 0 0 10px var(--vp-accent-border);
     }
@@ -359,7 +359,6 @@ form {
     .feedback-form-holder {
         right: 0;
         bottom: 0;
-        width: 100%;
     }
 }
 </style>
