@@ -9,7 +9,7 @@ ASI:Chain is powered by a flexible Docker-based infrastructure that supports mul
 All node types use the official ASI Chain Docker image:
 
 ```bash
-533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+public.ecr.aws/f6y9h6x4/asi-chain/node:latest
 ```
 
 This image is referenced across all Docker Compose configurations, including:

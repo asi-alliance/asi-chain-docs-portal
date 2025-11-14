@@ -283,7 +283,7 @@ newgrp docker
 
 2. **Retry Pull**
    ```bash
-   docker pull 533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+   docker pull public.ecr.aws/f6y9h6x4/asi-chain/node:latest
    ```
 
 3. **Clear Docker Cache**

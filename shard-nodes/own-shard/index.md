@@ -38,7 +38,7 @@ A private shard requires:
 
 Use the official ASI:Chain node image:
 ```
-533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+public.ecr.aws/f6y9h6x4/asi-chain/node:latest
 ```
 
 ## Key Configuration Parameters

@@ -7,7 +7,7 @@ Technical documentation for the ASI:Chain validator node Docker image and config
 ASI:Chain validators use the official Docker image hosted on AWS ECR:
 
 ```bash
-533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+public.ecr.aws/f6y9h6x4/asi-chain/node:latest
 ```
 
 This image contains:
@@ -50,7 +50,7 @@ This image contains:
 ### Pull the Image
 
 ```bash
-docker pull 533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+docker pull public.ecr.aws/f6y9h6x4/asi-chain/node:latest
 ```
 
 ### Basic Container Run
@@ -61,7 +61,7 @@ docker run -d \
   -p 40400:40400 \
   -v ./data:/var/lib/rnode/ \
   -v ./conf/validator.conf:/var/lib/rnode/rnode.conf \
-  533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest \
+  public.ecr.aws/f6y9h6x4/asi-chain/node:latest \
   --bootstrap=rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404
 ```
 
@@ -73,7 +73,7 @@ Recommended approach using `docker-compose.yml`:
 version: '3.9'
 services:
   validator:
-    image: 533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+    image: public.ecr.aws/f6y9h6x4/asi-chain/node:latest
     container_name: validator
     ports:
       - "40400:40400"  # Protocol server
@@ -313,7 +313,7 @@ docker compose -f validator.yml up -d
 
 ```bash
 docker compose -f validator.yml down
-docker pull 533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+docker pull public.ecr.aws/f6y9h6x4/asi-chain/node:latest
 docker compose -f validator.yml up -d
 ```
 
