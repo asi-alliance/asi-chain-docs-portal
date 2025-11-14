@@ -9,7 +9,7 @@ Observer nodes use the same Docker image as validators but are configured for re
 ## Official Docker Image
 
 ```bash
-533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+public.ecr.aws/f6y9h6x4/asi-chain/node:latest
 ```
 
 Same image as validators, different configuration.
@@ -57,7 +57,7 @@ Use these for:
 version: '3.9'
 services:
   observer:
-    image: 533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+    image: public.ecr.aws/f6y9h6x4/asi-chain/node:latest
     container_name: observer
     ports:
       - "40450:40450"  # Protocol server
@@ -318,7 +318,7 @@ sudo ufw allow from <trusted-ip> to any port 40453
 
 ```bash
 docker compose -f observer.yml down
-docker pull 533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+docker pull public.ecr.aws/f6y9h6x4/asi-chain/node:latest
 docker compose -f observer.yml up -d
 ```
 

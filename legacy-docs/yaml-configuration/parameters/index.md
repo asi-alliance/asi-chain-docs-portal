@@ -81,7 +81,7 @@ This is useful when adding a new external validator to avoid reusing static keys
 version: '3.9'
 services:
   rnode:
-    image: 533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+    image: public.ecr.aws/f6y9h6x4/asi-chain/node:latest
     container_name: validator-custom
     ports:
       - "40400:40400"
