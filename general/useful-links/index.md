@@ -87,7 +87,7 @@ Command-line wallet interface for ASI:Chain.
 
 ### Official Node Image
 ```
-533793137436.dkr.ecr.us-east-1.amazonaws.com/asi-chain/node:latest
+public.ecr.aws/f6y9h6x4/asi-chain/node:latest
 ```
 Docker image for running validator and observer nodes.
 
