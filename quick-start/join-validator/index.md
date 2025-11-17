@@ -1,5 +1,8 @@
 # Join DevNet as Validator
 
+> [!WARNING]
+> Attention! At the DevNet stage, ASI:Chain works in dev mode. To retrieve data from the blockchain, you can use the unbonded validator as an observer, using the same methods as for the observer node. **On the Testnet and Mainnet stages - it will change: only observer node will be available to retrieve data from the blockchain.**
+
 This guide will help you join the ASI:Chain DevNet as a validator and participate in network consensus.
 
 ![ASI:Chain Workflows](/images/asi-chain-workflows.png)

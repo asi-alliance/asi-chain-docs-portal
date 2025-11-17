@@ -1,5 +1,8 @@
 # Join DevNet as Observer
 
+> [!WARNING]
+> Attention! At the DevNet stage, ASI:Chain works in dev mode. The observer node works unstably. You can set up and deploy a validator node as an entry point for retrieving data from the blockchain. **On the Testnet and Mainnet stages - it will change: only observer node will be available to retrieve data from the blockchain.**
+
 Documentation for running an observer node is currently under development.
 
 ## Public Observer Access
