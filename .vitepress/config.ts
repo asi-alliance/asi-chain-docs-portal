@@ -10,19 +10,6 @@ export default withMermaid(defineConfig({
   mermaid: {
     theme: 'base',
     themeVariables: {
-      primaryColor: '#6366f1',
-      primaryTextColor: '#ffffff',
-      primaryBorderColor: '#4f46e5',
-      lineColor: '#6366f1',
-      secondaryColor: '#e0e7ff',
-      tertiaryColor: '#f5f5ff',
-      background: '#ffffff',
-      mainBkg: '#f8fafc',
-      nodeBorder: '#4f46e5',
-      clusterBkg: '#e0e7ff',
-      clusterBorder: '#6366f1',
-      titleColor: '#1e1b4b',
-      edgeLabelBackground: '#ffffff',
       fontFamily: '"Roboto Mono", monospace'
     }
   },
