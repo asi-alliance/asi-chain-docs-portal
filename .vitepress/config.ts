@@ -1,7 +1,8 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 import CustomLanguages from "../config/languages";
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: "ASI:Chain Docs",
   description: "Complete guide for ASI:Chain blockchain network",
   css: ['custom.css'],
@@ -83,6 +84,34 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Architecture',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/architecture/' },
+          { text: 'Component Diagrams', link: '/architecture/component-diagrams/',
+            items: [
+              { text: 'Wallet', link: '/architecture/component-diagrams/wallet/' },
+              { text: 'Explorer', link: '/architecture/component-diagrams/explorer/' },
+              { text: 'Node', link: '/architecture/component-diagrams/node/' },
+            ]
+          },
+          { text: 'Sequence Diagrams', link: '/architecture/sequence-diagrams/',
+            items: [
+              { text: 'Transaction Flow', link: '/architecture/sequence-diagrams/transaction/' },
+              { text: 'Balance Query', link: '/architecture/sequence-diagrams/balance/' },
+            ]
+          },
+          { text: 'State Diagrams', link: '/architecture/state-diagrams/',
+            items: [
+              { text: 'Startup States', link: '/architecture/state-diagrams/startup/' },
+              { text: 'Operational States', link: '/architecture/state-diagrams/operations/' },
+            ]
+          },
+          { text: 'Data Flow', link: '/architecture/data-flow/' },
+          { text: 'Network Topology', link: '/architecture/network-topology/' },
+        ]
+      },
+      {
         text: 'FAQ',
         collapsed: false,
         items: [
@@ -128,4 +157,4 @@ export default defineConfig({
     ['meta', { property: 'og:site_name', content: 'ASI:Chain Docs' }],
     ['meta', { property: 'og:url', content: 'https://docs.asi-chain.singularitynet.dev/' }],
   ]
-})
+}))
