@@ -48,6 +48,10 @@ features:
     details: Configure and run validator or observer nodes
     link: /shard-nodes/validator-image/
   
+  - title: Architecture
+    details: Technical diagrams for components, data flow, and network topology
+    link: /architecture/
+  
   - title: FAQ
     details: Find answers to common questions about ASI:Chain DevNet
     link: /faq/
@@ -55,7 +59,7 @@ features:
 
 ## Welcome to ASI:Chain DevNet
 
-ASI:Chain is a blockchain network built for the ASI Alliance ecosystem, powered by F1R3FLY technology. This documentation helps you get started with DevNet - our development and testing environment.
+ASI:Chain is a blockchain network built for the Artificial Superintelligence Alliance ecosystem. This documentation helps you get started with DevNet - our development and testing environment.
 
 ### Current Network Status
 
@@ -127,6 +131,12 @@ Explore our comprehensive documentation:
 - [Explorer Usage](/explorer/usage/) - Block explorer guide
 - [Faucet Usage](/faucet/usage/) - Get test tokens
 
+**Architecture**
+- [Overview](/architecture/) - Technical diagrams
+- [Component Diagrams](/architecture/component-diagrams/) - Wallet, Explorer, Node internals
+- [Sequence Diagrams](/architecture/sequence-diagrams/) - Transaction and query flows
+- [Network Topology](/architecture/network-topology/) - Infrastructure overview
+
 **Help**
 - [FAQ](/faq/) - Frequently asked questions
 - [Troubleshooting](/quick-start/troubleshooting/) - Common issues and solutions
@@ -184,6 +194,7 @@ Need help?
 - [Smart Contracts](/wallet/usage/) - Deploy with the wallet IDE
 
 **Technical Details:**
+- [Architecture](/architecture/) - Component and sequence diagrams
 - [Network Configuration](/shard-nodes/devnet-structure/) - Ports, IPs, topology
 - [Node Images](/shard-nodes/validator-image/) - Docker setup and config
 - [API Access](/general/useful-links/) - Endpoints and integration
