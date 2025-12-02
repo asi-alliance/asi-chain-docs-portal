@@ -9,18 +9,30 @@ Runtime states for active validator and observer nodes.
 Active validator nodes cycle through consensus states.
 
 ```mermaid
-stateDiagram-v2
-    Active --> Proposing : Create block
-    Active --> Voting : Validate block
-    Active --> Finalizing : Commit block
+flowchart TD
+    subgraph Consensus["Consensus Cycle"]
+        Active((Active))
+        Proposing[Proposing]
+        Voting[Voting]
+        Finalizing[Finalizing]
+        
+        Active --> |Create block| Proposing
+        Active --> |Validate block| Voting
+        Active --> |Commit block| Finalizing
+        
+        Proposing --> Active
+        Voting --> Active
+        Finalizing --> Active
+    end
     
-    Proposing --> Active : Block proposed
-    Voting --> Active : Vote cast
-    Finalizing --> Active : Block finalized
+    subgraph Recovery["Connection Recovery"]
+        Disconnected[Disconnected]
+        Reconnecting[Reconnecting]
+    end
     
-    Active --> Disconnected : Network loss
-    Disconnected --> Reconnecting : Auto retry
-    Reconnecting --> Active : Restored
+    Active --> |Network loss| Disconnected
+    Disconnected --> |Auto retry| Reconnecting
+    Reconnecting --> |Restored| Active
 ```
 
 ## Observer States
@@ -28,12 +40,24 @@ stateDiagram-v2
 Observer nodes monitor without participating in consensus.
 
 ```mermaid
-stateDiagram-v2
-    Observer --> Observer : Monitor blocks
-    Observer --> Disconnected : Network loss
-    Disconnected --> Reconnecting : Auto retry
-    Reconnecting --> Observer : Restored
+flowchart LR
+    subgraph Normal["Normal Operation"]
+        Observer((Observer))
+    end
+    
+    subgraph Recovery["Connection Recovery"]
+        Disconnected[Disconnected]
+        Reconnecting[Reconnecting]
+    end
+    
+    Observer --> |Network loss| Disconnected
+    Disconnected --> |Auto retry| Reconnecting
+    Reconnecting --> |Restored| Observer
 ```
+
+::: tip Observer Mode
+Observer nodes continuously receive and store blocks but do not participate in consensus voting.
+:::
 
 ## State Descriptions
 
