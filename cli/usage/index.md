@@ -1,6 +1,6 @@
 # Wallet CLI
 
-A command-line wallet for the ASI Chain network. The CLI provides wallet management, token transfers, balance checking, and transaction history monitoring directly from your terminal.
+A command-line wallet for the ASI Chain network. The CLI provides wallet management, token transfers, balance checking, and deploy history monitoring directly from your terminal.
 
 **Source code**: [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli)
 
@@ -14,7 +14,7 @@ Before using the CLI, ensure you have:
 
 - [Rust](https://www.rust-lang.org/tools/install) installed (edition 2024)
 - Access to ASI Chain network nodes (Validator and Observer)
-- GraphQL API endpoint for transaction history features
+- GraphQL API endpoint for deploy history features
 
 ## Installation
 
@@ -82,7 +82,7 @@ GRAPHQL_URL=<GRAPHQL_API_ENDPOINT>
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `VALIDATOR_HOST` | IP address of the validator node (for sending transactions) | Required |
+| `VALIDATOR_HOST` | IP address of the validator node (for sending deploys) | Required |
 | `VALIDATOR_GRPC_PORT` | gRPC port of the validator node | 40432 |
 | `VALIDATOR_HTTP_PORT` | HTTP port of the validator node | 40433 |
 | `OBSERVER_HOST` | IP address of the observer node (for read operations) | Required |
@@ -90,7 +90,7 @@ GRAPHQL_URL=<GRAPHQL_API_ENDPOINT>
 | `OUTPUT_DIR` | Directory for storing wallet credentials | ./credentials |
 | `TOKEN` | Token name to use | ASI |
 | `VERBOSE_LOGS` | Show detailed logs from rust-client | false |
-| `GRAPHQL_URL` | GraphQL API endpoint for transaction history | Required |
+| `GRAPHQL_URL` | GraphQL API endpoint for deploy history | Required |
 
 ::: tip Network Endpoints
 Contact the ASI Chain team or check the [Useful Links](/general/useful-links/) page for current DevNet node addresses and GraphQL endpoints.
@@ -166,9 +166,9 @@ The command performs several checks before sending:
 - Validates recipient address format
 - Confirms amount is greater than zero
 
-After deployment, the CLI displays the deploy ID and waits for transaction finalization.
+After deployment, the CLI displays the deploy ID and waits for deploy finalization.
 
-### Transaction History
+### Deploy History
 
 Monitor your deploy history in real-time:
 
@@ -188,7 +188,7 @@ cargo run -- hist --limit 20
 - Displays recent deployments (both incoming and outgoing transfers)
 - Shows deploy ID, block number, status, and timestamp
 - Lists associated transfers with direction (IN/OUT) and amounts
-- Continuously monitors for new transactions via WebSocket subscription
+- Continuously monitors for new deploys via WebSocket subscription
 - Real-time updates as new blocks are created
 
 **Output example:**
@@ -218,7 +218,7 @@ Created at: 2025-01-15 10:30:45 UTC
 
 ### Export Data
 
-Export your transaction history to a file for analysis or record-keeping:
+Export your deploy history to a file for analysis or record-keeping:
 
 ```bash
 # Export as JSON (default format)
@@ -228,7 +228,7 @@ cargo run -- export
 cargo run -- export --format csv
 
 # Specify custom output path
-cargo run -- export --output my_transactions.json
+cargo run -- export --output my_deploys.json
 
 # Limit number of records (default: 100)
 cargo run -- export --limit 50
@@ -282,18 +282,18 @@ ASI token uses 8 decimal places. When specifying amounts in CLI commands, use th
 To send 1 ASI token, use `--amount 100000000` (1 × 10⁸)
 :::
 
-## Transaction Statuses
+## Deploy Statuses
 
-Your transactions can have the following statuses:
+Your deploys can have the following statuses:
 
 | Status | Description |
 |--------|-------------|
-| **Deploying** | Transaction is sent but not yet included in a block |
-| **Finalizing** | Transaction is included in a block but not finalized |
-| **Finalized** | Transaction successfully completed |
+| **Deploying** | Deploy is sent but not yet included in a block |
+| **Finalizing** | Deploy is included in a block but not finalized |
+| **Finalized** | Deploy successfully completed |
 
 ::: info Status Timing
-Transactions typically take a few seconds to finalize. The CLI automatically monitors and displays status updates during the send operation.
+Deploys typically take a few seconds to finalize. The CLI automatically monitors and displays status updates during the send operation.
 :::
 
 ## Troubleshooting
