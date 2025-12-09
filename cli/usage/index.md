@@ -302,18 +302,13 @@ Deploys typically take a few seconds to finalize. The CLI automatically monitors
 - Ensure your `.env` file exists and contains all required variables
 - Check that variable names match exactly (case-sensitive)
 
-**"Failed to read wallet info":**
+**"Failed to read wallet info from ...":**
 - Create a wallet first using `cargo run -- create --save`
 - Verify the `OUTPUT_DIR` path in your `.env` file
 
-**"Insufficient balance":**
+**"Insufficient balance to complete the transfer":**
 - Check your current balance with `cargo run -- balance`
 - Remember to account for token decimals (1 ASI = 100000000)
-
-**Connection errors:**
-- Verify your `VALIDATOR_HOST` and `OBSERVER_HOST` are correct
-- Check that the ports match your network configuration
-- Ensure network connectivity to the nodes
 
 ## Support Resources
 
