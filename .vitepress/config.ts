@@ -34,6 +34,9 @@ export default withMermaid(defineConfig({
           text: 'Wallet repository', link: "https://github.com/asi-alliance/asi-chain-wallet",
         },
         {
+          text: 'Wallet CLI repository', link: "https://github.com/asi-alliance/asi-chain-wallet-cli",
+        },
+        {
           text: 'Faucet repository', link: "https://github.com/asi-alliance/asi-chain-faucet",
         }
       ]}
@@ -74,6 +77,13 @@ export default withMermaid(defineConfig({
         items: [
           { text: 'Usage Guide', link: '/wallet/usage/' },
           { text: 'Custom Network Connection', link: '/wallet/custom-network/' },
+        ]
+      },
+      {
+        text: 'Wallet CLI',
+        collapsed: false,
+        items: [
+          { text: 'Usage Guide', link: '/cli/usage/' },
         ]
       },
       {
