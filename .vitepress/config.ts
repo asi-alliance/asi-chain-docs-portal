@@ -1,10 +1,18 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 import CustomLanguages from "../config/languages";
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: "ASI:Chain Docs",
   description: "Complete guide for ASI:Chain blockchain network",
   css: ['custom.css'],
+
+  mermaid: {
+    theme: 'base',
+    themeVariables: {
+      fontFamily: '"Roboto Mono", monospace'
+    }
+  },
 
   themeConfig: {
     logo: {
@@ -24,6 +32,9 @@ export default defineConfig({
         },
         {
           text: 'Wallet repository', link: "https://github.com/asi-alliance/asi-chain-wallet",
+        },
+        {
+          text: 'Wallet CLI repository', link: "https://github.com/asi-alliance/asi-chain-wallet-cli",
         },
         {
           text: 'Faucet repository', link: "https://github.com/asi-alliance/asi-chain-faucet",
@@ -69,6 +80,13 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Wallet CLI',
+        collapsed: false,
+        items: [
+          { text: 'Usage Guide', link: '/cli/usage/' },
+        ]
+      },
+      {
         text: 'Explorer',
         collapsed: false,
         items: [
@@ -80,6 +98,34 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Usage Guide', link: '/faucet/usage/' },
+        ]
+      },
+      {
+        text: 'Architecture',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/architecture/' },
+          { text: 'Component Diagrams', link: '/architecture/component-diagrams/',
+            items: [
+              { text: 'Wallet', link: '/architecture/component-diagrams/wallet/' },
+              { text: 'Explorer', link: '/architecture/component-diagrams/explorer/' },
+              { text: 'Node', link: '/architecture/component-diagrams/node/' },
+            ]
+          },
+          { text: 'Sequence Diagrams', link: '/architecture/sequence-diagrams/',
+            items: [
+              { text: 'Transaction Flow', link: '/architecture/sequence-diagrams/transaction/' },
+              { text: 'Balance Query', link: '/architecture/sequence-diagrams/balance/' },
+            ]
+          },
+          { text: 'State Diagrams', link: '/architecture/state-diagrams/',
+            items: [
+              { text: 'Startup States', link: '/architecture/state-diagrams/startup/' },
+              { text: 'Operational States', link: '/architecture/state-diagrams/operations/' },
+            ]
+          },
+          { text: 'Data Flow', link: '/architecture/data-flow/' },
+          { text: 'Network Topology', link: '/architecture/network-topology/' },
         ]
       },
       {
@@ -138,4 +184,4 @@ export default defineConfig({
     ['meta', { name: 'twitter:description', content: 'Complete guide for ASI:Chain blockchain network - DevNet setup, wallet usage, explorer, faucet, and more' }],
     ['meta', { name: 'twitter:image', content: 'https://docs.asichain.io/logo-light.svg' }],
   ]
-})
+}))
