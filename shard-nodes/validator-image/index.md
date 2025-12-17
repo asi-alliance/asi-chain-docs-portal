@@ -62,7 +62,7 @@ docker run -d \
   -v ./data:/var/lib/rnode/ \
   -v ./conf/validator.conf:/var/lib/rnode/rnode.conf \
   public.ecr.aws/f6y9h6x4/asi-chain/node:latest \
-  --bootstrap=rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404
+  --bootstrap=rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404
 ```
 
 ### With Docker Compose
@@ -89,7 +89,7 @@ services:
       - VALIDATOR_PRIVATE_KEY=${VALIDATOR_PRIVATE_KEY}
       - VALIDATOR_HOST=${VALIDATOR_HOST}
     command:
-      - "--bootstrap=rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404"
+      - "--bootstrap=rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404"
     restart: unless-stopped
 ```
 
@@ -167,7 +167,7 @@ All ports must be exposed for proper operation:
 ### Bootstrap Connection
 
 ```bash
---bootstrap=rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404
+--bootstrap=rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404
 ```
 
 This connects your validator to the network via the bootstrap node.

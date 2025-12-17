@@ -28,7 +28,7 @@ Access indexed blockchain data.
 
 ### Bootstrap Node
 ```
-rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404
+rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404
 ```
 Use this endpoint to connect your node to the DevNet.
 
