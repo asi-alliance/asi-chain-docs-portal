@@ -67,7 +67,7 @@ ASI:Chain is a blockchain network built for the Artificial Superintelligence All
 
 **DevNet is Live**
 
-- **Bootstrap Node:** `rnode://e5e6faf012f36a30176d459ddc0db81435f6f1dc@54.152.57.201?protocol=40400&discovery=40404`
+- **Bootstrap Node:** `rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404`
 - **Block Explorer:** [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
 - **Wallet:** [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
 - **Faucet:** [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
