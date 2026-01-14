@@ -265,6 +265,29 @@ Display available commands and usage information:
 cargo run -- help
 ```
 
+## Docker
+
+You can build and run the wallet CLI using Docker instead of compiling from source.
+
+### Build Docker Image
+
+```bash
+docker build -t wallet-cli .
+```
+
+### Run with Docker Compose
+
+Run commands using Docker Compose:
+
+```bash
+docker compose run --rm wallet-cli balance
+docker compose run --rm wallet-cli send --to <ADDRESS> --amount 1000
+```
+
+::: tip Volume Mounts
+Docker Compose automatically mounts `./credentials` and `./exports` directories, so your wallet credentials and exported data persist on your local filesystem.
+:::
+
 ## Token Decimals
 
 ASI token uses 8 decimal places. When specifying amounts in CLI commands, use the smallest unit:
@@ -309,6 +332,32 @@ Deploys typically take a few seconds to finalize. The CLI automatically monitors
 **"Insufficient balance to complete the transfer":**
 - Check your current balance with `cargo run -- balance`
 - Remember to account for token decimals (1 ASI = 100000000)
+
+## Project Structure
+
+```
+asi-chain-wallet-cli/
+├── Cargo.toml              # Project dependencies
+├── .env.example            # Environment configuration template
+├── Dockerfile              # Docker build configuration
+├── docker-compose.yml      # Docker Compose configuration
+├── src/
+│   ├── main.rs             # Entry point and CLI commands
+│   ├── config.rs           # Configuration management
+│   ├── models.rs           # Data models
+│   ├── commands/
+│   │   ├── balance.rs      # Balance command
+│   │   ├── export.rs       # Export command
+│   │   ├── history.rs      # History command
+│   │   ├── keys.rs         # Create wallet command
+│   │   └── send.rs         # Send command
+│   ├── requests/
+│   │   └── graphql.rs      # GraphQL queries
+│   └── utils/
+│       ├── deployment.rs   # Deployment utilities
+│       └── websocket.rs    # WebSocket connection
+└── rust-client/            # Submodule: low-level node CLI
+```
 
 ## Support Resources
 
