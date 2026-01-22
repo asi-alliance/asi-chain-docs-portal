@@ -1,4 +1,5 @@
 <template>
+    <div id="captcha-modal-container"></div>
     <div class="feedback-form-holder">
         <div class="feedback-form" :class="{ 'hidden': !isFormDisplayed }">
             <div class="form-header">
@@ -51,6 +52,9 @@
         </div>
         <div class="ready-alert" :class="{ 'hidden': !isRequestSent }">Thank you!
             Our technical support will get in touch with you soon!</div>
+        <div class="error-alert" :class="{ 'hidden': !isRequestErrored }">
+            Something went wrong! Please, try again later
+        </div>
         <div class="feedback-form-launcher" :class="{ 'hidden': isFormDisplayed }">
             <button @click="toggleFormVisibility">
                 <img src="/images/common/asi-feedback-logo.png" alt="feedback" />
@@ -62,6 +66,7 @@
 <script lang="ts">
 import DropdownList, { OptionType } from './DropdownList.vue';
 import { endpoints } from '../utils/constants';
+import { getCaptchaFetch } from '../utils/captchaFetch';
 
 const enum FeedbackCategory {
     QUESTION = 'question',
@@ -79,8 +84,10 @@ const COMPLETED_SCREEN_TIMEOUT = 5000;
 export default {
     data() {
         return {
+            captchaFetch: undefined as | undefined | ((path: RequestInfo | URL, init: RequestInit) => Promise<Response>),
             isRequestHandling: false as boolean,
             isRequestSent: false as boolean,
+            isRequestErrored: false as boolean,
             isFormDisplayed: false as boolean,
             name: '' as string,
             email: '' as string,
@@ -93,6 +100,9 @@ export default {
             ] as OptionType[]
         }
     },
+    created() {
+        this.captchaFetch = getCaptchaFetch()
+    },
     components: {
         DropdownList
     },
@@ -103,7 +113,7 @@ export default {
                 && !!this.feedback
                 && this.feedback?.trim().length >= MINIMUM_FEEDBACK_LENGTH
                 && !!this.category
-        }
+        },
     },
     methods: {
         isEmailValid(value: string): boolean {
@@ -120,6 +130,11 @@ export default {
             this.email = '';
             this.feedback = '';
             this.category = FeedbackCategory.QUESTION;
+        },
+        async showError(): Promise<void> {
+            this.isRequestErrored = true;
+            await new Promise(r => setTimeout(r, COMPLETED_SCREEN_TIMEOUT));
+            this.isRequestErrored = false;
         },
         async showAlert(): Promise<void> {
             this.isRequestSent = true;
@@ -149,13 +164,14 @@ export default {
                 };
                 if (!this.isRequestHandling) {
                     this.isRequestHandling = true;
-                    await fetch(endpoints.FEEDBACK, options);
+                    await this.captchaFetch?.(endpoints.FEEDBACK, options);
                 }
                 this.isFormDisplayed = false;
                 await this.showAlert();
             } catch (error) {
                 this.isFormDisplayed = false;
-                console.log("error on feedback request: ", error);
+                console.error("error on feedback request: ", error);
+                await this.showError();
             } finally {
                 this.resetForm();
                 this.isRequestHandling = false;
@@ -196,6 +212,7 @@ export default {
     box-shadow: 0 0 5px var(--vp-c-gray-soft);
 }
 
+.error-alert.hidden,
 .ready-alert.hidden,
 .feedback-form.hidden,
 .feedback-form-launcher.hidden {
@@ -337,6 +354,7 @@ form {
     transition: .3s;
 }
 
+.error-alert,
 .ready-alert {
     width: 200px;
     position: absolute;
@@ -344,9 +362,18 @@ form {
     bottom: 30px;
     padding: 10px;
     border-radius: 8px;
+    transition: .3s all;
+    backdrop-filter: blur(5px);
+}
+
+.error-alert {
+    color: var(--vp-c-danger-3);
+    background-color: var(--vp-c-danger-soft);
+}
+
+.ready-alert {
     color: var(--vp-c-gray-3);
     background-color: var(--vp-c-green-3);
-    transition: .3s all;
 }
 
 @media (max-width: 450px) {
