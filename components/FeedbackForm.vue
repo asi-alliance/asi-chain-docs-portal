@@ -66,7 +66,6 @@
 <script lang="ts">
 import DropdownList, { OptionType } from './DropdownList.vue';
 import { endpoints } from '../utils/constants';
-import { getCaptchaFetch } from '../utils/captchaFetch';
 
 const enum FeedbackCategory {
     QUESTION = 'question',
@@ -84,7 +83,6 @@ const COMPLETED_SCREEN_TIMEOUT = 5000;
 export default {
     data() {
         return {
-            captchaFetch: undefined as | undefined | ((path: RequestInfo | URL, init: RequestInit) => Promise<Response>),
             isRequestHandling: false as boolean,
             isRequestSent: false as boolean,
             isRequestErrored: false as boolean,
@@ -99,9 +97,6 @@ export default {
                 { value: "feedback", title: "Feedback" },
             ] as OptionType[]
         }
-    },
-    created() {
-        this.captchaFetch = getCaptchaFetch()
     },
     components: {
         DropdownList
@@ -162,9 +157,9 @@ export default {
                         attachment_details: {},
                     })
                 };
-                if (!this.isRequestHandling) {
+                if (!this.isRequestHandling && this.$captcha.isReady) {
                     this.isRequestHandling = true;
-                    await this.captchaFetch?.(endpoints.FEEDBACK, options);
+                    await this.$captcha?.fetch?.(endpoints.FEEDBACK+'__', options);
                 }
                 this.isFormDisplayed = false;
                 await this.showAlert();
