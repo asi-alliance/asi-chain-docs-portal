@@ -159,7 +159,7 @@ export default {
                 };
                 if (!this.isRequestHandling && this.$captcha.isReady) {
                     this.isRequestHandling = true;
-                    await this.$captcha?.fetch?.(endpoints.FEEDBACK+'__', options);
+                    await this.$captcha?.fetch?.(endpoints.FEEDBACK, options);
                 }
                 this.isFormDisplayed = false;
                 await this.showAlert();
