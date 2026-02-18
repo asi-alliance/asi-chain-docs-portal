@@ -2,6 +2,8 @@
 
 interface ImportMetaEnv {
     readonly VITE_FEEDBACK_FORM_URL: string;
+    readonly VITE_JSAPI_URL: string;
+    readonly VITE_CAPTCHA_TOKEN: string;
 }
 
 interface ImportMeta {

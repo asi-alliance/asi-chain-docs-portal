@@ -23,7 +23,7 @@ const initCaptcha = () => {
 
     if (!VITE_CAPTCHA_TOKEN || !VITE_JSAPI_URL) {
         console.warn('Captcha configuration missing');
-        return null;
+        return fetch;
     }
 
     captchaInstance = createCaptchaFetchHandler({
