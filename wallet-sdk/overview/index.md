@@ -81,6 +81,14 @@ const deployId = await assetsService.transfer(
 );
 ```
 
+## Cryptographic Flow
+
+- **Key Generation**: secp256k1 elliptic curve keypairs
+- **Address Derivation**: keccak256 hash → blake2b checksum → Base58 encoding with chain prefix
+- **Encryption**: PBKDF2 (100,000 iterations) → AES-GCM
+- **Mnemonic**: BIP-39 standard (12/24 words)
+- **Derivation Path**: BIP-44 (`m/44'/60'/0'/0/index`)
+
 ## Dependencies
 
 | Package | Version | Purpose |
