@@ -80,6 +80,14 @@ export default withMermaid(defineConfig({
         ]
       },
       {
+        text: 'Wallet SDK',
+        collapsed: false,
+        items: [
+          { text: 'Overview', link: '/wallet-sdk/overview/' },
+          { text: 'API Reference', link: '/wallet-sdk/api-reference/' },
+        ]
+      },
+      {
         text: 'Wallet CLI',
         collapsed: false,
         items: [
