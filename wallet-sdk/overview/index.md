@@ -85,28 +85,31 @@ The SDK is organized into three layers — **Services**, **Domains**, and **Util
 
 ```mermaid
 %%{init: {'theme': 'neutral', 'themeVariables': {'fontSize': '16px', 'fontFamily': 'Roboto Mono, monospace'}}}%%
-flowchart TB
+flowchart LR
     A(["Your Application"])
 
-    A --> S & D & U
+    A --> S
+    A --> D
+    A --> U
 
-    subgraph S["Services — business logic"]
-        direction LR
-        s1["WalletsService\nCryptoService"]
-        s2["MnemonicService\nKeyDerivationService\nKeysManager"]
-        s3["AssetsService\nSignerService\nDeployResubmitter"]
+    subgraph S["Services"]
+        direction TB
+        s1["WalletsService · CryptoService"]
+        s2["MnemonicService · KeyDerivationService · KeysManager"]
+        s3["AssetsService · SignerService · DeployResubmitter"]
     end
 
-    subgraph D["Domains — stateful entities"]
-        direction LR
-        d1["Wallet\nVault"]
-        d2["BlockchainGateway\nEncryptedRecord"]
-        d3["Asset\nBrowserStorage"]
+    subgraph D["Domains"]
+        direction TB
+        d1["Wallet · Vault"]
+        d2["BlockchainGateway · EncryptedRecord"]
+        d3["Asset · BrowserStorage"]
     end
 
-    subgraph U["Utilities — stateless helpers"]
-        direction LR
-        u1["Codec · Functions · Validators · Constants · Polyfills"]
+    subgraph U["Utilities"]
+        direction TB
+        u1["Codec · Functions"]
+        u2["Validators · Constants · Polyfills"]
     end
 
     S -.-> D -.-> U
