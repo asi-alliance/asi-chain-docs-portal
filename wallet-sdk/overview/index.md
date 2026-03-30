@@ -83,38 +83,7 @@ const deployId = await assetsService.transfer(
 
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
-```mermaid
-%%{init: {'theme': 'neutral', 'themeVariables': {'fontSize': '16px', 'fontFamily': 'Roboto Mono, monospace'}}}%%
-flowchart TB
-    A(["Your Application"])
-    A --> Layers
-
-    subgraph Layers[" "]
-        direction LR
-
-        subgraph S["Services"]
-            direction TB
-            s1["WalletsService · CryptoService"]
-            s2["MnemonicService · KeyDerivationService · KeysManager"]
-            s3["AssetsService · SignerService · DeployResubmitter"]
-        end
-
-        subgraph D["Domains"]
-            direction TB
-            d1["Wallet · Vault"]
-            d2["BlockchainGateway · EncryptedRecord"]
-            d3["Asset · BrowserStorage"]
-        end
-
-        subgraph U["Utilities"]
-            direction TB
-            u1["Codec · Functions"]
-            u2["Validators · Constants · Polyfills"]
-        end
-
-        S -.-> D -.-> U
-    end
-```
+<img src="/images/wallet-sdk/module-architecture.svg" alt="Module Architecture" style="width: 100%; max-width: 900px;" />
 
 **Services** implement business logic and orchestrate other modules:
 - `WalletsService` — entry point for wallet creation from private keys or mnemonics.
