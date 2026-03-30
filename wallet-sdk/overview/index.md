@@ -15,8 +15,6 @@ A lightweight, modular SDK for wallet integration and key management on [ASI Cha
 - **Chain Interaction** — Transfer and balance operations via BlockchainGateway
 - **Address Generation** — secp256k1 key generation with keccak256/blake2b address derivation
 
----
-
 ## Installation
 
 ```bash
