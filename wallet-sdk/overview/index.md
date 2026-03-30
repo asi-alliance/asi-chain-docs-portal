@@ -83,89 +83,85 @@ const deployId = await assetsService.transfer(
 
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
-### Option A — Vertical layers, no individual modules
-
-```mermaid
-graph TB
-    A(["Your Application"])
-    A --> S["<b>Services</b><br/>Business logic &amp; orchestration"]
-    S --> D["<b>Domains</b><br/>Stateful entities &amp; storage"]
-    D --> U["<b>Utilities</b><br/>Stateless helpers"]
-```
-
----
-
-### Option B — Vertical layers with modules listed inside
-
-```mermaid
-graph TB
-    A(["Your Application"]) --> S
-
-    subgraph S["Services"]
-        S1["WalletsService"] & S2["CryptoService"] & S3["MnemonicService"] & S4["KeysManager"]
-        S5["KeyDerivationService"] & S6["SignerService"] & S7["AssetsService"] & S8["DeployResubmitter"]
-    end
-
-    S --> D
-
-    subgraph D["Domains"]
-        D1["Wallet"] & D2["Vault"] & D3["BlockchainGateway"]
-        D4["EncryptedRecord"] & D5["Asset"] & D6["BrowserStorage"]
-    end
-
-    D --> U
-
-    subgraph U["Utilities"]
-        U1["Codec"] & U2["Functions"] & U3["Validators"] & U4["Constants"] & U5["Polyfills"]
-    end
-```
-
----
-
-### Option C — Left-to-right, compact 3 blocks
+### C1 — Базовый LR с round-edge нодами
 
 ```mermaid
 graph LR
-    A(["App"]) --> S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
-    S --> D["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"]
-    S --> U["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"]
+    A(["App"]) --> S(["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"])
+    S --> D(["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"])
+    S --> U(["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"])
     D --> U
 ```
 
 ---
 
-### Option D — Top-down, 3 boxes with flow arrows
+### C2 — LR с описаниями вместо списков
 
 ```mermaid
-flowchart TB
+graph LR
     A(["Your Application"])
-
-    S["<b>Services</b><br/><i>WalletsService · CryptoService · MnemonicService · KeysManager</i><br/><i>KeyDerivationService · SignerService · AssetsService · DeployResubmitter</i>"]
-
-    D["<b>Domains</b><br/><i>Wallet · Vault · BlockchainGateway · EncryptedRecord · Asset · BrowserStorage</i>"]
-
-    U["<b>Utilities</b><br/><i>Codec · Functions · Validators · Constants · Polyfills</i>"]
-
-    A --> S --> D --> U
+    A --> S["<b>Services</b><br/><i>Business logic</i><br/>Wallet creation, signing,<br/>transfers, key derivation,<br/>deploy resubmission"]
+    S --> D["<b>Domains</b><br/><i>Stateful entities</i><br/>Wallet, Vault, Gateway,<br/>encrypted storage,<br/>asset management"]
+    S --> U["<b>Utilities</b><br/><i>Stateless helpers</i><br/>Codec, validators,<br/>amount conversion,<br/>constants, polyfills"]
+    D --> U
 ```
 
 ---
 
-### Option E — Top-down, layer boxes without module names
+### C3 — LR с subgraph-обёрткой SDK
 
 ```mermaid
-flowchart TB
-    A(["Your Application"])
+graph LR
+    A(["Your Application"]) --> SDK
 
     subgraph SDK["ASI Wallet SDK"]
-        direction TB
-        S["Services<br/><i>8 modules — wallet creation, signing, transfers, key derivation</i>"]
-        D["Domains<br/><i>6 modules — wallet, vault, gateway, encrypted storage</i>"]
-        U["Utilities<br/><i>5 modules — codec, validators, amount conversion</i>"]
+        direction LR
+        S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
+        D["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"]
+        U["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"]
         S --> D --> U
     end
+```
 
-    A --> SDK
+---
+
+### C4 — LR с пунктирными стрелками и аннотациями
+
+```mermaid
+graph LR
+    A(["Your Application"]) -->|"imports"| S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
+    S -->|"orchestrates"| D["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"]
+    S -.->|"uses"| U["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"]
+    D -.->|"uses"| U
+```
+
+---
+
+### C5 — LR с разделением на 2 колонки: Domains + Utilities
+
+```mermaid
+graph LR
+    A(["Your Application"]) --> S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
+    S --> D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
+    S --> U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
+```
+
+---
+
+### C6 — Flowchart LR со стилизацией
+
+```mermaid
+flowchart LR
+    A(["Your Application"])
+    S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
+    D["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"]
+    U["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"]
+
+    A --> S --> D --> U
+
+    style S fill:#4a2c8a,stroke:#7c3aed,color:#e8e0f5
+    style D fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe
+    style U fill:#1a3c34,stroke:#10b981,color:#d1fae5
 ```
 
 **Services** implement business logic and orchestrate other modules:
