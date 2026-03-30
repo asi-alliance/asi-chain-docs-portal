@@ -119,6 +119,8 @@ export default withMermaid(defineConfig({
                   { text: 'Codec', link: '/wallet-sdk/api-reference/codec/' },
                   { text: 'Functions', link: '/wallet-sdk/api-reference/functions/' },
                   { text: 'Validators', link: '/wallet-sdk/api-reference/validators/' },
+                  { text: 'Constants', link: '/wallet-sdk/api-reference/constants/' },
+                  { text: 'Polyfills', link: '/wallet-sdk/api-reference/polyfills/' },
                 ]
               },
             ]

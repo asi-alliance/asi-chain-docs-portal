@@ -35,3 +35,5 @@ Complete API reference for ASI Chain Wallet SDK services, domains, and utilities
 | [Codec](./codec/) | Base16, Base58, and Base64 encoding helpers |
 | [Functions](./functions/) | Atomic amount conversion utilities |
 | [Validators](./validators/) | Address checksum and account name validation |
+| [Constants](./constants/) | Library-wide constants (`ASI_DECIMALS`, `ASI_BASE_UNIT`, `GasFee`, etc.) |
+| [Polyfills](./polyfills/) | Browser `Buffer` polyfill setup |
