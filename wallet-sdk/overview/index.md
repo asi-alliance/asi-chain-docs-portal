@@ -83,21 +83,65 @@ const deployId = await assetsService.transfer(
 
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
-```mermaid
-graph TB
-    App(["Your Application"]) --> SDK
+<div style="max-width: 720px; margin: 24px auto; font-family: var(--vp-font-family-base); font-size: 14px;">
 
-    subgraph SDK["ASI Wallet SDK"]
-        direction TB
-        Services["<b>Services</b><br/>WalletsService · MnemonicService · KeyDerivationService<br/>KeysManager · CryptoService · SignerService<br/>AssetsService · DeployResubmitter"]
-        Domains["<b>Domains</b><br/>Wallet · Vault · BlockchainGateway<br/>EncryptedRecord · Asset · BrowserStorage"]
-        Utilities["<b>Utilities</b><br/>Codec · Functions · Validators"]
+  <!-- Your Application -->
+  <div style="text-align: center; margin-bottom: 12px;">
+    <div style="display: inline-block; padding: 8px 24px; border-radius: 20px; border: 2px solid var(--vp-c-brand-1); color: var(--vp-c-brand-1); font-weight: 600;">
+      Your Application
+    </div>
+    <div style="color: var(--vp-c-text-3); font-size: 20px;">&#8595;</div>
+  </div>
 
-        Services --> Domains
-        Services --> Utilities
-        Domains --> Utilities
-    end
-```
+  <!-- SDK Container -->
+  <div style="border: 1px solid var(--vp-c-divider); border-radius: 12px; padding: 20px; background: var(--vp-c-bg-soft);">
+
+    <!-- Services -->
+    <div style="margin-bottom: 16px;">
+      <div style="font-weight: 700; margin-bottom: 8px; color: var(--vp-c-brand-1);">Services</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <code>WalletsService</code>
+        <code>MnemonicService</code>
+        <code>KeyDerivationService</code>
+        <code>KeysManager</code>
+        <code>CryptoService</code>
+        <code>SignerService</code>
+        <code>AssetsService</code>
+        <code>DeployResubmitter</code>
+      </div>
+    </div>
+
+    <div style="text-align: center; color: var(--vp-c-text-3); font-size: 13px; margin: 4px 0;">&#8595; uses</div>
+
+    <!-- Domains -->
+    <div style="margin-bottom: 16px;">
+      <div style="font-weight: 700; margin-bottom: 8px; color: var(--vp-c-brand-1);">Domains</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <code>Wallet</code>
+        <code>Vault</code>
+        <code>BlockchainGateway</code>
+        <code>EncryptedRecord</code>
+        <code>Asset</code>
+        <code>BrowserStorage</code>
+      </div>
+    </div>
+
+    <div style="text-align: center; color: var(--vp-c-text-3); font-size: 13px; margin: 4px 0;">&#8595; uses</div>
+
+    <!-- Utilities -->
+    <div>
+      <div style="font-weight: 700; margin-bottom: 8px; color: var(--vp-c-brand-1);">Utilities</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <code>Codec</code>
+        <code>Functions</code>
+        <code>Validators</code>
+        <code>Constants</code>
+        <code>Polyfills</code>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 **Services** implement business logic and orchestrate other modules:
 - `WalletsService` — entry point for wallet creation from private keys or mnemonics.
