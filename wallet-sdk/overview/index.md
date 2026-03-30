@@ -83,7 +83,90 @@ const deployId = await assetsService.transfer(
 
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
-![Module Architecture](/images/wallet-sdk/module-architecture.svg)
+### Option A — Vertical layers, no individual modules
+
+```mermaid
+graph TB
+    A(["Your Application"])
+    A --> S["<b>Services</b><br/>Business logic &amp; orchestration"]
+    S --> D["<b>Domains</b><br/>Stateful entities &amp; storage"]
+    D --> U["<b>Utilities</b><br/>Stateless helpers"]
+```
+
+---
+
+### Option B — Vertical layers with modules listed inside
+
+```mermaid
+graph TB
+    A(["Your Application"]) --> S
+
+    subgraph S["Services"]
+        S1["WalletsService"] & S2["CryptoService"] & S3["MnemonicService"] & S4["KeysManager"]
+        S5["KeyDerivationService"] & S6["SignerService"] & S7["AssetsService"] & S8["DeployResubmitter"]
+    end
+
+    S --> D
+
+    subgraph D["Domains"]
+        D1["Wallet"] & D2["Vault"] & D3["BlockchainGateway"]
+        D4["EncryptedRecord"] & D5["Asset"] & D6["BrowserStorage"]
+    end
+
+    D --> U
+
+    subgraph U["Utilities"]
+        U1["Codec"] & U2["Functions"] & U3["Validators"] & U4["Constants"] & U5["Polyfills"]
+    end
+```
+
+---
+
+### Option C — Left-to-right, compact 3 blocks
+
+```mermaid
+graph LR
+    A(["App"]) --> S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
+    S --> D["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"]
+    S --> U["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"]
+    D --> U
+```
+
+---
+
+### Option D — Top-down, 3 boxes with flow arrows
+
+```mermaid
+flowchart TB
+    A(["Your Application"])
+
+    S["<b>Services</b><br/><i>WalletsService · CryptoService · MnemonicService · KeysManager</i><br/><i>KeyDerivationService · SignerService · AssetsService · DeployResubmitter</i>"]
+
+    D["<b>Domains</b><br/><i>Wallet · Vault · BlockchainGateway · EncryptedRecord · Asset · BrowserStorage</i>"]
+
+    U["<b>Utilities</b><br/><i>Codec · Functions · Validators · Constants · Polyfills</i>"]
+
+    A --> S --> D --> U
+```
+
+---
+
+### Option E — Top-down, layer boxes without module names
+
+```mermaid
+flowchart TB
+    A(["Your Application"])
+
+    subgraph SDK["ASI Wallet SDK"]
+        direction TB
+        S["Services<br/><i>8 modules — wallet creation, signing, transfers, key derivation</i>"]
+        D["Domains<br/><i>6 modules — wallet, vault, gateway, encrypted storage</i>"]
+        U["Utilities<br/><i>5 modules — codec, validators, amount conversion</i>"]
+        S --> D --> U
+    end
+
+    A --> SDK
+```
 
 **Services** implement business logic and orchestrate other modules:
 - `WalletsService` — entry point for wallet creation from private keys or mnemonics.
