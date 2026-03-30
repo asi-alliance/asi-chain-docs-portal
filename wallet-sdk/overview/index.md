@@ -1,12 +1,10 @@
 # Wallet SDK
 
-TypeScript SDK (v1.0.0) for wallet management and blockchain interaction on ASI Chain.
+A lightweight, modular SDK for wallet integration and key management on [ASI Chain](https://github.com/asi-alliance/asi-chain). The SDK provides secure cryptographic operations, BIP-39/BIP-44 key derivation, encrypted storage mechanisms, and direct interaction with ASI Chain nodes.
 
-Part of the [Artificial Superintelligence Alliance](https://superintelligence.io) ecosystem.
+**GitHub**: [asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk)
 
-## Overview
-
-ASI Chain Wallet SDK is a lightweight, modular TypeScript library designed to simplify wallet integration and key management for [ASI Chain](https://github.com/asi-alliance/asi-chain) applications. It provides secure cryptographic operations, BIP-39/BIP-44 key derivation, encrypted storage mechanisms, and direct interaction with ASI Chain nodes.
+## Key Features
 
 ## Key Features
 
@@ -16,6 +14,8 @@ ASI Chain Wallet SDK is a lightweight, modular TypeScript library designed to si
 - **Vault System** — Encrypted container for managing multiple wallets and seeds
 - **Chain Interaction** — Transfer and balance operations via BlockchainGateway
 - **Address Generation** — secp256k1 key generation with keccak256/blake2b address derivation
+
+---
 
 ## Installation
 
