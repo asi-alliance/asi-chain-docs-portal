@@ -88,6 +88,7 @@ export default withMermaid(defineConfig({
             items: [
               {
                 text: 'Services',
+                collapsed: true,
                 items: [
                   { text: 'WalletsService', link: '/wallet-sdk/api-reference/wallets-service/' },
                   { text: 'CryptoService', link: '/wallet-sdk/api-reference/crypto-service/' },
@@ -101,6 +102,7 @@ export default withMermaid(defineConfig({
               },
               {
                 text: 'Domains',
+                collapsed: true,
                 items: [
                   { text: 'Wallet', link: '/wallet-sdk/api-reference/wallet/' },
                   { text: 'Vault', link: '/wallet-sdk/api-reference/vault/' },
@@ -112,6 +114,7 @@ export default withMermaid(defineConfig({
               },
               {
                 text: 'Utilities',
+                collapsed: true,
                 items: [
                   { text: 'Codec', link: '/wallet-sdk/api-reference/codec/' },
                   { text: 'Functions', link: '/wallet-sdk/api-reference/functions/' },
