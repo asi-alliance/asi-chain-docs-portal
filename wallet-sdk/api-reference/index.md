@@ -185,18 +185,6 @@ Validates address before exploration deploy.
 
 ---
 
-### [FeeService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Fee/index.ts)
-
-Gas-fee helper utilities.
-
-```ts
-generateRandomGasFee(): string
-getGasFeeAsNumber(): number
-formatGasFee(fee?: string): string
-```
-
----
-
 ### [DeployResubmitter](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Resubmit/DeployResubmitter.ts)
 
 Retry + resubmission flow for non-read-only deploys.
