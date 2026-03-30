@@ -12,6 +12,7 @@ Related exports: [`ResubmitNodeManager`](https://github.com/asi-alliance/asi-cha
 
 | Field | Type | Description |
 |-------|------|-------------|
+| `phloPrice` | `number` | Gas price per unit of phlogiston. |
 | `deployValiditySeconds` | `number` | Deploy expiry time in seconds. |
 | `deployRetries` | `number` | Maximum retry attempts per node. |
 | `deployIntervalSeconds` | `number` | Delay between retry attempts. |
@@ -26,7 +27,16 @@ Related exports: [`ResubmitNodeManager`](https://github.com/asi-alliance/asi-cha
 | `success` | `boolean` | Whether the deploy was confirmed. |
 | `deployId` | `string \| undefined` | Deploy ID if successful. |
 | `deployStatus` | `DeployStatus \| undefined` | Final deploy status. |
-| `error` | `DeployError \| undefined` | Error details if failed. |
+| `error` | `ErrorDetail \| undefined` | Error details if failed. |
+
+**Interface `ErrorDetail`:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `blockchainError` | `{ type: DeploymentErrorType; message: string } \| undefined` | Parsed blockchain error with classified type and human-readable message. |
+| `exceededTimeout` | `FatalDeployErrors.DEPLOY_SUBMIT_TIMEOUT \| FatalDeployErrors.BLOCK_INCLUSION_TIMEOUT \| undefined` | Set when the deploy exceeded a timeout threshold. |
+
+See [Error Types](../error-types/) for `DeploymentErrorType` and `FatalDeployErrors` details.
 
 ## Constructor
 

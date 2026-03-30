@@ -75,6 +75,22 @@ Alias for `fromAtomicAmountToString`.
 
 **Returns:** `string` — decimal string.
 
+## `genRandomHex`
+
+```ts
+genRandomHex(size: number): string
+```
+
+Generates a random hex string of the specified length. Uses `Math.random()` — not cryptographically secure; intended for non-security purposes such as generating identifiers.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `size` | `number` | Yes | Number of hex characters to generate. |
+
+**Returns:** `string` — random hex string of the given length.
+
 ## Example
 
 ```ts

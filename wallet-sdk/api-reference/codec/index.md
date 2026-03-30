@@ -20,6 +20,22 @@ Converts a hex string to a Base58-encoded string.
 
 **Returns:** `string` — Base58-encoded result.
 
+## `decodeBase58`
+
+```ts
+decodeBase58(value: string): Uint8Array
+```
+
+Decodes a Base58-encoded string into a `Uint8Array`.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `value` | `string` | Yes | Base58-encoded string. |
+
+**Returns:** `Uint8Array` — decoded bytes.
+
 ## `decodeBase16`
 
 ```ts

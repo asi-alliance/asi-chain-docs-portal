@@ -28,6 +28,12 @@ Complete API reference for ASI Chain Wallet SDK services, domains, and utilities
 | [Asset](./asset/) | Token model |
 | [BrowserStorage](./browser-storage/) | `localStorage` adapter with key isolation |
 
+## Error Handling
+
+| Module | Description |
+|--------|-------------|
+| [Error Types](./error-types/) | Deploy error classification, recoverable/fatal error enums, and `DeploymentErrorHandler` |
+
 ## Utilities
 
 | Module | Description |

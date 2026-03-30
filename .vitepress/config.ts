@@ -113,6 +113,13 @@ export default withMermaid(defineConfig({
                 ]
               },
               {
+                text: 'Error Handling',
+                collapsed: true,
+                items: [
+                  { text: 'Error Types', link: '/wallet-sdk/api-reference/error-types/' },
+                ]
+              },
+              {
                 text: 'Utilities',
                 collapsed: true,
                 items: [
