@@ -84,10 +84,11 @@ const deployId = await assetsService.transfer(
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
 ```mermaid
-graph TD
+graph LR
     App(["Your Application"])
 
     subgraph Services["Services"]
+        direction TB
         s1["WalletsService"]
         s2["MnemonicService"]
         s3["KeyDerivationService"]
@@ -99,14 +100,17 @@ graph TD
     end
 
     subgraph Domains["Domains"]
+        direction TB
         d1["Wallet"]
         d2["Vault"]
         d3["BlockchainGateway"]
         d4["EncryptedRecord"]
-        d5["BrowserStorage"]
+        d5["Asset"]
+        d6["BrowserStorage"]
     end
 
     subgraph Utilities["Utilities"]
+        direction TB
         u1["Codec"]
         u2["Functions"]
         u3["Validators"]
@@ -131,6 +135,7 @@ graph TD
 - `Vault` — manages multiple wallets and encrypted seeds in browser `localStorage`; all access is guarded by lock/unlock.
 - `BlockchainGateway` — singleton that routes deploys to the validator and queries to the indexer.
 - `EncryptedRecord` — stores BIP-39 seeds encrypted with the same AES-GCM scheme used for private keys.
+- `Asset` — token model holding identifier, name, and decimal precision.
 - `BrowserStorage` — thin `localStorage` wrapper with prefix-based key isolation.
 
 **Utilities** are stateless helpers used across the SDK:
@@ -155,6 +160,7 @@ graph TD
 | [bip39](https://github.com/bitcoinjs/bip39) | 3.1.0 | BIP-39 mnemonic generation |
 | [blakejs](https://github.com/dcposch/blakejs) | 1.2.1 | BLAKE2b hashing for addresses |
 | [bs58](https://github.com/cryptocoinjs/bs58) | 6.0.0 | Base58 encoding |
+| [buffer](https://github.com/feross/buffer) | 6.0.3 | Node.js `Buffer` polyfill for browser environments |
 | [@noble/hashes](https://github.com/paulmillr/noble-hashes) | 1.6.0 | Cryptographic hash helpers |
 | [@noble/secp256k1](https://github.com/paulmillr/noble-secp256k1) | 1.7.0 | secp256k1 key generation and signing |
 | [js-sha3](https://github.com/nicknisi/js-sha3) | 0.9.3 | keccak256 hashing |
