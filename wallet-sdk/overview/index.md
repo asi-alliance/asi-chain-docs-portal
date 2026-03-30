@@ -6,8 +6,6 @@ A lightweight, modular SDK for wallet integration and key management on [ASI Cha
 
 ## Key Features
 
-## Key Features
-
 - **Wallet Management** — Create, import, and derive wallets from private keys or mnemonic phrases
 - **Secure Storage** — Password-based encryption using PBKDF2 + AES
 - **Key Derivation** — BIP-39 mnemonic generation and BIP-44 hierarchical deterministic key derivation
