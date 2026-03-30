@@ -84,39 +84,25 @@ const deployId = await assetsService.transfer(
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
 ```mermaid
-graph LR
+graph TB
     App(["Your Application"])
+    App --> Services
+    App --> Domains
+    App --> Utilities
 
     subgraph Services["Services"]
-        direction TB
-        s1["WalletsService"]
-        s2["MnemonicService"]
-        s3["KeyDerivationService"]
-        s4["KeysManager"]
-        s5["CryptoService"]
-        s6["SignerService"]
-        s7["AssetsService"]
-        s8["DeployResubmitter"]
+        s1["WalletsService"] ~~~ s2["MnemonicService"] ~~~ s3["KeyDerivationService"] ~~~ s4["KeysManager"]
+        s5["CryptoService"] ~~~ s6["SignerService"] ~~~ s7["AssetsService"] ~~~ s8["DeployResubmitter"]
     end
 
     subgraph Domains["Domains"]
-        direction TB
-        d1["Wallet"]
-        d2["Vault"]
-        d3["BlockchainGateway"]
-        d4["EncryptedRecord"]
-        d5["Asset"]
-        d6["BrowserStorage"]
+        d1["Wallet"] ~~~ d2["Vault"] ~~~ d3["BlockchainGateway"] ~~~ d4["EncryptedRecord"] ~~~ d5["Asset"] ~~~ d6["BrowserStorage"]
     end
 
     subgraph Utilities["Utilities"]
-        direction TB
-        u1["Codec"]
-        u2["Functions"]
-        u3["Validators"]
+        u1["Codec"] ~~~ u2["Functions"] ~~~ u3["Validators"]
     end
 
-    App --> Services
     Services --> Domains
     Services --> Utilities
     Domains --> Utilities
