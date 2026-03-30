@@ -84,74 +84,32 @@ const deployId = await assetsService.transfer(
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#7c3aed', 'primaryTextColor': '#f5f3ff', 'primaryBorderColor': '#7c3aed', 'secondaryColor': '#2563eb', 'secondaryTextColor': '#eff6ff', 'secondaryBorderColor': '#2563eb', 'tertiaryColor': '#059669', 'tertiaryTextColor': '#ecfdf5', 'tertiaryBorderColor': '#059669', 'noteBkgColor': '#d97706', 'noteTextColor': '#fffbeb', 'noteBorderColor': '#d97706', 'lineColor': '#94a3b8', 'fontSize': '18px'}}}%%
-mindmap
-  root(("ASI Wallet SDK"))
-    **Key Management**
-      MnemonicService
-      KeyDerivationService
-      KeysManager
-      CryptoService
-    **Wallet Operations**
-      WalletsService
-      Wallet
-      Vault
-      BrowserStorage
-    **Chain Interaction**
-      AssetsService
-      SignerService
-      DeployResubmitter
-      BlockchainGateway
-    **Data & Helpers**
-      Asset
-      EncryptedRecord
-      Codec
-      Validators
-      Functions
-```
-
----
-
-### Layered Architecture
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#7c3aed', 'primaryTextColor': '#f5f3ff', 'primaryBorderColor': '#6d28d9', 'lineColor': '#94a3b8', 'fontSize': '15px', 'fontFamily': 'Roboto Mono, monospace'}}}%%
+%%{init: {'theme': 'neutral', 'themeVariables': {'fontSize': '16px', 'fontFamily': 'Roboto Mono, monospace'}}}%%
 flowchart TB
     A(["Your Application"])
 
     A --> S & D & U
 
     subgraph S["Services — business logic"]
-        direction TB
-        s1["WalletsService — wallet creation"]
-        s2["AssetsService — transfers & balance"]
-        s3["SignerService — deploy signing"]
-        s4["DeployResubmitter — retry logic"]
-        s5["CryptoService — AES encryption"]
-        s6["MnemonicService — BIP-39"]
-        s7["KeyDerivationService — BIP-44"]
-        s8["KeysManager — secp256k1"]
+        direction LR
+        s1["WalletsService\nCryptoService"]
+        s2["MnemonicService\nKeyDerivationService\nKeysManager"]
+        s3["AssetsService\nSignerService\nDeployResubmitter"]
     end
 
     subgraph D["Domains — stateful entities"]
-        direction TB
-        d1["Wallet — encrypted key + signing"]
-        d2["Vault — multi-wallet storage"]
-        d3["BlockchainGateway — node communication"]
-        d4["EncryptedRecord · Asset · BrowserStorage"]
+        direction LR
+        d1["Wallet\nVault"]
+        d2["BlockchainGateway\nEncryptedRecord"]
+        d3["Asset\nBrowserStorage"]
     end
 
     subgraph U["Utilities — stateless helpers"]
-        direction TB
+        direction LR
         u1["Codec · Functions · Validators · Constants · Polyfills"]
     end
 
     S -.-> D -.-> U
-
-    style A fill:#7c3aed,stroke:#6d28d9,color:#f5f3ff
-    style S fill:#1e293b,stroke:#7c3aed,color:#e2e8f0
-    style D fill:#1e293b,stroke:#3b82f6,color:#e2e8f0
-    style U fill:#1e293b,stroke:#10b981,color:#e2e8f0
 ```
 
 **Services** implement business logic and orchestrate other modules:
