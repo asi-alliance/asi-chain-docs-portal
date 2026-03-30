@@ -84,7 +84,42 @@ export default withMermaid(defineConfig({
         collapsed: false,
         items: [
           { text: 'Overview', link: '/wallet-sdk/overview/' },
-          { text: 'API Reference', link: '/wallet-sdk/api-reference/' },
+          { text: 'API Reference', link: '/wallet-sdk/api-reference/',
+            items: [
+              {
+                text: 'Services',
+                items: [
+                  { text: 'WalletsService', link: '/wallet-sdk/api-reference/wallets-service/' },
+                  { text: 'CryptoService', link: '/wallet-sdk/api-reference/crypto-service/' },
+                  { text: 'MnemonicService', link: '/wallet-sdk/api-reference/mnemonic-service/' },
+                  { text: 'KeyDerivationService', link: '/wallet-sdk/api-reference/key-derivation/' },
+                  { text: 'KeysManager', link: '/wallet-sdk/api-reference/keys-manager/' },
+                  { text: 'SignerService', link: '/wallet-sdk/api-reference/signer-service/' },
+                  { text: 'AssetsService', link: '/wallet-sdk/api-reference/assets-service/' },
+                  { text: 'DeployResubmitter', link: '/wallet-sdk/api-reference/deploy-resubmitter/' },
+                ]
+              },
+              {
+                text: 'Domains',
+                items: [
+                  { text: 'Wallet', link: '/wallet-sdk/api-reference/wallet/' },
+                  { text: 'Vault', link: '/wallet-sdk/api-reference/vault/' },
+                  { text: 'BlockchainGateway', link: '/wallet-sdk/api-reference/blockchain-gateway/' },
+                  { text: 'EncryptedRecord', link: '/wallet-sdk/api-reference/encrypted-record/' },
+                  { text: 'Asset', link: '/wallet-sdk/api-reference/asset/' },
+                  { text: 'BrowserStorage', link: '/wallet-sdk/api-reference/browser-storage/' },
+                ]
+              },
+              {
+                text: 'Utilities',
+                items: [
+                  { text: 'Codec', link: '/wallet-sdk/api-reference/codec/' },
+                  { text: 'Functions', link: '/wallet-sdk/api-reference/functions/' },
+                  { text: 'Validators', link: '/wallet-sdk/api-reference/validators/' },
+                ]
+              },
+            ]
+          },
         ]
       },
       {
