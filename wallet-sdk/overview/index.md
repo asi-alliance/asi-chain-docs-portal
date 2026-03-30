@@ -85,61 +85,37 @@ The SDK is organized into three layers — **Services**, **Domains**, and **Util
 
 ```mermaid
 graph TD
-    App["Your Application"]
+    App(["Your Application"])
 
-    subgraph Services["Services — Business Logic"]
-        WS["WalletsService\nwallet creation & address derivation"]
-        MS["MnemonicService\nBIP-39 mnemonic generation"]
-        KDS["KeyDerivationService\nBIP-44 key derivation"]
-        KM["KeysManager\nsecp256k1 operations"]
-        CS["CryptoService\nAES-GCM encryption"]
-        SS["SignerService\ndeploy signing"]
-        AS["AssetsService\ntransfers & balances"]
-        FS["FeeService\ngas fee utilities"]
-        DR["DeployResubmitter\nretry & resubmission"]
+    subgraph Services["Services"]
+        s1["WalletsService"]
+        s2["MnemonicService"]
+        s3["KeyDerivationService"]
+        s4["KeysManager"]
+        s5["CryptoService"]
+        s6["SignerService"]
+        s7["AssetsService"]
+        s8["DeployResubmitter"]
     end
 
-    subgraph Domains["Domains — State & Entities"]
-        W["Wallet\nencrypted key + signing boundary"]
-        V["Vault\nmulti-wallet browser storage"]
-        BG["BlockchainGateway\nnode communication singleton"]
-        ER["EncryptedRecord\nencrypted seed container"]
-        BS["BrowserStorage\nlocalStorage adapter"]
+    subgraph Domains["Domains"]
+        d1["Wallet"]
+        d2["Vault"]
+        d3["BlockchainGateway"]
+        d4["EncryptedRecord"]
+        d5["BrowserStorage"]
     end
 
-    subgraph Utils["Utilities — Helpers"]
-        CO["Codec\nBase16 / Base58 / Base64"]
-        FN["Functions\natomic amount conversion"]
-        VA["Validators\naddress & name validation"]
+    subgraph Utilities["Utilities"]
+        u1["Codec"]
+        u2["Functions"]
+        u3["Validators"]
     end
 
-    App --> WS
-    App --> AS
-    App --> V
-    App --> BG
-
-    WS --> KM
-    WS --> CS
-    WS --> KDS
-    WS --> MS
-    KDS --> KM
-
-    AS --> BG
-    AS --> SS
-    AS --> VA
-    SS --> W
-    DR --> BG
-    DR --> SS
-
-    V --> W
-    V --> ER
-    V --> BS
-
-    W --> CS
-    ER --> CS
-
-    WS --> VA
-    BG --> CO
+    App --> Services
+    Services --> Domains
+    Services --> Utilities
+    Domains --> Utilities
 ```
 
 **Services** implement business logic and orchestrate other modules:
