@@ -2,11 +2,13 @@
 
 Complete API reference for ASI Chain Wallet SDK services, domains, and utilities.
 
+**Source code**: [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk)
+
 ---
 
 ## Services
 
-### WalletsService
+### [WalletsService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Wallets/index.ts)
 
 Wallet creation and address derivation.
 
@@ -34,7 +36,7 @@ Derives address from public key (keccak256 + chain prefix + blake2b checksum + b
 
 ---
 
-### CryptoService
+### [CryptoService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Crypto/index.ts)
 
 Password-based encryption/decryption using WebCrypto.
 
@@ -65,7 +67,7 @@ Derives the AES-GCM key from password + salt.
 
 ---
 
-### MnemonicService
+### [MnemonicService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Mnemonic/index.ts)
 
 BIP-39 helpers.
 
@@ -92,7 +94,7 @@ Conversion helpers.
 
 ---
 
-### KeyDerivationService
+### [KeyDerivationService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/KeyDerivation/index.ts)
 
 BIP-32/BIP-44 derivation helpers.
 
@@ -124,7 +126,7 @@ Convenience derivation helpers.
 
 ---
 
-### KeysManager
+### [KeysManager](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/KeysManager/index.ts)
 
 secp256k1 key utilities.
 
@@ -139,7 +141,7 @@ deriveKeyFromMnemonic(mnemonicWords: string[], options?: Bip44PathOptions): Prom
 
 ---
 
-### SignerService
+### [SignerService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Signer/index.ts)
 
 Builds deploy signatures without exposing raw key bytes to callers.
 
@@ -151,7 +153,7 @@ Signing flow:
 
 1. Gets password from `passwordProvider`
 2. Uses `wallet.withSigningCapability(...)` to obtain scoped signing capability
-3. Serializes deploy data (BinaryWriter)
+3. Serializes deploy data ([BinaryWriter](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/BinaryWriter/index.ts))
 4. Hashes with blake2b-256
 5. Signs digest with secp256k1 and returns `{ deployer, signature, sigAlgorithm }`
 
@@ -159,7 +161,7 @@ Signing flow:
 
 ---
 
-### AssetsService
+### [AssetsService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/AssetsService/index.ts)
 
 Balance and transfer operations through BlockchainGateway.
 
@@ -184,7 +186,7 @@ Validates address before exploration deploy.
 
 ---
 
-### FeeService
+### [FeeService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Fee/index.ts)
 
 Gas-fee helper utilities.
 
@@ -196,7 +198,7 @@ formatGasFee(fee?: string): string
 
 ---
 
-### DeployResubmitter
+### [DeployResubmitter](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Resubmit/DeployResubmitter.ts)
 
 Retry + resubmission flow for non-read-only deploys.
 
@@ -209,13 +211,13 @@ resubmit(
 ): Promise<ResubmitResult>
 ```
 
-Related exports: `ResubmitNodeManager`, `ResubmitConfig`, `ResubmitResult`.
+Related exports: [`ResubmitNodeManager`](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Resubmit/NodeManager.ts), `ResubmitConfig`, `ResubmitResult`.
 
 ---
 
 ## Domains
 
-### Wallet
+### [Wallet](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/Wallet/index.ts)
 
 Encrypted wallet metadata + signing capability boundary.
 
@@ -273,7 +275,7 @@ toString(): string
 
 ---
 
-### Vault
+### [Vault](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/Vault/index.ts)
 
 Encrypted browser vault for wallets + encrypted records.
 
@@ -326,7 +328,7 @@ hasSeed(seedId: string): boolean
 
 ---
 
-### Asset
+### [Asset](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/Asset/index.ts)
 
 Simple token model.
 
@@ -341,7 +343,7 @@ Associated types: `AssetId = string`, `Assets = Map<AssetId, Asset>`.
 
 ---
 
-### EncryptedRecord
+### [EncryptedRecord](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/EncryptedRecord/index.ts)
 
 Encrypted data wrapper used by vault seed flows.
 
@@ -355,7 +357,7 @@ toString(): string
 
 ---
 
-### BlockchainGateway
+### [BlockchainGateway](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/BlockchainGateway/index.ts)
 
 Singleton gateway for validator/indexer node communication.
 
@@ -386,7 +388,7 @@ Types and enums: `BlockchainGatewayConfig`, `DeployStatus`, `DeployStatusResult`
 
 ---
 
-### BrowserStorage
+### [BrowserStorage](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/BrowserStorage/index.ts)
 
 LocalStorage adapter with prefix-based key isolation.
 
@@ -402,7 +404,7 @@ clear(): void
 
 ---
 
-### Signing Types
+### [Signing Types](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/Signer/index.ts)
 
 ```ts
 interface SigningRequest {
@@ -424,7 +426,7 @@ type PasswordProvider = () => Promise<string>
 
 ## Utilities
 
-### Codec
+### [Codec](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/codec/index.ts)
 
 Encoders and decoders for base16/base58 conversions.
 
@@ -440,7 +442,7 @@ Parses a hex string into a Uint8Array of bytes.
 
 ---
 
-### Constants
+### [Constants](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/constants/index.ts)
 
 Library-wide constants.
 
@@ -455,7 +457,7 @@ Library-wide constants.
 
 ---
 
-### Functions
+### [Functions](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/functions/index.ts)
 
 Amount conversion helpers between human-readable ASI values and atomic integer representation.
 
@@ -490,7 +492,7 @@ const asNumber = fromAtomicAmountToNumber(atomic);
 
 ---
 
-### Validators
+### [Validators](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/validators/index.ts)
 
 Validation helpers for account names and addresses.
 
@@ -524,7 +526,7 @@ Performs detailed validation and returns a deterministic errorCode when invalid.
 
 ---
 
-### Polyfills
+### [Polyfills](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/polyfills/index.ts)
 
 ```ts
 setupBufferPolyfill(): void
