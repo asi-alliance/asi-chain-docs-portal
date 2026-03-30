@@ -79,6 +79,89 @@ const deployId = await assetsService.transfer(
 );
 ```
 
+## Module Architecture
+
+The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
+
+```mermaid
+graph TD
+    App["Your Application"]
+
+    subgraph Services["Services — Business Logic"]
+        WS["WalletsService\nwallet creation & address derivation"]
+        MS["MnemonicService\nBIP-39 mnemonic generation"]
+        KDS["KeyDerivationService\nBIP-44 key derivation"]
+        KM["KeysManager\nsecp256k1 operations"]
+        CS["CryptoService\nAES-GCM encryption"]
+        SS["SignerService\ndeploy signing"]
+        AS["AssetsService\ntransfers & balances"]
+        FS["FeeService\ngas fee utilities"]
+        DR["DeployResubmitter\nretry & resubmission"]
+    end
+
+    subgraph Domains["Domains — State & Entities"]
+        W["Wallet\nencrypted key + signing boundary"]
+        V["Vault\nmulti-wallet browser storage"]
+        BG["BlockchainGateway\nnode communication singleton"]
+        ER["EncryptedRecord\nencrypted seed container"]
+        BS["BrowserStorage\nlocalStorage adapter"]
+    end
+
+    subgraph Utils["Utilities — Helpers"]
+        CO["Codec\nBase16 / Base58 / Base64"]
+        FN["Functions\natomic amount conversion"]
+        VA["Validators\naddress & name validation"]
+    end
+
+    App --> WS
+    App --> AS
+    App --> V
+    App --> BG
+
+    WS --> KM
+    WS --> CS
+    WS --> KDS
+    WS --> MS
+    KDS --> KM
+
+    AS --> BG
+    AS --> SS
+    AS --> VA
+    SS --> W
+    DR --> BG
+    DR --> SS
+
+    V --> W
+    V --> ER
+    V --> BS
+
+    W --> CS
+    ER --> CS
+
+    WS --> VA
+    BG --> CO
+```
+
+**Services** implement business logic and orchestrate other modules:
+- `WalletsService` — entry point for wallet creation from private keys or mnemonics.
+- `MnemonicService` / `KeyDerivationService` / `KeysManager` — handle the cryptographic derivation pipeline (BIP-39 → BIP-44 → secp256k1).
+- `CryptoService` — provides PBKDF2 + AES-GCM encryption used by `Wallet` and `EncryptedRecord`.
+- `SignerService` — signs deploys using the wallet's scoped signing capability (private key never exposed).
+- `AssetsService` — combines signing, gateway calls, and address validation for token transfers and balance queries.
+- `DeployResubmitter` — wraps `AssetsService` with retry logic and status polling.
+
+**Domains** represent stateful entities:
+- `Wallet` — holds an encrypted private key and enforces that the key is only accessible within a scoped callback (`withSigningCapability`).
+- `Vault` — manages multiple wallets and encrypted seeds in browser `localStorage`; all access is guarded by lock/unlock.
+- `BlockchainGateway` — singleton that routes deploys to the validator and queries to the indexer.
+- `EncryptedRecord` — stores BIP-39 seeds encrypted with the same AES-GCM scheme used for private keys.
+- `BrowserStorage` — thin `localStorage` wrapper with prefix-based key isolation.
+
+**Utilities** are stateless helpers used across the SDK:
+- `Codec` — Base16, Base58, and Base64 encode/decode functions.
+- `Functions` — atomic unit conversion (`toAtomicAmount`, `fromAtomicAmountToString`).
+- `Validators` — address checksum validation and account name checks.
+
 ## Cryptographic Flow
 
 - **Key Generation**: secp256k1 elliptic curve keypairs
