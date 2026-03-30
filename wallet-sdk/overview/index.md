@@ -83,81 +83,94 @@ const deployId = await assetsService.transfer(
 
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
-### C1 — Базовый LR с round-edge нодами
+### V1 — Дерево: App → 3 ветки с модулями
 
 ```mermaid
-graph LR
-    A(["App"]) --> S(["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"])
-    S --> D(["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"])
-    S --> U(["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"])
-    D --> U
-```
-
----
-
-### C2 — LR с описаниями вместо списков
-
-```mermaid
-graph LR
+flowchart TB
     A(["Your Application"])
-    A --> S["<b>Services</b><br/><i>Business logic</i><br/>Wallet creation, signing,<br/>transfers, key derivation,<br/>deploy resubmission"]
-    S --> D["<b>Domains</b><br/><i>Stateful entities</i><br/>Wallet, Vault, Gateway,<br/>encrypted storage,<br/>asset management"]
-    S --> U["<b>Utilities</b><br/><i>Stateless helpers</i><br/>Codec, validators,<br/>amount conversion,<br/>constants, polyfills"]
-    D --> U
+
+    A --> S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
+    A --> D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
+    A --> U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
 ```
 
 ---
 
-### C3 — LR с subgraph-обёрткой SDK
+### V2 — Дерево с описаниями, без модулей
 
 ```mermaid
-graph LR
+flowchart TB
+    A(["Your Application"])
+
+    A --> S["<b>Services</b><br/><i>Business logic &amp; orchestration</i>"]
+    A --> D["<b>Domains</b><br/><i>Stateful entities &amp; storage</i>"]
+    A --> U["<b>Utilities</b><br/><i>Stateless helpers</i>"]
+```
+
+---
+
+### V3 — Дерево + зависимости пунктиром
+
+```mermaid
+flowchart TB
+    A(["Your Application"])
+
+    A --> S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
+    A --> D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
+    A --> U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
+
+    S -.-> D
+    S -.-> U
+    D -.-> U
+```
+
+---
+
+### V4 — Дерево со стилизацией
+
+```mermaid
+flowchart TB
+    A(["Your Application"])
+
+    A --> S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
+    A --> D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
+    A --> U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
+
+    style S fill:#4a2c8a,stroke:#7c3aed,color:#e8e0f5
+    style D fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe
+    style U fill:#1a3c34,stroke:#10b981,color:#d1fae5
+```
+
+---
+
+### V5 — Дерево с обёрткой SDK + зависимости
+
+```mermaid
+flowchart TB
     A(["Your Application"]) --> SDK
 
     subgraph SDK["ASI Wallet SDK"]
-        direction LR
-        S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
-        D["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"]
-        U["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"]
-        S --> D --> U
+        S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
+        D["<b>Domains</b><br/>Wallet · Vault · BlockchainGateway<br/>EncryptedRecord · Asset · BrowserStorage"]
+        U["<b>Utilities</b><br/>Codec · Functions · Validators<br/>Constants · Polyfills"]
     end
+
+    S -.-> D
+    S -.-> U
+    D -.-> U
 ```
 
 ---
 
-### C4 — LR с пунктирными стрелками и аннотациями
+### V6 — Дерево со стилизацией + аннотации на стрелках
 
 ```mermaid
-graph LR
-    A(["Your Application"]) -->|"imports"| S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
-    S -->|"orchestrates"| D["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"]
-    S -.->|"uses"| U["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"]
-    D -.->|"uses"| U
-```
-
----
-
-### C5 — LR с разделением на 2 колонки: Domains + Utilities
-
-```mermaid
-graph LR
-    A(["Your Application"]) --> S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
-    S --> D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
-    S --> U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
-```
-
----
-
-### C6 — Flowchart LR со стилизацией
-
-```mermaid
-flowchart LR
+flowchart TB
     A(["Your Application"])
-    S["<b>Services</b><br/>WalletsService<br/>CryptoService<br/>MnemonicService<br/>KeysManager<br/>KeyDerivationService<br/>SignerService<br/>AssetsService<br/>DeployResubmitter"]
-    D["<b>Domains</b><br/>Wallet<br/>Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset<br/>BrowserStorage"]
-    U["<b>Utilities</b><br/>Codec<br/>Functions<br/>Validators<br/>Constants<br/>Polyfills"]
 
-    A --> S --> D --> U
+    A -->|"create wallets, sign, transfer"| S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
+    A -->|"manage state"| D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
+    A -->|"encode, validate, convert"| U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
 
     style S fill:#4a2c8a,stroke:#7c3aed,color:#e8e0f5
     style D fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe
