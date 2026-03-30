@@ -83,98 +83,155 @@ const deployId = await assetsService.transfer(
 
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
-### V1 — Дерево: App → 3 ветки с модулями
+### V1 — Mindmap: функциональные области
+
+```mermaid
+mindmap
+  root(("ASI Wallet SDK"))
+    **Key Management**
+      MnemonicService
+      KeyDerivationService
+      KeysManager
+      CryptoService
+    **Wallet Operations**
+      WalletsService
+      Wallet
+      Vault
+      BrowserStorage
+    **Chain Interaction**
+      AssetsService
+      SignerService
+      DeployResubmitter
+      BlockchainGateway
+    **Data & Helpers**
+      Asset
+      EncryptedRecord
+      Codec
+      Validators
+      Functions
+```
+
+---
+
+### V2 — Функциональные группы, дерево от App
 
 ```mermaid
 flowchart TB
     A(["Your Application"])
 
-    A --> S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
-    A --> D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
-    A --> U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
-```
+    A --> KM
+    A --> WO
+    A --> CI
 
----
-
-### V2 — Дерево с описаниями, без модулей
-
-```mermaid
-flowchart TB
-    A(["Your Application"])
-
-    A --> S["<b>Services</b><br/><i>Business logic &amp; orchestration</i>"]
-    A --> D["<b>Domains</b><br/><i>Stateful entities &amp; storage</i>"]
-    A --> U["<b>Utilities</b><br/><i>Stateless helpers</i>"]
-```
-
----
-
-### V3 — Дерево + зависимости пунктиром
-
-```mermaid
-flowchart TB
-    A(["Your Application"])
-
-    A --> S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
-    A --> D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
-    A --> U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
-
-    S -.-> D
-    S -.-> U
-    D -.-> U
-```
-
----
-
-### V4 — Дерево со стилизацией
-
-```mermaid
-flowchart TB
-    A(["Your Application"])
-
-    A --> S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
-    A --> D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
-    A --> U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
-
-    style S fill:#4a2c8a,stroke:#7c3aed,color:#e8e0f5
-    style D fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe
-    style U fill:#1a3c34,stroke:#10b981,color:#d1fae5
-```
-
----
-
-### V5 — Дерево с обёрткой SDK + зависимости
-
-```mermaid
-flowchart TB
-    A(["Your Application"]) --> SDK
-
-    subgraph SDK["ASI Wallet SDK"]
-        S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
-        D["<b>Domains</b><br/>Wallet · Vault · BlockchainGateway<br/>EncryptedRecord · Asset · BrowserStorage"]
-        U["<b>Utilities</b><br/>Codec · Functions · Validators<br/>Constants · Polyfills"]
+    subgraph KM["Key Management"]
+        direction LR
+        MnemonicService --> KeyDerivationService --> KeysManager
+        KeysManager --> CryptoService
     end
 
-    S -.-> D
-    S -.-> U
-    D -.-> U
+    subgraph WO["Wallet Operations"]
+        direction LR
+        WalletsService --> Wallet
+        Wallet --> Vault
+        Vault --> BrowserStorage
+    end
+
+    subgraph CI["Chain Interaction"]
+        direction LR
+        AssetsService --> SignerService
+        SignerService --> BlockchainGateway
+        AssetsService --> DeployResubmitter
+    end
+
+    KM -.->|"keys"| WO
+    WO -.->|"signed deploys"| CI
 ```
 
 ---
 
-### V6 — Дерево со стилизацией + аннотации на стрелках
+### V3 — Pipeline: реальный флоу создания кошелька и перевода
+
+```mermaid
+flowchart LR
+    subgraph Create["Create Wallet"]
+        direction TB
+        M["MnemonicService<br/><i>generate phrase</i>"]
+        K["KeyDerivationService<br/><i>derive key</i>"]
+        W["WalletsService<br/><i>create wallet</i>"]
+        V["Vault<br/><i>encrypt &amp; store</i>"]
+        M --> K --> W --> V
+    end
+
+    subgraph Transfer["Transfer Tokens"]
+        direction TB
+        AS["AssetsService<br/><i>build deploy</i>"]
+        SG["SignerService<br/><i>sign</i>"]
+        GW["BlockchainGateway<br/><i>submit</i>"]
+        AS --> SG --> GW
+    end
+
+    Create -->|"wallet ready"| Transfer
+```
+
+---
+
+### V4 — Layered с функциональными группами и цветом
 
 ```mermaid
 flowchart TB
     A(["Your Application"])
 
-    A -->|"create wallets, sign, transfer"| S["<b>Services</b><br/>WalletsService · CryptoService<br/>MnemonicService · KeysManager<br/>KeyDerivationService · SignerService<br/>AssetsService · DeployResubmitter"]
-    A -->|"manage state"| D["<b>Domains</b><br/>Wallet · Vault<br/>BlockchainGateway<br/>EncryptedRecord<br/>Asset · BrowserStorage"]
-    A -->|"encode, validate, convert"| U["<b>Utilities</b><br/>Codec · Functions<br/>Validators · Constants<br/>Polyfills"]
+    A --> KM["🔑 <b>Key Management</b><br/>MnemonicService · KeyDerivationService<br/>KeysManager · CryptoService"]
+    A --> WO["💼 <b>Wallet Operations</b><br/>WalletsService · Wallet · Vault<br/>EncryptedRecord · BrowserStorage"]
+    A --> CI["🔗 <b>Chain Interaction</b><br/>AssetsService · SignerService<br/>DeployResubmitter · BlockchainGateway"]
+    A --> UT["🛠 <b>Helpers</b><br/>Codec · Validators · Functions<br/>Constants · Polyfills · Asset"]
 
-    style S fill:#4a2c8a,stroke:#7c3aed,color:#e8e0f5
-    style D fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe
-    style U fill:#1a3c34,stroke:#10b981,color:#d1fae5
+    KM -.-> WO -.-> CI
+    KM -.-> UT
+    CI -.-> UT
+
+    style KM fill:#4a2c8a,stroke:#7c3aed,color:#e8e0f5
+    style WO fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe
+    style CI fill:#5c3100,stroke:#f59e0b,color:#fef3c7
+    style UT fill:#1a3c34,stroke:#10b981,color:#d1fae5
+```
+
+---
+
+### V5 — Архитектура по слоям + кто кого использует
+
+```mermaid
+flowchart TB
+    A(["Your Application"])
+
+    A --> S & D & U
+
+    subgraph S["Services — business logic"]
+        direction TB
+        s1["WalletsService<br/><i>wallet creation</i>"]
+        s2["AssetsService<br/><i>transfers &amp; balance</i>"]
+        s3["SignerService<br/><i>deploy signing</i>"]
+        s4["DeployResubmitter<br/><i>retry logic</i>"]
+        s5["CryptoService<br/><i>AES encryption</i>"]
+        s6["MnemonicService<br/><i>BIP-39</i>"]
+        s7["KeyDerivationService<br/><i>BIP-44</i>"]
+        s8["KeysManager<br/><i>secp256k1</i>"]
+    end
+
+    subgraph D["Domains — stateful entities"]
+        direction TB
+        d1["Wallet<br/><i>encrypted key + signing</i>"]
+        d2["Vault<br/><i>multi-wallet storage</i>"]
+        d3["BlockchainGateway<br/><i>node communication</i>"]
+        d4["EncryptedRecord · Asset · BrowserStorage"]
+    end
+
+    subgraph U["Utilities — stateless helpers"]
+        direction TB
+        u1["Codec · Functions · Validators · Constants · Polyfills"]
+    end
+
+    S -.-> D -.-> U
 ```
 
 **Services** implement business logic and orchestrate other modules:
