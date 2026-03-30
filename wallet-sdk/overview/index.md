@@ -85,27 +85,18 @@ The SDK is organized into three layers — **Services**, **Domains**, and **Util
 
 ```mermaid
 graph TB
-    App(["Your Application"])
-    App --> Services
-    App --> Domains
-    App --> Utilities
+    App(["Your Application"]) --> SDK
 
-    subgraph Services["Services"]
-        s1["WalletsService"] ~~~ s2["MnemonicService"] ~~~ s3["KeyDerivationService"] ~~~ s4["KeysManager"]
-        s5["CryptoService"] ~~~ s6["SignerService"] ~~~ s7["AssetsService"] ~~~ s8["DeployResubmitter"]
+    subgraph SDK["ASI Wallet SDK"]
+        direction TB
+        Services["<b>Services</b><br/>WalletsService · MnemonicService · KeyDerivationService<br/>KeysManager · CryptoService · SignerService<br/>AssetsService · DeployResubmitter"]
+        Domains["<b>Domains</b><br/>Wallet · Vault · BlockchainGateway<br/>EncryptedRecord · Asset · BrowserStorage"]
+        Utilities["<b>Utilities</b><br/>Codec · Functions · Validators"]
+
+        Services --> Domains
+        Services --> Utilities
+        Domains --> Utilities
     end
-
-    subgraph Domains["Domains"]
-        d1["Wallet"] ~~~ d2["Vault"] ~~~ d3["BlockchainGateway"] ~~~ d4["EncryptedRecord"] ~~~ d5["Asset"] ~~~ d6["BrowserStorage"]
-    end
-
-    subgraph Utilities["Utilities"]
-        u1["Codec"] ~~~ u2["Functions"] ~~~ u3["Validators"]
-    end
-
-    Services --> Domains
-    Services --> Utilities
-    Domains --> Utilities
 ```
 
 **Services** implement business logic and orchestrate other modules:
