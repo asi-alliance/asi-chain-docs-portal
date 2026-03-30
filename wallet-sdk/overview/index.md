@@ -83,28 +83,7 @@ const deployId = await assetsService.transfer(
 
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
-<div style="max-width:720px;margin:24px auto;font-size:14px">
-<div style="text-align:center;margin-bottom:12px">
-<div style="display:inline-block;padding:8px 24px;border-radius:20px;border:2px solid var(--vp-c-brand-1);color:var(--vp-c-brand-1);font-weight:600">Your Application</div>
-<div style="color:var(--vp-c-text-3);font-size:20px">↓</div>
-</div>
-<div style="border:1px solid var(--vp-c-divider);border-radius:12px;padding:20px;background:var(--vp-c-bg-soft)">
-<div style="margin-bottom:16px">
-<div style="font-weight:700;margin-bottom:8px;color:var(--vp-c-brand-1)">Services</div>
-<div style="display:flex;flex-wrap:wrap;gap:6px"><code>WalletsService</code> <code>MnemonicService</code> <code>KeyDerivationService</code> <code>KeysManager</code> <code>CryptoService</code> <code>SignerService</code> <code>AssetsService</code> <code>DeployResubmitter</code></div>
-</div>
-<div style="text-align:center;color:var(--vp-c-text-3);font-size:13px;margin:4px 0">↓ uses</div>
-<div style="margin-bottom:16px">
-<div style="font-weight:700;margin-bottom:8px;color:var(--vp-c-brand-1)">Domains</div>
-<div style="display:flex;flex-wrap:wrap;gap:6px"><code>Wallet</code> <code>Vault</code> <code>BlockchainGateway</code> <code>EncryptedRecord</code> <code>Asset</code> <code>BrowserStorage</code></div>
-</div>
-<div style="text-align:center;color:var(--vp-c-text-3);font-size:13px;margin:4px 0">↓ uses</div>
-<div>
-<div style="font-weight:700;margin-bottom:8px;color:var(--vp-c-brand-1)">Utilities</div>
-<div style="display:flex;flex-wrap:wrap;gap:6px"><code>Codec</code> <code>Functions</code> <code>Validators</code> <code>Constants</code> <code>Polyfills</code></div>
-</div>
-</div>
-</div>
+![Module Architecture](/images/wallet-sdk/module-architecture.svg)
 
 **Services** implement business logic and orchestrate other modules:
 - `WalletsService` — entry point for wallet creation from private keys or mnemonics.

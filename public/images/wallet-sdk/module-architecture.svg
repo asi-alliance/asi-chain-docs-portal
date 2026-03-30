@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      @media (prefers-color-scheme: dark) {
+        .bg { fill: #1e1e20; }
+        .container-bg { fill: #2a2a2e; }
+        .container-stroke { stroke: #3a3a3e; }
+        .app-stroke { stroke: #a78bfa; }
+        .app-text { fill: #a78bfa; }
+        .layer-title { fill: #a78bfa; }
+        .module-bg { fill: #363639; }
+        .module-text { fill: #d4d4d8; }
+        .module-stroke { stroke: #4a4a4e; }
+        .arrow { stroke: #555; fill: #555; }
+        .arrow-label { fill: #777; }
+      }
+      @media (prefers-color-scheme: light) {
+        .bg { fill: #ffffff; }
+        .container-bg { fill: #f6f6f7; }
+        .container-stroke { stroke: #e2e2e3; }
+        .app-stroke { stroke: #7c3aed; }
+        .app-text { fill: #7c3aed; }
+        .layer-title { fill: #7c3aed; }
+        .module-bg { fill: #ffffff; }
+        .module-text { fill: #3c3c43; }
+        .module-stroke { stroke: #e2e2e3; }
+        .arrow { stroke: #c0c0c4; fill: #c0c0c4; }
+        .arrow-label { fill: #999; }
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="720" height="520" rx="12" class="bg"/>
+
+  <!-- Your Application -->
+  <rect x="260" y="20" width="200" height="40" rx="20" fill="none" stroke-width="2" class="app-stroke"/>
+  <text x="360" y="45" text-anchor="middle" font-size="14" font-weight="600" class="app-text">Your Application</text>
+
+  <!-- Arrow down -->
+  <line x1="360" y1="60" x2="360" y2="85" stroke-width="1.5" class="arrow"/>
+  <polygon points="355,82 360,90 365,82" class="arrow"/>
+
+  <!-- SDK Container -->
+  <rect x="30" y="90" width="660" height="410" rx="12" stroke-width="1" class="container-bg container-stroke"/>
+
+  <!-- Services layer -->
+  <text x="50" y="122" font-size="13" font-weight="700" class="layer-title">Services</text>
+  <rect x="50" y="132" width="140" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="120" y="153" text-anchor="middle" font-size="12" class="module-text">WalletsService</text>
+  <rect x="200" y="132" width="140" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="270" y="153" text-anchor="middle" font-size="12" class="module-text">MnemonicService</text>
+  <rect x="350" y="132" width="160" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="430" y="153" text-anchor="middle" font-size="12" class="module-text">KeyDerivationService</text>
+  <rect x="520" y="132" width="140" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="590" y="153" text-anchor="middle" font-size="12" class="module-text">KeysManager</text>
+  <rect x="50" y="172" width="140" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="120" y="193" text-anchor="middle" font-size="12" class="module-text">CryptoService</text>
+  <rect x="200" y="172" width="140" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="270" y="193" text-anchor="middle" font-size="12" class="module-text">SignerService</text>
+  <rect x="350" y="172" width="140" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="420" y="193" text-anchor="middle" font-size="12" class="module-text">AssetsService</text>
+  <rect x="500" y="172" width="160" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="580" y="193" text-anchor="middle" font-size="12" class="module-text">DeployResubmitter</text>
+
+  <!-- Arrow: Services → Domains -->
+  <line x1="360" y1="214" x2="360" y2="245" stroke-width="1.5" class="arrow"/>
+  <polygon points="355,242 360,250 365,242" class="arrow"/>
+  <text x="380" y="234" font-size="11" class="arrow-label">uses</text>
+
+  <!-- Domains layer -->
+  <text x="50" y="270" font-size="13" font-weight="700" class="layer-title">Domains</text>
+  <rect x="50" y="280" width="100" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="100" y="301" text-anchor="middle" font-size="12" class="module-text">Wallet</text>
+  <rect x="160" y="280" width="80" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="200" y="301" text-anchor="middle" font-size="12" class="module-text">Vault</text>
+  <rect x="250" y="280" width="160" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="330" y="301" text-anchor="middle" font-size="12" class="module-text">BlockchainGateway</text>
+  <rect x="420" y="280" width="140" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="490" y="301" text-anchor="middle" font-size="12" class="module-text">EncryptedRecord</text>
+  <rect x="50" y="320" width="80" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="90" y="341" text-anchor="middle" font-size="12" class="module-text">Asset</text>
+  <rect x="140" y="320" width="140" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="210" y="341" text-anchor="middle" font-size="12" class="module-text">BrowserStorage</text>
+
+  <!-- Arrow: Domains → Utilities -->
+  <line x1="360" y1="362" x2="360" y2="393" stroke-width="1.5" class="arrow"/>
+  <polygon points="355,390 360,398 365,390" class="arrow"/>
+  <text x="380" y="382" font-size="11" class="arrow-label">uses</text>
+
+  <!-- Utilities layer -->
+  <text x="50" y="418" font-size="13" font-weight="700" class="layer-title">Utilities</text>
+  <rect x="50" y="428" width="80" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="90" y="449" text-anchor="middle" font-size="12" class="module-text">Codec</text>
+  <rect x="140" y="428" width="100" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="190" y="449" text-anchor="middle" font-size="12" class="module-text">Functions</text>
+  <rect x="250" y="428" width="100" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="300" y="449" text-anchor="middle" font-size="12" class="module-text">Validators</text>
+  <rect x="360" y="428" width="100" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="410" y="449" text-anchor="middle" font-size="12" class="module-text">Constants</text>
+  <rect x="470" y="428" width="100" height="32" rx="6" stroke-width="1" class="module-bg module-stroke"/>
+  <text x="520" y="449" text-anchor="middle" font-size="12" class="module-text">Polyfills</text>
+</svg>
