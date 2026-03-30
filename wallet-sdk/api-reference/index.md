@@ -33,6 +33,7 @@ deriveAddressFromPublicKey(publicKey: Uint8Array): Address
 ```
 Derives address from public key (keccak256 + chain prefix + blake2b checksum + base58).
 
+---
 
 ### [CryptoService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Crypto/index.ts)
 
@@ -63,6 +64,7 @@ Derives the AES-GCM key from password + salt.
 | Salt | 16 bytes |
 | IV | 12 bytes |
 
+---
 
 ### [MnemonicService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Mnemonic/index.ts)
 
@@ -89,6 +91,7 @@ wordArrayToMnemonic(words: string[]): string
 ```
 Conversion helpers.
 
+---
 
 ### [KeyDerivationService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/KeyDerivation/index.ts)
 
@@ -120,6 +123,7 @@ deriveNextKeyFromMnemonic(...)
 ```
 Convenience derivation helpers.
 
+---
 
 ### [KeysManager](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/KeysManager/index.ts)
 
@@ -134,6 +138,7 @@ convertKeyToHex(key: Uint8Array): string
 deriveKeyFromMnemonic(mnemonicWords: string[], options?: Bip44PathOptions): Promise<Uint8Array>
 ```
 
+---
 
 ### [SignerService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Signer/index.ts)
 
@@ -153,6 +158,7 @@ Signing flow:
 
 **Security boundary:** Normal signing path does not return decrypted private key bytes. Capability expires after callback scope.
 
+---
 
 ### [AssetsService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/AssetsService/index.ts)
 
@@ -177,6 +183,7 @@ getASIBalance(address: Address): Promise<bigint>
 ```
 Validates address before exploration deploy.
 
+---
 
 ### [FeeService](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Fee/index.ts)
 
@@ -188,6 +195,7 @@ getGasFeeAsNumber(): number
 formatGasFee(fee?: string): string
 ```
 
+---
 
 ### [DeployResubmitter](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Resubmit/DeployResubmitter.ts)
 
@@ -263,6 +271,7 @@ isWalletLocked(): boolean
 toString(): string
 ```
 
+---
 
 ### [Vault](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/Vault/index.ts)
 
@@ -315,6 +324,7 @@ getSeedsIds(): string[]
 hasSeed(seedId: string): boolean
 ```
 
+---
 
 ### [Asset](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/Asset/index.ts)
 
@@ -329,6 +339,7 @@ getDecimals(): number
 
 Associated types: `AssetId = string`, `Assets = Map<AssetId, Asset>`.
 
+---
 
 ### [EncryptedRecord](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/EncryptedRecord/index.ts)
 
@@ -342,6 +353,7 @@ decrypt(password: string): Promise<string>
 toString(): string
 ```
 
+---
 
 ### [BlockchainGateway](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/BlockchainGateway/index.ts)
 
@@ -372,6 +384,7 @@ getValidatorClientUrl(): string
 
 Types and enums: `BlockchainGatewayConfig`, `DeployStatus`, `DeployStatusResult`.
 
+---
 
 ### [BrowserStorage](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/BrowserStorage/index.ts)
 
@@ -387,6 +400,7 @@ isEmpty(): boolean
 clear(): void
 ```
 
+---
 
 ### [Signing Types](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/domains/Signer/index.ts)
 
@@ -423,6 +437,7 @@ decodeBase16(hex: string): Uint8Array
 ```
 Parses a hex string into a Uint8Array of bytes.
 
+---
 
 ### [Constants](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/constants/index.ts)
 
@@ -437,6 +452,7 @@ Library-wide constants.
 | `POWER_BASE` | Base used for power calculations (10) |
 | `ASI_BASE_UNIT` | Atomic unit multiplier (`BigInt(POWER_BASE) ** BigInt(ASI_DECIMALS)`) |
 
+---
 
 ### [Functions](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/functions/index.ts)
 
@@ -471,6 +487,7 @@ const backToString = fromAtomicAmountToString(atomic); // "1234.56789012"
 const asNumber = fromAtomicAmountToNumber(atomic);
 ```
 
+---
 
 ### [Validators](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/validators/index.ts)
 
@@ -504,6 +521,7 @@ Performs detailed validation and returns a deterministic errorCode when invalid.
 | `INVALID_CHECKSUM` | Checksum mismatch |
 | `NON_CANONICAL` | Address is not in canonical form |
 
+---
 
 ### [Polyfills](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/polyfills/index.ts)
 
