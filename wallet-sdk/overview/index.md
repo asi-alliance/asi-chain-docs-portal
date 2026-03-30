@@ -83,9 +83,8 @@ const deployId = await assetsService.transfer(
 
 The SDK is organized into three layers — **Services**, **Domains**, and **Utilities** — each covering its own logical scope. Modules within a layer are independent of each other and communicate only through well-defined interfaces.
 
-### V1 — Mindmap: функциональные области
-
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#7c3aed', 'primaryTextColor': '#f5f3ff', 'primaryBorderColor': '#7c3aed', 'secondaryColor': '#2563eb', 'secondaryTextColor': '#eff6ff', 'secondaryBorderColor': '#2563eb', 'tertiaryColor': '#059669', 'tertiaryTextColor': '#ecfdf5', 'tertiaryBorderColor': '#059669', 'noteBkgColor': '#d97706', 'noteTextColor': '#fffbeb', 'noteBorderColor': '#d97706', 'lineColor': '#94a3b8', 'fontSize': '18px'}}}%%
 mindmap
   root(("ASI Wallet SDK"))
     **Key Management**
@@ -113,94 +112,10 @@ mindmap
 
 ---
 
-### V2 — Функциональные группы, дерево от App
+### Layered Architecture
 
 ```mermaid
-flowchart TB
-    A(["Your Application"])
-
-    A --> KM
-    A --> WO
-    A --> CI
-
-    subgraph KM["Key Management"]
-        direction LR
-        MnemonicService --> KeyDerivationService --> KeysManager
-        KeysManager --> CryptoService
-    end
-
-    subgraph WO["Wallet Operations"]
-        direction LR
-        WalletsService --> Wallet
-        Wallet --> Vault
-        Vault --> BrowserStorage
-    end
-
-    subgraph CI["Chain Interaction"]
-        direction LR
-        AssetsService --> SignerService
-        SignerService --> BlockchainGateway
-        AssetsService --> DeployResubmitter
-    end
-
-    KM -.->|"keys"| WO
-    WO -.->|"signed deploys"| CI
-```
-
----
-
-### V3 — Pipeline: реальный флоу создания кошелька и перевода
-
-```mermaid
-flowchart LR
-    subgraph Create["Create Wallet"]
-        direction TB
-        M["MnemonicService<br/><i>generate phrase</i>"]
-        K["KeyDerivationService<br/><i>derive key</i>"]
-        W["WalletsService<br/><i>create wallet</i>"]
-        V["Vault<br/><i>encrypt &amp; store</i>"]
-        M --> K --> W --> V
-    end
-
-    subgraph Transfer["Transfer Tokens"]
-        direction TB
-        AS["AssetsService<br/><i>build deploy</i>"]
-        SG["SignerService<br/><i>sign</i>"]
-        GW["BlockchainGateway<br/><i>submit</i>"]
-        AS --> SG --> GW
-    end
-
-    Create -->|"wallet ready"| Transfer
-```
-
----
-
-### V4 — Layered с функциональными группами и цветом
-
-```mermaid
-flowchart TB
-    A(["Your Application"])
-
-    A --> KM["🔑 <b>Key Management</b><br/>MnemonicService · KeyDerivationService<br/>KeysManager · CryptoService"]
-    A --> WO["💼 <b>Wallet Operations</b><br/>WalletsService · Wallet · Vault<br/>EncryptedRecord · BrowserStorage"]
-    A --> CI["🔗 <b>Chain Interaction</b><br/>AssetsService · SignerService<br/>DeployResubmitter · BlockchainGateway"]
-    A --> UT["🛠 <b>Helpers</b><br/>Codec · Validators · Functions<br/>Constants · Polyfills · Asset"]
-
-    KM -.-> WO -.-> CI
-    KM -.-> UT
-    CI -.-> UT
-
-    style KM fill:#4a2c8a,stroke:#7c3aed,color:#e8e0f5
-    style WO fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe
-    style CI fill:#5c3100,stroke:#f59e0b,color:#fef3c7
-    style UT fill:#1a3c34,stroke:#10b981,color:#d1fae5
-```
-
----
-
-### V5 — Архитектура по слоям + кто кого использует
-
-```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#7c3aed', 'primaryTextColor': '#f5f3ff', 'primaryBorderColor': '#6d28d9', 'lineColor': '#94a3b8', 'fontSize': '15px', 'fontFamily': 'Roboto Mono, monospace'}}}%%
 flowchart TB
     A(["Your Application"])
 
@@ -208,21 +123,21 @@ flowchart TB
 
     subgraph S["Services — business logic"]
         direction TB
-        s1["WalletsService<br/><i>wallet creation</i>"]
-        s2["AssetsService<br/><i>transfers &amp; balance</i>"]
-        s3["SignerService<br/><i>deploy signing</i>"]
-        s4["DeployResubmitter<br/><i>retry logic</i>"]
-        s5["CryptoService<br/><i>AES encryption</i>"]
-        s6["MnemonicService<br/><i>BIP-39</i>"]
-        s7["KeyDerivationService<br/><i>BIP-44</i>"]
-        s8["KeysManager<br/><i>secp256k1</i>"]
+        s1["WalletsService — wallet creation"]
+        s2["AssetsService — transfers & balance"]
+        s3["SignerService — deploy signing"]
+        s4["DeployResubmitter — retry logic"]
+        s5["CryptoService — AES encryption"]
+        s6["MnemonicService — BIP-39"]
+        s7["KeyDerivationService — BIP-44"]
+        s8["KeysManager — secp256k1"]
     end
 
     subgraph D["Domains — stateful entities"]
         direction TB
-        d1["Wallet<br/><i>encrypted key + signing</i>"]
-        d2["Vault<br/><i>multi-wallet storage</i>"]
-        d3["BlockchainGateway<br/><i>node communication</i>"]
+        d1["Wallet — encrypted key + signing"]
+        d2["Vault — multi-wallet storage"]
+        d3["BlockchainGateway — node communication"]
         d4["EncryptedRecord · Asset · BrowserStorage"]
     end
 
@@ -232,6 +147,11 @@ flowchart TB
     end
 
     S -.-> D -.-> U
+
+    style A fill:#7c3aed,stroke:#6d28d9,color:#f5f3ff
+    style S fill:#1e293b,stroke:#7c3aed,color:#e2e8f0
+    style D fill:#1e293b,stroke:#3b82f6,color:#e2e8f0
+    style U fill:#1e293b,stroke:#10b981,color:#e2e8f0
 ```
 
 **Services** implement business logic and orchestrate other modules:
