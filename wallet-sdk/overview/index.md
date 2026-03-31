@@ -16,7 +16,7 @@ A lightweight, modular SDK for wallet integration and key management on [ASI Cha
 ## Installation
 
 ```bash
-npm install asi-wallet-sdk
+npm install @asichain/asi-wallet-sdk
 ```
 
 ## Quick Start
