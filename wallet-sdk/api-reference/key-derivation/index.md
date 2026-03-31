@@ -8,7 +8,7 @@ BIP-32/BIP-44 hierarchical deterministic key derivation.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `coinType` | `number` | Yes | BIP-44 coin type (ASI uses `60`). |
+| `coinType` | `number` | Yes | BIP-44 coin type. |
 | `account` | `number` | No | Account index. Defaults to `0`. |
 | `change` | `number` | No | `0` = external chain, `1` = internal. Defaults to `0`. |
 | `index` | `number` | No | Address index. Defaults to `0`. |
@@ -42,7 +42,7 @@ Derives a private key from a BIP-32 master node along the specified path.
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `masterNode` | `BIP32Interface` | Yes | Master BIP-32 node. |
-| `path` | `string` | Yes | BIP-32 derivation path (e.g., `"m/44'/60'/0'/0/0"`). |
+| `path` | `string` | Yes | BIP-32 derivation path. |
 
 **Returns:** `Uint8Array` — private key (32 bytes).
 
