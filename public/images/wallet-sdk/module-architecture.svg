@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'Roboto Mono', 'Consolas', monospace">
+  <defs>
+    <style>
+      .bg { fill: #1b1b1f; }
+      .app-pill { fill: #7c3aed; }
+      .app-label { fill: #fff; font-size: 14px; font-weight: 700; }
+      .layer-bg { fill: #232327; }
+      .layer-border-s { fill: #7c3aed; }
+      .layer-border-d { fill: #3b82f6; }
+      .layer-border-u { fill: #10b981; }
+      .layer-title { fill: #a1a1aa; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; }
+      .mod { fill: #2e2e33; stroke: #3a3a3f; stroke-width: 1; }
+      .mod-label { fill: #d4d4d8; font-size: 12px; }
+      .arrow { stroke: #52525b; stroke-width: 1.4; fill: none; }
+      .arrow-head { fill: #52525b; }
+      .uses { fill: #52525b; font-size: 10px; }
+
+      @media (prefers-color-scheme: light) {
+        .bg { fill: #ffffff; }
+        .layer-bg { fill: #f4f4f5; }
+        .mod { fill: #ffffff; stroke: #e4e4e7; }
+        .mod-label { fill: #27272a; }
+        .layer-title { fill: #71717a; }
+        .arrow { stroke: #d4d4d8; }
+        .arrow-head { fill: #d4d4d8; }
+        .uses { fill: #a1a1aa; }
+      }
+    </style>
+  </defs>
+
+  <rect width="880" height="540" class="bg"/>
+
+  <!-- Your Application -->
+  <rect x="330" y="18" width="220" height="38" rx="19" class="app-pill"/>
+  <text x="440" y="42" text-anchor="middle" class="app-label">Your Application</text>
+
+  <!-- Arrow -->
+  <line x1="440" y1="56" x2="440" y2="82" class="arrow"/>
+  <polygon points="435,79 440,87 445,79" class="arrow-head"/>
+
+  <!-- ═══════ SERVICES ═══════ -->
+  <rect x="30" y="92" width="820" height="126" rx="8" class="layer-bg"/>
+  <rect x="30" y="92" width="4" height="126" rx="2" class="layer-border-s"/>
+  <text x="54" y="112" class="layer-title">SERVICES</text>
+
+  <!-- Row 1 -->
+  <rect x="50" y="120" width="185" height="34" rx="5" class="mod"/>
+  <text x="142" y="142" text-anchor="middle" class="mod-label">WalletsService</text>
+
+  <rect x="247" y="120" width="185" height="34" rx="5" class="mod"/>
+  <text x="339" y="142" text-anchor="middle" class="mod-label">MnemonicService</text>
+
+  <rect x="444" y="120" width="185" height="34" rx="5" class="mod"/>
+  <text x="536" y="142" text-anchor="middle" class="mod-label">KeyDerivationService</text>
+
+  <rect x="641" y="120" width="185" height="34" rx="5" class="mod"/>
+  <text x="733" y="142" text-anchor="middle" class="mod-label">KeysManager</text>
+
+  <!-- Row 2 -->
+  <rect x="50" y="164" width="185" height="34" rx="5" class="mod"/>
+  <text x="142" y="186" text-anchor="middle" class="mod-label">CryptoService</text>
+
+  <rect x="247" y="164" width="185" height="34" rx="5" class="mod"/>
+  <text x="339" y="186" text-anchor="middle" class="mod-label">SignerService</text>
+
+  <rect x="444" y="164" width="185" height="34" rx="5" class="mod"/>
+  <text x="536" y="186" text-anchor="middle" class="mod-label">AssetsService</text>
+
+  <rect x="641" y="164" width="185" height="34" rx="5" class="mod"/>
+  <text x="733" y="186" text-anchor="middle" class="mod-label">DeployResubmitter</text>
+
+  <!-- Arrow + uses -->
+  <line x1="440" y1="218" x2="440" y2="250" class="arrow"/>
+  <polygon points="435,247 440,255 445,247" class="arrow-head"/>
+  <text x="458" y="239" class="uses">uses</text>
+
+  <!-- ═══════ DOMAINS ═══════ -->
+  <rect x="30" y="260" width="820" height="126" rx="8" class="layer-bg"/>
+  <rect x="30" y="260" width="4" height="126" rx="2" class="layer-border-d"/>
+  <text x="54" y="280" class="layer-title">DOMAINS</text>
+
+  <!-- Row 1 -->
+  <rect x="50" y="288" width="185" height="34" rx="5" class="mod"/>
+  <text x="142" y="310" text-anchor="middle" class="mod-label">Wallet</text>
+
+  <rect x="247" y="288" width="185" height="34" rx="5" class="mod"/>
+  <text x="339" y="310" text-anchor="middle" class="mod-label">Vault</text>
+
+  <rect x="444" y="288" width="185" height="34" rx="5" class="mod"/>
+  <text x="536" y="310" text-anchor="middle" class="mod-label">BlockchainGateway</text>
+
+  <!-- Row 2 -->
+  <rect x="50" y="332" width="185" height="34" rx="5" class="mod"/>
+  <text x="142" y="354" text-anchor="middle" class="mod-label">EncryptedRecord</text>
+
+  <rect x="247" y="332" width="185" height="34" rx="5" class="mod"/>
+  <text x="339" y="354" text-anchor="middle" class="mod-label">Asset</text>
+
+  <rect x="444" y="332" width="185" height="34" rx="5" class="mod"/>
+  <text x="536" y="354" text-anchor="middle" class="mod-label">BrowserStorage</text>
+
+  <!-- Arrow + uses -->
+  <line x1="440" y1="386" x2="440" y2="418" class="arrow"/>
+  <polygon points="435,415 440,423 445,415" class="arrow-head"/>
+  <text x="458" y="407" class="uses">uses</text>
+
+  <!-- ═══════ UTILITIES ═══════ -->
+  <rect x="30" y="428" width="820" height="90" rx="8" class="layer-bg"/>
+  <rect x="30" y="428" width="4" height="90" rx="2" class="layer-border-u"/>
+  <text x="54" y="448" class="layer-title">UTILITIES</text>
+
+  <rect x="50" y="458" width="148" height="34" rx="5" class="mod"/>
+  <text x="124" y="480" text-anchor="middle" class="mod-label">Codec</text>
+
+  <rect x="210" y="458" width="148" height="34" rx="5" class="mod"/>
+  <text x="284" y="480" text-anchor="middle" class="mod-label">Functions</text>
+
+  <rect x="370" y="458" width="148" height="34" rx="5" class="mod"/>
+  <text x="444" y="480" text-anchor="middle" class="mod-label">Validators</text>
+
+  <rect x="530" y="458" width="148" height="34" rx="5" class="mod"/>
+  <text x="604" y="480" text-anchor="middle" class="mod-label">Constants</text>
+
+  <rect x="690" y="458" width="148" height="34" rx="5" class="mod"/>
+  <text x="764" y="480" text-anchor="middle" class="mod-label">Polyfills</text>
+</svg>
