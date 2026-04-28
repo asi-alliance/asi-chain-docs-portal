@@ -81,13 +81,13 @@ The network supports external validators joining:
 - Powers external services
 
 ::: warning
-The dedicated DevNet observer (`mettacycle-devnet-5`, IP `54.235.138.68`) is currently **unstable**. **Validator 1** (`mettacycle-devnet-2`, IP `34.196.119.4`) is used in observer role until further notice.
+The dedicated DevNet observer (`mettacycle-devnet-5`, IP `54.235.138.68`) is currently **unstable** — it runs a newer F1r3node Rust build that is being stabilized against the rest of the (Scala) shard. **Validator 1** (`mettacycle-devnet-2`, IP `34.196.119.4`) is used in observer role until further notice.
 :::
 
-**Technical Details (planned, when observer is stabilized):**
+**Technical Details:**
 - **Port Range:** 40400-40405 (same as all other DevNet nodes — each runs on its own VM)
 - **HTTP Port:** 40403
-- **gRPC Port:** 40401
+- **gRPC Port:** 40401 (external) / 40402 (internal)
 
 **Use Cases:**
 - Blockchain explorers

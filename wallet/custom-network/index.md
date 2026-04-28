@@ -120,13 +120,15 @@ Before connecting to a custom network, you need:
 
 ### Example Custom Network
 
-For a private shard at `192.168.1.100`:
+For a private shard with one validator and one observer on separate hosts (each node on its own VM uses the standard `40400-40405` range):
 
 ```
 Network Name: Private Test
 Validator URL: http://192.168.1.100:40403
 Observer URL: http://192.168.1.101:40403
 ```
+
+If your private shard runs everything on a single VM, the nodes use the `404XY` pattern (`X=0` bootstrap, `X=1` validator1, `X=5` observer) — for example `http://192.168.1.100:40413` for validator and `http://192.168.1.100:40453` for observer.
 
 ## Network Selection
 

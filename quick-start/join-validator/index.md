@@ -378,13 +378,16 @@ Ensure these ports are open in your firewall for the validator to function prope
 
 ### Key Parameters in .env
 
-**Chain Config:**
-- `BOOTSTRAP` — Bootstrap node connection string
+**Chain Config** (matches the template at [`asi-chain/chain/validator/conf/validator.env`](https://github.com/asi-alliance/asi-chain/blob/main/chain/validator/conf/validator.env)):
+
+- `BOOTSTRAP` — Full bootstrap rnode URI (`rnode://0d1312...@54.152.57.201?protocol=40400&discovery=40404`)
+- `BOOTSTRAP_GRPC_PORT` — Bootstrap gRPC port the connector uses (`40402`)
+- `BOOTSTRAP_HTTP_PORT` — Bootstrap HTTP port the connector uses (`40403`)
+- `OBSERVER_HOST` — Read-API host. Template ships with `54.235.138.68` (the dedicated observer); since it is currently unstable, override to `34.196.119.4` (Validator 1) for reliable bonding/status checks
+- `OBSERVER_GRPC_PORT` — Observer gRPC port (`40402`)
+- `OBSERVER_HTTP_PORT` — Observer HTTP port (`40403`)
 - `FAUCET_API_URL` — Testnet faucet URL for automatic funding (`https://ffyp8igwwc.execute-api.us-east-1.amazonaws.com`)
-- `BOOTSTRAP_PUBLIC_GRPC_PORT` — Bootstrap gRPC port (40401)
-- `OBSERVER_HOST` — Read-API host (currently `34.196.119.4` — Validator 1 in observer role)
-- `OBSERVER_HTTP_PORT` — Read-API HTTP port (40403)
-- `STAKE` — Amount to stake when bonding (100000000)
+- `STAKE` — Amount to stake when bonding (`100000000`)
 
 **Validator Config:**
 - `VALIDATOR_HOST` — Your validator's public IP address
@@ -450,11 +453,11 @@ See [Troubleshooting Guide](/quick-start/troubleshooting/) for detailed solution
 
 * **Bootstrap (P2P join URI):** `rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404`
 * **Validator 1 (public HTTP/gRPC API, write + read):** `http://34.196.119.4:40403` — also serves read traffic because the dedicated observer is currently unstable
+* **Wallet UI:** `https://wallet.dev.asichain.io`
+* **Explorer UI:** `https://explorer.dev.asichain.io`
+* **Faucet UI:** `https://faucet.dev.asichain.io`
 * **Indexer GraphQL:** `https://indexer.dev.asichain.io/v1/graphql`
 * **Faucet API:** `https://ffyp8igwwc.execute-api.us-east-1.amazonaws.com`
-* **Faucet UI:** `https://faucet.dev.asichain.io`
-* **Wallet:** `https://wallet.dev.asichain.io`
-* **Explorer:** `https://explorer.dev.asichain.io`
 
 
 

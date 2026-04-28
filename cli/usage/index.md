@@ -73,10 +73,9 @@ VALIDATOR_HTTP_PORT=40403
 
 OBSERVER_HOST=34.196.119.4
 OBSERVER_GRPC_PORT=40401
-OBSERVER_HTTP_PORT=40403
 
 OUTPUT_DIR=./credentials
-TOKEN="ASI"
+TOKEN=ASI
 
 VERBOSE_LOGS=false
 
@@ -103,8 +102,8 @@ The bootstrap node (`54.152.57.201`) is the network's peer-discovery entry point
 | `VERBOSE_LOGS` | Show detailed logs from rust-client | `false` |
 | `GRAPHQL_URL` | Indexer GraphQL endpoint for deploy history | `https://indexer.dev.asichain.io/v1/graphql` |
 
-::: tip Other ports
-The default `40432/40433/40452` values that ship with `.env.example` are local-development defaults (multiple nodes on a single machine using the `404XY` pattern with X = node index). For DevNet, use the values above.
+::: tip About the placeholder defaults in `.env.example`
+The shipped [`.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/main/.env.example) uses `40432/40433/40452` as defaults — these match a local multi-node setup (`404XY` pattern: X=3 for validator, X=5 for observer). Replace them with the DevNet values above when targeting the public network.
 :::
 
 ## Commands
