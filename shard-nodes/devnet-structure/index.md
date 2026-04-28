@@ -80,11 +80,14 @@ The network supports external validators joining:
 - Does not sign or propose blocks
 - Powers external services
 
-**Technical Details:**
-- **Host:** `54.152.57.201`
-- **HTTP Port:** 40453
-- **gRPC Port:** 40451
-- **Port Range:** 40450-40455
+::: warning
+The dedicated DevNet observer (`mettacycle-devnet-5`, IP `54.235.138.68`) is currently **unstable**. **Validator 1** (`mettacycle-devnet-2`, IP `34.196.119.4`) is used in observer role until further notice.
+:::
+
+**Technical Details (planned, when observer is stabilized):**
+- **Port Range:** 40400-40405 (same as all other DevNet nodes — each runs on its own VM)
+- **HTTP Port:** 40403
+- **gRPC Port:** 40401
 
 **Use Cases:**
 - Blockchain explorers
@@ -93,10 +96,10 @@ The network supports external validators joining:
 - Network monitoring
 - Application backends
 
-**Public Access:**
+**Current Public Read Access (Validator 1):**
 ```
-HTTP: http://54.152.57.201:40453
-gRPC: 54.152.57.201:40451
+HTTP: http://34.196.119.4:40403
+gRPC: 34.196.119.4:40401
 ```
 
 ## Network Services
@@ -204,18 +207,24 @@ gRPC: 54.152.57.201:40451
 | Discovery | 40404 | Peer discovery |
 | Admin | 40405 | Administration |
 
-### Validator Nodes
-Validators use similar port ranges (404X0-404X5 pattern) but are not publicly exposed for security.
+### All DevNet Nodes Use the Same Port Range
 
-### Observer Node
+In DevNet, **every node** (bootstrap, validators, observer) uses the **same 40400-40405** range, because each node runs on its own dedicated VM — there are no port conflicts to avoid.
+
 | Service | Port | Purpose |
 |---------|------|---------|
-| Protocol | 40450 | Node communication |
-| Public gRPC | 40451 | External API |
-| Internal gRPC | 40452 | Internal API |
-| HTTP API | 40453 | HTTP access |
-| Discovery | 40454 | Peer discovery |
-| Admin | 40455 | Administration |
+| Protocol | 40400 | Node communication (P2P) |
+| Public gRPC | 40401 | External gRPC API |
+| Internal gRPC | 40402 | Internal gRPC API |
+| HTTP API | 40403 | HTTP access (REST) |
+| Discovery | 40404 | Kademlia peer discovery |
+| Admin | 40405 | Administration HTTP |
+
+::: tip Why "404XY" with X > 0 in some places?
+The `404XY` naming (X = node type, Y = endpoint type) is used in **Internal Dev** environments where multiple node roles run on a single VM and need different port ranges (X=0 bootstrap, X=1 validator1, etc.). In production DevNet each node has its own VM, so X is always **0**.
+
+External validators using `chain/validator/validator.yml` from the `asi-chain` repo run on **40440-40445** (X=4) for the same reason — to leave the standard 40400-40405 range free for other tooling on the same machine.
+:::
 
 ## Network Parameters
 

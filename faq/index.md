@@ -179,7 +179,11 @@ Like any system, brief outages are possible. DevNet status:
 
 ### Where is the network hosted?
 
-Bootstrap and observer nodes are hosted at IP: `54.152.57.201`
+DevNet runs on AWS EC2. The two endpoints relevant to users:
+- **Bootstrap** (P2P entry point): `54.152.57.201`
+- **Validator 1** (public API for deploys + reads): `34.196.119.4`
+
+There are 3 active validators in total; the other two participate in consensus but are not exposed as public endpoints. The dedicated observer is currently unstable, so Validator 1 also serves read traffic.
 
 ## Technical Questions
 
@@ -197,15 +201,19 @@ On DevNet, token supply is unlimited via the faucet since tokens have no value. 
 
 ### Can I query the blockchain directly?
 
-Yes! Use the observer node at `http://54.152.57.201:40453` for direct API access.
+Yes! Use Validator 1 at `http://34.196.119.4:40403` for direct API access. The dedicated observer is currently unstable, so Validator 1 serves this role.
 
 ### What ports need to be open?
 
-For validators:
-- 40400-40405 (protocol, APIs, discovery)
+All DevNet nodes use the same port range:
+- **40400** — Protocol (P2P)
+- **40401** — Public gRPC API
+- **40402** — Internal gRPC API
+- **40403** — HTTP API
+- **40404** — Kademlia Discovery
+- **40405** — Admin HTTP API
 
-For observers:
-- 40450-40455
+For external validators connecting to DevNet, only **40400** (protocol) and **40404** (discovery) need to be open inbound for peer-to-peer communication.
 
 ## Troubleshooting
 
@@ -255,9 +263,11 @@ Yes! DevNet is specifically for development and testing. Build and test freely.
 ### Are there API endpoints?
 
 Yes:
-- **Validator:** `http://54.152.57.201:40413`
-- **Observer:** `http://54.152.57.201:40453`
-- **gRPC:** ports 40401 (validator), 40451 (observer)
+- **Validator 1 HTTP** (write + read): `http://34.196.119.4:40403`
+- **Validator 1 gRPC** (write + read): `34.196.119.4:40401`
+- **Indexer GraphQL:** `https://indexer.dev.asichain.io/v1/graphql`
+- **Faucet API:** `https://ffyp8igwwc.execute-api.us-east-1.amazonaws.com`
+- **Bootstrap P2P** (for joining the network as a node, not for app traffic): `54.152.57.201:40400`
 
 ### Is there an SDK?
 

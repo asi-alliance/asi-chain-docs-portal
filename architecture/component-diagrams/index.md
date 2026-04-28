@@ -42,10 +42,9 @@ ASI Scala blockchain node.
 
 ```mermaid
 graph LR
-    W[Wallet] --> |writes| VN[Validator :40443]
-    W --> |reads| RN[Observer :40453]
-    E[Explorer] --> |reads| RN
-    F[Faucet] --> |writes| VN
+    W[Wallet] --> |writes + reads| V1[Validator 1 34.196.119.4:40403]
+    E[Explorer] --> |reads via Indexer| V1
+    F[Faucet] --> |writes| V1
 ```
 
 ---

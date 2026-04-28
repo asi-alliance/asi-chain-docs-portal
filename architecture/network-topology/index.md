@@ -41,72 +41,84 @@ graph TB
 
 ## Network Components
 
-### Bootstrap Node
+### Bootstrap Node (`mettacycle-devnet-1`)
 
 Entry point for new nodes joining the network.
 
 | Property | Value |
 |----------|-------|
 | IP | `54.152.57.201` |
-| Port | `40400` |
-| Purpose | Network discovery |
+| Protocol port | `40400` |
+| HTTP API | `40403` |
+| Purpose | Network discovery + write-API host |
 
-### Validators
+### Validators (3 active)
 
-Nodes that participate in consensus.
+Three nodes participate in consensus.
+
+| VM | Public API exposure |
+|----|---------------------|
+| Validator 1 (`mettacycle-devnet-2`, `34.196.119.4`) | **Public** — `http://34.196.119.4:40403` (write + read) |
+| Validator 2 (`mettacycle-devnet-3`) | Internal — consensus only |
+| Validator 3 (`mettacycle-devnet-4`) | Internal — consensus only |
 
 | Function | Description |
 |----------|-------------|
 | Block production | Propose new blocks |
-| Consensus | Vote on block validity |
-| API | Accept deploys |
+| Consensus | Vote on block validity (CBC Casper) |
+| Public API (Validator 1 only) | Accept deploys + serve read queries |
 
-### Observer
+::: tip
+Validator 1 also handles all read traffic because the dedicated observer is currently unstable.
+:::
 
-Read-only node for queries.
+### Observer (currently unstable)
 
-| Function | Description |
-|----------|-------------|
-| Block sync | Receive finalized blocks |
-| Queries | Balance and state lookups |
-| Explorer | Data source for explorer |
+Read-only node for queries — `mettacycle-devnet-5` (`54.235.138.68`). Until it stabilizes, Validator 1 (`34.196.119.4:40403`) serves read requests.
 
 ## Port Configuration
 
+All DevNet nodes share the same port range — each runs on its own VM.
+
 ```mermaid
 graph LR
-    N[Node] --> P1[":40440 P2P"]
-    N --> P2[":40443 HTTP"]
-    N --> P3[":40444 Discovery"]
-    N --> P4[":40445 Admin"]
+    N[Node] --> P1[":40400 Protocol/P2P"]
+    N --> P2[":40401 gRPC ext"]
+    N --> P3[":40402 gRPC int"]
+    N --> P4[":40403 HTTP"]
+    N --> P5[":40404 Discovery"]
+    N --> P6[":40405 Admin"]
 ```
 
 | Port | Protocol | Purpose | Access |
 |------|----------|---------|--------|
-| 40440 | TCP | P2P communication | Public |
-| 40443 | HTTP | API (deploy, query) | Public |
-| 40444 | UDP | Peer discovery | Public |
-| 40445 | HTTP | Admin API | Localhost |
+| 40400 | TCP | Protocol / P2P communication | Public |
+| 40401 | TCP | Public gRPC API | Public |
+| 40402 | TCP | Internal gRPC API | Localhost |
+| 40403 | HTTP | API (deploy, query) | Public |
+| 40404 | UDP | Kademlia peer discovery | Public |
+| 40405 | HTTP | Admin API | Localhost |
 
 ## External Services
 
-| Service | URL | Node |
-|---------|-----|------|
-| Wallet | wallet.dev.asichain.io | Validator + Observer |
-| Explorer | explorer.dev.asichain.io | Observer |
-| Faucet | faucet.dev.asichain.io | Validator |
+| Service | URL | Backend |
+|---------|-----|---------|
+| Wallet | wallet.dev.asichain.io | Validator 1 (write + read) |
+| Explorer | explorer.dev.asichain.io | Indexer GraphQL |
+| Indexer | indexer.dev.asichain.io/v1/graphql | PostgreSQL via Hasura, indexes from Validator 1 |
+| Faucet | faucet.dev.asichain.io | Faucet API → Validator 1 |
 
 ## Firewall Configuration
 
-Required ports for validators:
+Required ports for external validators:
 
 ```bash
 # Required for P2P
-ufw allow 40440/tcp
-ufw allow 40444/udp
+ufw allow 40400/tcp
+ufw allow 40404/udp
 
-# Optional for API
-ufw allow 40443/tcp
+# Optional for HTTP API access
+ufw allow 40403/tcp
 ```
 
 ---

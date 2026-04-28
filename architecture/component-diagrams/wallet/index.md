@@ -15,15 +15,13 @@ graph TB
     end
     
     subgraph "External"
-        VN[Validator Node :40413]
-        RN[Observer Node :40453]
+        V1["Validator 1 34.196.119.4:40403<br/>(write + read; observer is unstable)"]
         WC[WalletConnect]
     end
     
     UI --> Store
     Store --> Services
-    Services --> VN
-    Services --> RN
+    Services --> V1
     Services --> WC
 ```
 
@@ -112,9 +110,9 @@ The wallet connects to different nodes for different operations.
 
 | Operation | Node | Port | Purpose |
 |-----------|------|------|---------|
-| Send tokens | Validator | :40413 | Write operations |
-| Check balance | Observer | :40453 | Read operations |
-| Deploy contract | Validator | :40413 | Write operations |
+| Send tokens | Validator 1 (`34.196.119.4`) | :40403 | Write |
+| Check balance | Validator 1 (`34.196.119.4`) | :40403 | Read (observer is unstable) |
+| Deploy contract | Validator 1 (`34.196.119.4`) | :40403 | Write |
 
 ---
 
