@@ -37,17 +37,14 @@ After creating your account, configure the network connection on the [Settings p
 
 **Devnet Configuration:**
 
-**Validator Node** (for transactions):
-- Host: `54.152.57.201`
+**Validator 1** (handles both write and read operations):
+- Host: `34.196.119.4`
 - gRPC Port: `40401`
-- HTTP Port: `40413`
+- HTTP Port: `40403`
 
-**Observer Node** (read-only operations):
-- Host: `54.152.57.201`
-- gRPC Port: `40451`
-- HTTP Port: `40453`
-
-The wallet automatically routes write operations (transfers, deployments) to the Validator node and read operations (balance checks, queries) to the Observer node.
+::: tip
+The standalone observer is currently unstable, so Validator 1 serves both write (deploys, transfers) and read (balance, queries) operations. Bootstrap (`54.152.57.201`) is used only for the initial peer-discovery handshake when nodes join the network — not by the wallet directly.
+:::
 
 ![Network Settings](/images/wallet/settings-network.png)
 
@@ -227,23 +224,22 @@ The [Settings page](https://wallet.dev.asichain.io/#/settings) manages network c
 
 Devnet is the primary network for development and testing.
 
-**Validator Node:**
-- Host: `54.152.57.201`
+**Validator 1** (handles both write and read operations):
+- Host: `34.196.119.4`
 - gRPC Port: `40401`
-- HTTP Port: `40413`
+- HTTP Port: `40403`
 
-**Observer Node:**
-- Host: `54.152.57.201`
-- gRPC Port: `40451`
-- HTTP Port: `40453`
+::: tip
+The dedicated observer is currently unstable, so Validator 1 (`34.196.119.4`) handles both deploys and read queries. Bootstrap (`54.152.57.201`) is reserved for peer discovery during node startup and is not used by the wallet directly.
+:::
 
 **Local Network Configuration:**
 
 Local Network is for local development with your own node.
 
 **Configuration:**
-- Validator URL: `http://localhost:40413`
-- Observer URL: `http://localhost:40453`
+- Validator URL: `http://localhost:40403`
+- Observer URL: `http://localhost:40403` (or your observer's host/port)
 - Admin URL: `http://localhost:40405`
 
 **Private Keys Management:**

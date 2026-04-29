@@ -60,8 +60,10 @@ vault.save();
 import { AssetsService, BlockchainGateway } from "@asichain/asi-wallet-sdk";
 
 BlockchainGateway.init({
-  validator: { baseUrl: 'http://validator-node:40403' },
-  indexer: { baseUrl: 'http://observer-node:40403' },
+  // DevNet endpoints — Validator 1 handles both write and read
+  // because the dedicated observer is currently unstable.
+  validator: { baseUrl: 'http://34.196.119.4:40403' },
+  indexer:   { baseUrl: 'http://34.196.119.4:40403' },
 });
 const assetsService = new AssetsService();
 

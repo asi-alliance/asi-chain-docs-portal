@@ -2,6 +2,12 @@
 
 Technical documentation for the ASI:Chain observer node Docker image and configuration.
 
+::: warning Current DevNet status
+The dedicated DevNet observer (`mettacycle-devnet-5`, IP `54.235.138.68`) is currently **unstable**. **Validator 1** (`http://34.196.119.4:40403`) is used for all read operations until the observer is stabilized.
+
+This page describes how observer nodes are intended to work and how to run your own; for current public read access, use Validator 1.
+:::
+
 ## Overview
 
 Observer nodes use the same Docker image as validators but are configured for read-only operation. They synchronize with the blockchain without participating in consensus.
@@ -28,18 +34,23 @@ Observer nodes provide:
 - No staking required
 - Read-only operation
 
-## Public Observer Access
+## Public Read Access (currently via Validator 1)
 
-ASI:Chain provides a public observer node:
+While the dedicated observer is unstable, ASI:Chain DevNet provides public read access via Validator 1:
 
 **HTTP Endpoint:**
 ```
-http://54.152.57.201:40453
+http://34.196.119.4:40403
 ```
 
 **gRPC Endpoint:**
 ```
-54.152.57.201:40451
+34.196.119.4:40401
+```
+
+**Indexer GraphQL** (preferred for app development):
+```
+https://indexer.dev.asichain.io/v1/graphql
 ```
 
 Use these for:
@@ -60,12 +71,12 @@ services:
     image: public.ecr.aws/f6y9h6x4/asi-chain/node:latest
     container_name: observer
     ports:
-      - "40450:40450"  # Protocol server
-      - "40451:40451"  # Public gRPC API
-      - "40452:40452"  # Internal gRPC API
-      - "40453:40453"  # HTTP API
-      - "40454:40454"  # Kademlia discovery
-      - "40455:40455"  # Admin HTTP API
+      - "40400:40400"  # Protocol server
+      - "40401:40401"  # Public gRPC API
+      - "40402:40402"  # Internal gRPC API
+      - "40403:40403"  # HTTP API
+      - "40404:40404"  # Kademlia discovery
+      - "40405:40405"  # Admin HTTP API
     volumes:
       - ./data/observer:/var/lib/rnode/
       - ./conf/observer.conf:/var/lib/rnode/rnode.conf
@@ -82,11 +93,11 @@ services:
 ```hocon
 api-server {
   host = ${?OBSERVER_HOST}
-  port = 40453
-  port-grpc-external = 40451
-  port-grpc-internal = 40452
-  port-http = 40453
-  port-kademlia = 40454
+  port = 40403
+  port-grpc-external = 40401
+  port-grpc-internal = 40402
+  port-http = 40403
+  port-kademlia = 40404
   enable-reporting = true
 }
 
@@ -130,17 +141,17 @@ Observer nodes provide full API access:
 
 **Status:**
 ```bash
-curl http://localhost:40453/status
+curl http://localhost:40403/status
 ```
 
 **Blocks:**
 ```bash
-curl http://localhost:40453/blocks
+curl http://localhost:40403/blocks
 ```
 
 **Explore Deploy:**
 ```bash
-curl -X POST http://localhost:40453/explore-deploy \
+curl -X POST http://localhost:40403/explore-deploy \
   -H 'Content-Type: application/json' \
   -d '{"term": "..."}'
 ```
@@ -149,7 +160,7 @@ curl -X POST http://localhost:40453/explore-deploy \
 
 **List services:**
 ```bash
-grpcurl -plaintext localhost:40451 list
+grpcurl -plaintext localhost:40401 list
 ```
 
 ## Use Cases
@@ -158,7 +169,7 @@ grpcurl -plaintext localhost:40451 list
 
 Connect explorer frontend to observer:
 ```javascript
-const API_URL = 'http://54.152.57.201:40453';
+const API_URL = 'http://34.196.119.4:40403';
 fetch(`${API_URL}/blocks`)
   .then(res => res.json())
   .then(data => console.log(data));
@@ -168,7 +179,7 @@ fetch(`${API_URL}/blocks`)
 
 Query blockchain state:
 ```bash
-curl -X POST http://localhost:40453/explore-deploy \
+curl -X POST http://localhost:40403/explore-deploy \
   -H 'Content-Type: application/json' \
   -d '{"term": "new stdout(`rho:io:stdout`) in { stdout!(\"data\") }"}'
 ```
@@ -178,7 +189,7 @@ curl -X POST http://localhost:40453/explore-deploy \
 Track network metrics:
 ```bash
 # Check status every minute
-watch -n 60 'curl -s http://localhost:40453/status'
+watch -n 60 'curl -s http://localhost:40403/status'
 ```
 
 ### 4. Data Indexing
@@ -188,7 +199,7 @@ Build custom indexes:
 import requests
 
 def index_blocks():
-    response = requests.get('http://54.152.57.201:40453/blocks')
+    response = requests.get('http://34.196.119.4:40403/blocks')
     blocks = response.json()
     # Process and index blocks
     for block in blocks:
@@ -235,7 +246,7 @@ docker stats observer
 
 **Sync status:**
 ```bash
-curl http://localhost:40453/status | jq '.syncStatus'
+curl http://localhost:40403/status | jq '.syncStatus'
 ```
 
 ### Performance Metrics
@@ -269,7 +280,7 @@ telnet 54.152.57.201 40400
 **Verify firewall:**
 ```bash
 sudo ufw status
-sudo ufw allow 40450:40455/tcp
+sudo ufw allow 40400:40405/tcp
 ```
 
 ### API Not Responding
@@ -286,7 +297,7 @@ docker logs observer --tail 100
 
 **Test API:**
 ```bash
-curl -v http://localhost:40453/status
+curl -v http://localhost:40403/status
 ```
 
 ## Security Considerations
@@ -303,13 +314,13 @@ If exposing observer publicly:
 
 **Allow necessary ports:**
 ```bash
-sudo ufw allow 40450:40455/tcp
+sudo ufw allow 40400:40405/tcp
 sudo ufw enable
 ```
 
 **Or restrict to specific IPs:**
 ```bash
-sudo ufw allow from <trusted-ip> to any port 40453
+sudo ufw allow from <trusted-ip> to any port 40403
 ```
 
 ## Updates
@@ -350,7 +361,7 @@ Blockchain data can be re-synced from the network.
 Change port mapping in docker-compose.yml:
 ```yaml
 ports:
-  - "8080:40453"  # Map HTTP API to port 8080
+  - "8080:40403"  # Map HTTP API to port 8080
 ```
 
 ### Resource Limits

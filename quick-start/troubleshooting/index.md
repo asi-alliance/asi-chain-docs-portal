@@ -80,7 +80,7 @@ Common issues and solutions when working with ASI:Chain DevNet.
 
 2. **Verify Network Connectivity**
    ```bash
-   curl http://54.152.57.201:40453/status
+   curl http://34.196.119.4:40403/status
    ```
 
 3. **Reset Blockchain Data**
@@ -138,7 +138,7 @@ Common issues and solutions when working with ASI:Chain DevNet.
 
 3. **Test Connectivity**
    ```bash
-   curl http://54.152.57.201:40453/status
+   curl http://34.196.119.4:40403/status
    ```
 
 ### Balance Not Showing

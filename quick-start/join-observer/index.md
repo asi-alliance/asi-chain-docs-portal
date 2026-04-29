@@ -1,41 +1,52 @@
 # Join DevNet as Observer
 
 > [!WARNING]
-> Attention! At the DevNet stage, ASI:Chain works in dev mode. The observer node works unstably. You can set up and deploy a validator node as an entry point for retrieving data from the blockchain. **On the Testnet and Mainnet stages - it will change: only observer node will be available to retrieve data from the blockchain.**
+> The dedicated DevNet observer node is currently **unstable**. Until it is stabilized, use **Validator 1** (`http://34.196.119.4:40403`) for all read operations. On TestNet and MainNet only the observer will be available for blockchain reads.
 
-Documentation for running an observer node is currently under development.
+Documentation for running a self-hosted observer node is under development. While it is being prepared, use the public read endpoints below.
 
-## Public Observer Access
-
-While the self-hosted observer documentation is being prepared, you can use the ASI:Chain public observer node:
+## Public Read Access (via Validator 1)
 
 **HTTP Endpoint:**
 ```
-http://54.152.57.201:40453
+http://34.196.119.4:40403
 ```
 
 **gRPC Endpoint:**
 ```
-54.152.57.201:40451
+34.196.119.4:40401
 ```
 
 ### Usage Examples
 
 **Query Blocks:**
 ```bash
-curl http://54.152.57.201:40453/blocks
+curl http://34.196.119.4:40403/blocks
 ```
 
 **Explore Deploy:**
 ```bash
-curl -X POST http://54.152.57.201:40453/explore-deploy \
+curl -X POST http://34.196.119.4:40403/explore-deploy \
   -H 'Content-Type: application/json' \
   -d '{"term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:asiVault\") }"}'
 ```
 
 **Check Network Status:**
 ```bash
-curl http://54.152.57.201:40453/status
+curl http://34.196.119.4:40403/status
+```
+
+**Latest Finalized Block:**
+```bash
+curl http://34.196.119.4:40403/api/last-finalized-block
+```
+
+### Indexer GraphQL (for app development)
+
+For applications that need indexed historical data (Explorer-like), use the public indexer:
+
+```
+https://indexer.dev.asichain.io/v1/graphql
 ```
 
 ## What is an Observer Node?

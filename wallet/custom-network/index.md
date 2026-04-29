@@ -22,23 +22,23 @@ DevNet is the default network for testing and development.
 
 ### DevNet Endpoints
 
-**Validator Node (for transactions):**
-- Host: `54.152.57.201`
+**Validator 1** (handles all wallet HTTP/gRPC operations):
+- Host: `34.196.119.4`
 - gRPC Port: `40401`
-- HTTP Port: `40413`
-- HTTP URL: `http://54.152.57.201:40413`
+- HTTP Port: `40403`
+- HTTP URL: `http://34.196.119.4:40403`
 
-**Observer Node (read-only operations):**
-- Host: `54.152.57.201`
-- gRPC Port: `40451`
-- HTTP Port: `40453`
-- HTTP URL: `http://54.152.57.201:40453`
+::: warning
+The standalone observer node (`mettacycle-devnet-5`) is currently unstable. Validator 1 (`34.196.119.4`) is used for both write (deploys, transfers) and read (balance, queries) operations.
+:::
+
+::: tip Bootstrap node
+The bootstrap node (`54.152.57.201`) is the network's peer-discovery entry point — used in the `rnode://...@54.152.57.201?protocol=40400&discovery=40404` URI when starting your own node. The wallet does not connect to it directly.
+:::
 
 ### How It Works
 
-The wallet automatically routes operations:
-- **Write Operations** (transfers, deployments) → Validator node (40413)
-- **Read Operations** (balance checks, queries) → Observer node (40453)
+The wallet sends both write (deploys, transfers) and read (balance, queries) operations to **Validator 1** (`34.196.119.4:40403`) via HTTP/gRPC.
 
 ### Editing DevNet Configuration
 
@@ -73,8 +73,8 @@ sudo docker compose -f observer.yml up -d
 ### Local Network Settings
 
 **Configuration:**
-- Validator URL: `http://localhost:40413`
-- Observer URL: `http://localhost:40453`
+- Validator URL: `http://localhost:40403`
+- Observer URL: `http://localhost:40403` (or your observer's host:port)
 - Admin URL: `http://localhost:40405`
 
 ### How to Configure
@@ -84,8 +84,8 @@ sudo docker compose -f observer.yml up -d
 3. Click **Edit Network** button
 4. Verify URLs:
    ```
-   Validator: http://localhost:40413
-   Observer: http://localhost:40453
+   Validator: http://localhost:40403
+   Observer: http://localhost:40403
    Admin: http://localhost:40405
    ```
 5. Save configuration
@@ -120,13 +120,15 @@ Before connecting to a custom network, you need:
 
 ### Example Custom Network
 
-For a private shard at `192.168.1.100`:
+For a private shard with one validator and one observer on separate hosts (each node on its own VM uses the standard `40400-40405` range):
 
 ```
 Network Name: Private Test
-Validator URL: http://192.168.1.100:40413
-Observer URL: http://192.168.1.100:40453
+Validator URL: http://192.168.1.100:40403
+Observer URL: http://192.168.1.101:40403
 ```
+
+If your private shard runs everything on a single VM, the nodes use the `404XY` pattern (`X=0` bootstrap, `X=1` validator1, `X=5` observer) — for example `http://192.168.1.100:40413` for validator and `http://192.168.1.100:40453` for observer.
 
 ## Network Selection
 
@@ -185,16 +187,16 @@ The wallet shows which network is currently active:
 
 3. Test endpoint manually:
    ```bash
-   curl http://localhost:40413/status
+   curl http://localhost:40403/status
    ```
 
 4. Verify ports are correct:
-   - Validator HTTP: 40413
-   - Observer HTTP: 40453
+   - Validator HTTP: 40403
+   - Observer HTTP: 40403 (typically same port, different host/VM)
 
 5. Check if ports are listening:
    ```bash
-   netstat -an | grep 40413
+   netstat -an | grep 40403
    ```
 
 ### Cannot Connect to Custom Network
@@ -251,7 +253,7 @@ If running node on local network but accessing from outside:
 
 2. **Update Wallet:**
    - Use public IP instead of localhost
-   - Example: `http://<your-public-ip>:40413`
+   - Example: `http://<your-public-ip>:40403`
 
 3. **Security:**
    - Consider VPN instead of public exposure
@@ -269,7 +271,7 @@ server {
     server_name wallet.example.com;
     
     location /api/ {
-        proxy_pass http://localhost:40413/;
+        proxy_pass http://localhost:40403/;
         proxy_set_header Host $host;
     }
 }

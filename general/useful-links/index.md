@@ -26,23 +26,21 @@ Access indexed blockchain data.
 
 ## Network Endpoints
 
-### Bootstrap Node
+### Bootstrap Node (P2P discovery)
 ```
 rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404
 ```
-Use this endpoint to connect your node to the DevNet.
+Use this URI to connect your own node to the DevNet. The bootstrap node is the peer-discovery entry point — applications (wallet, CLI, SDK) do not call it directly.
 
-### Validator Node (HTTP)
+### Validator 1 — primary public API
 ```
-http://54.152.57.201:40413
+http://34.196.119.4:40403
 ```
-For transaction submission and contract deployment.
+For **both** transaction submission and read operations (deploys, balance, queries). The dedicated observer is currently unstable, so Validator 1 also serves all read traffic.
 
-### Observer Node (HTTP)
-```
-http://54.152.57.201:40453
-```
-For read-only operations and blockchain queries.
+::: warning
+The standalone observer node is **not stable right now**. Use Validator 1 (`34.196.119.4:40403`) for all read operations until further notice.
+:::
 
 ## Repositories
 
@@ -116,8 +114,11 @@ Docker image for running validator and observer nodes.
 
 ### Network Interaction
 - **CLI Tool:** [Rust Client](https://github.com/singnet/rust-client)
-- **HTTP API:** `http://54.152.57.201:40413` (Validator)
-- **gRPC API:** `54.152.57.201:40401` (Validator)
+- **Validator 1 HTTP API** (write + read): `http://34.196.119.4:40403`
+- **Validator 1 gRPC API** (write + read): `34.196.119.4:40401`
+- **Indexer GraphQL:** `https://indexer.dev.asichain.io/v1/graphql`
+- **Faucet API:** `https://ffyp8igwwc.execute-api.us-east-1.amazonaws.com`
+- **Bootstrap (P2P only):** `54.152.57.201:40400` / discovery `40404` — for joining the network as a node, not for app traffic
 
 ## Network Information
 
@@ -157,24 +158,24 @@ Docker image for running validator and observer nodes.
 
 ### Deploy Smart Contract
 ```bash
-cargo run -- deploy -f ./contract.rho --private-key <key> -H localhost -p 40402
+cargo run -- deploy -f ./contract.rho --private-key <key> -H 34.196.119.4 -p 40402
 ```
 
 ### Propose Block
 ```bash
-cargo run -- propose --private-key <key> -H localhost -p 40402
+cargo run -- propose --private-key <key> -H 34.196.119.4 -p 40402
 ```
 
 ### Check Balance
 ```bash
-curl -X POST http://54.152.57.201:40453/explore-deploy \
+curl -X POST http://34.196.119.4:40403/explore-deploy \
   -H 'Content-Type: application/json' \
   -d '{"term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:asiVault\") }"}'
 ```
 
 ### Query Block History
 ```bash
-curl http://54.152.57.201:40453/blocks
+curl http://34.196.119.4:40403/blocks
 ```
 
 ---

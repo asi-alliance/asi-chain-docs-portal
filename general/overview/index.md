@@ -130,7 +130,8 @@ See [Join DevNet as Validator](/quick-start/join-validator/) or [Join DevNet as 
 
 - **Network:** DevNet (Development Network)
 - **Status:** Active
-- **Bootstrap Node:** `54.152.57.201`
+- **Bootstrap (P2P entry point):** `54.152.57.201` — used in `rnode://...` URIs when joining the network as a node
+- **Public API (Validator 1, write + read):** `http://34.196.119.4:40403` — the dedicated observer is currently unstable, so Validator 1 also serves read traffic
 - **Total Validators:** 3 active validators
 - **Block Time:** ~20 seconds average
 - **Explorer:** [explorer.dev.asichain.io](https://explorer.dev.asichain.io)

@@ -60,40 +60,50 @@ cp .env.example .env
 
 ### Step 2: Configure Network Connection
 
-Edit the `.env` file with your network settings:
+Edit the `.env` file with your network settings.
+
+**For DevNet:**
 
 ```env
-VALIDATOR_HOST=<VALIDATOR_IP>
-VALIDATOR_GRPC_PORT=40432
-VALIDATOR_HTTP_PORT=40433
+# Validator 1 handles both write (deploys) and read (queries),
+# because the dedicated observer is currently unstable.
+VALIDATOR_HOST=34.196.119.4
+VALIDATOR_GRPC_PORT=40401
+VALIDATOR_HTTP_PORT=40403
 
-OBSERVER_HOST=<OBSERVER_IP>
-OBSERVER_GRPC_PORT=40452
+OBSERVER_HOST=34.196.119.4
+OBSERVER_GRPC_PORT=40401
 
 OUTPUT_DIR=./credentials
-TOKEN="ASI"
+TOKEN=ASI
 
 VERBOSE_LOGS=false
 
-GRAPHQL_URL=<GRAPHQL_API_ENDPOINT>
+GRAPHQL_URL=https://indexer.dev.asichain.io/v1/graphql
 ```
+
+::: warning
+Both `VALIDATOR_HOST` and `OBSERVER_HOST` point to **Validator 1** (`34.196.119.4`) for now: the dedicated DevNet observer is unstable, so Validator 1 serves both deploys and read queries until the observer is stabilized.
+
+The bootstrap node (`54.152.57.201`) is the network's peer-discovery entry point — used only when launching your own node, not by the CLI directly.
+:::
 
 **Configuration Parameters:**
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `VALIDATOR_HOST` | IP address of the validator node (for sending deploys) | Required |
-| `VALIDATOR_GRPC_PORT` | gRPC port of the validator node | 40432 |
-| `VALIDATOR_HTTP_PORT` | HTTP port of the validator node | 40433 |
-| `OBSERVER_HOST` | IP address of the observer node (for read operations) | Required |
-| `OBSERVER_GRPC_PORT` | gRPC port of the observer node | 40452 |
-| `OUTPUT_DIR` | Directory for storing wallet credentials | ./credentials |
-| `TOKEN` | Token name to use | ASI |
-| `VERBOSE_LOGS` | Show detailed logs from rust-client | false |
-| `GRAPHQL_URL` | GraphQL API endpoint for deploy history | Required |
+| Parameter | Description | DevNet Value |
+|-----------|-------------|--------------|
+| `VALIDATOR_HOST` | Host accepting deploys | `34.196.119.4` (Validator 1) |
+| `VALIDATOR_GRPC_PORT` | gRPC port for write operations | `40401` |
+| `VALIDATOR_HTTP_PORT` | HTTP port for write operations | `40403` |
+| `OBSERVER_HOST` | Host serving read queries | `34.196.119.4` (Validator 1, observer is unstable) |
+| `OBSERVER_GRPC_PORT` | gRPC port for read operations | `40401` |
+| `OUTPUT_DIR` | Directory for storing wallet credentials | `./credentials` |
+| `TOKEN` | Token name to use | `ASI` |
+| `VERBOSE_LOGS` | Show detailed logs from rust-client | `false` |
+| `GRAPHQL_URL` | Indexer GraphQL endpoint for deploy history | `https://indexer.dev.asichain.io/v1/graphql` |
 
-::: tip Network Endpoints
-Contact the ASI Chain team or check the [Useful Links](/general/useful-links/) page for current DevNet node addresses and GraphQL endpoints.
+::: tip About the placeholder defaults in `.env.example`
+The shipped [`.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/main/.env.example) uses `40432/40433/40452` as defaults — these match a local multi-node setup (`404XY` pattern: X=3 for validator, X=5 for observer). Replace them with the DevNet values above when targeting the public network.
 :::
 
 ## Commands

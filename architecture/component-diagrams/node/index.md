@@ -37,18 +37,22 @@ graph LR
         N[Node]
     end
     
-    N --> P1[":40440 P2P"]
-    N --> P2[":40443 HTTP API"]
-    N --> P3[":40444 Discovery"]
-    N --> P4[":40445 Admin"]
+    N --> P1[":40400 Protocol/P2P"]
+    N --> P2[":40401 gRPC ext"]
+    N --> P3[":40402 gRPC int"]
+    N --> P4[":40403 HTTP API"]
+    N --> P5[":40404 Discovery"]
+    N --> P6[":40405 Admin"]
 ```
 
 | Port | Protocol | Purpose | Access |
 |------|----------|---------|--------|
-| 40440 | TCP | P2P communication | Public |
-| 40443 | HTTP | Deploy and query API | Public |
-| 40444 | UDP | Peer discovery | Public |
-| 40445 | HTTP | Admin API | Localhost only |
+| 40400 | TCP | Protocol / P2P communication | Public |
+| 40401 | TCP | Public gRPC API | Public |
+| 40402 | TCP | Internal gRPC API | Localhost |
+| 40403 | HTTP | Deploy and query REST API | Public |
+| 40404 | UDP | Kademlia peer discovery | Public |
+| 40405 | HTTP | Admin API | Localhost only |
 
 ## Core Services
 

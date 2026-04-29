@@ -16,7 +16,7 @@ graph TB
     
     subgraph "External"
         Docker[Docker Container]
-        Node[Node API :40453]
+        Node[Validator 1 API :40403]
     end
     
     subgraph "Clients"
