@@ -77,7 +77,7 @@ const EMAIL_VALIDATION_REGEX: RegExp = new RegExp(
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 );
 
-const MINIMUM_FEEDBACK_LENGTH = 10;
+const MINIMUM_FEEDBACK_LENGTH = 1;
 const COMPLETED_SCREEN_TIMEOUT = 5000;
 
 export default {
