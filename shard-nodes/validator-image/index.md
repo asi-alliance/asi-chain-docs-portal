@@ -1,411 +1,58 @@
-# Validator Node Image
+# Validator node image
 
-Technical documentation for the ASI:Chain validator node Docker image and configuration.
+The image contains the maintained **Rust** implementation of CBC Casper, Rholang and RSpace++. Its source is [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8).
 
-## Official Docker Image
+## Select the image
 
-ASI:Chain validators use the official Docker image hosted on AWS ECR:
+The published baseline is:
+
+```text
+public.ecr.aws/l2u2v4a8/asi-chain/node-rust:0.4.46-dev.20261102-e6ecf23814a3
+public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:3c93b745dc3edbb1aa1ca8e2a3fec030cc96e016a29044b575ab549da44abab0
+```
+
+See [container images](/general/container-images/) for the separately published `5dafbc37` compatibility image and application versions. Choose the node revision together with its client/API contract; a newer tag does not select an upgrade for a running shard.
 
 ```bash
-public.ecr.aws/f6y9h6x4/asi-chain/node:latest
+NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:3c93b745dc3edbb1aa1ca8e2a3fec030cc96e016a29044b575ab549da44abab0
+docker pull --platform linux/amd64 "$NODE_IMAGE"
+docker image inspect "$NODE_IMAGE" --format '{{json .Config.Labels}}'
+docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" --version
+docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" run --help
 ```
 
-This image contains:
-- RNode implementation (F1R3FLY-based)
-- Rholang execution environment
-- Consensus engine (CBC Casper)
-- Network communication protocols
-- API servers (gRPC, HTTP, WebSocket)
+These commands inspect the existing image without starting a network.
 
-## Image Contents
+## Runtime and configuration
 
-### Core Components
+The pinned [Dockerfile](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/node/Dockerfile) and [entrypoint](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/node/docker-entrypoint-rust.sh) define:
 
-**RNode Binary:**
-- Located at `/opt/docker/bin/rnode`
-- Main blockchain node executable
-- Handles all node operations
+| Item | Value |
+|---|---|
+| Binary | `/opt/docker/bin/node` |
+| Entrypoint | `/opt/docker/bin/docker-entrypoint.sh`; adds `--profile=docker` |
+| Default command | `run` |
+| Runtime user | `daemon` |
+| Docker data directory | `/var/lib/rnode/` |
+| Configuration | Built-in HOCON defaults, plus the selected override file |
 
-**Configuration:**
-- Default config at `/var/lib/rnode/rnode.conf`
-- Can be overridden via volume mounts
-- Environment variables supported
+Use [defaults.conf at the same revision](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/node/src/main/resources/defaults.conf). Pass `run --config-file /path/to/node.conf` to make the mounted override explicit. Upstream [shard overrides](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/docker/conf/default.conf) illustrate the structure; development keys and genesis files are not inputs for joining another network.
 
-**Data Directory:**
-- `/var/lib/rnode/` - Main data directory
-- Stores blockchain data
-- Keeps node state
-- Contains generated certificates
+## Default container ports
 
-### Included Libraries
+| TCP port | Service | Exposure |
+|---|---|---|
+| 40400 | P2P protocol | Reachable by intended peers |
+| 40401 | External gRPC | Approved client network or gateway |
+| 40402 | Internal gRPC, including propose | Private operator access |
+| 40403 | HTTP API; also `/metrics` | Route approved API paths; keep metrics private |
+| 40404 | Peer discovery | Reachable by intended peers |
+| 40405 | Admin HTTP | Private operator access |
 
-- Scala runtime
-- JVM (Java Virtual Machine)
-- Cryptographic libraries
-- Network protocols
-- Storage backends
+Host mappings are independent of container defaults. Binding `40403` publicly exposes all enabled routes on that listener unless a gateway filters them. Do not open the entire `40400:40405` range or copy all development mappings to a public host.
 
-## Using the Image
+## Before starting a validator
 
-### Pull the Image
+Obtain the target shard's bootstrap peer, shard/genesis settings, native-token metadata, approved digest and admission/bonding process. Prepare persistent storage writable by the image user and private TLS/signing inputs. A running container or configured validator key does not establish active bonded stake, synchronization or finalization.
 
-```bash
-docker pull public.ecr.aws/f6y9h6x4/asi-chain/node:latest
-```
-
-### Basic Container Run
-
-```bash
-docker run -d \
-  --name validator \
-  -p 40400:40400 \
-  -v ./data:/var/lib/rnode/ \
-  -v ./conf/validator.conf:/var/lib/rnode/rnode.conf \
-  public.ecr.aws/f6y9h6x4/asi-chain/node:latest \
-  --bootstrap=rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404
-```
-
-### With Docker Compose
-
-Recommended approach using `docker-compose.yml`:
-
-```yaml
-version: '3.9'
-services:
-  validator:
-    image: public.ecr.aws/f6y9h6x4/asi-chain/node:latest
-    container_name: validator
-    ports:
-      - "40400:40400"  # Protocol server
-      - "40401:40401"  # Public gRPC API
-      - "40402:40402"  # Internal gRPC API
-      - "40403:40403"  # HTTP API
-      - "40404:40404"  # Kademlia discovery
-      - "40405:40405"  # Admin HTTP API
-    volumes:
-      - ./data:/var/lib/rnode/
-      - ./conf/validator.conf:/var/lib/rnode/rnode.conf
-    environment:
-      - VALIDATOR_PRIVATE_KEY=${VALIDATOR_PRIVATE_KEY}
-      - VALIDATOR_HOST=${VALIDATOR_HOST}
-    command:
-      - "--bootstrap=rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404"
-    restart: unless-stopped
-```
-
-## Configuration
-
-### Required Configuration Files
-
-**1. validator.conf** - Node configuration
-
-```hocon
-api-server {
-  host = ${?VALIDATOR_HOST}
-  port = 40403
-  port-grpc-external = 40401
-  port-grpc-internal = 40402
-  port-http = 40403
-  port-kademlia = 40404
-  enable-reporting = true
-}
-
-casper {
-  validator-public-key = "<YOUR-PUBLIC-KEY>"
-  validator-private-key = "<YOUR-PRIVATE-KEY>"
-  fault-tolerance-threshold = 0.99
-}
-
-tls {
-  certificate-path = "node.certificate.pem"
-  key-path = "node.key.pem"
-}
-```
-
-**2. .env** - Environment variables
-
-```env
-VALIDATOR_PRIVATE_KEY=<YOUR-PRIVATE-KEY>
-VALIDATOR_HOST=<YOUR-PUBLIC-IP>
-```
-
-### Volume Mounts
-
-**Required volumes:**
-
-```yaml
-volumes:
-  - ./data:/var/lib/rnode/              # Blockchain data
-  - ./conf/validator.conf:/var/lib/rnode/rnode.conf  # Configuration
-```
-
-**Optional volumes:**
-
-```yaml
-  - ./conf/validator.certificate.pem:/var/lib/rnode/node.certificate.pem
-  - ./conf/validator.key.pem:/var/lib/rnode/node.key.pem
-  - ./conf/logback.xml:/var/lib/rnode/logback.xml
-```
-
-> **Note:** If certificates are not provided, RNode will auto-generate them on first run.
-
-### Port Mapping
-
-All ports must be exposed for proper operation:
-
-| Container Port | Host Port | Purpose |
-|----------------|-----------|---------|
-| 40400 | 40400 | Protocol server |
-| 40401 | 40401 | Public gRPC API |
-| 40402 | 40402 | Internal gRPC API |
-| 40403 | 40403 | HTTP API |
-| 40404 | 40404 | Peer discovery |
-| 40405 | 40405 | Admin interface |
-
-## Command-Line Arguments
-
-### Bootstrap Connection
-
-```bash
---bootstrap=rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404
-```
-
-This connects your validator to the network via the bootstrap node.
-
-### Common Arguments
-
-```bash
---host <ip>                    # Public IP address
---data-dir <path>              # Data directory path
---config-file <path>           # Configuration file path
---port <number>                # Protocol port
---standalone                   # Run without bootstrap (genesis only)
-```
-
-## Resource Requirements
-
-### Minimum Specifications
-
-- **CPU:** 4 cores
-- **RAM:** 16 GB
-- **Storage:** 250+ GB SSD
-- **Network:** 100 Mbps, low latency
-
-### Recommended Specifications
-
-- **CPU:** 8 cores
-- **RAM:** 32 GB
-- **Storage:** 500+ GB SSD
-- **Network:** 1 Gbps, dedicated
-
-### Storage Considerations
-
-**Growth Rate:**
-- Blockchain data grows continuously
-- Rate depends on network activity
-- Plan for long-term storage needs
-
-**Performance:**
-- SSD strongly recommended
-- Fast I/O critical for validator performance
-- IOPS matter more than sequential speed
-
-## Running the Validator
-
-### Start Container
-
-```bash
-docker compose -f validator.yml up -d
-```
-
-### View Logs
-
-```bash
-docker logs validator -f
-```
-
-### Stop Container
-
-```bash
-docker compose -f validator.yml down
-```
-
-### Restart Container
-
-```bash
-docker compose -f validator.yml restart
-```
-
-## Monitoring
-
-### Health Checks
-
-**Container status:**
-```bash
-docker ps -a
-```
-
-**Resource usage:**
-```bash
-docker stats validator
-```
-
-**Logs:**
-```bash
-docker logs validator --tail 100 -f
-```
-
-### API Endpoints
-
-**Status check:**
-```bash
-curl http://localhost:40403/status
-```
-
-**Peer count:**
-Check logs for: `Peers: X`
-
-**Block height:**
-```bash
-curl http://localhost:40403/blocks | jq '.[0].blockNumber'
-```
-
-## Troubleshooting
-
-### Container Won't Start
-
-**Check Docker logs:**
-```bash
-docker logs validator
-```
-
-**Common issues:**
-- Port conflicts
-- Missing configuration
-- Invalid private key
-- Insufficient resources
-
-### Connection Issues
-
-**Verify bootstrap:**
-```bash
-ping 54.152.57.201
-telnet 54.152.57.201 40400
-```
-
-**Check firewall:**
-```bash
-sudo ufw status
-```
-
-### Synchronization Problems
-
-**Reset blockchain data:**
-```bash
-docker compose -f validator.yml down
-rm -rf data/
-docker compose -f validator.yml up -d
-```
-
-## Updates and Maintenance
-
-### Update Image
-
-```bash
-docker compose -f validator.yml down
-docker pull public.ecr.aws/f6y9h6x4/asi-chain/node:latest
-docker compose -f validator.yml up -d
-```
-
-### Backup Data
-
-**Important files to backup:**
-- `conf/validator.conf` - Configuration
-- `.env` - Environment variables
-- Private keys (store securely offline)
-
-**Blockchain data:**
-- Can be re-synced from network
-- Not critical to backup
-- But saves time on recovery
-
-### Log Management
-
-**Rotate logs:**
-```bash
-docker compose -f validator.yml logs --tail=1000 > validator.log
-```
-
-**Limit log size in compose:**
-```yaml
-logging:
-  driver: "json-file"
-  options:
-    max-size: "10m"
-    max-file: "3"
-```
-
-## Security Best Practices
-
-### Key Management
-
-- Never commit private keys to git
-- Store keys in `.env` file (add to `.gitignore`)
-- Use strong key generation methods
-- Backup keys securely offline
-
-### Network Security
-
-- Use firewall to restrict access
-- Only expose necessary ports
-- Consider VPN for admin access
-- Monitor for unusual activity
-
-### Container Security
-
-- Run as non-root user (if possible)
-- Limit container resources
-- Regular security updates
-- Monitor container logs
-
-## Advanced Configuration
-
-### Custom Network
-
-For private networks:
-
-```bash
-docker run ... \
-  --standalone \
-  --genesis-validator \
-  --validator-private-key <key> \
-  --validator-public-key <key>
-```
-
-### Performance Tuning
-
-**JVM options:**
-```yaml
-environment:
-  - JAVA_OPTS=-Xms8g -Xmx16g
-```
-
-**Network buffers:**
-```hocon
-api-server {
-  max-message-size = 268435456  # 256 MB
-}
-```
-
-## Support
-
-For issues with the validator image:
-
-- [GitHub Repository](https://github.com/asi-alliance/asi-chain)
-- [Docker Hub](https://hub.docker.com/) (if public)
-- [Setup Guide](/quick-start/join-validator/)
-- [FAQ](/faq/)
-
----
-
-**This image is for ASI:Chain DevNet. Always use the latest version for best compatibility.**
+Follow [join as validator](/quick-start/join-validator/) for checks. Legacy configurator/connector recipes and JVM options do not configure this Rust image.

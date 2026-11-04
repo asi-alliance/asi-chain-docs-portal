@@ -1,183 +1,37 @@
-# Useful Links
+# Useful links
 
-Quick access to all ASI:Chain DevNet resources and tools.
+## Applications
 
-## Web Applications
+| Application | URL |
+|---|---|
+| Wallet | [wallet.dev.asichain.io](https://wallet.dev.asichain.io) |
+| Explorer | [explorer.dev.asichain.io](https://explorer.dev.asichain.io) |
+| Faucet | [faucet.dev.asichain.io](https://faucet.dev.asichain.io) |
 
-### ASI Wallet
-**URL:** [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
+These are application links, not a live health report. Obtain current node HTTP/gRPC endpoints, GraphQL URLs and bootstrap identity from the target network operator. Historical raw IPs and observer status are not current connection instructions.
 
-Create accounts, manage assets, deploy smart contracts, and interact with the ASI:Chain network.
+## Public sources
 
-### Block Explorer
-**URL:** [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
+| Component | Repository |
+|---|---|
+| Maintained Rust node | [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust) |
+| ASI node client | [asi-alliance/asi-chain-client](https://github.com/asi-alliance/asi-chain-client) |
+| Wallet CLI | [asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) |
+| Indexer | [asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer) |
+| Explorer | [asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer) |
+| Web wallet | [asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet) |
+| Wallet SDK | [asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk) |
+| Faucet | [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
+| Documentation | [asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal) |
 
-Monitor real-time blockchain activity, search transactions, and view network statistics.
+Inspect the selected revision and consumer gitlinks; repository defaults do not always select the current ASI integration. The node currently retains upstream source provenance. Legacy deployment repositories are not the source of current node setup instructions.
 
-### Faucet
-**URL:** [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
+## Images and guides
 
-Request test ASI tokens for development and testing.
+- [ECR image catalog](/general/container-images/): current namespace, versioned tags, digests and source revisions.
+- [Documentation status](/general/documentation-status/): verified scope and material awaiting review.
+- [Validator image](/shard-nodes/validator-image/) and [observer image](/shard-nodes/observer-image/): runtime and configuration inputs.
+- [Wallet CLI](/cli/usage/): pinned dependency, explicit endpoints and exact amounts.
+- [Architecture](/architecture/): node, indexer, database, Hasura and application responsibilities.
 
-### Indexer
-**URL:** [explorer.dev.asichain.io/indexer-status](https://explorer.dev.asichain.io/indexer-status)
-
-Access indexed blockchain data.
-
-## Network Endpoints
-
-### Bootstrap Node (P2P discovery)
-```
-rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404
-```
-Use this URI to connect your own node to the DevNet. The bootstrap node is the peer-discovery entry point — applications (wallet, CLI, SDK) do not call it directly.
-
-### Validator 1 — primary public API
-```
-http://34.196.119.4:40403
-```
-For **both** transaction submission and read operations (deploys, balance, queries). The dedicated observer is currently unstable, so Validator 1 also serves all read traffic.
-
-::: warning
-The standalone observer node is **not stable right now**. Use Validator 1 (`34.196.119.4:40403`) for all read operations until further notice.
-:::
-
-## Repositories
-
-### ASI Chain Core
-**GitHub:** [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain)
-
-Main repository containing:
-- Node Docker configurations
-- Network setup scripts
-- Documentation source
-- Example contracts
-
-### Rust Client (CLI)
-**GitHub:** [singnet/rust-client](https://github.com/singnet/rust-client)
-
-Command-line interface for:
-- Deploying smart contracts
-- Proposing blocks
-- Interacting with the network
-
-### Block Explorer
-**GitHub:** [asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer)
-
-Web-based block explorer application.
-
-### Web Wallet
-**GitHub:** [asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet)
-
-Web wallet application for ASI:Chain.
-
-### Faucet
-**GitHub:** [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet)
-
-Faucet service for distributing test ASI tokens.
-
-### Wallet CLI
-**GitHub:** [asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli)
-
-Command-line wallet interface for ASI:Chain.
-
-## Docker Images
-
-### Official Node Image
-```
-public.ecr.aws/f6y9h6x4/asi-chain/node:latest
-```
-Docker image for running validator and observer nodes.
-
-## Documentation Sections
-
-### Quick Start
-- [Join DevNet as Validator](/quick-start/join-validator/) - Become a validator
-- [Get DevNet ASI Tokens](/quick-start/get-asi/) - Request test tokens
-
-### Shard & Nodes
-- [DevNet Structure & Entities](/shard-nodes/devnet-structure/) - Network architecture
-- [Validator Node Image](/shard-nodes/validator-image/) - Validator setup
-- [Observer Node Image](/shard-nodes/observer-image/) - Observer setup
-
-### Tools
-- [Wallet Usage Guide](/wallet/usage/) - Wallet documentation
-- [Explorer Usage Guide](/explorer/usage/) - Explorer documentation
-- [Faucet Usage Guide](/faucet/usage/) - Faucet documentation
-
-## Development Tools
-
-### Smart Contract Development
-- **Language:** Rholang
-- **IDE:** Built into [ASI Wallet](https://wallet.dev.asichain.io/#/ide)
-- **Examples:** Available in wallet and [GitHub](https://github.com/asi-alliance/asi-chain/tree/master/examples)
-
-### Network Interaction
-- **CLI Tool:** [Rust Client](https://github.com/singnet/rust-client)
-- **Validator 1 HTTP API** (write + read): `http://34.196.119.4:40403`
-- **Validator 1 gRPC API** (write + read): `34.196.119.4:40401`
-- **Indexer GraphQL:** `https://indexer.dev.asichain.io/v1/graphql`
-- **Faucet API:** `https://ffyp8igwwc.execute-api.us-east-1.amazonaws.com`
-- **Bootstrap (P2P only):** `54.152.57.201:40400` / discovery `40404` — for joining the network as a node, not for app traffic
-
-## Network Information
-
-### Current Configuration
-- **Network:** DevNet (Development Network)
-- **Bootstrap Nodes:** 1
-- **Validators:** 3 active
-- **Observer Nodes:** 1
-- **Average Block Time:** ~20 seconds
-
-### System Requirements
-**Minimum:**
-- CPU: 4 cores
-- RAM: 16 GB
-- Storage: 250+ GB
-- Network: Stable internet connection
-
-**Recommended:**
-- CPU: 8 cores
-- RAM: 32 GB
-- Storage: 250+ GB
-- Network: Stable internet connection
-
-## Support
-
-### Getting Help
-- **Documentation:** Browse this site using the sidebar
-- **GitHub Issues:** Report bugs or request features
-- **FAQ:** Check the [FAQ section](/faq/) for common questions
-
-### Quick Troubleshooting
-- **Wallet Issues:** Clear browser cache, check network settings
-- **Node Connection:** Verify bootstrap endpoint and firewall settings
-- **Transaction Failures:** Ensure sufficient balance and correct parameters
-
-## Quick Command Reference
-
-### Deploy Smart Contract
-```bash
-cargo run -- deploy -f ./contract.rho --private-key <key> -H 34.196.119.4 -p 40402
-```
-
-### Propose Block
-```bash
-cargo run -- propose --private-key <key> -H 34.196.119.4 -p 40402
-```
-
-### Check Balance
-```bash
-curl -X POST http://34.196.119.4:40403/explore-deploy \
-  -H 'Content-Type: application/json' \
-  -d '{"term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:asiVault\") }"}'
-```
-
-### Query Block History
-```bash
-curl http://34.196.119.4:40403/blocks
-```
-
----
-
-**Bookmark this page** for quick access to all ASI:Chain resources.
+For a problem, open an issue in the affected public repository with sanitized reproduction steps and exact source/image identity.

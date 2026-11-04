@@ -1,140 +1,14 @@
-# ASI Node Architecture
+# Node components
 
-The ASI Scala Node is the core blockchain engine running in Docker.
-
-← [Back to Component Diagrams](../)
-
-## High-Level Overview
+The maintained [pure Rust source](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) separates node services, consensus, contract execution, storage and networking into Rust crates.
 
 ```mermaid
-graph TB
-    subgraph "ASI Node"
-        Core[Node Core]
-        API[API Layer]
-        P2P[P2P Network]
-    end
-    
-    subgraph "External"
-        Bootstrap[Bootstrap Node]
-        Peers[Peer Nodes]
-        Clients[API Clients]
-    end
-    
-    Bootstrap --> P2P
-    Peers <-.-> P2P
-    Clients --> API
-    API --> Core
-    P2P --> Core
+flowchart TB
+  API[gRPC / HTTP services] --> Casper[CBC Casper]
+  P2P[P2P / peer discovery] --> Casper
+  Casper --> Rho[Rholang execution]
+  Rho --> RSpace[RSpace++]
+  Casper --> Blocks[Block storage]
 ```
 
-## Port Configuration
-
-Each node exposes multiple ports for different protocols.
-
-```mermaid
-graph LR
-    subgraph "Node Ports"
-        N[Node]
-    end
-    
-    N --> P1[":40400 Protocol/P2P"]
-    N --> P2[":40401 gRPC ext"]
-    N --> P3[":40402 gRPC int"]
-    N --> P4[":40403 HTTP API"]
-    N --> P5[":40404 Discovery"]
-    N --> P6[":40405 Admin"]
-```
-
-| Port | Protocol | Purpose | Access |
-|------|----------|---------|--------|
-| 40400 | TCP | Protocol / P2P communication | Public |
-| 40401 | TCP | Public gRPC API | Public |
-| 40402 | TCP | Internal gRPC API | Localhost |
-| 40403 | HTTP | Deploy and query REST API | Public |
-| 40404 | UDP | Kademlia peer discovery | Public |
-| 40405 | HTTP | Admin API | Localhost only |
-
-## Core Services
-
-The node core handles consensus and smart contract execution.
-
-```mermaid
-graph TD
-    subgraph "Core Services"
-        CE[Consensus Engine]
-        RR[Rholang Runtime]
-        ST[Storage]
-    end
-    
-    CE --> |validates| Blocks[Blocks]
-    RR --> |executes| Deploys[Smart Contracts]
-    ST --> |persists| State[Blockchain State]
-```
-
-| Service | Function |
-|---------|----------|
-| Consensus Engine | CBC Casper block validation and finalization |
-| Rholang Runtime | Smart contract execution environment |
-| Storage Layer | Block and state persistence (LMDB) |
-
-## API Layer
-
-HTTP and gRPC interfaces for client interaction.
-
-```mermaid
-graph LR
-    subgraph "HTTP API"
-        D[/api/deploy]
-        E[/api/explore-deploy]
-        B[/api/blocks]
-        S[/status]
-    end
-```
-
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/api/deploy` | POST | Submit signed deploy |
-| `/api/explore-deploy` | POST | Read-only query |
-| `/api/blocks` | GET | Block information |
-| `/status` | GET | Node status |
-
-## P2P Networking
-
-Nodes communicate using the Kademlia protocol.
-
-```mermaid
-graph TD
-    subgraph "P2P Flow"
-        BT[Connect to Bootstrap]
-        PD[Peer Discovery]
-        SY[Synchronization]
-        BG[Block Gossip]
-    end
-    
-    BT --> PD
-    PD --> SY
-    SY --> BG
-```
-
-| Phase | Description |
-|-------|-------------|
-| Bootstrap | Initial connection to known node |
-| Discovery | Find and connect to peers |
-| Sync | Download missing blocks |
-| Gossip | Propagate new blocks/deploys |
-
-## Configuration Files
-
-| File | Purpose |
-|------|---------|
-| `rnode.conf` | Network and node settings |
-| `logback.xml` | Logging configuration |
-| Validator keys | Private key for signing |
-
----
-
-## Related Documentation
-
-- [Validator Setup](/quick-start/join-validator/) - How to run a validator
-- [Observer Setup](/quick-start/join-observer/) - Read-only node setup
-- [Node Lifecycle](../../state-diagrams/) - Node states
+The runtime binary is `/opt/docker/bin/node`; no Scala/JVM runtime configuration is required. See [validator image](/shard-nodes/validator-image/) for entrypoint, defaults, ports and access boundaries. Native-token metadata is part of shard/genesis configuration; upstream defaults do not establish ASI metadata for a deployed chain.

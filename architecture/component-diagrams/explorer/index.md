@@ -1,131 +1,15 @@
-# Block Explorer Architecture
+# Explorer components
 
-The Block Explorer is a Flask web application that indexes and displays blockchain data.
-
-← [Back to Component Diagrams](../)
-
-## High-Level Overview
+The [explorer](https://github.com/asi-alliance/asi-chain-explorer/tree/0ae1eea64234c86937b3adf39fc6a5551b228f1a) is a React frontend served by nginx in its published image. It queries Hasura GraphQL.
 
 ```mermaid
-graph TB
-    subgraph "Block Explorer"
-        Parser[Enhanced Parser]
-        DB[(SQLite Database)]
-        Web[Flask Web App]
-    end
-    
-    subgraph "External"
-        Docker[Docker Container]
-        Node[Validator 1 API :40403]
-    end
-    
-    subgraph "Clients"
-        Browser[Web Browser]
-    end
-    
-    Docker --> Parser
-    Node --> Parser
-    Parser --> DB
-    DB --> Web
-    Web --> Browser
+flowchart LR
+  Browser[Explorer frontend] -->|GraphQL| Hasura[Hasura]
+  Hasura --> PG[(PostgreSQL)]
+  Indexer[Python indexer] --> PG
+  Indexer -->|gRPC / HTTP| Node[Rust node]
 ```
 
-## Data Processing
+The Python indexer performs extraction and database writes. Hasura provides relationships, permissions and GraphQL. These services are separate from the frontend container.
 
-The Enhanced Parser continuously indexes blockchain data.
-
-```mermaid
-graph LR
-    subgraph "Parser Process"
-        LP[Log Parser]
-        RPC[RPC Client]
-        AGG[Aggregator]
-    end
-    
-    LP --> |block events| AGG
-    RPC --> |block details| AGG
-    AGG --> DB[(Database)]
-```
-
-| Component | Function |
-|-----------|----------|
-| Log Parser | Read Docker logs |
-| RPC Client | Query block details |
-| Aggregator | Combine and store |
-
-## Database Schema
-
-SQLite stores indexed blockchain data.
-
-```mermaid
-erDiagram
-    blocks ||--o{ deployments : contains
-    blocks ||--o{ block_validators : has
-    validators ||--o{ block_validators : participates
-    
-    blocks {
-        int block_number
-        string block_hash
-        string proposer
-        datetime created_at
-    }
-    
-    deployments {
-        string deploy_id
-        string deployer
-        string term
-        int phlo_cost
-        boolean errored
-    }
-    
-    validators {
-        string public_key
-        string alias
-    }
-```
-
-## Web Interface
-
-Flask serves both HTML pages and REST API endpoints.
-
-```mermaid
-graph TD
-    subgraph "Routes"
-        HTML[HTML Pages]
-        API[REST API]
-    end
-    
-    HTML --> H1[/ - Block list]
-    HTML --> H2[/block/:hash - Details]
-    
-    API --> A1[/api/blocks]
-    API --> A2[/api/deployments]
-    API --> A3[/api/validators]
-    API --> A4[/api/wallet/:address]
-```
-
-## API Endpoints
-
-| Endpoint | Method | Returns |
-|----------|--------|---------|
-| `/api/blocks` | GET | Block list with pagination |
-| `/api/block/<hash>` | GET | Block details + deployments |
-| `/api/validators` | GET | Active validator list |
-| `/api/wallet/<address>` | GET | Balance + transaction history |
-| `/api/transfers` | GET | Recent transfers |
-
-## Data Sources
-
-| Source | Data Type | Access Method |
-|--------|-----------|---------------|
-| Docker logs | Block creation events | `docker logs` command |
-| Node RPC | Block details, deploys | `show-blocks`, `show-block` |
-| Node HTTP | Balance queries | `/api/explore-deploy` |
-
----
-
-## Related Documentation
-
-- [Explorer Usage Guide](/explorer/usage/) - How to use the explorer
-- [Explorer Query Flow](../../sequence-diagrams/) - Data retrieval sequence
-- [Network Topology](../../network-topology/) - Node connections
+See [container images](/general/container-images/) for the published frontend digest and [data flow](/architecture/data-flow/) for revision boundaries. Browser-visible configuration must contain public endpoint URLs rather than administrator credentials.

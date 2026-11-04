@@ -1,130 +1,24 @@
-# Network Topology
+# Network topology
 
-ASI:Chain network infrastructure and node connections.
+This page describes roles and default container listeners, not the current machine inventory of a hosted network.
 
-← [Back to Architecture Overview](../)
+| Role | Responsibility |
+|---|---|
+| Bootstrap peer | Initial peer discovery; genesis-ceremony participation depends on configuration |
+| Validator | Consensus according to active bonded stake and shard admission |
+| Observer | Follows chain state without proposing validator blocks |
+| Indexer | Reads node APIs and stores derived chain data in PostgreSQL |
+| Hasura | Exposes approved database data through GraphQL |
+| Applications | Use approved node/gateway and GraphQL endpoints |
 
-## Network Overview
+A bootstrap service is not automatically a bonded validator. Configured node counts do not prove initialization, synchronization or canonical finalization, and do not establish a fault budget without stake assumptions.
 
-```mermaid
-graph TB
-    subgraph "ASI:Chain DevNet"
-        B[Bootstrap Node]
-        V1[Validator 1]
-        V2[Validator 2]
-        V3[Validator 3]
-        O[Observer]
-    end
-    
-    subgraph "Services"
-        W[Wallet]
-        E[Explorer]
-        F[Faucet]
-    end
-    
-    B --> V1
-    B --> V2
-    B --> V3
-    
-    V1 -.-> V2
-    V2 -.-> V3
-    
-    V1 --> O
-    V2 --> O
-    V3 --> O
-    
-    W --> V1
-    W --> O
-    E --> O
-    F --> V1
-```
+## Ports and access
 
-## Network Components
+The Rust node defaults are TCP `40400` P2P, `40401` external gRPC, `40402` internal gRPC, `40403` HTTP, `40404` peer discovery and `40405` admin HTTP. See the authoritative [port/exposure table](/shard-nodes/validator-image/#default-container-ports) and its pinned configuration source.
 
-### Bootstrap Node (`mettacycle-devnet-1`)
+Discovery uses TCP for the documented Rust revision. Container ports and host mappings differ. Keep privileged listeners and HTTP `/metrics` private; a public HTTP gateway must select approved routes explicitly.
 
-Entry point for new nodes joining the network.
+## Deployment inputs
 
-| Property | Value |
-|----------|-------|
-| IP | `54.152.57.201` |
-| Protocol port | `40400` |
-| HTTP API | `40403` |
-| Purpose | Network discovery + write-API host |
-
-### Validators (3 active)
-
-Three nodes participate in consensus.
-
-| VM | Public API exposure |
-|----|---------------------|
-| Validator 1 (`mettacycle-devnet-2`, `34.196.119.4`) | **Public** — `http://34.196.119.4:40403` (write + read) |
-| Validator 2 (`mettacycle-devnet-3`) | Internal — consensus only |
-| Validator 3 (`mettacycle-devnet-4`) | Internal — consensus only |
-
-| Function | Description |
-|----------|-------------|
-| Block production | Propose new blocks |
-| Consensus | Vote on block validity (CBC Casper) |
-| Public API (Validator 1 only) | Accept deploys + serve read queries |
-
-::: tip
-Validator 1 also handles all read traffic because the dedicated observer is currently unstable.
-:::
-
-### Observer (currently unstable)
-
-Read-only node for queries — `mettacycle-devnet-5` (`54.235.138.68`). Until it stabilizes, Validator 1 (`34.196.119.4:40403`) serves read requests.
-
-## Port Configuration
-
-All DevNet nodes share the same port range — each runs on its own VM.
-
-```mermaid
-graph LR
-    N[Node] --> P1[":40400 Protocol/P2P"]
-    N --> P2[":40401 gRPC ext"]
-    N --> P3[":40402 gRPC int"]
-    N --> P4[":40403 HTTP"]
-    N --> P5[":40404 Discovery"]
-    N --> P6[":40405 Admin"]
-```
-
-| Port | Protocol | Purpose | Access |
-|------|----------|---------|--------|
-| 40400 | TCP | Protocol / P2P communication | Public |
-| 40401 | TCP | Public gRPC API | Public |
-| 40402 | TCP | Internal gRPC API | Localhost |
-| 40403 | HTTP | API (deploy, query) | Public |
-| 40404 | UDP | Kademlia peer discovery | Public |
-| 40405 | HTTP | Admin API | Localhost |
-
-## External Services
-
-| Service | URL | Backend |
-|---------|-----|---------|
-| Wallet | wallet.dev.asichain.io | Validator 1 (write + read) |
-| Explorer | explorer.dev.asichain.io | Indexer GraphQL |
-| Indexer | indexer.dev.asichain.io/v1/graphql | PostgreSQL via Hasura, indexes from Validator 1 |
-| Faucet | faucet.dev.asichain.io | Faucet API → Validator 1 |
-
-## Firewall Configuration
-
-Required ports for external validators:
-
-```bash
-# Required for P2P
-ufw allow 40400/tcp
-ufw allow 40404/udp
-
-# Optional for HTTP API access
-ufw allow 40403/tcp
-```
-
----
-
-## Related Documentation
-
-- [DevNet Structure](/shard-nodes/devnet-structure/) - Network details
-- [Validator Setup](/quick-start/join-validator/) - Join as validator
-- [Observer Setup](/quick-start/join-observer/) - Join as observer
+Obtain current endpoints, bootstrap identity, approved image digest, shard settings, validator admission process and resource requirements from the operator. Former raw IPs, fixed validator counts and observer availability claims are historical examples. No current hosted inventory or deployment acceptance is inferred from the [published image catalog](/general/container-images/).
