@@ -4,7 +4,7 @@
 
 [![Status](https://img.shields.io/badge/Status-BETA-FFA500?style=for-the-badge)](https://github.com/asi-alliance/asi-chain-docs-portal)
 [![Version](https://img.shields.io/badge/Version-0.1.0-A8E6A3?style=for-the-badge)](https://github.com/asi-alliance/asi-chain-docs-portal/releases)
-[![License](https://img.shields.io/badge/License-Apache%202.0-1A1A1A?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache%202.0-1A1A1A?style=for-the-badge)](LICENSE.md)
 [![Docs](https://img.shields.io/badge/Docs-Available-C4F0C1?style=for-the-badge)](https://docs.asichain.io)
 
 <h3>Official documentation portal for ASI Chain blockchain network</h3>
@@ -14,6 +14,8 @@ Part of the [**Artificial Superintelligence Alliance**](https://superintelligenc
 *Uniting Fetch.ai, SingularityNET, and CUDOS*
 
 </div>
+
+> **Documentation review — 2026-11-04:** operational guides are being updated for the Rust node and versioned ECR images. See [documentation status](general/documentation-status/index.md) for the verified scope and remaining review, and [container images](general/container-images/index.md) for tags, digests and public source revisions. A successful VitePress build validates rendering, not API accuracy or live deployment acceptance.
 
 ---
 
@@ -49,13 +51,13 @@ This repository contains the source code for the ASI Chain documentation portal,
 npm install
 
 # Start development server
-npm run dev
+npm run docs:dev
 
 # Build for production
-npm run build
+npm run docs:build
 
 # Preview production build
-npm run preview
+npm run docs:preview
 ```
 
 ---
@@ -91,7 +93,7 @@ If you encounter a problem that is not listed, please feel free to open a new is
 
 Copyright 2025 Artificial Superintelligence Alliance
 
-Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) file for details.
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE.md) file for details.
 
 ---
 
