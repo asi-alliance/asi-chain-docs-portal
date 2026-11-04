@@ -12,11 +12,11 @@ Confirm storage, CPU, memory and retention requirements for the deployment. Earl
 
 Follow [validator node image](/shard-nodes/validator-image/) to pull by digest, inspect source labels and read `run --help`. The current [catalog](/general/container-images/) lists `linux/amd64` images.
 
-The catalog distinguishes the `e6ecf238` baseline from the separately published `5dafbc37` node used in client compatibility tests. Confirm which exact revision the target network accepts.
+The catalog distinguishes the new ASI dev `72c9126` artifact, the historical `e6ecf238` baseline and the `5dafbc37` node used in client compatibility tests. Confirm which exact revision the target network accepts.
 
 ## 3. Prepare configuration and private inputs
 
-Use [HOCON defaults pinned to the baseline](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/node/src/main/resources/defaults.conf), or the corresponding file at your selected revision. Mount the reviewed override and pass its path explicitly with `run --config-file`.
+Use [HOCON defaults pinned to the ASI dev build](https://github.com/asi-alliance/asi-chain-rust-node/blob/72c9126ca17b26c4b5c33b093422020cabe91f45/node/src/main/resources/defaults.conf), or the corresponding file at your selected revision. Mount the reviewed override and pass its path explicitly with `run --config-file`.
 
 - Persist state under the Docker data directory, `/var/lib/rnode/`.
 - Make mounted storage writable by the `daemon` runtime user.

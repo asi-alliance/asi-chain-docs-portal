@@ -14,7 +14,8 @@ These are application links, not a live health report. Obtain current node HTTP/
 
 | Component | Repository |
 |---|---|
-| Maintained Rust node | [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust) |
+| Maintained ASI Rust node | [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) |
+| Rust node upstream reference | [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust) |
 | ASI node client | [asi-alliance/asi-chain-client](https://github.com/asi-alliance/asi-chain-client) |
 | Wallet CLI | [asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) |
 | Indexer | [asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer) |
@@ -24,7 +25,7 @@ These are application links, not a live health report. Obtain current node HTTP/
 | Faucet | [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
 | Documentation | [asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal) |
 
-Inspect the selected revision and consumer gitlinks; repository defaults do not always select the current ASI integration. The node currently retains upstream source provenance. Legacy deployment repositories are not the source of current node setup instructions.
+Inspect the selected revision and consumer gitlinks; repository defaults do not always select the current ASI integration. The current ASI node fork follows the maintained pure-Rust parent. Older published images retain their upstream provenance. Legacy deployment repositories are not the source of current node setup instructions.
 
 ## Images and guides
 

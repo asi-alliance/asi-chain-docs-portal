@@ -2,7 +2,7 @@
 
 Registry snapshot checked on **2026-11-04** using ECR Public image metadata. The current namespace is **`public.ecr.aws/l2u2v4a8/asi-chain/`**. Use the versioned tags below to identify artifacts and the digests to pin them. All listed artifacts are **`linux/amd64`**.
 
-The catalog covers eight components and nine selected artifacts, including two distinct node revisions. Older tags remain in the registry but are omitted here. Publication is not proof of deployment or compatibility for every combination.
+The catalog covers eight components and ten selected artifacts, including three distinct node revisions. Older tags remain in the registry but are omitted here. Publication is not proof of deployment or compatibility for every combination.
 
 ## Published artifacts
 
@@ -10,6 +10,7 @@ Repository paths in the table are relative to the namespace above. Each source l
 
 | Component / repository | Versioned tag | Manifest digest | Public application source |
 |---|---|---|---|
+| Node ASI dev build / `node-rust` | `0.4.46-dev.20261104-72c9126ca17b` | `sha256:269bee1885371eb7918380984730217c36cd4d259b13ca85e579f1ba2cb5e1e8` | [72c9126ca17b](https://github.com/asi-alliance/asi-chain-rust-node/tree/72c9126ca17b26c4b5c33b093422020cabe91f45) |
 | Node baseline / `node-rust` | `0.4.46-dev.20261102-e6ecf23814a3` | `sha256:3c93b745dc3edbb1aa1ca8e2a3fec030cc96e016a29044b575ab549da44abab0` | [e6ecf23814a3](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) |
 | Node client-compatibility target / `node-rust` | `0.4.46-dev.20261103-5dafbc37dad3` | `sha256:e6e82cdc5c9bc794367e15314d9c22256a8ebc0b2457d9492d633b2453c4c1df` | [5dafbc37dad3](https://github.com/F1R3FLY-io/f1r3node-rust/tree/5dafbc37dad3ebf3da810641fc0d8cecd5a1127b) |
 | Indexer / `indexer` | `1.0.0-dev.20261103-71e80edb0bba` | `sha256:c8312b9e073c1d133e69626a0641008418c8e0a37cf045cc2e89749b2d3b00e0` | [71e80edb0bba](https://github.com/asi-alliance/asi-chain-indexer/tree/71e80edb0bbae7dfbbab0e0393901edb70df471d) |
@@ -33,6 +34,8 @@ docker image inspect "$IMAGE" --format '{{json .Config.Labels}}'
 Anonymous pulls do not require AWS credentials. The [ECR Public gallery](https://gallery.ecr.aws/l2u2v4a8) also exposes the public registry. Verify the source/revision labels and selected digest before writing a deployment manifest. Avoid mutable `latest` tags.
 
 ## Select compatible artifacts
+
+- **New ASI dev node:** the `72c9126` image comes from the now-correct ASI fork of the maintained pure-Rust repository. Version/help, provenance, runtime lock and anonymous digest pull checks passed. Exact-source [upstream CI](https://github.com/F1R3FLY-io/f1r3node-rust/actions/runs/41746432130) passed crate tests but failed Soak Harness Tests (CbC runtime/lockfile mismatch); integration gates were skipped. The separate [authority adapter](https://github.com/F1R3FLY-io/f1r3node-rust/actions/runs/41746432069) also failed. This image does not inherit exact-image client or deployment acceptance from older builds.
 
 - **Node baseline vs compatibility target:** `e6ecf238` and `5dafbc37` are separate published builds. The ASI client/Wallet CLI compatibility suites target the latter digest. Listing it does not promote it over the former for an existing deployment. See the [pinned client workflow](https://github.com/asi-alliance/asi-chain-client/blob/40f2a9408040252dd23761cd06adb9f1407ef228/.github/workflows/build-and-test.yml) and [wallet CLI workflow](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.github/workflows/compatibility.yml).
 - **Wallet CLI:** the `8f6c20e` image embeds ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. It does not acquire later `dev` or PR changes. The standalone client image is a separate operator tool.

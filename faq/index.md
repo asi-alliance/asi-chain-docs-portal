@@ -6,11 +6,11 @@ Use `public.ecr.aws/l2u2v4a8/asi-chain/` and the versioned tags/digests in [cont
 
 ## Which node implementation is maintained?
 
-The pure Rust source is [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust). Current images retain that provenance. Old combined/Scala repositories and legacy deployment helpers are not the setup source for these images.
+The pure Rust source is [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New ASI images record this source; historical images retain their original provenance. Old combined/Scala repositories and legacy deployment helpers are not the setup source for these images.
 
 ## Does a newer image mean I should upgrade?
 
-Select the image with the target network's accepted configuration and client/API contract. The `e6ecf238` baseline and `5dafbc37` compatibility image are distinct artifacts. Publication and packaging checks do not establish live deployment acceptance.
+Select the image with the target network's accepted configuration and client/API contract. The new ASI dev `72c9126` build, historical `e6ecf238` baseline and `5dafbc37` compatibility target are distinct artifacts. Publication and packaging checks do not establish live deployment acceptance.
 
 ## Can I use a hard-coded public node IP from an older page?
 

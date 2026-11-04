@@ -15,12 +15,13 @@ The catalog records published artifacts. It does not establish which images or e
 
 | Component | Public source revision |
 |---|---|
-| Node baseline | [e6ecf23814a306e4ad9850ea44fc753f40966db8](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) |
+| Current ASI dev node | [72c9126ca17b26c4b5c33b093422020cabe91f45](https://github.com/asi-alliance/asi-chain-rust-node/tree/72c9126ca17b26c4b5c33b093422020cabe91f45) |
+| Historical node baseline | [e6ecf23814a306e4ad9850ea44fc753f40966db8](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) |
 | Node used by client compatibility tests | [5dafbc37dad3ebf3da810641fc0d8cecd5a1127b](https://github.com/F1R3FLY-io/f1r3node-rust/tree/5dafbc37dad3ebf3da810641fc0d8cecd5a1127b) |
 | ASI client image | [40f2a9408040252dd23761cd06adb9f1407ef228](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) |
 | Wallet CLI image | [8f6c20ea43ebc6d333783f936372d4220e449681](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681); client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91` |
 
-The maintained node is the pure Rust repository above. Old combined node repositories and legacy `asi-chain` deployment helpers do not supply setup instructions for these images. Node images retain their F1R3FLY source identity.
+The maintained node is the pure Rust repository above. Old combined node repositories and legacy `asi-chain` deployment helpers do not supply setup instructions for these images. New node images use their ASI source identity; historical images retain their original F1R3FLY provenance.
 
 For application development, inspect remote `dev` and freeze its full revision before building. For a published image, use its recorded revision even if `dev` has moved. Published wallet CLI images do not acquire client changes from later pull requests. A default branch or matching package version does not replace a consumer's committed gitlink.
 

@@ -6,7 +6,7 @@ An observer uses the same [Rust node image](/shard-nodes/validator-image/) as a 
 
 An observer follows the chain without proposing validator blocks. Its role is not an API authorization rule: configure allowed routes and clients separately. Do not assume an observer rejects every write request simply because it is not bonded.
 
-The [pinned upstream observer service](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/docker/shard.yml) runs without validator signing arguments, with bootstrap and configuration inputs. Check the selected image's `run --help`. This upstream Compose file is a development topology, not a public-network enrollment manifest.
+The [pinned upstream observer service](https://github.com/asi-alliance/asi-chain-rust-node/blob/72c9126ca17b26c4b5c33b093422020cabe91f45/docker/shard.yml) runs without validator signing arguments, with bootstrap and configuration inputs. Check the selected image's `run --help`. This upstream Compose file is a development topology, not a public-network enrollment manifest.
 
 ## Image and configuration
 

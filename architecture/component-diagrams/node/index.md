@@ -1,6 +1,6 @@
 # Node components
 
-The maintained [pure Rust source](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) separates node services, consensus, contract execution, storage and networking into Rust crates.
+The maintained [pure Rust source](https://github.com/asi-alliance/asi-chain-rust-node/tree/72c9126ca17b26c4b5c33b093422020cabe91f45) separates node services, consensus, contract execution, storage and networking into Rust crates.
 
 ```mermaid
 flowchart TB

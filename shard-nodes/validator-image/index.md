@@ -1,31 +1,31 @@
 # Validator node image
 
-The image contains the maintained **Rust** implementation of CBC Casper, Rholang and RSpace++. Its source is [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8).
+The image contains the maintained **Rust** implementation of CBC Casper, Rholang and RSpace++. Its source is [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/72c9126ca17b26c4b5c33b093422020cabe91f45).
 
 ## Select the image
 
-The published baseline is:
+The new ASI dev artifact is:
 
 ```text
-public.ecr.aws/l2u2v4a8/asi-chain/node-rust:0.4.46-dev.20261102-e6ecf23814a3
-public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:3c93b745dc3edbb1aa1ca8e2a3fec030cc96e016a29044b575ab549da44abab0
+public.ecr.aws/l2u2v4a8/asi-chain/node-rust:0.4.46-dev.20261104-72c9126ca17b
+public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:269bee1885371eb7918380984730217c36cd4d259b13ca85e579f1ba2cb5e1e8
 ```
 
-See [container images](/general/container-images/) for the separately published `5dafbc37` compatibility image and application versions. Choose the node revision together with its client/API contract; a newer tag does not select an upgrade for a running shard.
+See [container images](/general/container-images/) for the historical `e6ecf238` baseline, separately published `5dafbc37` client-compatibility target and application versions. Choose the node revision together with its client/API contract; a newer tag does not select an upgrade for a running shard.
 
 ```bash
-NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:3c93b745dc3edbb1aa1ca8e2a3fec030cc96e016a29044b575ab549da44abab0
+NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:269bee1885371eb7918380984730217c36cd4d259b13ca85e579f1ba2cb5e1e8
 docker pull --platform linux/amd64 "$NODE_IMAGE"
 docker image inspect "$NODE_IMAGE" --format '{{json .Config.Labels}}'
 docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" --version
 docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" run --help
 ```
 
-These commands inspect the existing image without starting a network.
+These commands inspect the image without starting a network. This new artifact has passed packaging/publication checks; it has not inherited the older image's client tests. The exact source CI has recorded failures and skipped integration gates; see the [catalog](/general/container-images/#select-compatible-artifacts).
 
 ## Runtime and configuration
 
-The pinned [Dockerfile](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/node/Dockerfile) and [entrypoint](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/node/docker-entrypoint-rust.sh) define:
+The pinned [Dockerfile](https://github.com/asi-alliance/asi-chain-rust-node/blob/72c9126ca17b26c4b5c33b093422020cabe91f45/node/Dockerfile) and [entrypoint](https://github.com/asi-alliance/asi-chain-rust-node/blob/72c9126ca17b26c4b5c33b093422020cabe91f45/node/docker-entrypoint-rust.sh) define:
 
 | Item | Value |
 |---|---|
@@ -36,7 +36,7 @@ The pinned [Dockerfile](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23
 | Docker data directory | `/var/lib/rnode/` |
 | Configuration | Built-in HOCON defaults, plus the selected override file |
 
-Use [defaults.conf at the same revision](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/node/src/main/resources/defaults.conf). Pass `run --config-file /path/to/node.conf` to make the mounted override explicit. Upstream [shard overrides](https://github.com/F1R3FLY-io/f1r3node-rust/blob/e6ecf23814a306e4ad9850ea44fc753f40966db8/docker/conf/default.conf) illustrate the structure; development keys and genesis files are not inputs for joining another network.
+Use [defaults.conf at the same revision](https://github.com/asi-alliance/asi-chain-rust-node/blob/72c9126ca17b26c4b5c33b093422020cabe91f45/node/src/main/resources/defaults.conf). Pass `run --config-file /path/to/node.conf` to make the mounted override explicit. Upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/72c9126ca17b26c4b5c33b093422020cabe91f45/docker/conf/default.conf) illustrate the structure; development keys and genesis files are not inputs for joining another network.
 
 ## Default container ports
 

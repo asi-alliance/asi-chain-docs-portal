@@ -1,6 +1,6 @@
 # General overview
 
-ASI:Chain provides a blockchain environment for Rholang contracts and ASI ecosystem applications. The maintained node is the pure Rust implementation in [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust).
+ASI:Chain provides a blockchain environment for Rholang contracts and ASI ecosystem applications. The maintained node is the pure Rust implementation in [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node).
 
 ## Components
 
