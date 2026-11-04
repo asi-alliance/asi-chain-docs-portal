@@ -10,7 +10,7 @@ The pure Rust source is [asi-alliance/asi-chain-rust-node](https://github.com/as
 
 ## Does a newer image mean I should upgrade?
 
-Select the image with the target network's accepted configuration and client/API contract. The new ASI dev `72c9126` build, historical `e6ecf238` baseline and `5dafbc37` compatibility target are distinct artifacts. Publication and packaging checks do not establish live deployment acceptance.
+Select the image with the target network's accepted configuration and client/API contract. The new ASI dev `e18defd4` build, historical `e6ecf238` baseline and `5dafbc37` compatibility target are distinct artifacts. Publication and packaging checks do not establish live deployment acceptance.
 
 ## Can I use a hard-coded public node IP from an older page?
 

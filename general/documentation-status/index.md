@@ -15,7 +15,7 @@ The catalog records published artifacts. It does not establish which images or e
 
 | Component | Public source revision |
 |---|---|
-| Current ASI dev node | [72c9126ca17b26c4b5c33b093422020cabe91f45](https://github.com/asi-alliance/asi-chain-rust-node/tree/72c9126ca17b26c4b5c33b093422020cabe91f45) |
+| Current ASI dev node | [e18defd44d43fe460379efefb88223797709a0cf](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) |
 | Historical node baseline | [e6ecf23814a306e4ad9850ea44fc753f40966db8](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) |
 | Node used by client compatibility tests | [5dafbc37dad3ebf3da810641fc0d8cecd5a1127b](https://github.com/F1R3FLY-io/f1r3node-rust/tree/5dafbc37dad3ebf3da810641fc0d8cecd5a1127b) |
 | ASI client image | [40f2a9408040252dd23761cd06adb9f1407ef228](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) |
