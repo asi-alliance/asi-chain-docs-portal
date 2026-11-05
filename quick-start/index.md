@@ -19,7 +19,7 @@ You want to take part in the network as an observer or a validator.
 3. To bond a validator, follow [validator enrollment](/quick-start/validator-enrollment/).
 4. If a node does not connect or stays out of sync, see [troubleshooting](/quick-start/troubleshooting/).
 
-Ask the network operator for the current endpoints and bootstrap identity before you connect.
+Public DevNet services are listed on [Network Endpoints](/general/endpoints/). Ask the network operator for the bootstrap identity before you connect a node.
 
 ## Build on ASI:Chain
 

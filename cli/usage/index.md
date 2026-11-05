@@ -36,10 +36,14 @@ The image reads its settings from the environment and keeps wallet files and exp
 
 ```bash
 mkdir -p credentials exports
-docker run --rm --platform linux/amd64   --env-file .env   -v "$PWD/credentials:/app/credentials"   -v "$PWD/exports:/app/exports"   "$WALLET_IMAGE" create --save
+docker run --rm --platform linux/amd64 \
+  --env-file .env \
+  -v "$PWD/credentials:/app/credentials" \
+  -v "$PWD/exports:/app/exports" \
+  "$WALLET_IMAGE" create --save
 ```
 
-`.env` sets `OUTPUT_DIR=/app/credentials` here, so the wallet file ends up in `credentials/wallet_info.json` on the host. Replace `create --save` with `balance`, `send`, `history` or `export` for the other commands, and keep the same two volumes so they find the wallet file and write exports to `exports/`.
+The working directory of the image is `/app`, so the default `OUTPUT_DIR=./credentials` puts the wallet file into `credentials/wallet_info.json` on the host. Replace `create --save` with `balance`, `send`, `history` or `export` for the other commands, and keep the same two volumes so they find the wallet file and write exports to `exports/`.
 
 The container runs as UID `10001`. On a Linux host, make both directories writable for that user (`sudo chown 10001:10001 credentials exports`), otherwise `create --save` cannot write the wallet file. Inside a container `127.0.0.1` is the container itself, so `.env` needs an address that the container can reach, not the host loopback.
 
@@ -48,7 +52,8 @@ The container runs as UID `10001`. On a Linux host, make both directories writab
 The published image is the shorter path. To build the same source yourself, install the build tools first. On Debian or Ubuntu:
 
 ```bash
-sudo apt-get install -y git curl ca-certificates build-essential cmake libclang-dev   libprotobuf-dev libssl-dev perl pkg-config protobuf-compiler
+sudo apt-get install -y git curl ca-certificates build-essential cmake libclang-dev \
+  libprotobuf-dev libssl-dev perl pkg-config protobuf-compiler
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
 . "$HOME/.cargo/env"
 ```
@@ -96,7 +101,7 @@ GRAPHQL_URL=
 
 The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports. `send` submits through the gRPC endpoint, and a node exposes it on an internal port that should not be open to the internet. HTTP ports are separate mappings. HTTPS URLs use TLS, and `NODE_CA_CERT` supplies a private CA.
 
-`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL and with `wss://explorer.dev.asichain.io/v1/graphql` both commands ended with `Failed to connect to WebSocket` on 5 November 2026, so there is no public GraphQL endpoint that is known to work. Do not put Hasura admin credentials into the URL. Acceptance of `history` and `export` on a deployment is tracked in [wallet CLI issue #5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
+`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. On 5 November 2026 no public GraphQL endpoint was known to work with them, so ask the network operator for one. Acceptance of `history` and `export` on a deployment is tracked in [github.com/asi-alliance/asi-chain-wallet-cli/issues/5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
 
 ## Commands
 

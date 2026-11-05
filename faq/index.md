@@ -44,11 +44,11 @@ Create a wallet account, copy its address and paste it into the [faucet](https:/
 
 ### Is there a waiting period between requests?
 
-No. The faucet API has no time limit. It refuses an address only when the balance of that address is above the faucet's limit, and then the page shows `Your address is not eligible`.
+Not in the faucet API, which sets no time limit between requests, although a proxy in front of the public faucet can still limit the request rate. The faucet refuses an address only when the balance of that address is above the faucet's limit, and then the page shows `Your address is not eligible`.
 
 ### The tokens have not arrived. What should I do?
 
-The faucet page checks the transfer status every 30 seconds and stops after 15 minutes. If nothing arrived by then, look the transfer up in the [explorer](/explorer/usage/) by its deploy ID before you ask again. A second request sends a second amount as long as your balance is below the limit.
+The faucet page checks the transfer status every 30 seconds and, with the default settings, stops after 15 minutes. If nothing arrived by then, look the transfer up in the [explorer](/explorer/usage/) by its deploy ID before you ask again. A second request sends a second amount as long as your balance is below the limit.
 
 ## Explorer
 
@@ -58,13 +58,13 @@ Blocks, transactions, validators and network statistics. See [explorer usage](/e
 
 ### Does the explorer run the indexer?
 
-No. The explorer is a web frontend that queries a Hasura GraphQL API. A separate indexer reads the node over gRPC and HTTP and stores what it finds in PostgreSQL. The indexer does not use the Wallet CLI.
+No. The explorer is a web frontend that queries a Hasura GraphQL API. A separate indexer reads the node over gRPC and HTTP and stores what it finds in PostgreSQL.
 
 ## Nodes
 
 ### Which node implementation is maintained?
 
-The Rust node, [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New images record this source. The older Scala repositories and deployment helpers are not the setup source for the current images.
+The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New images record this source. As of 5 November 2026 the public DevNet still runs the Scala node, and a Rust node does not join it. The older Scala repositories and deployment helpers are not the setup source for the current images.
 
 ### Which container registry should I use?
 
@@ -84,7 +84,7 @@ Peers connect over TCP on `40400` and `40404`. Clients need access to the extern
 
 ### Does an observer reject writes?
 
-Not necessarily. The observer role describes its part in consensus. Which API routes are allowed is configured separately, so do not assume that an unbonded node refuses writes.
+Yes. A node started without a validator key runs in read-only mode. It rejects deploys with `Deploy was rejected because node is running in read-only mode.` and does not propose blocks, but it still answers queries, and only a read-only node accepts exploratory deploys.
 
 ## Tools
 

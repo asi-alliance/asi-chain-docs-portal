@@ -49,4 +49,4 @@ features:
 
 DevNet tokens are for testing and have no real value. The [Get Started](/quick-start/) page sends you to the right guide for using the network, running a node or building on it.
 
-Node setup uses the [published container images](/general/container-images/) and their source revisions. Ask the network operator for current endpoints and bootstrap identity, because published images do not identify the live deployment. The [documentation status](/general/documentation-status/) page lists which pages are verified and which still wait for review.
+Node setup uses the [published container images](/general/container-images/) and their source revisions. Public DevNet services are listed on [Network Endpoints](/general/endpoints/). Ask the network operator for the bootstrap identity of the network you join, because published images do not identify the live deployment. The [documentation status](/general/documentation-status/) page lists which pages are verified and which still wait for review.
