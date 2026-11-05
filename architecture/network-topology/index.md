@@ -30,7 +30,7 @@ Applications and the indexer can talk to any node that exposes the API ports, in
 | 40404 | TCP, gRPC | Peer discovery (Kademlia) | Open to peers |
 | 40405 | TCP, HTTP | Admin HTTP API, for example `/api/propose` | Private |
 
-These are the Rust node defaults. Container ports and host mappings differ between setups; see [Validator Image](/nodes/image/#default-container-ports) for the container side.
+These are the Rust node defaults. Container ports and host mappings differ between setups; see [Node Image](/nodes/image/#default-container-ports) for the container side.
 
 ::: warning Discovery Uses TCP
 The node's discovery client opens a gRPC channel to `http://<host>:<discovery port>`, even though the field in the peer record is called `udp_port`. Allowing `40404/udp` does nothing for discovery.
