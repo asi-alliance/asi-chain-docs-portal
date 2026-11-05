@@ -37,7 +37,7 @@ flowchart LR
 
 A validator creates a block when its proposer triggers and both the synchrony and the height constraints hold. By default the heartbeat proposer checks every 5 seconds. Peers that receive the block validate it before adding it to their DAG.
 
-A block can finalize while some of its deploys have their effects dropped during state merge. Poll `deploy-finalization-status` with the deploy signature rather than the block hash alone. According to the OpenAPI description, `GET /api/deploy/{deploy_id}` returns 404 when no finalized block contains the deploy, so a 404 does not mean the deploy was lost.
+A block can finalize while some of its deploys have their effects dropped during state merge. Poll `deploy-finalization-status` with the deploy signature rather than the block hash alone. `GET /api/deploy/{deploy_id}` returns 404 while no block known to the node contains the deploy, so a 404 right after submission does not mean the deploy was lost.
 
 A successful API response or an indexed row alone does not prove a successful, finalized token transfer. Use exact raw integer amounts.
 

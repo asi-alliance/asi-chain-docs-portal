@@ -101,7 +101,7 @@ Converts a binary key to a lowercase hex string.
 getInitialHDPathFromOptions(hdWalletOptions: TCreateHDPathWalletOptions): Promise<Bip44Path>
 ```
 
-Returns the BIP-44 path for a new HD wallet. With `{ index }` it builds `m/44'/60'/0'/0/<index>`, and with `{ customHDPath }` it returns that path unchanged.
+Returns the BIP-44 path for a new HD wallet. With `{ index }` it builds a path from `ASI_COIN_TYPE`, account 0, change 0 and that index, and with `{ customHDPath }` it returns that path unchanged.
 
 **Parameters:**
 
