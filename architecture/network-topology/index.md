@@ -15,24 +15,7 @@ This page describes node roles and default listeners. Current DevNet addresses a
 
 A bootstrap peer is not automatically a bonded validator. After the first connection every node talks to its peers through discovery, so the bootstrap peer is not a hub for traffic.
 
-```mermaid
-flowchart LR
-  subgraph P2P["Peer-to-peer network (TCP 40400, 40404)"]
-    Bootstrap[Bootstrap peer]
-    Validator[Validator]
-    Observer[Observer]
-    Bootstrap <--> Validator
-    Bootstrap <--> Observer
-    Validator <--> Observer
-  end
-  Apps["Wallet, SDK, CLI"] -->|"HTTP 40403, gRPC 40401"| Validator
-  Faucet[Faucet] -->|"HTTP 40403, gRPC 40401"| Validator
-  Indexer[Indexer] -->|"gRPC / HTTP"| Validator
-  Indexer -->|writes| DB[(PostgreSQL)]
-  Hasura[Hasura GraphQL] -->|reads| DB
-  Explorer[Explorer] -->|GraphQL| Hasura
-  Apps -->|GraphQL| Hasura
-```
+<Diagram name="network-topology" caption="Node roles, the peer-to-peer ports, and which clients call the validator, the indexer and Hasura." />
 
 Applications and the indexer can talk to any node that exposes the API ports, including an observer. The diagram shows a validator because that is the public entry point of DevNet.
 

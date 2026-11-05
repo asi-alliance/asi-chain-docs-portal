@@ -19,32 +19,14 @@ The wallet calls the SDK `Client`, and the SDK talks to the nodes behind `Valida
 
 ## Phase 1: Check and Reserve
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant W as Wallet
-    participant SDK as SDK Client
-    participant RN as Read-only node
+<Diagram name="transfer-checks" caption="Messages between the user, the wallet, the SDK and the read-only node while a transfer is checked and funds are reserved." />
 
-    U->>W: Enter recipient and amount
-    W->>SDK: transfer(account, recipient, amount)
-    opt Session is locked or the policy asks for a password on every signature
-        SDK-->>W: Password required
-        W->>U: Request password
-        U->>W: Provide password
-    end
-    SDK->>SDK: pending = amount + maximum fee
-    SDK->>RN: Query balance (explore-deploy)
-    RN-->>SDK: Balance
-    SDK->>SDK: Balance minus reserved funds covers pending?
-```
-
-| Step | Description |
-|------|-------------|
-| User input | Recipient address and amount. The wallet does not send to `0x...` addresses |
-| Password | Needed only while the signing session is closed. By default a session stays open for 15 minutes after unlocking |
-| Reserve | The amount held for the transfer is `amount + GasFee.MAX`, where `GasFee.MAX` is 250000 atomic units (0.0025 ASI) |
-| Balance check | The SDK reads the balance as described in [Balance Query](/architecture/sequence-diagrams/balance/). If it does not cover the reserve, the transfer stops with an error before anything is signed |
+| Messages | Step | Description |
+|----------|------|-------------|
+| 1-2 | User input | Recipient address and amount. The wallet does not send to `0x...` addresses |
+| 3-5 | Password | Needed only while the signing session is closed. By default a session stays open for 15 minutes after unlocking |
+| 6 | Reserve | The amount held for the transfer is `amount + GasFee.MAX`, where `GasFee.MAX` is 250000 atomic units (0.0025 ASI) |
+| 7-9 | Balance check | The SDK reads the balance as described in [Balance Query](/architecture/sequence-diagrams/balance/). If it does not cover the reserve, the transfer stops with an error before anything is signed |
 
 The private key is not kept in the Redux store. The SDK decrypts it only while the signing session is open.
 

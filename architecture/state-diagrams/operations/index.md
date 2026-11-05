@@ -19,18 +19,7 @@ A node in the Running state has one of two roles, and both use the same engine.
 
 A validator proposes through the heartbeat proposer, which is enabled by default.
 
-```mermaid
-flowchart TD
-    T[Heartbeat check every 5 seconds or a deploy is submitted] --> A{Bonded and active?}
-    A -->|No| W[Wait]
-    A -->|Yes| C{Synchrony and height constraints met?}
-    C -->|No| W
-    C -->|Yes| B[Create block from deploy pool]
-    B --> E[Execute deploys]
-    E --> S[Sign block]
-    S --> R[Add to DAG and relay to peers]
-    R --> W
-```
+<Diagram name="block-proposal" caption="The checks a validator passes before it creates, signs and relays a block." />
 
 The proposer checks every `casper.heartbeat.check-interval`, which is 5 seconds by default, and a deploy submission wakes it immediately. It proposes when there are pending deploys. When the last finalized block is older than `max-lfb-age` (the maximum age of the last finalized block, 5 seconds by default), the shard counts as stalled, and every bonded validator proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval. A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals. A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
 
