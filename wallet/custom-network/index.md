@@ -26,13 +26,13 @@ DevNet is built into the wallet. It is not listed on this page and cannot be edi
 
 Each URL must use `http` or `https` and contain a host. Do not add a path such as `/api`, because the wallet appends `/api/...` to the address itself. The **Direct Links** block under the fields lists the filled URLs as links, so you can open each one in a new tab.
 
-**Save Custom Network** validates the form, and the first problem it finds is shown next to the field, for example `Network name is required.` or `Validator URL: URL must use http or https protocol`. After a successful save the form is cleared. **Clear form** does the same at any time and restores the default profile.
+**Save Custom Network** checks every field and shows an error next to each one that fails, for example `Network name is required.` or `Validator URL: URL must use http or https protocol`. After a successful save the form is cleared. **Clear form** does the same at any time and restores the default profile.
 
 ## Switch To The Network
 
-After saving, the network appears in the **Existing Custom Networks** card and in the selector in the header. Saving does not switch to it, so pick it in the selector.
+After saving, the network appears in the **Existing Custom Networks** card and in the selector in the header. Saving does not switch to it, so pick it in the selector. The card of each saved network has **Edit network** and **Delete network** buttons.
 
-The header then shows `Connected` or `Disconnected`. The wallet checks `GET <validator-url>/api/status` when you switch and then every 60 seconds.
+The header then shows `Connected` or `Disconnected`. The wallet checks `GET <read-only-url>/api/status`, that is, the Read-only URL, when you switch and then every 60 seconds.
 
 The networks are stored in the browser together with your wallets. Clearing the browser data removes them, and the form has to be filled in again.
 
@@ -78,11 +78,6 @@ server {
         proxy_pass http://127.0.0.1:40403;
         proxy_set_header Host $host;
     }
-
-    location = /status {
-        proxy_pass http://127.0.0.1:40403;
-        proxy_set_header Host $host;
-    }
 }
 ```
 
@@ -106,7 +101,7 @@ When the header shows `Disconnected`, open the browser console on the wallet pag
 - `blocked by CORS policy: No 'Access-Control-Allow-Origin' header` means the node or the proxy in front of it does not send CORS headers.
 - `Permission was denied for this request to access the loopback address space` means the browser has not been allowed to reach `localhost` from the wallet site.
 - `404` on `/api/deploy` or `/api/explore-deploy` behind a proxy, while the header shows `Connected`, usually means that `proxy_pass` cuts the `/api/` prefix.
-- A timeout means the host or port is unreachable from your machine. Test it with `curl -4 <validator-url>/api/status`.
+- A timeout means the host or port is unreachable from your machine. Test the Read-only URL, which the header checks, with `curl -4 <read-only-url>/api/status`, and the Validator URL the same way.
 
 ## Run The Wallet Yourself
 
