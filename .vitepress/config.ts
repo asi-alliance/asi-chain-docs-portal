@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import CustomLanguages from "../config/languages";
+import { writeRedirectStubs } from "./redirect-stubs";
 import { deepSpaceLight, deepSpaceDark } from "./theme/shiki";
 
 const sidebarGetStarted = [
@@ -43,6 +44,7 @@ export default withMermaid(defineConfig({
   description: "Use the wallet, get test tokens, run a node and build on ASI:Chain",
   css: ['custom.css'],
   srcExclude: ['README.md', 'LICENSE.md'],
+  buildEnd: writeRedirectStubs,
 
   mermaid: {
     theme: 'base',
