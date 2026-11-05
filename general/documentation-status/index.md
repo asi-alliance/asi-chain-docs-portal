@@ -1,36 +1,32 @@
-# Documentation status
+# Documentation Status
 
-Reviewed on **2026-11-04**. This portal is being updated for the maintained Rust node and ASI application images in ECR Public.
+This page records what was checked against running software and published sources, and what was not. The checks were made on 2026-11-05.
 
-## Verified scope
+## Public DevNet
 
-- [Container images](/general/container-images/): published tags and immutable digests checked against ECR Public, with public application source revisions.
-- [Validator image](/shard-nodes/validator-image/) and [observer image](/shard-nodes/observer-image/): Rust runtime, configuration inputs, API boundaries and image selection.
-- [Wallet CLI](/cli/usage/): the published image's pinned ASI client, explicit endpoints and raw integer amounts.
-- [Architecture](/architecture/) and [network topology](/architecture/network-topology/): component responsibilities and default container ports.
+The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`, so it runs a Scala node. The node guides in this portal describe the Rust node and its images. An image from [Container Images](/general/container-images/) started on a local machine, reached the DevNet bootstrap node and found other nodes through discovery, but after 6.5 minutes it was still at `Waiting for first connection` with no peers. Treat the node guides as instructions for the Rust node, not as a way to join the public DevNet today. [Network Endpoints](/general/endpoints/) lists what DevNet offers now.
 
-The catalog records published artifacts. It does not establish which images or endpoints a running network uses, or prove interoperability for every artifact combination. Request the target network's current connection details before joining or sending transactions.
+## What was checked
 
-## Source selection
-
-| Component | Public source revision |
+| Area | How it was checked |
 |---|---|
-| Current ASI dev node | [e18defd44d43fe460379efefb88223797709a0cf](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) |
-| Historical node baseline | [e6ecf23814a306e4ad9850ea44fc753f40966db8](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) |
-| Node used by client compatibility tests | [5dafbc37dad3ebf3da810641fc0d8cecd5a1127b](https://github.com/F1R3FLY-io/f1r3node-rust/tree/5dafbc37dad3ebf3da810641fc0d8cecd5a1127b) |
-| ASI client image | [40f2a9408040252dd23761cd06adb9f1407ef228](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) |
-| Wallet CLI image | [8f6c20ea43ebc6d333783f936372d4220e449681](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681); client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91` |
+| Site | The portal is built to catch dead internal links and unclosed tags, and its pages are opened in a browser with the console watched for errors. |
+| Container images | Tags and digests are looked up in ECR Public, and the commands on the image pages are run against the published node image. |
+| Node image | The commands on the node pages are run in Docker on a local machine, apart from bonding and enrollment. |
+| Wallet CLI | The published image is pulled and its commands are run against DevNet. |
+| Wallet SDK | The examples are compiled against `@asichain/asi-wallet-sdk` 2.1.0, and read-only calls are made to the DevNet node. |
+| Network addresses | They are compared with the team's environment description and requested directly. |
+| README | The commands in README.md are run in a clean Node.js 24 container. |
+| External links | Every external link is requested once. |
 
-The maintained node is the pure Rust repository above. Old combined node repositories and legacy `asi-chain` deployment helpers do not supply setup instructions for these images. New node images use their ASI source identity; historical images retain their original F1R3FLY provenance.
+## Known limits
 
-For application development, inspect remote `dev` and freeze its full revision before building. For a published image, use its recorded revision even if `dev` has moved. Published wallet CLI images do not acquire client changes from later pull requests. A default branch or matching package version does not replace a consumer's committed gitlink.
+- The Wallet CLI is built for the API of the Rust node. Against the Scala node of DevNet only `create` works, while `balance` and `send` fail, because that node has no `/api/balance` endpoint and does not report a token symbol. See [Wallet CLI](/cli/usage/).
+- The `history` and `export` commands of the Wallet CLI need a WebSocket address for GraphQL, which this portal does not publish.
+- The commands that change the validator set, bonding and enrollment, were not run. Those pages follow the source code and `--help` output of the tools.
+- Faucet requests were not made as part of the checks, apart from one request for a test wallet. The faucet page describes the behavior found in the faucet source code.
+- No page describes TestNet. The team's environment description lists only the documentation address for it.
 
-## Remaining review
+## Contributing Verified Instructions
 
-Wallet, faucet and explorer UI walkthroughs, the Wallet SDK reference and detailed transaction/balance/state diagrams retain earlier material. Verify methods, screenshots, endpoints and token behavior against the exact component revision you use. They are not included in this source audit.
-
-Historical IPs, observer availability, validator counts, resource estimates and block-time claims are not a current network inventory. This update removes them from principal setup pages; remaining walkthroughs may still contain historical examples.
-
-## Contributing verified instructions
-
-Link the public source revision and relevant manifest, configuration or implementation. Keep container defaults separate from host mappings. Run `npm run docs:build`, then check technical claims independently. Never publish keys, real environment files or administrator credentials.
+When you add an instruction, link the source file or the command output it comes from. Keep container defaults separate from host port mappings, and run `npm run docs:build` before you open a pull request. A successful build shows that links and diagrams render. It does not show that a command works. Never publish keys, real `.env` files or administrator credentials.
