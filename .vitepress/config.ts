@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitepress'
-import { withMermaid } from 'vitepress-plugin-mermaid'
 import CustomLanguages from "../config/languages";
 import { writeRedirectStubs } from "./redirect-stubs";
 import { deepSpaceLight, deepSpaceDark } from "./theme/shiki";
@@ -38,19 +37,12 @@ const sidebarBuild = [
   },
 ]
 
-export default withMermaid(defineConfig({
+export default defineConfig({
   title: "ASI:Chain Docs",
   description: "Use the wallet, get test tokens, run a node and build on ASI:Chain",
   css: ['custom.css'],
   srcExclude: ['README.md', 'LICENSE.md'],
   buildEnd: writeRedirectStubs,
-
-  mermaid: {
-    theme: 'base',
-    themeVariables: {
-      fontFamily: '"Roboto Mono", monospace'
-    }
-  },
 
   themeConfig: {
     logo: {
@@ -292,4 +284,4 @@ export default withMermaid(defineConfig({
     ['meta', { name: 'twitter:description', content: 'Use the wallet, get test tokens, run a node and build on ASI:Chain' }],
     ['meta', { name: 'twitter:image', content: 'https://docs.asichain.io/logo-light.svg' }],
   ]
-}))
+})
