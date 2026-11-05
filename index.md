@@ -6,8 +6,6 @@ hero:
   name: "ASI:Chain"
   text: "DevNet Documentation"
   tagline: "Use the wallet, get test tokens, run a node and build on ASI:Chain"
-  image:
-    alt: ASI:Chain
   actions:
     - theme: brand
       text: Get Started
@@ -18,32 +16,29 @@ hero:
     - theme: alt
       text: View on GitHub
       link: https://github.com/asi-alliance/asi-chain-rust-node
-features:
-  - title: Wallet
-    details: Create an account, send and receive ASI and deploy Rholang contracts
-    link: /wallet/usage/
-  - title: Explorer
-    details: Browse blocks, transactions, validators and network statistics
-    link: /explorer/usage/
-  - title: Faucet
-    details: Request DevNet ASI for testing
-    link: /faucet/usage/
-  - title: Wallet SDK
-    details: Build wallets and integrations with the TypeScript SDK
-    link: /wallet-sdk/overview/
-  - title: Wallet CLI
-    details: Create wallets, check balances and send tokens from a terminal
-    link: /cli/usage/
-  - title: Node Setup
-    details: Run a Rust validator or observer node from the published images
-    link: /quick-start/join-validator/
-  - title: Architecture
-    details: Components, data flow and network topology
-    link: /architecture/
-  - title: FAQ
-    details: Answers to common questions about accounts, tokens and nodes
-    link: /faq/
 ---
+
+## Start Here
+
+<CardGrid columns="3">
+<DocCard title="Use the Wallet" href="/wallet/usage/" icon="wallet">Create an account, send and receive ASI and deploy Rholang contracts</DocCard>
+<DocCard title="Run a Node" href="/quick-start/" icon="node">Run a Rust validator or observer node from the published images</DocCard>
+<DocCard title="Build" href="/wallet-sdk/overview/" icon="sdk">Build wallets and integrations with the TypeScript SDK</DocCard>
+</CardGrid>
+
+## Products
+
+<CardGrid columns="2">
+<DocCard title="Wallet" href="/wallet/usage/" icon="wallet">Create an account, send and receive ASI and deploy Rholang contracts</DocCard>
+<DocCard title="Explorer" href="/explorer/usage/" icon="explorer">Browse blocks, transactions, validators and network statistics</DocCard>
+<DocCard title="Faucet" href="/faucet/usage/" icon="faucet">Request DevNet ASI for testing</DocCard>
+<DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">Build wallets and integrations with the TypeScript SDK</DocCard>
+<DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">Create wallets, check balances and send tokens from a terminal</DocCard>
+<DocCard title="Node Setup" href="/quick-start/join-validator/" icon="node">Run a Rust validator or observer node from the published images</DocCard>
+<DocCard title="Architecture" href="/architecture/" icon="architecture">Components, data flow and network topology</DocCard>
+<DocCard title="FAQ" href="/faq/" icon="faq">Answers to common questions about accounts, tokens and nodes</DocCard>
+</CardGrid>
+
 
 ## Before You Start
 
