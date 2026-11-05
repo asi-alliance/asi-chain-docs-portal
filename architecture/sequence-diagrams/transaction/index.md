@@ -131,7 +131,7 @@ If the deploy is not finalized within 180 seconds, the watch ends with `DeployTi
 For a Scala node the SDK reads the `faultTolerance` field of the answer and treats the deploy as finalized at 0.99 or above. For a Rust node the SDK expects the same field with a threshold of 0.33.
 
 ::: warning Finalization on Rust nodes
-The answer of a Rust node to `GET /api/deploy/{id}` has no `faultTolerance` field. It reports `isFinalized` and `finalizationState` instead. Wallet SDK 2.1.0 with the `rust` profile therefore keeps the status at `IncludedInBlock` for a deploy that the node already reports as `Finalized`, and the watch ends with `DeployTimeoutError`. Before the deploy is in any finalized block, a Rust node answers `404 deploy_not_found`, which the SDK reports as `CheckingError`.
+The answer of a Rust node to `GET /api/deploy/{id}` has no `faultTolerance` field. It reports `isFinalized` and `finalizationState` instead. Wallet SDK 2.1.0 with the `rust` profile therefore keeps the status at `IncludedInBlock` for a deploy that the node already reports as `Finalized`, and the watch ends with `DeployTimeoutError`. A Rust node returns the deploy as soon as a block it knows contains it, with `isFinalized: false` until that block is finalized. Only when no known block contains the deploy does it answer `404 deploy_not_found`, which the SDK reports as `CheckingError`.
 :::
 
 ## Errors

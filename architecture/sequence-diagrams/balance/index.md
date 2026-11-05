@@ -104,7 +104,7 @@ A Rust node returns the balance as `ExprBigInt`, while a Scala node returns `Exp
 
 ### Auto-Refresh
 
-The wallet refreshes balances every 30 seconds while a page that shows them is open, and the cached value also expires after 30 seconds. After a transfer or a deploy the cache is invalidated twice: right after the deploy is submitted and again when the wallet stops watching it.
+While they are open, the Dashboard and Send pages refresh the balance every 30 seconds, and the Dashboard and History pages refresh the history at the same interval. Cached data that no open page uses is dropped after 30 seconds. After a transfer or a deploy the cache is invalidated twice: right after the deploy is submitted and again when the wallet stops watching it.
 
 ---
 

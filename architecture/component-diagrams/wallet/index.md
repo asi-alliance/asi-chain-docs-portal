@@ -82,7 +82,7 @@ graph TD
 | `auth` | Whether the wallet is unlocked |
 | `theme` | Light or dark theme |
 
-Balances and history are kept only in the RTK Query cache and are fetched again after a reload. The wallet build of a given release may carry a few more slices, for example for network activity or the SDK client, but the ones above are in every build.
+Balances and history are kept only in the RTK Query cache and are fetched again after a reload. Some builds carry more slices, but the ones above are in every build.
 
 ## Storage
 
