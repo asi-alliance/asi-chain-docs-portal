@@ -25,6 +25,7 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 - The `history` and `export` commands of the Wallet CLI need a WebSocket address for GraphQL, which this portal does not publish.
 - The commands that change the validator set, bonding and enrollment, were not run. Those pages follow the source code and `--help` output of the tools.
 - Faucet requests were not made as part of the checks, apart from one request for a test wallet. The faucet page describes the behavior found in the faucet source code.
+- With the `rust` profile, Wallet SDK 2.1.0 cannot read balances or send transfers, and `watchDeploy` never reports finalization. This was found on a local Rust node, see [Wallet SDK](/wallet-sdk/overview/).
 - No page describes TestNet yet.
 
 ## Contributing Verified Instructions
