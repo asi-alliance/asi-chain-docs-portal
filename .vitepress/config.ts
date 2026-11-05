@@ -57,6 +57,7 @@ export default withMermaid(defineConfig({
         text: 'Quick Start',
         collapsed: false,
         items: [
+          { text: 'Rust Validator Enrollment', link: '/quick-start/validator-enrollment/' },
           { text: 'Join DevNet as Validator', link: '/quick-start/join-validator/' },
           { text: 'Join DevNet as Observer', link: '/quick-start/join-observer/' },
           { text: 'How to Get DevNet ASI', link: '/quick-start/get-asi/' },
