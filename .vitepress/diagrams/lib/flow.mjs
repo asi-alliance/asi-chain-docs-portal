@@ -52,6 +52,13 @@ function check(spec, r) {
   for (const e of r.edges) for (const k of ['from', 'to']) if (!ids.has(e[k])) fail(spec, `edge ${e.index + 1} has unknown ${k} "${e[k]}"`);
 }
 
+// Legend sample in the shape the node kind has in the diagram: cylinder, hexagon, pill or rounded box.
+function swatch(kind, x, y) {
+  if (kind === 'store') return `<path d="M${x} ${y + 3}v8a11 3 0 0 0 22 0v-8a11 3 0 0 0-22 0a11 3 0 0 0 22 0"/>`;
+  if (kind === 'decision') return `<polygon points="${x},${y + 7} ${x + 5},${y} ${x + 17},${y} ${x + 22},${y + 7} ${x + 17},${y + 14} ${x + 5},${y + 14}"/>`;
+  return `<rect x="${x}" y="${y}" width="22" height="14" rx="${kind === 'terminal' ? 7 : 4}"/>`;
+}
+
 export function flow(spec, variant = 'w') {
   const r = resolve(spec, variant);
   check(spec, r);
@@ -61,8 +68,9 @@ export function flow(spec, variant = 'w') {
   // node sizes
   for (const n of r.nodes) {
     n.lines = wrap(n.label, n.wrap || o.wrap);
-    const tx = Math.max(...n.lines.map((l) => tw(l, FS.node)), n.sub ? tw(n.sub, FS.small) : 0);
-    n.blockH = n.lines.length * 16 + (n.sub ? 14 : 0);
+    n.subs = n.sub === undefined ? [] : Array.isArray(n.sub) ? n.sub : String(n.sub).split('\n');
+    const tx = Math.max(...n.lines.map((l) => tw(l, FS.node)), ...n.subs.map((l) => tw(l, FS.small)));
+    n.blockH = n.lines.length * 16 + n.subs.length * 14;
     const pad = { decision: 64, terminal: 44, store: 36 }[n.kind] ?? 36;
     n.w = n.w || Math.max(tx + pad, 96);
     n.h = n.h || n.blockH + 24 + (n.kind === 'store' ? 14 : 0) + (n.kind === 'decision' ? 6 : 0);
@@ -202,7 +210,7 @@ export function flow(spec, variant = 'w') {
   for (const e of r.edges) {
     const strong = e.style === 'strong';
     const m = `${id}-${strong ? 'ap' : 'a'}`;
-    s += `<path d="${rounded(e.pts)}" class="d-edge${strong ? ' d-edge-strong' : ''}${e.style === 'dashed' ? ' d-dashed' : ''}" marker-end="url(#${m})"${e.dir === 'both' ? ` marker-start="url(#${m})"` : ''}/>`;
+    s += `<path d="${rounded(e.pts)}" class="d-edge${strong ? ' d-edge-strong' : ''}${e.style === 'dashed' ? ' d-dashed' : ''}"${e.dir === 'none' ? '' : ` marker-end="url(#${m})"`}${e.dir === 'both' ? ` marker-start="url(#${m})"` : ''}/>`;
   }
   for (const n of r.nodes) {
     const { x, y, w, h, cx, cy } = n;
@@ -218,7 +226,7 @@ export function flow(spec, variant = 'w') {
     s += '</g>';
     const top = cy - n.blockH / 2 + (n.kind === 'store' ? 3 : 0);
     n.lines.forEach((l, j) => { s += `<text x="${n2(cx)}" y="${n2(top + 12 + j * 16)}" class="d-label" text-anchor="middle">${esc(l)}</text>`; });
-    if (n.sub) s += `<text x="${n2(cx)}" y="${n2(top + n.lines.length * 16 + 11)}" class="d-meta" text-anchor="middle">${esc(n.sub)}</text>`;
+    n.subs.forEach((l, j) => { s += `<text x="${n2(cx)}" y="${n2(top + n.lines.length * 16 + 11 + j * 14)}" class="d-meta" text-anchor="middle">${esc(l)}</text>`; });
   }
   for (const c of chips) s += `<rect x="${n2(c.x)}" y="${n2(c.y)}" width="${n2(c.w)}" height="${n2(c.h)}" rx="4" class="d-chip"/>`;
   for (const c of chips) c.lines.forEach((t, j) => { s += `<text x="${n2(c.cx)}" y="${n2(c.cy + 4 + (j - (c.lines.length - 1) / 2) * 14)}" class="d-elabel" text-anchor="middle">${esc(t)}</text>`; });
@@ -233,7 +241,7 @@ export function flow(spec, variant = 'w') {
         const text = (spec.legendLabels || {})[k] || LEGEND[k];
         const need = 30 + tw(text, FS.small) + 18;
         if (lx + need > W && lx > 4) { lx = 4; ly += 22; }
-        s += `<g class="d-node d-${k}"><rect x="${lx}" y="${ly}" width="22" height="14" rx="${k === 'terminal' ? 7 : 4}"/></g><text x="${lx + 30}" y="${ly + 11}" class="d-meta">${esc(text)}</text>`;
+        s += `<g class="d-node d-${k}">${swatch(k, lx, ly)}</g><text x="${lx + 30}" y="${ly + 11}" class="d-meta">${esc(text)}</text>`;
         lx += need;
       }
       H = ly + 14 + 6;

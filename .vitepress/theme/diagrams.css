@@ -11,8 +11,13 @@
   --d-surface: var(--vp-c-bg);
   --d-service-bg: var(--vp-c-bg);
   --d-service-line: var(--vp-c-text-3);
-  --d-group-bg: var(--vp-c-bg-soft);
-  --d-group-line: var(--vp-c-divider);
+  /* Group fill. In the light theme --vp-c-bg-soft equals the page background, so --vp-c-bg-alt separates the group. */
+  --d-group-bg: var(--vp-c-bg-alt);
+  /* Structure lines (group frames, lifelines, fragment frames, label chips) are boundaries a reader needs, so they
+     must reach 3:1 against the page and the group fill. --vp-c-divider gives only 1.1 to 1.3. 85 % of --vp-c-text-3
+     over the page colour gives 3.6 and 3.4 in the light theme and 5.4 and 4.7 in the dark one. Do not lighten it. */
+  --d-struct-line: color-mix(in srgb, var(--vp-c-text-3) 85%, var(--vp-c-bg));
+  --d-group-line: var(--d-struct-line);
   --d-chain-bg: var(--vp-c-brand-soft);
   --d-chain-line: var(--vp-c-brand-1);
   --d-store-bg: var(--vp-c-tip-soft);
@@ -24,6 +29,8 @@
   --d-accent: var(--vp-c-brand-1);
   --d-accent-bg: var(--vp-c-brand-soft);
 }
+
+html.dark { --d-group-bg: var(--vp-c-bg-soft); }
 
 /* Figure and caption. The counter gives every diagram on a page its number. */
 .vp-doc { counter-reset: diagram; }
@@ -85,6 +92,13 @@ figure.diagram figcaption::before {
 .dgm .d-fragment rect { fill: var(--d-group-bg); fill-opacity: .6; stroke: var(--d-group-line); }
 .dgm .d-fragline { stroke: var(--d-group-line); fill: none; }
 .dgm .d-badge circle { fill: var(--d-accent-bg); stroke: var(--d-accent); stroke-width: 1; }
-.dgm .d-badge text { font-size: 10px; font-weight: 700; fill: var(--d-text); }
+.dgm .d-badge text { font-size: 11px; font-weight: 700; fill: var(--d-text); }
 .dgm .d-note rect { fill: var(--d-note-bg); stroke: var(--d-note-line); stroke-width: 1; }
 .dgm .d-notetext { fill: var(--d-text); }
+
+/* Phone. The figure gives the SVG nearly the full screen width, because the narrow layouts are drawn at about 330 to
+   400 px and any scaling below 0.9 would push the 11 px labels under 10 px. The figure runs to the screen edges, so
+   it drops the side border and the radius. */
+@media (max-width: 639px) {
+  figure.diagram { margin-inline: -24px; padding: 12px 8px; border-inline: 0; border-radius: 0; }
+}
