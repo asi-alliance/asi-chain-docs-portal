@@ -6,35 +6,7 @@ The ASI Wallet is a browser-based React application for managing accounts and se
 
 ## Layers
 
-```mermaid
-graph TB
-    subgraph "ASI Wallet (browser)"
-        UI["Pages (React)"]
-        Redux["Redux store and RTK Query"]
-        Svc["SdkWalletService"]
-    end
-
-    subgraph "Wallet SDK"
-        Client["Client"]
-        API["ApiClientManager"]
-        IDB[("IndexedDB")]
-    end
-
-    subgraph "Network"
-        VAL["Validator node<br/>(ValidatorURL)"]
-        RO["Read-only node<br/>(ReadOnlyURL)"]
-        IDX["Indexer<br/>(IndexerURL)"]
-    end
-
-    UI --> Redux
-    Redux --> Svc
-    Svc --> Client
-    Client --> API
-    Client --> IDB
-    API --> VAL
-    API --> RO
-    API --> IDX
-```
+<Diagram name="wallet-layers" caption="How a call travels from the wallet pages through the Redux store and the SDK to the nodes and the indexer." />
 
 | Layer | What it does |
 |-------|--------------|
@@ -60,20 +32,6 @@ Components do not call the SDK directly. A page dispatches a Redux thunk or uses
 | Settings | Network and application settings |
 
 ## State
-
-```mermaid
-graph TD
-    subgraph "Redux store"
-        WS["walletsStore"]
-        API["walletsApi (RTK Query)"]
-        AU["auth"]
-        TH["theme"]
-    end
-
-    WS --> |"wallet metadata, selected account and network, deploy watches"| Meta["Selection state"]
-    API --> |"balances, history"| Cache["In-memory cache"]
-    AU --> |"unlock state"| Lock["Session"]
-```
 
 | Slice | Data managed |
 |-------|--------------|
@@ -119,11 +77,11 @@ Which call goes to which address:
 
 Balance queries run as exploratory deploys, and a node accepts them only if it is read-only or started in developer mode. A validator without developer mode answers `readonly_node_required`, so `ReadOnlyURL` has to point at a read-only node.
 
----
+## Next Steps
 
-## Related Documentation
-
-- [Wallet Usage Guide](/wallet/usage/): how to use the wallet
-- [Balance Query](/architecture/sequence-diagrams/balance/): how the balance is read
-- [Transaction Flow](/architecture/sequence-diagrams/transaction/): transaction lifecycle
-- [Wallet SDK](/wallet-sdk/overview/): the library under the wallet
+<CardGrid columns="2">
+<DocCard title="Wallet Usage Guide" href="/wallet/usage/" icon="wallet">How to use the wallet</DocCard>
+<DocCard title="Balance Query" href="/architecture/sequence-diagrams/balance/" icon="diagram">How the balance is read</DocCard>
+<DocCard title="Transaction Flow" href="/architecture/sequence-diagrams/transaction/" icon="diagram">Transaction lifecycle</DocCard>
+<DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">The library under the wallet</DocCard>
+</CardGrid>

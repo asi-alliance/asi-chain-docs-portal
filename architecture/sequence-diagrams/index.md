@@ -25,7 +25,7 @@ How the wallet reads and shows the balance of an account.
 
 ## Quick Reference
 
-The wallet takes the address of every node role from the network configuration. See [Wallet Architecture](/architecture/component-diagrams/wallet/#network-connections) for the roles.
+The wallet takes the address of every node role from the network configuration. See [Wallet Components](/architecture/component-diagrams/wallet/#network-connections) for the roles.
 
 | Operation | Calls | Addresses used |
 |-----------|-------|----------------|
@@ -34,26 +34,10 @@ The wallet takes the address of every node role from the network configuration. 
 | Check balance | `POST /api/explore-deploy` | `ReadOnlyURL` |
 | Transaction history | GraphQL query | `IndexerURL` |
 
-## Simplified Flow
+## Next Steps
 
-```mermaid
-graph LR
-    W[Wallet]
-    V["Validator<br/>(ValidatorURL)"]
-    R["Read-only node<br/>(ReadOnlyURL)"]
-    I["Indexer<br/>(IndexerURL)"]
-
-    W --> |"signed deploy"| V
-    W --> |"balance, latest block, deploy status"| R
-    W --> |"history"| I
-    V --> |"block"| BC[Blockchain]
-    R --> |"reads"| BC
-```
-
----
-
-## Related Documentation
-
-- [Component Diagrams](/architecture/component-diagrams/): internal architecture
-- [State Diagrams](/architecture/state-diagrams/): node lifecycle
-- [Wallet Usage](/wallet/usage/): user guide
+<CardGrid columns="3">
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="architecture">Internal architecture</DocCard>
+<DocCard title="State Diagrams" href="/architecture/state-diagrams/" icon="diagram">Node lifecycle</DocCard>
+<DocCard title="Wallet Usage" href="/wallet/usage/" icon="wallet">User guide</DocCard>
+</CardGrid>

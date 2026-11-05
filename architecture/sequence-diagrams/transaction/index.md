@@ -4,7 +4,7 @@ Complete sequence from the moment the user sends tokens to the moment the transf
 
 ← [Back to Sequence Diagrams](/architecture/sequence-diagrams/)
 
-## Overview
+## How a Transfer Works
 
 A token transfer goes through four phases:
 
@@ -15,7 +15,7 @@ A token transfer goes through four phases:
 
 A transfer is a deploy of a Rholang term that moves tokens between two vaults. Deploying a contract from the Deploy page uses the same phases with a different term.
 
-The wallet calls the SDK `Client`, and the SDK talks to the nodes behind `ValidatorURL` and `ReadOnlyURL` (see [Wallet Architecture](/architecture/component-diagrams/wallet/#network-connections)).
+The wallet calls the SDK `Client`, and the SDK talks to the nodes behind `ValidatorURL` and `ReadOnlyURL` (see [Wallet Components](/architecture/component-diagrams/wallet/#network-connections)).
 
 ## Phase 1: Check and Reserve
 
@@ -32,19 +32,7 @@ The private key is not kept in the Redux store. The SDK decrypts it only while t
 
 ## Phase 2: Signing
 
-```mermaid
-sequenceDiagram
-    participant SDK as SDK Client
-    participant RN as Read-only node
-
-    SDK->>SDK: Validate the recipient address and the amount
-    SDK->>SDK: Build the transfer term for the node profile
-    SDK->>RN: GET /api/blocks
-    RN-->>SDK: Latest block number
-    SDK->>SDK: validAfterBlockNumber = latest - 1
-    SDK->>SDK: Serialize the deploy fields
-    SDK->>SDK: Hash with blake2b and sign with secp256k1
-```
+<Diagram name="deploy-signing" caption="Messages between the SDK and the read-only node while the SDK builds, serializes and signs the transfer deploy." />
 
 | Field | Value |
 |-------|-------|
@@ -59,45 +47,22 @@ The result is a signed deploy: the serialized data, the public key of the deploy
 
 ## Phase 3: Submission
 
-```mermaid
-sequenceDiagram
-    participant SDK as SDK Client
-    participant ST as Local storage (IndexedDB)
-    participant VN as Validator node
+<Diagram name="deploy-submission" caption="Messages between the SDK, the local storage and the validator node when the signed deploy is submitted, with the three possible outcomes." />
 
-    SDK->>ST: Save the reservation
-    SDK->>VN: POST /api/deploy
-    VN->>VN: Check the signature, the price and the term
-    VN-->>SDK: Deploy ID
-    Note over SDK: The wallet uses the signature as the deploy ID
-```
+| Messages | Step | Description |
+|----------|------|-------------|
+| 1 | Save reservation | The reservation is written to the browser storage before the request, so the amount stays held even if the page closes |
+| 2 | Submit | `POST /api/deploy` with the signed deploy |
+| 3 | Validate | The node checks the signature algorithm, the phlo price against its minimum price and the term |
+| 4 | Deploy ID | The node returns the signature of the deploy in hex. The wallet tracks the transfer by that signature |
 
-| Step | Description |
-|------|-------------|
-| Save reservation | The reservation is written to the browser storage before the request, so the amount stays held even if the page closes |
-| Submit | `POST /api/deploy` with the signed deploy |
-| Validate | The node checks the signature algorithm, the phlo price against its minimum price and the term |
-| Deploy ID | The node returns the signature of the deploy in hex. The wallet tracks the transfer by that signature |
-
-If the node refuses the deploy with a 4xx answer, the reservation is released. If the outcome is unknown, for example because of a network error, the reservation stays, because the deploy may still reach the network.
+If the node refuses the deploy with a 4xx answer, the reservation is released (messages 5 and 6). If the outcome is unknown, for example because of a network error, the reservation stays, because the deploy may still reach the network.
 
 The validator answers `400` for a malformed request or a bad term and `409` for a duplicate deploy. Other failures come back as `422`, `500` or `502`.
 
 ## Phase 4: Confirmation
 
-```mermaid
-sequenceDiagram
-    participant W as Wallet
-    participant SDK as SDK Client
-    participant RN as Read-only node
-
-    loop Every 5 seconds, up to 180 seconds
-        SDK->>RN: GET /api/deploy/{id}
-        RN-->>SDK: Deploy info or error
-    end
-    SDK-->>W: Finalized, error or timeout
-    W->>W: Refresh balance and history
-```
+<Diagram name="deploy-status-polling" caption="Messages between the wallet, the SDK and the read-only node while the SDK polls the deploy status until the watch ends." />
 
 The SDK maps every answer to a status.
 
@@ -112,7 +77,7 @@ If the deploy is not finalized within 180 seconds, the watch ends with `DeployTi
 
 For a Scala node the SDK reads the `faultTolerance` field of the answer and treats the deploy as finalized at 0.99 or above. For a Rust node the SDK expects the same field with a threshold of 0.33.
 
-::: warning Finalization on Rust nodes
+::: warning Finalization on Rust Nodes
 The answer of a Rust node to `GET /api/deploy/{id}` has no `faultTolerance` field. It reports `isFinalized` and `finalizationState` instead. Wallet SDK 2.1.0 with the `rust` profile therefore keeps the status at `IncludedInBlock` for a deploy that the node already reports as `Finalized`, and the watch ends with `DeployTimeoutError`. A Rust node returns the deploy as soon as a block it knows contains it, with `isFinalized: false` until that block is finalized. Only when no known block contains the deploy does it answer `404 deploy_not_found`, which the SDK reports as `CheckingError`.
 :::
 
@@ -129,10 +94,10 @@ The answer of a Rust node to `GET /api/deploy/{id}` has no `faultTolerance` fiel
 
 The Deploy page follows the same four phases. It differs in two places. The term is the user's Rholang code, and the reserved amount is `phloLimit * phloPrice`. The page sets the phlo limit to 100000000 by default.
 
----
+## Next Steps
 
-## Related Documentation
-
-- [Wallet Architecture](/architecture/component-diagrams/wallet/): wallet internals
-- [Balance Query](/architecture/sequence-diagrams/balance/): how balance checks work
-- [Send Tokens Guide](/wallet/usage/): step-by-step guide
+<CardGrid columns="3">
+<DocCard title="Wallet Components" href="/architecture/component-diagrams/wallet/" icon="wallet">Wallet internals</DocCard>
+<DocCard title="Balance Query" href="/architecture/sequence-diagrams/balance/" icon="diagram">How balance checks work</DocCard>
+<DocCard title="Send Tokens Guide" href="/wallet/usage/" icon="book">Step-by-step guide</DocCard>
+</CardGrid>

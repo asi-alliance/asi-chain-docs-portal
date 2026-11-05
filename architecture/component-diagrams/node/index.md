@@ -2,32 +2,9 @@
 
 The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates. The public DevNet currently runs a Scala node; see the [architecture overview](/architecture/).
 
-```mermaid
-flowchart TB
-  subgraph Interfaces
-    P2P["Transport 40400, discovery 40404"]
-    GRPC["gRPC 40401 external, 40402 internal"]
-    HTTP["HTTP 40403 public, 40405 admin"]
-  end
-  Node["node: runtime, API servers, web routes"]
-  Casper["casper: engine, proposer, validation, finality"]
-  Rholang["rholang: interpreter"]
-  RSpace["rspace++: tuple space"]
-  Blocks["block-storage: blocks and DAG on LMDB"]
-  Comm["comm: transport, Kademlia, TLS"]
-  Common["models, crypto, shared"]
-  P2P --> Comm
-  GRPC --> Node
-  HTTP --> Node
-  Node --> Casper
-  Node --> Comm
-  Casper --> Rholang
-  Casper --> Blocks
-  Casper --> Comm
-  Rholang --> RSpace
-  Blocks --> Common
-  Casper --> Common
-```
+## Components
+
+<Diagram name="node-components" caption="The Rust crates of the node and the interfaces that reach them." />
 
 The runtime binary is `/opt/docker/bin/node`; no Scala/JVM runtime configuration is required. See [Validator Image](/nodes/image/) for entrypoint, defaults, ports and access boundaries. Native-token metadata is part of shard/genesis configuration; upstream defaults do not set ASI token metadata for a deployed chain.
 
@@ -49,7 +26,7 @@ The HTTP API listens on port 40403. Most routes are under `/api`, while `/status
 | `GET /status`, `/version`, `/metrics`, `/ws/events` | Status, version, Prometheus metrics and an event stream |
 | `/api/v1/*` | Versioned variants of status, deploy, explore-deploy and block routes |
 
-The admin HTTP API on port 40405 has `POST /api/propose` and the admin variants under `/api/v1`. The external gRPC server on 40401 serves only the Deploy service. The internal gRPC server on 40402 serves Repl, Deploy, Propose and Lsp.
+The admin HTTP API on port 40405 has `POST /api/propose` and the admin variants under `/api/v1`. The external gRPC server on 40401 serves only the Deploy service. The internal gRPC server on 40402 serves Repl, Deploy, Propose and Lsp. Peer transport uses port 40400 and discovery uses port 40404.
 
 ## Configuration
 

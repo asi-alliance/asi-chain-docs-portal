@@ -16,6 +16,6 @@ export default {
     { from: 'sdk', to: 'sdk', label: 'Serialize the deploy fields' },
     { from: 'sdk', to: 'sdk', label: 'Hash with blake2b and sign with secp256k1' },
   ],
-  wide: { gap: 110, pad: 36, wrapMsg: 26, wrapSelf: 30 },
+  wide: { gap: 110, pad: 36, wrapMsg: 26, wrapSelf: 36 },
   narrow: { gap: 20, pad: 0, wrapMsg: 11, wrapSelf: 26, headWrap: 5 },
 };

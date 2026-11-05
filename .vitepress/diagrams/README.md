@@ -47,15 +47,22 @@ export default {
 export default {
   kind: 'sequence',
   title: '...', desc: '...',
-  participants: [{ id: 'u', label: 'User', kind: 'external' }],
+  participants: [{ id: 'u', label: 'User', kind: 'external' }],   // kind: chain, store, service (default) or external
   steps: [
-    { from: 'u', to: 'w', label: 'Message', reply: true },
-    { frame: 'opt', label: 'Condition', steps: [ /* messages */ ] },   // opt, loop or alt
-    { note: 'Text', over: ['u', 'w'] },
+    { from: 'u', to: 'w', label: 'Message', reply: true },          // reply: true draws a dashed arrow
+    { frame: 'opt', label: 'Condition', steps: [ /* steps */ ] },   // opt or loop
+    { frame: 'alt', label: 'First branch', steps: [ /* steps */ ],
+      else: [{ label: 'Second branch', steps: [ /* steps */ ] }, { label: 'Third branch', steps: [ /* steps */ ] }] },
+    { note: 'Text', over: ['u', 'w'] },                             // one or more participants
   ],
   wide: { gap: 110, pad: 36, wrapMsg: 26, wrapSelf: 24 },
-  narrow: { gap: 50, pad: 16, wrapMsg: 9, wrapSelf: 12, headWrap: 8 },
+  narrow: { gap: 20, pad: 0, wrapMsg: 11, wrapSelf: 26, headWrap: 5 },
 };
 ```
 
-Messages are numbered in order, and a table under the diagram uses the same numbers. A message from a participant to itself is drawn as a loop. The narrow layout is always rendered, and `narrow: false` turns it off.
+- Messages are numbered in order, and a table under the diagram numbers its rows with the same numbers (a column `Messages` with `1`, `3-5`).
+- A frame holds messages, notes and other frames. A nested frame sits 10 px inside its parent, so the labels do not overlap. An `alt` can have any number of `else` branches, each with a label, drawn under a dashed divider inside the same frame. `opt` and `loop` take no `else`.
+- A frame is as wide as everything in it: messages, notes and the labels of self-messages, in any column including the last.
+- A message from a participant to itself is drawn as a loop. In the wide layout its text stands beside the loop, which needs free space on the right, so the label can cross the lifelines of the columns on the right. In the narrow layout the text stands over the loop and is kept inside 308 px.
+- Options of a layout: `gap` is the minimum distance between lifelines, `pad` and `msgPad` add room around a message label, `wrapMsg` and `wrapSelf` wrap labels at that many characters, `headWrap` wraps participant names, `headGap` and `headPad` set the space between and inside the participant boxes. A long word breaks after `(`, `-` or `/`.
+- The narrow layout is always rendered, and `narrow: false` turns it off. Aim at a narrow SVG that is at most 308 px wide, the content width of a 390 px page: the browser scales a wider SVG down, and the text gets smaller than 10 px on screen. Run `node` on the SVG `viewBox` or look at the page at 390 px.

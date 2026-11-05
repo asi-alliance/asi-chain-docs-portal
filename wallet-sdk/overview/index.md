@@ -179,7 +179,7 @@ console.log("Derived Address:", derived.address);
 
 The SDK has four layers. `Client` sits on top, and your application talks to it. Below it are services that implement the logic, domains that model stateful entities, and utilities. The API reference has a page for every module in the picture.
 
-<img src="/images/wallet-sdk/module-architecture.svg" alt="Module Architecture" style="width: 100%; max-width: 900px;" />
+<Diagram name="sdk-modules" caption="The four layers of the Wallet SDK and the modules in each layer." />
 
 ### Client
 
