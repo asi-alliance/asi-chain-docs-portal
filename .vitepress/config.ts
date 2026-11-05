@@ -243,9 +243,15 @@ export default withMermaid(defineConfig({
     config(md) {
       const open = md.renderer.rules.table_open
       const close = md.renderer.rules.table_close
-      md.renderer.rules.table_open = (tokens, idx, options, env, self) =>
-        '<div class="table-wrap" role="region" aria-label="Table" tabindex="0">' +
-        (open ? open(tokens, idx, options, env, self) : self.renderToken(tokens, idx, options))
+      // The region name lists the column headers, so a screen reader tells tables on one page apart.
+      md.renderer.rules.table_open = (tokens, idx, options, env, self) => {
+        const cols: string[] = []
+        for (let i = idx + 1; i < tokens.length && tokens[i].type !== 'thead_close'; i++)
+          if (tokens[i].type === 'inline') cols.push(tokens[i].content.replace(/[`*_]/g, ''))
+        const label = md.utils.escapeHtml(cols.length ? 'Table: ' + cols.join(', ') : 'Table')
+        return `<div class="table-wrap" role="region" aria-label="${label}" tabindex="0">` +
+          (open ? open(tokens, idx, options, env, self) : self.renderToken(tokens, idx, options))
+      }
       md.renderer.rules.table_close = (tokens, idx, options, env, self) =>
         (close ? close(tokens, idx, options, env, self) : self.renderToken(tokens, idx, options)) + '</div>'
     }
