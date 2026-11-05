@@ -1,382 +1,91 @@
 # Wallet CLI
 
-A command-line wallet for the ASI Chain network. The CLI provides wallet management, token transfers, balance checking, and deploy history monitoring directly from your terminal.
+The ASI wallet CLI creates wallets, queries balances, sends tokens and reads/exports deploy history. It embeds its repository-local ASI client dependency; the standalone client container is a separate tool.
 
-**Source code**: [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli)
+## Published image
 
-::: warning SECURITY NOTICE
-The CLI stores wallet credentials in a local JSON file. Keep your `credentials/wallet_info.json` file secure and never share it. There is no recovery mechanism for lost private keys.
-:::
+```text
+public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli:0.1.0-dev.20261103-8f6c20ea43eb
+public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
+```
 
-## Prerequisites
+This image was built from [wallet CLI `8f6c20ea43ebc6d333783f936372d4220e449681`](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681), with ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. Its compatibility tests target the node `5dafbc37` image listed in [container images](/general/container-images/). The tested source was merged into `dev`; later source changes do not modify this artifact.
 
-Before using the CLI, ensure you have:
-
-- [Rust](https://www.rust-lang.org/tools/install) installed (edition 2024)
-- Access to ASI Chain network nodes (Validator and Observer)
-- GraphQL API endpoint for deploy history features
-
-## Installation
-
-### Step 1: Clone the Repository
+Inspect help without accessing a network:
 
 ```bash
-git clone https://github.com/asi-alliance/asi-chain-wallet-cli.git
+WALLET_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
+docker pull --platform linux/amd64 "$WALLET_IMAGE"
+docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" --help
+docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --help
+```
+
+For actual commands, pass a protected environment file and mount the required credential/output directories. The container runs as UID `10001`; arrange ownership and paths explicitly. Host loopback URLs do not reach host services from a normal Docker bridge container.
+
+## Source installation
+
+For current integration development, explicitly select `dev`, inspect its full SHA and committed gitlink, and follow that revision's prerequisites. To reproduce the published application source:
+
+```bash
+git clone --branch dev https://github.com/asi-alliance/asi-chain-wallet-cli.git
 cd asi-chain-wallet-cli
+git checkout --detach 8f6c20ea43ebc6d333783f936372d4220e449681
+git submodule update --init --recursive
+cargo build --release --locked
 ```
 
-### Step 2: Initialize Submodules
-
-The CLI depends on the `rust-client` submodule for low-level blockchain interactions:
-
-```bash
-git submodule init
-git submodule update
-```
-
-To keep the submodule up-to-date:
-
-```bash
-git submodule update --init --remote -- rust-client
-```
-
-### Step 3: Build the Project
-
-```bash
-cargo build --release
-```
-
-The compiled binary will be available at `target/release/asi-chain-wallet-cli`.
+Use the pinned `rust-toolchain.toml`, `Cargo.lock` and submodule. Do not use `git submodule update --remote`: it replaces the reviewed dependency with a moving head. The default release branch and a sibling client checkout are not substitutes for the gitlink.
 
 ## Configuration
 
-### Step 1: Create Configuration File
+Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. Replace these local mapping examples with actual approved URLs:
 
-Copy the example configuration:
-
-```bash
-cp .env.example .env
-```
-
-### Step 2: Configure Network Connection
-
-Edit the `.env` file with your network settings.
-
-**For DevNet:**
-
-```env
-# Validator 1 handles both write (deploys) and read (queries),
-# because the dedicated observer is currently unstable.
-VALIDATOR_HOST=34.196.119.4
-VALIDATOR_GRPC_PORT=40401
-VALIDATOR_HTTP_PORT=40403
-
-OBSERVER_HOST=34.196.119.4
-OBSERVER_GRPC_PORT=40401
-
+```dotenv
+VALIDATOR_GRPC_URL=http://127.0.0.1:40412
+VALIDATOR_HTTP_URL=http://127.0.0.1:40413
+OBSERVER_HTTP_URL=http://127.0.0.1:40453
 OUTPUT_DIR=./credentials
-TOKEN=ASI
-
-VERBOSE_LOGS=false
-
-GRAPHQL_URL=https://indexer.dev.asichain.io/v1/graphql
+EXPECTED_TOKEN_SYMBOL=ASI
+SHARD_ID=root
+DEPLOY_MAX_WAIT_SECONDS=480
+DEPLOY_CHECK_INTERVAL_SECONDS=5
+NODE_CONNECT_TIMEOUT_SECONDS=10
+NODE_TIMEOUT_SECONDS=30
+GRAPHQL_URL=
 ```
 
-::: warning
-Both `VALIDATOR_HOST` and `OBSERVER_HOST` point to **Validator 1** (`34.196.119.4`) for now: the dedicated DevNet observer is unstable, so Validator 1 serves both deploys and read queries until the observer is stabilized.
+The example gRPC port is a locally mapped validator **internal** listener. Keep it private. HTTP ports are independent mappings, not inferred from gRPC. HTTPS URLs use TLS; optional `NODE_CA_CERT` supplies a private CA.
 
-The bootstrap node (`54.152.57.201`) is the network's peer-discovery entry point — used only when launching your own node, not by the CLI directly.
-:::
+Legacy `VALIDATOR_HOST` with `VALIDATOR_GRPC_PORT` / `VALIDATOR_HTTP_PORT` is supported. For observers, supply `OBSERVER_HTTP_URL` or `OBSERVER_HOST` with **`OBSERVER_HTTP_PORT`**. `OBSERVER_GRPC_PORT` is no longer used.
 
-**Configuration Parameters:**
-
-| Parameter | Description | DevNet Value |
-|-----------|-------------|--------------|
-| `VALIDATOR_HOST` | Host accepting deploys | `34.196.119.4` (Validator 1) |
-| `VALIDATOR_GRPC_PORT` | gRPC port for write operations | `40401` |
-| `VALIDATOR_HTTP_PORT` | HTTP port for write operations | `40403` |
-| `OBSERVER_HOST` | Host serving read queries | `34.196.119.4` (Validator 1, observer is unstable) |
-| `OBSERVER_GRPC_PORT` | gRPC port for read operations | `40401` |
-| `OUTPUT_DIR` | Directory for storing wallet credentials | `./credentials` |
-| `TOKEN` | Token name to use | `ASI` |
-| `VERBOSE_LOGS` | Show detailed logs from rust-client | `false` |
-| `GRAPHQL_URL` | Indexer GraphQL endpoint for deploy history | `https://indexer.dev.asichain.io/v1/graphql` |
-
-::: tip About the placeholder defaults in `.env.example`
-The shipped [`.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/main/.env.example) uses `40432/40433/40452` as defaults — these match a local multi-node setup (`404XY` pattern: X=3 for validator, X=5 for observer). Replace them with the DevNet values above when targeting the public network.
-:::
+`GRAPHQL_URL` is needed for history/export only. Configure the actual Hasura schema, permissions and WebSocket endpoint without putting admin credentials in public URLs. Full deployment acceptance for history/export remains tracked in [wallet CLI issue #5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
 
 ## Commands
 
-### Create Wallet
-
-Generate a new wallet with private key, public key, and ASI address.
+Run from the configured source directory:
 
 ```bash
-# Create and display keys (not saved to disk)
-cargo run -- create
-
-# Create and save to credentials file
-cargo run -- create --save
+./target/release/asi-chain-wallet-cli --help
+./target/release/asi-chain-wallet-cli create --save
+./target/release/asi-chain-wallet-cli balance
+./target/release/asi-chain-wallet-cli history --limit 10
+./target/release/asi-chain-wallet-cli export --format json --limit 10
 ```
 
-When using the `--save` flag, wallet credentials are stored in `./credentials/wallet_info.json`:
+`create --save` writes private wallet credentials under `OUTPUT_DIR`. Protect its output and generated file. Balance/history also require a complete matching wallet file at this revision; watch-only files are not supported.
 
-```json
-{
-  "private_key": "...",
-  "public_key": "...",
-  "address": "1111..."
-}
+To send, explicitly choose the recipient and **raw dust** amount. The command shape is:
+
+```text
+asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 ```
 
-::: warning
-Back up your `wallet_info.json` file securely. If you lose this file or your private key, you will lose access to your funds permanently.
-:::
-
-### Check Balance
-
-Check the current balance of your wallet:
-
-```bash
-cargo run -- balance
-```
-
-Or use the short alias:
-
-```bash
-cargo run -- bal
-```
-
-The command reads the wallet address from your saved credentials and queries the Observer node for the current balance.
-
-### Send Tokens
-
-Transfer ASI tokens to another address:
-
-```bash
-cargo run -- send --to <recipient-address> --amount <amount>
-```
-
-**Example:**
-
-```bash
-cargo run -- send --to 1111AtahZeefej4tvVR6ti9TJtv8yxLebT31SCEVDCKMNikBk5r3g --amount 100000000
-```
-
-**Parameters:**
-
-| Parameter | Description |
-|-----------|-------------|
-| `--to` | Recipient's ASI address (starts with `1111`) |
-| `--amount` | Amount in smallest units (see [Token Decimals](#token-decimals)) |
-
-The command performs several checks before sending:
-- Verifies sufficient balance
-- Validates recipient address format
-- Confirms amount is greater than zero
-
-After deployment, the CLI displays the deploy ID and waits for deploy finalization.
-
-### Deploy History
-
-Monitor your deploy history in real-time:
-
-```bash
-# Display last 10 deployments and monitor for new ones
-cargo run -- history
-
-# Specify custom limit
-cargo run -- history --limit 20
-
-# Using alias
-cargo run -- hist --limit 20
-```
-
-**Features:**
-
-- Displays recent deployments (both incoming and outgoing transfers)
-- Shows deploy ID, block number, status, and timestamp
-- Lists associated transfers with direction (IN/OUT) and amounts
-- Continuously monitors for new deploys via WebSocket subscription
-- Real-time updates as new blocks are created
-
-**Output example:**
-
-```
->>> Starting real-time deploy monitoring...
-Wallet: 1111AtahZeefej4tvVR6ti9TJtv8yxLebT31SCEVDCKMNikBk5r3g
-Public Key: 04abc...
-
-================================================================================
-
-Recent History (last 10):
-
-================================================================================
-Deploy ID: 3045022100abc...
-Block: #12345
-Status: finalized
-Created at: 2025-01-15 10:30:45 UTC
-
- 💳  Associated Transfers:
-  ← IN  | 100000000 dust
-     From: 1111La6tHaCtGjRiv4wkffbTAAjGyMsVhzSUNzQxH1jjZH9jtEi3M
-================================================================================
-
->>> Monitoring for new deployments...
-```
-
-### Export Data
-
-Export your deploy history to a file for analysis or record-keeping:
-
-```bash
-# Export as JSON (default format)
-cargo run -- export
-
-# Export as CSV
-cargo run -- export --format csv
-
-# Specify custom output path
-cargo run -- export --output my_deploys.json
-
-# Limit number of records (default: 100)
-cargo run -- export --limit 50
-
-# Combine options
-cargo run -- export --format csv --output reports/wallet_2024.csv --limit 200
-```
-
-**Parameters:**
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `--format` | Output format: `json` or `csv` | json |
-| `--output` | Custom output file path | Auto-generated in `exports/` |
-| `--limit` | Maximum number of records to export | 100 |
-
-**Default output location:** `exports/wallet_export_YYYYMMDD_HHMMSS.{json|csv}`
-
-**Exported data includes:**
-
-- Deploy ID
-- Block number
-- Status
-- Timestamp
-- Transfer direction (IN/OUT)
-- Transfer amount
-- Sender and recipient addresses
-
-### Help
-
-Display available commands and usage information:
-
-```bash
-cargo run -- help
-```
-
-## Docker
-
-You can build and run the wallet CLI using Docker instead of compiling from source.
-
-### Build Docker Image
-
-```bash
-docker build -t wallet-cli .
-```
-
-### Run with Docker Compose
-
-Run commands using Docker Compose:
-
-```bash
-docker compose run --rm wallet-cli balance
-docker compose run --rm wallet-cli send --to <ADDRESS> --amount 1000
-```
-
-::: tip Volume Mounts
-Docker Compose automatically mounts `./credentials` and `./exports` directories, so your wallet credentials and exported data persist on your local filesystem.
-:::
-
-## Token Decimals
-
-ASI token uses 8 decimal places. When specifying amounts in CLI commands, use the smallest unit:
-
-| Human-Readable | CLI Amount |
-|----------------|------------|
-| 0.5 ASI | 50000000 |
-| 1 ASI | 100000000 |
-| 10 ASI | 1000000000 |
-| 100 ASI | 10000000000 |
-
-**Formula:** `CLI Amount = Human Amount × 100000000`
-
-::: tip
-To send 1 ASI token, use `--amount 100000000` (1 × 10⁸)
-:::
-
-## Deploy Statuses
-
-Your deploys can have the following statuses:
-
-| Status | Description |
-|--------|-------------|
-| **Deploying** | Deploy is sent but not yet included in a block |
-| **Finalizing** | Deploy is included in a block but not finalized |
-| **Finalized** | Deploy successfully completed |
-
-::: info Status Timing
-Deploys typically take a few seconds to finalize. The CLI automatically monitors and displays status updates during the send operation.
-:::
-
-## Troubleshooting
-
-**"VALIDATOR_HOST is not set in .env":**
-- Ensure your `.env` file exists and contains all required variables
-- Check that variable names match exactly (case-sensitive)
-
-**"Failed to read wallet info from ...":**
-- Create a wallet first using `cargo run -- create --save`
-- Verify the `OUTPUT_DIR` path in your `.env` file
-
-**"Insufficient balance to complete the transfer":**
-- Check your current balance with `cargo run -- balance`
-- Remember to account for token decimals (1 ASI = 100000000)
-
-## Project Structure
-
-```
-asi-chain-wallet-cli/
-├── Cargo.toml              # Project dependencies
-├── .env.example            # Environment configuration template
-├── Dockerfile              # Docker build configuration
-├── docker-compose.yml      # Docker Compose configuration
-├── src/
-│   ├── main.rs             # Entry point and CLI commands
-│   ├── config.rs           # Configuration management
-│   ├── models.rs           # Data models
-│   ├── commands/
-│   │   ├── balance.rs      # Balance command
-│   │   ├── export.rs       # Export command
-│   │   ├── history.rs      # History command
-│   │   ├── keys.rs         # Create wallet command
-│   │   └── send.rs         # Send command
-│   ├── requests/
-│   │   └── graphql.rs      # GraphQL queries
-│   └── utils/
-│       ├── deployment.rs   # Deployment utilities
-│       └── websocket.rs    # WebSocket connection
-└── rust-client/            # Submodule: low-level node CLI
-```
-
-## Support Resources
-
-- **Documentation**: [docs.asichain.io](https://docs.asichain.io)
-- **Web Wallet**: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
-- **Block Explorer**: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-- **Faucet**: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
-- **GitHub**: [asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli)
-
----
-
-**Note**: The Wallet CLI is currently in beta. For production use cases, ensure you have proper backups of your credentials and test with small amounts first.
+| ASI amount | Raw CLI amount (8 decimals) |
+|---|---|
+| 0.5 | `50000000` |
+| 1 | `100000000` |
+| 10 | `1000000000` |
+
+Keep amounts as exact integers, including values above JavaScript's safe integer range. Success requires canonical finalization and a positive vault verdict. When the outcome is unknown, retain the deploy ID and investigate before sending again.
+
+The node's native-token configuration and expected symbol must match the target shard. Cost-accounting APIs and later node API changes require their own compatible source/image pair; they are not enabled by substituting an image tag here.

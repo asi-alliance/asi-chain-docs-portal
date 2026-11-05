@@ -1,81 +1,21 @@
-# Own Shard Setting Up
+# Set up a private shard
 
-Documentation for setting up a private ASI:Chain shard is currently under development.
+A private shard needs its own genesis, validator identities, bonds, token metadata, storage and network configuration. It does not join an existing network by reusing that network's bootstrap identity.
 
-## Overview
+Use the maintained [Rust source at the selected revision](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) and a [published digest](/general/container-images/). The upstream [Docker guide](https://github.com/asi-alliance/asi-chain-rust-node/blob/e18defd44d43fe460379efefb88223797709a0cf/docker/README.md) and [shard topology](https://github.com/asi-alliance/asi-chain-rust-node/blob/e18defd44d43fe460379efefb88223797709a0cf/docker/shard.yml) are development references. Review image/build settings; sample keys and public host mappings must not become production settings.
 
-A private shard is an independent blockchain network that:
-- Operates separately from the public DevNet
-- Has its own genesis configuration
-- Requires minimum 3 validators to function
-- Uses the same Docker image as DevNet
-- Can be configured for enterprise or private testing
+## Required decisions
 
-## Core Requirements
+| Input | Define before initialization |
+|---|---|
+| Node/client pair | Exact revisions, digests and API compatibility |
+| Genesis | Shard ID, allocations, bonds and ceremony participants |
+| Native token | Name, symbol and decimals; ASI integrations use eight decimals |
+| Consensus | Bonded stake, validator admission and safety assumptions |
+| Networking | Bootstrap identity, private management access and approved API routes |
+| Persistence | Ownership, backups, recovery and retention |
+| Consumers | Indexer migrations, PostgreSQL, Hasura metadata/permissions and application endpoints |
 
-**Technical Prerequisites:**
-- Docker and Docker Compose installed
-- Multiple servers (minimum 4: bootstrap + 3 validators)
-- Network connectivity between servers
-- Understanding of blockchain node operations
+A sample topology's count is not a universal minimum or a fault-tolerance guarantee. Validate the actual bonded set and stake assumptions. Fixed block times and safety thresholds cannot be copied from former examples without review.
 
-**Resource Requirements per Node:**
-- CPU: 4-8 cores
-- RAM: 16-32 GB
-- Storage: 250+ GB
-- Stable network infrastructure
-
-## Network Components
-
-A private shard requires:
-
-1. **Bootstrap Node** - Network entry point (not a validator)
-2. **Validator Nodes** - Minimum 3 for consensus
-3. **Observer Node** - (Optional) For read access
-4. **Genesis Configuration** - Initial network parameters
-
-## Docker Image
-
-Use the official ASI:Chain node image:
-```
-public.ecr.aws/f6y9h6x4/asi-chain/node:latest
-```
-
-## Key Configuration Parameters
-
-Based on DevNet configuration:
-- **Consensus:** CBC Casper
-- **Fault Tolerance Threshold:** 0.99
-- **Minimum Validators:** 3
-- **Block Time:** ~20 seconds average
-
-## Reference Materials
-
-To understand the implementation, study the DevNet setup:
-- [DevNet Structure](/shard-nodes/devnet-structure/) - Network architecture
-- [Validator Node Image](/shard-nodes/validator-image/) - Node configuration
-- [GitHub Repository](https://github.com/asi-alliance/asi-chain) - Source code and examples
-
-## Bootstrap Connection Format
-
-Bootstrap nodes use this URI format:
-```
-rnode://0d1312b556db1d3fa4745fd88c29f8e15095621e@54.152.57.201?protocol=40400&discovery=40404
-```
-
-Where:
-- First part: Bootstrap node public key
-- IP address: Bootstrap server
-- protocol: Protocol server port
-- discovery: Kademlia discovery port
-
-## Support
-
-For questions about private shards:
-- Review the public DevNet configuration in [GitHub](https://github.com/asi-alliance/asi-chain)
-- Check [DevNet Structure](/shard-nodes/devnet-structure/) for architecture details
-- See [Validator Setup](/quick-start/join-validator/) for node configuration examples
-
----
-
-**Note:** Detailed setup guide with step-by-step instructions will be added soon.
+Use fresh private credentials. Do not reuse published development keys or retired deployment helpers. See [validator image](/shard-nodes/validator-image/) for paths and ports, and [architecture](/architecture/) for consumer data paths.

@@ -1,90 +1,17 @@
-# Data Flow Diagrams
-
-How data moves through the ASI:Chain ecosystem.
-
-← [Back to Architecture Overview](../)
-
-## Wallet Data Flow
-
-Data flow from user actions to blockchain.
+# Data flow
 
 ```mermaid
-graph LR
-    User([User]) --> UI[Wallet UI]
-    UI --> Store[Redux Store]
-    Store --> Services[Services]
-    Services --> Nodes[Blockchain Nodes]
-    Nodes --> Services
-    Services --> Store
-    Store --> UI
+flowchart LR
+  Node[Rust node] -->|gRPC / HTTP responses| Indexer[Python indexer]
+  Indexer -->|indexed rows| PG[(PostgreSQL)]
+  PG -->|authorized queries| Hasura[Hasura GraphQL]
+  Hasura -->|GraphQL responses| Explorer[Explorer frontend]
+  Hasura -->|GraphQL responses| Wallet[Wallet / SDK]
+  Node -->|HTTP responses| Wallet
 ```
 
-### Flow Details
+The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py) uses node gRPC and HTTP directly. It does not invoke a Rust CLI. PostgreSQL and Hasura are separate services; the explorer neither extracts chain blocks nor owns the database.
 
-| Layer | Input | Output |
-|-------|-------|--------|
-| UI | User actions | Display updates |
-| Store | State changes | Persisted state |
-| Services | API calls | Responses |
-| Nodes | Deploys/queries | Results |
+Deploy submission, inclusion, execution results and canonical finalization are separate states. A successful API response or indexed row alone does not prove a successful, finalized token transfer. Use the selected node/client contract and exact raw integer amounts.
 
-### Data Types
-
-| Type | Encryption | Storage |
-|------|------------|---------|
-| Private keys | AES-256 | Browser |
-| Transactions | Signed | Blockchain |
-| Balances | None | In-memory |
-
----
-
-## Explorer Data Flow
-
-Blockchain data to user interface.
-
-```mermaid
-graph LR
-    Node[ASI Node] --> Parser[Parser]
-    Parser --> DB[(SQLite)]
-    DB --> API[Flask API]
-    API --> Browser([Browser])
-```
-
-### Indexing Pipeline
-
-| Source | Process | Storage |
-|--------|---------|---------|
-| Docker logs | Parse blocks | blocks table |
-| RPC API | Get details | deployments table |
-| HTTP API | Query balance | Live query |
-
----
-
-## Transaction Lifecycle
-
-End-to-end transaction flow.
-
-```mermaid
-graph TD
-    Create[Create Transaction] --> Sign[Sign Deploy]
-    Sign --> Submit[Submit to Validator]
-    Submit --> Validate[Validate]
-    Validate --> Block[Include in Block]
-    Block --> Finalize[Finalize]
-    Finalize --> Confirm[Confirmation]
-```
-
-| Stage | Component |
-|-------|-----------|
-| Create/Sign | Wallet |
-| Submit/Validate | Validator |
-| Block | Consensus |
-| Finalize | Network |
-
----
-
-## Related Documentation
-
-- [Sequence Diagrams](../sequence-diagrams/) - Detailed interactions
-- [Component Diagrams](../component-diagrams/) - Internal structure
-- [Network Topology](../network-topology/) - Infrastructure
+Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision. Later cost-accounting/API candidates do not change the [published indexer artifact](/general/container-images/) automatically.

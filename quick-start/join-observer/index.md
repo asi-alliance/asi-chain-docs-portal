@@ -1,98 +1,13 @@
-# Join DevNet as Observer
+# Join as an observer
 
-> [!WARNING]
-> The dedicated DevNet observer node is currently **unstable**. Until it is stabilized, use **Validator 1** (`http://34.196.119.4:40403`) for all read operations. On TestNet and MainNet only the observer will be available for blockchain reads.
+Use an observer to follow chain state without participating as a bonded validator. Select the node revision and shard configuration accepted by the target network.
 
-Documentation for running a self-hosted observer node is under development. While it is being prepared, use the public read endpoints below.
+1. Obtain the current bootstrap URI, shard/genesis settings, approved digest and query endpoints from the operator.
+2. Pull the existing Rust image by digest using the [catalog](/general/container-images/). Confirm source labels and `run --help`.
+3. Configure the observer without validator signing arguments, using reviewed HOCON overrides, persistent data and TLS inputs. See [observer image](/shard-nodes/observer-image/).
+4. Permit intended peer traffic on TCP `40400` and `40404`. Review host mappings; keep privileged APIs and metrics private.
+5. Confirm readiness, catch-up and canonical finalization against a trusted peer before serving application reads.
 
-## Public Read Access (via Validator 1)
+The former claim that a particular public observer is unstable is historical. This page does not select a public validator as a substitute or publish a current network inventory. Use the operator's approved API URLs.
 
-**HTTP Endpoint:**
-```
-http://34.196.119.4:40403
-```
-
-**gRPC Endpoint:**
-```
-34.196.119.4:40401
-```
-
-### Usage Examples
-
-**Query Blocks:**
-```bash
-curl http://34.196.119.4:40403/blocks
-```
-
-**Explore Deploy:**
-```bash
-curl -X POST http://34.196.119.4:40403/explore-deploy \
-  -H 'Content-Type: application/json' \
-  -d '{"term": "new rl(`rho:registry:lookup`) in { rl!(\"rho:rchain:asiVault\") }"}'
-```
-
-**Check Network Status:**
-```bash
-curl http://34.196.119.4:40403/status
-```
-
-**Latest Finalized Block:**
-```bash
-curl http://34.196.119.4:40403/api/last-finalized-block
-```
-
-### Indexer GraphQL (for app development)
-
-For applications that need indexed historical data (Explorer-like), use the public indexer:
-
-```
-https://indexer.dev.asichain.io/v1/graphql
-```
-
-## What is an Observer Node?
-
-Observer nodes:
-- Synchronize with the blockchain
-- Provide read access to blockchain data
-- Do **not** participate in consensus
-- Do **not** validate or propose blocks
-- Power external services like explorers and APIs
-
-## System Requirements
-
-**Minimum:**
-- CPU: 2 cores
-- RAM: 8 GB
-- Storage: 250+ GB
-
-**Recommended:**
-- CPU: 4 cores
-- RAM: 16 GB
-- Storage: 250+ GB
-
-## Use Cases
-
-### For Developers
-- Query blockchain data for applications
-- Build custom explorers or analytics tools
-- Test API integrations
-
-### For Infrastructure
-- Provide API access for dApps
-- Run blockchain indexing services
-- Monitor network health
-
-### For Data Analysis
-- Analyze blockchain history
-- Track network statistics
-- Research blockchain patterns
-
-## Related Documentation
-
-- [DevNet Structure](/shard-nodes/devnet-structure/)
-- [Observer Node Image](/shard-nodes/observer-image/)
-- [GitHub Repository](https://github.com/asi-alliance/asi-chain)
-
----
-
-**Note:** Documentation for self-hosted observer setup will be available soon.
+Applications can query node HTTP or the indexer's Hasura GraphQL according to their API contract. The [explorer](/explorer/usage/) uses Hasura; it does not index the chain itself.

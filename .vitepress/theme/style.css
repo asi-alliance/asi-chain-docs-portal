@@ -1,3 +1,18 @@
+.docs-review-note {
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--vp-c-warning-1);
+  border-radius: 4px;
+  background: var(--vp-c-warning-soft);
+  color: var(--vp-c-text-1);
+  font-size: 14px;
+}
+
+.docs-review-note a {
+  color: var(--vp-c-brand-1);
+  text-decoration: underline;
+}
+
 /**
  * Customize default theme styling by overriding CSS variables:
  * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css

@@ -48,6 +48,8 @@ export default withMermaid(defineConfig({
         collapsed: false,
         items: [
           { text: 'Overview', link: '/general/overview/' },
+          { text: 'Documentation Status', link: '/general/documentation-status/' },
+          { text: 'Container Images (ECR)', link: '/general/container-images/' },
           { text: 'Useful Links', link: '/general/useful-links/' },
         ]
       },
