@@ -1,0 +1,275 @@
+/**
+ * Components: Steps, CardGrid, DocCard, section label, review note, hero terminal.
+ * Class names start with asi- . Inside .vp-doc the selectors repeat .vp-doc,
+ * because .vp-doc p, .vp-doc h3 and .vp-doc a would otherwise win.
+ */
+
+/* Section label above the H1 */
+
+.asi-eyebrow {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+}
+
+/* Review note: one slim neutral line */
+
+.docs-review-note {
+  margin: 0 0 20px;
+  padding: 8px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--ds-r-sm);
+  background: var(--vp-c-bg-alt);
+  color: var(--vp-c-text-2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.docs-review-note a {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Steps: numbers come from a CSS counter on every ### inside the wrapper. */
+
+.asi-steps {
+  position: relative;
+  margin: 24px 0;
+  padding-left: 52px;
+  counter-reset: asi-step;
+}
+
+.asi-steps::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  bottom: 0;
+  left: 15px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--vp-c-border) calc(100% - 40px), transparent);
+}
+
+.vp-doc .asi-steps > h3 {
+  position: relative;
+  margin: 32px 0 8px;
+  padding-top: 0;
+  border-top: 0;
+  font-size: 17px;
+  line-height: 32px;
+  counter-increment: asi-step;
+}
+
+.vp-doc .asi-steps > h3:first-child {
+  margin-top: 0;
+}
+
+.vp-doc .asi-steps > h3::before {
+  content: counter(asi-step);
+  position: absolute;
+  top: 0;
+  left: -52px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--ds-step-line);
+  border-radius: 50%;
+  background: var(--ds-step-bg);
+  color: var(--ds-step-fg);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.vp-doc .asi-steps > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 639px) {
+  .asi-steps {
+    padding-left: 44px;
+  }
+
+  .asi-steps::before {
+    left: 13px;
+  }
+
+  .vp-doc .asi-steps > h3::before {
+    left: -44px;
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .vp-doc .asi-steps > h3 {
+    line-height: 28px;
+  }
+}
+
+/* CardGrid and DocCard */
+
+.asi-card-grid {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.asi-card-grid[data-columns='3'] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 959px) {
+  .asi-card-grid[data-columns='3'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .asi-card-grid,
+  .asi-card-grid[data-columns='3'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.asi-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid var(--vp-c-border);
+  border-radius: var(--ds-r-lg);
+  background: var(--vp-c-bg-elv);
+  color: var(--vp-c-text-1);
+  font-weight: 400;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.vp-doc a.asi-card,
+.vp-doc a.asi-card:hover {
+  color: var(--vp-c-text-1);
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.vp-doc a.asi-card:hover {
+  border-color: var(--ds-accent);
+  box-shadow: var(--ds-shadow-md);
+}
+
+.asi-card:focus-visible {
+  outline: 2px solid var(--ds-ring);
+  outline-offset: 2px;
+  border-radius: var(--ds-r-lg);
+}
+
+.asi-card-icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 8px;
+  color: var(--vp-c-brand-1);
+}
+
+.asi-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.asi-card-body {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--vp-c-text-2);
+}
+
+/* Hero terminal */
+
+.VPHero .image {
+  margin: 0;
+}
+
+.VPHero .image-container {
+  width: 100%;
+  height: auto;
+  transform: none;
+}
+
+.VPHero .image-bg {
+  display: none;
+}
+
+.asi-term {
+  width: 100%;
+  max-width: 520px;
+  margin: 24px 0 0;
+  border: 1px solid var(--ds-code-border);
+  border-radius: var(--ds-r-lg);
+  background: var(--ds-code-bg);
+  box-shadow: var(--ds-shadow-lg);
+  overflow: hidden;
+  text-align: left;
+}
+
+@media (min-width: 960px) {
+  .asi-term {
+    margin: 0;
+  }
+}
+
+.asi-term-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ds-code-border);
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  color: var(--ds-code-mute);
+}
+
+.asi-term-bar i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ds-code-border);
+}
+
+.asi-term-bar span {
+  margin-left: 8px;
+}
+
+.asi-term pre {
+  margin: 0;
+  padding: 20px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--vp-code-block-color);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.asi-term pre code {
+  font-family: inherit;
+}
+
+.asi-term-p {
+  color: var(--ds-code-mute);
+  user-select: none;
+}
+
+.asi-term-out {
+  color: var(--vp-c-brand-1);
+}
+
+/* The feedback button is fixed at the bottom right, so the page keeps room under its last block. */
+
+.VPDoc {
+  padding-bottom: 104px;
+}
