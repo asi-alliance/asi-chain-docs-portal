@@ -1,5 +1,6 @@
 <template>
-    <p v-if="label" class="asi-eyebrow">{{ label }}</p>
+    <!-- Hidden from screen readers: the label repeats the sidebar group name, and it sits outside <main>. -->
+    <p v-if="label" class="asi-eyebrow" aria-hidden="true">{{ label }}</p>
 </template>
 
 <script setup lang="ts">

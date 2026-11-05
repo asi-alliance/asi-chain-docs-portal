@@ -20,8 +20,10 @@ export default {
     Layout: () => {
         return h(DefaultTheme.Layout, null, {
             "layout-top": () => h(FeedbackForm),
+            // doc-before sits outside <main>, so the note is its own complementary landmark
+            // and a screen reader can reach it from the landmark list.
             "doc-before": () => [
-                h("div", { class: "docs-review-note" }, [
+                h("aside", { class: "docs-review-note", "aria-label": "Documentation status" }, [
                     "Documentation review in progress. ",
                     h("a", { href: "/help/documentation-status/" }, "Check the verified scope"),
                     " and ",
