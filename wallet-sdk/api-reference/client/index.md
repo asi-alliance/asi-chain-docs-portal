@@ -6,6 +6,12 @@
 
 The SDK keeps no active account. Every call that touches an account names its wallet and its account, and a wallet id that is not open or an account id that does not belong to the wallet throws.
 
+## Import
+
+```ts
+import { Client } from "@asichain/asi-wallet-sdk";
+```
+
 ## Create the Client
 
 ```ts
@@ -26,7 +32,7 @@ interface ICreateClientOptions {
 
 | Option | Meaning |
 |--------|---------|
-| `networksConfig` | Network name mapped to `{ ValidatorURL, ReadOnlyURL, IndexerURL, nodeApiProfile }`. See [Network Configuration](/wallet-sdk/overview/#network-configuration). |
+| `networksConfig` | Network name mapped to `{ ValidatorURL, ReadOnlyURL, IndexerURL, nodeApiProfile }`. See [Configure Networks](/wallet-sdk/overview/#configure-networks). |
 | `defaultNetwork` | Name of the network to select at start. |
 | `storageOptions` | `{ nodeStorageDir }` sets the directory of the Node.js storage. The default is `./storage`. The browser build uses IndexedDB and ignores it. |
 | `eventDispatcher` | Callbacks fixed at creation time. Prefer `getEventBus()`, which can subscribe at any time. |

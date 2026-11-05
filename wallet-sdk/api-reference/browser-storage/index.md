@@ -6,9 +6,11 @@ A wrapper over the browser's IndexedDB. It keeps records in named tables and imp
 
 All methods are asynchronous except `getVersion`, `getDatabaseName`, `getTableNamesList` and `isInitialized`. The class needs `indexedDB`, so it works in a browser and does not work in Node.js.
 
-## Record
+## Import
 
-`ITableRecord` is an object with a string `id` and any other fields. The `id` is the table key unless you pick another `keyPath` in `createTable`. `insert` and `insertMany` add the fields `createdAt` and `updatedAt` (Unix time in milliseconds), and `update` refreshes `updatedAt`.
+```ts
+import { BrowserStorage } from "@asichain/asi-wallet-sdk";
+```
 
 ## Constructor
 
@@ -24,7 +26,9 @@ BrowserStorage.getInstance(name?: string): BrowserStorage
 
 `getInstance` returns one shared instance. The `name` is used only by the first call.
 
-## Opening and Tables
+## Methods
+
+### Opening and Tables
 
 ```ts
 init(): Promise<IDBDatabase>
@@ -41,7 +45,7 @@ close(): Promise<void>
 
 Methods that work with a table throw `Error("Table '<name>' does not exist. Use createTable() first.")` when the table is missing.
 
-## Records
+### Records
 
 ```ts
 insert(tableName: string, record: ITableRecord): Promise<void>
@@ -63,7 +67,7 @@ clearTable(tableName: string): Promise<void>
 | `delete`, `deleteMany` | Remove records by key. Missing keys are ignored. |
 | `clearTable` | Removes all records and keeps the table. |
 
-## State
+### State
 
 ```ts
 isInitialized(): boolean
@@ -73,6 +77,12 @@ getTableNamesList(): string[]
 ```
 
 `getVersion` returns the current IndexedDB version, or `0` before `init`. `getTableNamesList` is the synchronous form of `getTableNames` and returns an empty array until the database is open.
+
+## Types
+
+### ITableRecord
+
+`ITableRecord` is an object with a string `id` and any other fields. The `id` is the table key unless you pick another `keyPath` in `createTable`. `insert` and `insertMany` add the fields `createdAt` and `updatedAt` (Unix time in milliseconds), and `update` refreshes `updatedAt`.
 
 ## Example
 

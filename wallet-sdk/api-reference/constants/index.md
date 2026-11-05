@@ -2,13 +2,17 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/constants/index.ts) · [Config](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/config/index.ts)
 
-Constants that the SDK exports from the package root. They live in two files: `utils/constants` holds the chain and encoding constants, and `config` holds the defaults for gas, timeouts and storage. All of them are imported the same way:
+Constants that the SDK exports from the package root. They live in two files: `utils/constants` holds the chain and encoding constants, and `config` holds the defaults for gas, timeouts and storage. All of them are imported from the package root.
+
+## Import
 
 ```ts
 import { ASI_DECIMALS, GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain/asi-wallet-sdk";
 ```
 
-## Chain and Token
+## Constants
+
+### Chain and Token
 
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
@@ -19,7 +23,7 @@ import { ASI_DECIMALS, GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain
 | `ASI_BASE_UNIT` | `bigint` | `100_000_000n` | Atomic units in one ASI (`10n ** 8n`). |
 | `PRIVATE_KEY_LENGTH` | `number` | `32` | Length of a secp256k1 private key in bytes. |
 
-## Node Responses
+### Node Responses
 
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
@@ -29,7 +33,7 @@ import { ASI_DECIMALS, GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain
 
 The SDK picks the threshold from the node API profile of the active network (`SCALA` or `RUST`).
 
-## Gas
+### Gas
 
 `GasFee` is the object `{ MIN: 170000n, MAX: 250000n }`. It holds the lower and upper bounds of the gas cost, as `bigint` in atomic units. When the SDK reserves funds for a transfer, it adds `GasFee.MAX` to the transfer amount.
 
@@ -38,7 +42,7 @@ The SDK picks the threshold from the node API profile of the active network (`SC
 | `DEFAULT_PHLO_LIMIT` | `number` | `500000` | Phlo limit of a deploy when none is given. |
 | `DEFAULT_PHLO_PRICE` | `number` | `1` | Phlo price of a deploy when none is given. |
 
-## Timeouts
+### Timeouts
 
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
@@ -49,7 +53,7 @@ The SDK picks the threshold from the node API profile of the active network (`SC
 | `DEFAULT_DRAIN_TIMEOUT_MS` | `number` | `10000` | Default time a closing domain waits for its running operations to finish, in milliseconds. |
 | `SUBMISSION_SETTLE_TIMEOUT_MS` | `number` | `40000` | `DEFAULT_REQUEST_TIMEOUT` plus `DEFAULT_DRAIN_TIMEOUT_MS`. |
 
-## Enums and Limits
+### Enums and Limits
 
 | Constant | Value | Description |
 |----------|-------|-------------|

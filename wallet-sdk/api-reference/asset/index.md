@@ -6,6 +6,12 @@ An `Asset` is the model of a token. It holds the identifier, the name and the nu
 
 The module also defines the types `AssetId = string` and `Assets = Map<AssetId, Asset>`.
 
+## Import
+
+```ts
+import { Asset, DEFAULT_ASSET } from "@asichain/asi-wallet-sdk";
+```
+
 ## Constructor
 
 ```ts
@@ -41,7 +47,7 @@ getContractAddress(): string | null
 
 All four are plain getters.
 
-## `DEFAULT_ASSET`
+## Default Asset
 
 `DEFAULT_ASSET` is the native ASI asset: name `"ASI"`, 8 decimals, no contract address, and a random `id` that is generated when the SDK is loaded. `Client.getBalance(address)` uses it.
 

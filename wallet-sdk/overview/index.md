@@ -1,10 +1,8 @@
 # Wallet SDK
 
-TypeScript SDK for wallet management and chain access on ASI:Chain. The pages in this section describe `@asichain/asi-wallet-sdk` 2.1.0, a beta release.
+TypeScript SDK for wallet management and chain access on ASI:Chain. The pages in this section describe `@asichain/asi-wallet-sdk` 2.1.0, a beta release. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
-The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
-
-## Key Features
+## What the SDK Does
 
 - `Client` is the single entry point for wallets, networks, balances, transfers and events. See the [Client](/wallet-sdk/api-reference/client/) page.
 - Wallets are HD wallets (BIP-39 mnemonic, BIP-44 paths) or private-key wallets, and HD accounts are derived on demand.
@@ -17,7 +15,7 @@ The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.c
 - Failures carry a machine-readable code. See [Error Types](/wallet-sdk/api-reference/error-types/).
 - Addresses come from secp256k1 keys through keccak256 and a blake2b checksum.
 
-## Installation
+## Install the SDK
 
 ```bash
 npm install @asichain/asi-wallet-sdk
@@ -25,7 +23,7 @@ npm install @asichain/asi-wallet-sdk
 
 The package ships ES module and CommonJS builds with type declarations.
 
-## Network Configuration
+## Configure Networks
 
 `Client.create` takes a map from network name to network config. Every network needs four fields.
 
@@ -36,7 +34,7 @@ The package ships ES module and CommonJS builds with type declarations.
 
 `nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. The public DevNet runs a Scala node, so use `NodeApiProfile.SCALA` for it. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). The indexer address is not published there, so ask the network operator for it if you need transaction history.
 
-::: warning Rust nodes and SDK 2.1.0
+::: warning Rust Nodes and SDK 2.1.0
 With `NodeApiProfile.RUST`, Wallet SDK 2.1.0 cannot read balances, because a Rust node returns them as `ExprBigInt` and the SDK reads only `ExprInt`. `getBalance` then fails with `BALANCE_UNAVAILABLE`, and so does every transfer. `watchDeploy` also never reports a deploy as finalized on a Rust node. See [Balance Query Flow](/architecture/sequence-diagrams/balance/) and [Transaction Flow](/architecture/sequence-diagrams/transaction/).
 :::
 
@@ -57,7 +55,7 @@ console.log(Object.keys(networksConfig));
 
 `Client.create` rejects a URL that is not valid, so replace the placeholders above before you create a client.
 
-## Quick Start
+## Try the SDK
 
 ### Create a Wallet
 
@@ -177,7 +175,7 @@ const derived = await Wallets.createFirstWalletWithMnemonic(mnemonic, 0);
 console.log("Derived Address:", derived.address);
 ```
 
-## Module Architecture
+## Find a Module
 
 The SDK has four layers. `Client` sits on top, and your application talks to it. Below it are services that implement the logic, domains that model stateful entities, and utilities. The API reference has a page for every module in the picture.
 
@@ -209,7 +207,7 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 - [`Validators`](/wallet-sdk/api-reference/validators/) checks addresses and account names.
 - [`Constants`](/wallet-sdk/api-reference/constants/) and [`Polyfills`](/wallet-sdk/api-reference/polyfills/) hold shared values and the browser `Buffer` setup.
 
-## Cryptographic Flow
+## Cryptography
 
 - Keys are secp256k1 key pairs, and the public key is 65 bytes, uncompressed.
 - The address is the keccak256 hash of the public key without its first byte, followed by the chain prefix, a blake2b checksum and Base58 encoding. Addresses start with `1111`.
@@ -219,7 +217,7 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 
 ## Dependencies
 
-| Package | Version range | Purpose |
+| Package | Version Range | Purpose |
 |---------|---------------|---------|
 | [axios](https://github.com/axios/axios) | ^1.13.2 | HTTP client for node communication |
 | [bip32](https://github.com/bitcoinjs/bip32) | ^4.0.0 | BIP-32 hierarchical deterministic wallets |
@@ -232,6 +230,11 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 | [js-sha3](https://github.com/emn178/js-sha3) | ^0.9.3 | keccak256 hashing |
 | [node-persist](https://github.com/simonlast/node-persist) | ^4.0.4 | Storage in Node.js |
 
-## Related Resources
+## Next Steps
 
-Repositories of the node, the wallet, the explorer and the faucet, and the DevNet service addresses are listed on the [Useful Links](/reference/links/) page.
+<CardGrid columns="2">
+<DocCard title="API Reference" href="/wallet-sdk/api-reference/" icon="book">A page for every module in the picture</DocCard>
+<DocCard title="Client" href="/wallet-sdk/api-reference/client/" icon="sdk">Wallets, networks, balances, transfers and events</DocCard>
+<DocCard title="Error Types" href="/wallet-sdk/api-reference/error-types/" icon="help">Every failure carries a machine-readable code</DocCard>
+<DocCard title="Useful Links" href="/reference/links/" icon="links">Repositories and DevNet service addresses</DocCard>
+</CardGrid>

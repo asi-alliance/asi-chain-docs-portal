@@ -4,7 +4,15 @@
 
 Typed errors thrown by the SDK. Every error extends `CustomError`, so a caller can branch on a machine-readable `code` and an HTTP-style `status` instead of matching message strings. All classes and enums on this page are exported from `@asichain/asi-wallet-sdk`.
 
-## `CustomError`
+## Import
+
+```ts
+import { CustomError, CustomErrorCode } from "@asichain/asi-wallet-sdk";
+```
+
+## Types
+
+### CustomError
 
 ```ts
 class CustomError extends Error {
@@ -15,21 +23,7 @@ class CustomError extends Error {
 
 Check errors with `instanceof` or `code`. `name` is set from the class name, but the published bundle is minified and the name comes out as a short string such as `Je`. `status` is a hint for the UI and not a response from a server. For example, `403` on `WalletLockedError` means "ask for the password again".
 
-```ts
-import { CustomError, CustomErrorCode } from '@asichain/asi-wallet-sdk';
-
-function describe(error: unknown): string {
-  if (error instanceof CustomError) {
-    if (error.code === CustomErrorCode.WALLET_LOCKED) return 'Enter the wallet password again';
-    return `${error.code} (${error.status}): ${error.message}`;
-  }
-  return String(error);
-}
-
-console.log(describe(new Error('boom')));
-```
-
-## `CustomErrorCode`
+### CustomErrorCode
 
 ```ts
 enum CustomErrorCode {
@@ -66,7 +60,27 @@ enum CustomErrorCode {
 }
 ```
 
-## Wallet and Account Errors
+### Supporting Enums
+
+`WalletAction`, `ReservationAction`, `CorruptedDataSource`, `StorageOperation`, `ApiSource`, `UnknownErrorReason`, `StorageMigrationChainViolation` and `StorageMigrationInterruptionReason` are exported as well. They supply the values of the `action`, `source`, `operation` and `reason` fields above.
+
+```ts
+enum ApiSource {
+  NODE = 'node api',
+  GRAPHQL = 'graphql api',
+}
+
+enum WalletAction {
+  OPEN = 'OPEN',
+  DERIVE_ACCOUNT = 'DERIVE_ACCOUNT',
+  SAVE_ACCOUNTS = 'SAVE_ACCOUNTS',
+  SUBMIT_DEPLOY = 'SUBMIT_DEPLOY',
+}
+```
+
+## Error Classes
+
+### Wallet and Account Errors
 
 | Class | Code | Status | Extra fields |
 |-------|------|--------|--------------|
@@ -87,7 +101,7 @@ enum CustomErrorCode {
 - `LastAccountRemovalError` stops `Wallet.removeAccount` from removing the only account of an HD wallet.
 - `UnknownAccountError` means the account id does not belong to that wallet, and `AccountBusyError` means the account is signing or has a pending reservation. Only the second one is worth retrying.
 
-## Crypto Errors
+### Crypto Errors
 
 | Class | Code | Status | Extra fields |
 |-------|------|--------|--------------|
@@ -98,7 +112,7 @@ enum CustomErrorCode {
 
 `InvalidPasswordError` means decryption failed authentication, so the password is wrong. `CorruptedDataError` means the stored data is damaged, and another password will not help. Its `source` is a `CorruptedDataSource`.
 
-## Keyfile Errors
+### Keyfile Errors
 
 | Class | Code | Status |
 |-------|------|--------|
@@ -108,7 +122,7 @@ enum CustomErrorCode {
 
 A well-formed keyfile with a wrong password gives `InvalidKeyfilePasswordError`, so a UI can ask for the password again instead of reporting a broken file.
 
-## Network and Runtime Errors
+### Network and Runtime Errors
 
 | Class | Code | Status | Extra fields |
 |-------|------|--------|--------------|
@@ -128,7 +142,7 @@ A well-formed keyfile with a wrong password gives `InvalidKeyfilePasswordError`,
 - `DeployTimeoutError` means the deploy was not finalized within the watch timeout. It may still be processed by the network.
 - `BalanceUnavailableError` means the balance could not be read, which is not the same as a zero balance.
 
-## Storage Schema Errors
+### Storage Schema Errors
 
 Thrown while a `Client` is created, before any wallet exists. All of them except `StorageMigrationChainError` extend `StorageSchemaError`, which adds `isStorageIntact: boolean`. When it is `true`, the stored data is untouched, so update the SDK and do not wipe anything. When it is `false`, storage may be partly migrated and has to be restored from an export.
 
@@ -142,20 +156,18 @@ Thrown while a `Client` is created, before any wallet exists. All of them except
 
 `StorageMigrationChainError` points to a defect in the SDK's own migration list and is not caused by user data.
 
-## Supporting Enums
-
-`WalletAction`, `ReservationAction`, `CorruptedDataSource`, `StorageOperation`, `ApiSource`, `UnknownErrorReason`, `StorageMigrationChainViolation` and `StorageMigrationInterruptionReason` are exported as well. They supply the values of the `action`, `source`, `operation` and `reason` fields above.
+## Example
 
 ```ts
-enum ApiSource {
-  NODE = 'node api',
-  GRAPHQL = 'graphql api',
+import { CustomError, CustomErrorCode } from '@asichain/asi-wallet-sdk';
+
+function describe(error: unknown): string {
+  if (error instanceof CustomError) {
+    if (error.code === CustomErrorCode.WALLET_LOCKED) return 'Enter the wallet password again';
+    return `${error.code} (${error.status}): ${error.message}`;
+  }
+  return String(error);
 }
 
-enum WalletAction {
-  OPEN = 'OPEN',
-  DERIVE_ACCOUNT = 'DERIVE_ACCOUNT',
-  SAVE_ACCOUNTS = 'SAVE_ACCOUNTS',
-  SUBMIT_DEPLOY = 'SUBMIT_DEPLOY',
-}
+console.log(describe(new Error('boom')));
 ```

@@ -8,7 +8,25 @@ An atomic amount is a `bigint` count of the smallest token unit. A token with `d
 
 Every conversion takes `decimals` as a required argument. Pass `ASI_DECIMALS` for ASI, or `asset.getDecimals()` when you work with an [`Asset`](/wallet-sdk/api-reference/asset/).
 
-## `toAtomicAmount`
+## Import
+
+```ts
+import {
+    buildUrl,
+    fromAtomicAmount,
+    fromAtomicAmountToNumber,
+    genRandomHex,
+    generateRandomId,
+    isSameAddress,
+    normalizeAddress,
+    parseAtomicAmount,
+    toAtomicAmount,
+} from "@asichain/asi-wallet-sdk";
+```
+
+## Functions
+
+### toAtomicAmount()
 
 ```ts
 toAtomicAmount(amount: number | string, decimals: number): bigint
@@ -16,25 +34,24 @@ toAtomicAmount(amount: number | string, decimals: number): bigint
 
 Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
 
-::: warning
+::: warning Result Is Wrong for Other Decimals
 In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`.
 :::
-
-**Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `amount` | `number \| string` | Yes | Decimal amount, for example `"1,234.56"` or `1234.56`. |
 | `decimals` | `number` | Yes | Number of decimal places of the token. |
 
-**Returns:** `bigint`.
+Returns `bigint`.
 
-**Throws:**
+It throws:
+
 - `Error("Cannot process empty amount")` for an empty string.
 - `Error("Invalid amount format")` when the string is not a decimal number.
 - `Error("Invalid number")` when a numeric input is not finite.
 
-## `fromAtomicAmount`
+### fromAtomicAmount()
 
 ```ts
 fromAtomicAmount(atomicAmount: bigint, decimals: number): string
@@ -42,16 +59,14 @@ fromAtomicAmount(atomicAmount: bigint, decimals: number): string
 
 Converts atomic units to a decimal string with trailing zeros trimmed, for example `150000000n` with 8 decimals gives `"1.5"`. Negative amounts keep their sign.
 
-**Parameters:**
-
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `atomicAmount` | `bigint` | Yes | Atomic amount. |
 | `decimals` | `number` | Yes | Number of decimal places of the token. |
 
-**Returns:** `string`.
+Returns `string`.
 
-## `fromAtomicAmountToNumber`
+### fromAtomicAmountToNumber()
 
 ```ts
 fromAtomicAmountToNumber(atomicAmount: bigint, decimals: number): number
@@ -59,16 +74,14 @@ fromAtomicAmountToNumber(atomicAmount: bigint, decimals: number): number
 
 Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Use `fromAtomicAmount` when exact digits matter.
 
-**Parameters:**
-
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `atomicAmount` | `bigint` | Yes | Atomic amount. |
 | `decimals` | `number` | Yes | Number of decimal places of the token. |
 
-**Returns:** `number`.
+Returns `number`.
 
-## `parseAtomicAmount`
+### parseAtomicAmount()
 
 ```ts
 parseAtomicAmount(value: unknown): bigint | null
@@ -76,7 +89,7 @@ parseAtomicAmount(value: unknown): bigint | null
 
 Reads an atomic amount from a value that came from outside, such as a node response. It returns a `bigint` for a non-negative safe integer or a string of digits only, and `null` for everything else, including negative numbers, fractions and strings like `"1.5"`.
 
-## `genRandomHex`
+### genRandomHex()
 
 ```ts
 genRandomHex(size: number): string
@@ -84,7 +97,7 @@ genRandomHex(size: number): string
 
 Returns a random hex string of `size` characters. It uses `Math.random()`, so it is not cryptographically secure and fits identifiers only.
 
-## `generateRandomId`
+### generateRandomId()
 
 ```ts
 generateRandomId(): string
@@ -92,7 +105,7 @@ generateRandomId(): string
 
 Returns an identifier of the form `res_<timestamp>_<8 hex characters>`. It is built on `genRandomHex` and has the same limits.
 
-## Addresses and URLs
+### Addresses and URLs
 
 ```ts
 normalizeAddress(address: string | undefined): string

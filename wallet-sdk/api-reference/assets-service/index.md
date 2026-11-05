@@ -6,6 +6,12 @@ Reads the balance of an address through an exploratory deploy. The service has o
 
 The package exports the class as `AssetsService`. You rarely build it yourself. `Client.getBalance(address)` calls it with `DEFAULT_ASSET` and returns the amount as a `bigint`, and `ApiServiceRegistry.getInstance().assets` holds an instance.
 
+## Import
+
+```ts
+import { AssetsService } from "@asichain/asi-wallet-sdk";
+```
+
 ## Constructor
 
 ```ts
@@ -14,7 +20,9 @@ new AssetsService(deployService: DeployService, nodeApiProvider?: NodeApiProvide
 
 `nodeApiProvider` is optional. It is used to pick the Rholang balance query that fits the profile of the active node (Scala or Rust).
 
-## `getBalance`
+## Methods
+
+### getBalance()
 
 ```ts
 getBalance(address: Address, asset: Asset): Promise<IBalanceData>
@@ -22,14 +30,12 @@ getBalance(address: Address, asset: Asset): Promise<IBalanceData>
 
 Reads the balance of `address` and returns it together with `asset`. The `asset` argument is not sent to the node. It is returned as it is, so you can keep the amount and its token in one object.
 
-**Parameters:**
-
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `address` | `Address` | Yes | Address to query. |
 | `asset` | [`Asset`](/wallet-sdk/api-reference/asset/) | Yes | Token the amount is reported in. `DEFAULT_ASSET` is the native ASI. |
 
-**Returns:** `Promise<IBalanceData>`.
+Returns `Promise<IBalanceData>`.
 
 ```ts
 interface IBalanceData {
@@ -38,13 +44,16 @@ interface IBalanceData {
 }
 ```
 
-**Throws:**
+It throws:
+
 - `Error("AssetsService.getBalance: Invalid address: <errorCode>")` when `address` fails [`validateAddress`](/wallet-sdk/api-reference/validators/). The code is one of the `AddressValidationErrorCode` values.
 - `BalanceUnavailableError` when the balance cannot be read: the node request fails, the node returns no balance, returns an unexpected value, or the vault replies with an error string.
 
 The method does not return `0n` on failure, so a zero in `amount` is a real zero balance.
 
-## `BalanceUnavailableError`
+## Errors
+
+### BalanceUnavailableError
 
 `BalanceUnavailableError` extends `CustomError` and is exported from the package root.
 

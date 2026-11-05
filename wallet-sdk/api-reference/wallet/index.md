@@ -4,9 +4,11 @@
 
 A `Wallet` owns one `Signer` and a set of `Account`s. It is either a private-key wallet with a single account or an HD (hierarchical deterministic) wallet with accounts derived from a mnemonic. This page also covers `Account`, `Signer` and `SigningSession`, which a wallet is built from.
 
-::: tip Use Client in applications
+::: tip Use Client in Applications
 `Client` creates, stores, opens and removes wallets for you. Use these classes directly only when you need the low-level pieces, for example to build a wallet in memory without storage. See [Client](/wallet-sdk/api-reference/client/).
 :::
+
+## Import
 
 ```ts
 import { Wallet, Account, Signer, SigningSession } from '@asichain/asi-wallet-sdk';
@@ -25,7 +27,9 @@ class SecretsProvider {
 
 For `Wallet.createPk` the closure returns `{ password, secret: { privateKey } }`. For `Wallet.createHD` it returns `{ password, secret: { seed } }`, where `seed` is the recovery phrase. For calls that only check or unlock, `{ password }` is enough.
 
-## Creating a Wallet
+## Methods
+
+### Create a Wallet
 
 The constructor is private. A wallet comes from one of four static factories.
 
@@ -58,35 +62,7 @@ interface IImportKeyfileWalletPayload {
 }
 ```
 
-```ts
-import { KeysManager, Mnemonic, SecretsProvider, Wallet, WalletTypes } from '@asichain/asi-wallet-sdk';
-
-const keyPair = KeysManager.generateKeyPair();
-const privateKey = keyPair.privateKey;
-const provider = new SecretsProvider(() => ({
-  password: 'example-password',
-  secret: { privateKey },
-}));
-
-const wallet = await Wallet.createPk({ name: 'Main' }, provider);
-const [account] = wallet.getAccounts();
-
-console.log(wallet.getType() === WalletTypes.PRIVATE_KEY);
-console.log(account.getName(), account.getAddress().startsWith('1111'));
-
-const hdProvider = new SecretsProvider(() => ({
-  password: 'example-password',
-  secret: { seed: Mnemonic.generateMnemonic() },
-}));
-const hd = await Wallet.createHD(
-  { pathOptions: { index: 0 }, accountOptions: { name: 'Account 1' } },
-  hdProvider,
-);
-const derived = await hd.deriveAccount({ name: 'Account 2' }, hdProvider);
-console.log(hd.getAccounts().length, derived.account.getIndex());
-```
-
-## Identity and Accounts
+### Identity and Accounts
 
 ```ts
 class Wallet {
@@ -107,7 +83,7 @@ enum WalletTypes {
 
 A wallet has no active account. `getAccount` resolves the id on every call and throws `UnknownAccountError` when the id belongs to another wallet. `runAccountOperation` resolves the account and marks it busy for the duration of the callback, which is what lets `removeAccount` refuse an account that is signing.
 
-## Session
+### Session
 
 A wallet delegates its signing session to its `Signer`.
 
@@ -129,7 +105,7 @@ interface ISigningSessionOptions {
 
 `isPasswordValid` returns `false` only for a wrong password. A storage failure, damaged data or an unsupported encryption version is rethrown, so a broken store is not reported as a typo.
 
-## Changing Accounts
+### Change Accounts
 
 ```ts
 class Wallet {
@@ -152,7 +128,7 @@ interface ICreatedAccountData {
 
 See [Error Types](/wallet-sdk/api-reference/error-types/) for the error classes.
 
-## Signing and Transfers
+### Signing and Transfers
 
 Each call takes the account id first. `passwordProvider` is optional when the wallet is unlocked. Without a session and without a provider the call throws `WalletLockedError`.
 
@@ -183,7 +159,9 @@ interface ITransferDetails {
 
 `TDeployDetails` is `{ term, phloLimit?, phloPrice?, shardId? }` as accepted by `Client.signDeploy`. A `SignedResult` is described on the [SignerService](/wallet-sdk/api-reference/signer-service/) page.
 
-## Account
+## Related Classes
+
+### Account
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Account/index.ts)
 
@@ -211,7 +189,7 @@ class Account {
 
 `getIndex` is `null` for a private-key account. `getFingerprint` returns the hex SHA-256 of the public key, which identifies the key pair without decrypting anything. `getBalance` and `getTransactionsHistory` read from the active network and need an initialized `Client`. The history combines transfers matched by address with deploys matched by the deployer public key, newest first.
 
-## Signer
+### Signer
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Signer/index.ts)
 
@@ -239,7 +217,7 @@ type TSigningContext = TPKSigningContext | THDSigningContext
 
 `sign` uses the in-memory secret when a session is active and otherwise decrypts with `signingContext.passwordProvider`. It throws `WalletLockedError` when neither is available. The private key is zeroed after an ephemeral decrypt. `resolveDataKey` returns the second secret that encrypts non-secret user data at rest, such as transaction reservations. It is never used for signing.
 
-## SigningSession
+### SigningSession
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/SigningSession/index.ts)
 
@@ -258,3 +236,33 @@ class SigningSession {
 ```
 
 `release` always raises the generation counter and is safe to call twice. `unlock` reads the generation before it decrypts, and `hold` compares it afterwards. If the wallet was locked while the decryption was running, `hold` zeroes the fresh secret and throws `WalletOperationCancelledError`, so a slow unlock cannot reopen a wallet the user has just locked.
+
+## Example
+
+```ts
+import { KeysManager, Mnemonic, SecretsProvider, Wallet, WalletTypes } from '@asichain/asi-wallet-sdk';
+
+const keyPair = KeysManager.generateKeyPair();
+const privateKey = keyPair.privateKey;
+const provider = new SecretsProvider(() => ({
+  password: 'example-password',
+  secret: { privateKey },
+}));
+
+const wallet = await Wallet.createPk({ name: 'Main' }, provider);
+const [account] = wallet.getAccounts();
+
+console.log(wallet.getType() === WalletTypes.PRIVATE_KEY);
+console.log(account.getName(), account.getAddress().startsWith('1111'));
+
+const hdProvider = new SecretsProvider(() => ({
+  password: 'example-password',
+  secret: { seed: Mnemonic.generateMnemonic() },
+}));
+const hd = await Wallet.createHD(
+  { pathOptions: { index: 0 }, accountOptions: { name: 'Account 1' } },
+  hdProvider,
+);
+const derived = await hd.deriveAccount({ name: 'Account 2' }, hdProvider);
+console.log(hd.getAccounts().length, derived.account.getIndex());
+```
