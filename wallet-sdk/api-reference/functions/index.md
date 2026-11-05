@@ -16,6 +16,10 @@ toAtomicAmount(amount: number | string, decimals: number): bigint
 
 Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
 
+::: warning
+In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`.
+:::
+
 **Parameters:**
 
 | Name | Type | Required | Description |
