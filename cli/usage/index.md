@@ -68,7 +68,7 @@ git submodule update --init --recursive
 cargo build --release --locked
 ```
 
-The build downloads its dependencies from crates.io and GitHub. `cargo build` itself took 5 minutes 46 seconds on a 12-core machine.
+The build downloads its dependencies from crates.io and GitHub. `cargo build` itself takes about 6 minutes on a 12-core machine.
 
 Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client.
 
@@ -76,7 +76,7 @@ Do not use `git submodule update --remote`: it replaces the pinned client with t
 
 ## Configuration
 
-Copy the pinned `.env.example` ([github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example)) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
+Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
 
 - `VALIDATOR_GRPC_URL`, the gRPC endpoint of a validator, which `send` uses to submit the deploy.
 - `VALIDATOR_HTTP_URL`, the HTTP endpoint of the same validator.
@@ -129,6 +129,6 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 | 1 | `100000000` |
 | 10 | `1000000000` |
 
-Keep amounts as exact integers, including values above JavaScript's safe integer range. Success requires canonical finalization and a positive vault verdict. If the outcome is unknown, keep the deploy ID and check the result before you send again.
+Give amounts as exact integers. The CLI reads them without a size limit, so values above JavaScript's safe integer range (2^53 − 1) stay exact. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 
 The node's native-token configuration and expected symbol must match the target shard. Cost-accounting APIs and later node API changes require a matching source and image of their own, and changing the image tag here does not enable them.

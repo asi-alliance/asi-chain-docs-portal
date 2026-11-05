@@ -117,7 +117,7 @@ Which call goes to which address:
 | Deploy status | `GET /api/deploy/{id}` | `ReadOnlyURL` |
 | Transaction history | GraphQL query | `IndexerURL` |
 
-On a node that runs as a validator, balance queries work only if the node is read-only or started in developer mode. Otherwise the node answers `readonly_node_required`, and `ReadOnlyURL` has to point at a read-only node.
+Balance queries run as exploratory deploys, and a node accepts them only if it is read-only or started in developer mode. A validator without developer mode answers `readonly_node_required`, so `ReadOnlyURL` has to point at a read-only node.
 
 ---
 

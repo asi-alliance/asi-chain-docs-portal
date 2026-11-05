@@ -104,7 +104,7 @@ new stdout(`rho:io:stdout`), deployerId(`rho:rchain:deployerId`) in {
 
 ![Deploy page](/images/wallet/deploy-page.png)
 
-**Deploy** and **Explore** first open a confirmation dialog. For a deploy it shows the account, the length of the code, the phlo limit and price, the estimated cost and the code itself, with a warning that the deploy consumes gas and cannot be reversed. **Deploy Contract** then asks for the wallet password.
+**Deploy** and **Explore** first open a confirmation dialog. For a deploy it shows the account, the length of the code, the phlo limit and price, the estimated cost and the code itself, with a warning that the deployment will consume gas (the dialog's word for phlo) and cannot be reversed. **Deploy Contract** then asks for the wallet password.
 
 ![Confirm Deployment dialog](/images/wallet/deploy-confirmation.png)
 

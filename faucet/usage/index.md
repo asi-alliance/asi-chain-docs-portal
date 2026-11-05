@@ -14,7 +14,7 @@ For the short path from a new wallet to a balance, see [Get DevNet ASI](/quick-s
 - There is no waiting time between requests. You can ask again as soon as the previous request is finished.
 - A request is refused when the balance of the address is above 20,000 ASI. Below that limit the FAUCET button works for any address.
 
-The request amount and the limit are the defaults of the faucet server, and the web page has the limit built in as well. If an operator changes them, the numbers above no longer match the real ones.
+The request amount and the limit are the defaults of the faucet server, and the web page has the limit built in as well. If an operator changes them, the actual values differ from the numbers above.
 
 ## Request Tokens
 

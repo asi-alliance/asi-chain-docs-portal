@@ -38,7 +38,7 @@ CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:f26511e261ca9d21c5
 docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 ```
 
-This image contains client 0.2.9 from ASI dev source [`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228). The image exists for `linux/amd64` only. Confirm compatibility with the operator's selected node digest, because the same version label on another image does not establish compatibility.
+This image contains client 0.2.9 built from commit [`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) on the `dev` branch of asi-chain-client. The image exists for `linux/amd64` only. Confirm compatibility with the operator's selected node digest, because the same version label on another image does not establish compatibility.
 
 On Linux or a WSL Linux filesystem, create a new protected directory and save keys without printing the private key:
 
@@ -129,6 +129,6 @@ client active-validators --http "$OBSERVER_HTTP"
 
 Record the deploy ID and outcome. A timeout can leave the transaction's outcome unknown, and the verdict for a deploy appears only after its block finalizes, so do not repeat the bond. Check the deploy first, either with `client deploy-status --sig <deploy signature> --http "$OBSERVER_HTTP"` or with `GET <observer HTTP URL>/api/deploy/<deploy ID>`. An underfunded vault does not reject the deploy. The deploy lands in a block and fails there with `Deploy payment failed: Insufficient funds`, and the client may not show that message. Do not treat a read error as proof that the validator is unbonded.
 
-Bonded membership and active membership are separate. Activation follows the shard's epoch and active-set rules, so `validator-status` reports `BONDED` first and `ACTIVE` after the boundary, and a full active set can prevent activation. Confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The CLI `blocks` command shows the observer's recent block JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`.
+Bonded membership and active membership are separate. Activation follows the shard's epoch and active-set rules, so `validator-status` reports `BONDED` first and `ACTIVE` after the boundary, and a full active set can prevent activation. Confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The client's `blocks` command prints recent blocks from the observer as JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`.
 
 The client's pinned [validator lifecycle guide](https://github.com/asi-alliance/asi-chain-client/blob/40f2a9408040252dd23761cd06adb9f1407ef228/docs/guides/bonding-a-validator.md) explains bonding, activation, withdrawal and troubleshooting. Its example topology and ports are test fixtures, not the target network's connection data.

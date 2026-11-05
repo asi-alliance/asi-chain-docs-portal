@@ -10,7 +10,7 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 
 | Area | How it was checked |
 |---|---|
-| Site | The portal was built, which fails on dead internal links and unclosed tags, and its pages were opened in a browser with the console watched for errors. |
+| Site | The portal was built (the build fails on dead internal links and unclosed tags), and its pages were opened in a browser with the console watched for errors. |
 | Container images | Tags and digests were looked up in ECR Public, and the commands on the image pages were run against the published node image. |
 | Node image | The commands on the node pages were run in Docker on a local machine, apart from bonding and enrollment. |
 | Wallet CLI | The published image was pulled and its commands were run against DevNet. |

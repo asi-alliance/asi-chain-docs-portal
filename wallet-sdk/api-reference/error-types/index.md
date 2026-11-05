@@ -122,7 +122,7 @@ A well-formed keyfile with a wrong password gives `InvalidKeyfilePasswordError`,
 | `BalanceUnavailableError` | `BALANCE_UNAVAILABLE` | 502 | `address`, `reason` |
 
 - `DomainClosedError` means the `Client` was closed for good. Create a new one instead of retrying.
-- `OperationsSuspendedError` is thrown while `clearPersistence` or `removeWallet` runs. Retry the operation after that call finishes.
+- `OperationsSuspendedError` is thrown while `clearPersistence` or `removeWallet` runs. The operation can be retried after that call finishes.
 - `NetworkBusyError` is thrown when a network is switched, updated or removed while it still has an operation in flight.
 - `DeploySubmissionRejectedError` extends `ApiRequestError` and means the node refused the deploy with a 4xx status. The deploy will not land and its reservation is released. Any other submission failure is a plain `ApiRequestError`, and the deploy may still have been accepted. `isRejectedByServer(error)` applies the same rule.
 - `DeployTimeoutError` means the deploy was not finalized within the watch timeout. It may still be processed by the network.

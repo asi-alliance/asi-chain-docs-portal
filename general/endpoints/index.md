@@ -3,7 +3,7 @@
 This page lists the public DevNet addresses. Other pages link here instead of repeating them. The addresses were checked with direct requests on 5 November 2026.
 
 ::: info DevNet runs a Scala node
-On 5 November 2026 the public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`. It is not the Rust node described in the [node image](/shard-nodes/validator-image/) guide. Clients that support both node dialects must be set to the Scala profile for DevNet.
+On 5 November 2026 the public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`. It is not the Rust node described in the [node image](/shard-nodes/validator-image/) guide. Clients that need to know which node dialect they talk to must be set to the Scala profile for DevNet.
 :::
 
 ## Applications

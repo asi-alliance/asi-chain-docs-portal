@@ -12,7 +12,7 @@ The [Get Started](/quick-start/) page has one path for using the network, one fo
 
 ### What does an ASI address look like?
 
-It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. Amounts are have 8 decimal places, so one ASI is `100000000` in the smallest unit.
+It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. Amounts have 8 decimal places, so one ASI is `100000000` in the smallest unit.
 
 ## Wallet and keys
 
@@ -64,7 +64,7 @@ No. The explorer is a web frontend that queries a Hasura GraphQL API. A separate
 
 ### Which node implementation is maintained?
 
-The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New images record this source. As of 5 November 2026 the public DevNet still runs the Scala node, and a Rust node does not join it. The older Scala repositories and deployment helpers are not the setup source for the current images.
+The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New images record this source. As of 5 November 2026 the public DevNet still runs the Scala node, and a Rust node started with the DevNet bootstrap did not connect to it. The older Scala repositories and deployment helpers are not the setup source for the current images.
 
 ### Which container registry should I use?
 

@@ -58,7 +58,7 @@ curl -4 http://localhost:40403/api/status
 
 A running node answers with JSON that contains its `version`. If the command fails, the wallet will not connect either.
 
-The hosted wallet runs on HTTPS, and Chrome asks you for permission before it lets a public site reach `localhost`. Without that permission the requests fail with `Permission was denied for this request to access the loopback address space`, and the header shows `Disconnected`. Allow access to the local network for the wallet site in the browser, or run the wallet yourself (see Run the Wallet Yourself below).
+The hosted wallet runs on HTTPS, and Chrome asks you for permission before it lets a public site reach `localhost`. Without that permission the requests fail with `Permission was denied for this request to access the loopback address space`, and the header shows `Disconnected`. Allow access to the local network for the wallet site in the browser, or run the wallet yourself (see [Run the Wallet Yourself](#run-the-wallet-yourself)).
 
 The node must also answer the browser's CORS preflight. The Rust node allows any origin by default. If you put a proxy in front of the node, make sure it passes the node's CORS headers through.
 

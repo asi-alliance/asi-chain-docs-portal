@@ -12,7 +12,7 @@ flowchart LR
   Node -->|HTTP responses| Wallet
 ```
 
-The indexer node client ([github.com/asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py)) uses node gRPC and HTTP directly. PostgreSQL and Hasura are separate services, and the explorer neither extracts chain blocks nor owns the database.
+The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py) uses node gRPC and HTTP directly. PostgreSQL and Hasura are separate services, and the explorer neither extracts chain blocks nor owns the database.
 
 The indexer polls the node every `SYNC_INTERVAL`. Besides blocks it reads bonds and the node's pending deploys. A separate `metrics-cron` service refreshes the aggregated network metrics every three minutes.
 
@@ -26,7 +26,7 @@ flowchart LR
   Pool -->|proposer runs with constraints met| Block[Block created and signed]
   Block -->|Rholang executed in RSpace++| Broadcast[Broadcast to peers]
   Broadcast -->|peers validate| DAG[Block in the DAG]
-  DAG -->|safety oracle| Final[Block finalized]
+  DAG -->|clique oracle| Final[Block finalized]
 ```
 
 | State | What it means | Where to look |
@@ -53,4 +53,4 @@ A successful API response or an indexed row alone does not prove a successful, f
 
 The wallet reads balances through the SDK from the node, and its history from GraphQL.
 
-Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision. Unreleased cost-accounting and API changes do not change the [published indexer image](/general/container-images/) automatically.
+Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision. Later cost-accounting and API changes do not change the [published indexer image](/general/container-images/) automatically.

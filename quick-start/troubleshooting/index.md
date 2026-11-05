@@ -67,7 +67,7 @@ The image healthcheck calls `/api/ready` on container port `40403` every 30 seco
 
 ## CLI or Indexer Response Mismatch
 
-Confirm the consumer source and client gitlink. An image does not include changes merged after it was built. The [catalog](/general/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
+Check which source revision the CLI or indexer was built from, and for the CLI also which client commit its `rust-client` submodule points to. An image does not include changes merged after it was built. The [catalog](/general/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
 
 Check the selected node's HTTP and Protobuf contract before you change a consumer. Cost-accounting APIs and newer integer and transfer representations need compatible clients and separate acceptance checks. The Rust client commands `wallet-balance`, `validator-status`, `bonds` and `active-validators` fail against the Scala DevNet node.
 

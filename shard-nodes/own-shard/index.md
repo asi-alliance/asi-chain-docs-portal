@@ -46,7 +46,7 @@ docker run -d --name my-shard --platform linux/amd64 \
   --validator-private-key "$VALIDATOR_PRIVATE_KEY"
 ```
 
-The `chown` is required because a new Docker volume belongs to root and the node runs as `daemon`. `--host localhost` is accepted only together with `--allow-private-addresses`. A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
+The `chown` is required because a new Docker volume is owned by `root` and the node runs as `daemon`. `--host localhost` is accepted only together with `--allow-private-addresses`. A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
 
 About 15 seconds after the container starts, `curl -s http://localhost:40403/api/status` reports the values you chose:
 

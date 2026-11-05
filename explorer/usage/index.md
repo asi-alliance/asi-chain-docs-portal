@@ -48,7 +48,7 @@ The Overview tab shows the transaction ID, deployer, type and timestamp. Under E
 
 ## Validators
 
-The Validators page starts with three cards, Total Validators, Total ASI Staked and Avg. Stake. The table below lists every validator with its abbreviated public key, stake in ASI, share of the total stake, the number of blocks it proposed, the block where it first appeared, the last block where it appeared, its last active block and its status. Large stakes are shortened, so 100000 ASI appears as 100.00K.
+The Validators page starts with three cards, Total Validators, Total ASI Staked and Avg. Stake. The table below lists every validator with its abbreviated public key, stake in ASI, share of the total stake, the number of blocks it proposed, the block where it first appeared, the last block where it appeared, the block of its latest bond (the **Last Active** column) and its status. Large stakes are shortened, so 100000 ASI appears as 100.00K.
 
 The View History button opens the Validator History page.
 
