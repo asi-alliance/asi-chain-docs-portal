@@ -23,7 +23,7 @@ The Python indexer performs extraction and database writes. Hasura provides rela
 
 ## Indexer Database
 
-The indexer writes to PostgreSQL, and Hasura exposes these tables. The diagram shows keys and the main columns of the schema in [migrations 000 to 003](https://github.com/asi-alliance/asi-chain-indexer/tree/71e80edb0bbae7dfbbab0e0393901edb70df471d/migrations).
+The indexer writes these tables to PostgreSQL. Hasura serves all of them except `native_transfer_calls`, `native_transfer_results` and `network_metrics_buckets`, and adds the `native_transfer_lifecycle` view. The diagram shows keys and the main columns from migrations 000 to 003 in [github.com/asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer/tree/71e80edb0bbae7dfbbab0e0393901edb70df471d/migrations). It leaves out the link table `native_transfer_result_aliases`, whose rows pair a `native_transfer_results` id with a `native_transfer_calls` id.
 
 ```mermaid
 erDiagram
@@ -37,6 +37,8 @@ erDiagram
   deployments ||--o{ transfers : "deploy_id"
   deployments ||--o{ native_transfer_calls : "deploy_id"
   native_transfer_calls ||--o{ native_transfer_results : "call_id"
+  blocks ||--o{ native_transfer_results : "block_hash"
+  deployments ||--o{ native_transfer_results : "deploy_id"
   native_transfer_results ||--o| transfers : "native_result_id"
 
   blocks {
@@ -80,6 +82,8 @@ erDiagram
   native_transfer_results {
     varchar id PK
     varchar call_id FK
+    varchar block_hash FK
+    varchar deploy_id FK
     varchar phase
     boolean success
   }
@@ -111,11 +115,13 @@ erDiagram
     boolean is_rejected
   }
   epoch_transitions {
+    bigint id PK
     bigint epoch_number
     bigint start_block
     bigint end_block
   }
   network_stats {
+    bigint id PK
     bigint block_number
     int active_validators
     varchar consensus_status
@@ -131,6 +137,6 @@ erDiagram
   }
 ```
 
-Amount columns are `NUMERIC(78,0)` after migration 001, so they hold 256-bit integers in the smallest token unit, and each of the tables `blocks`, `transfers`, `validators`, `validator_bonds` and `balance_states` carries a `token_decimals` column. The tables `validators`, `pending_deploys`, `epoch_transitions`, `network_stats`, `indexer_state` and `network_metrics_buckets` have no foreign keys. A `validators` row is linked to `validator_bonds` only by the public key value.
+After migration 001, amounts in the smallest token unit (`amount_dust`, `stake`, `total_stake`, `bonded_balance_dust` and `unbonded_balance_dust`) are `NUMERIC(78,0)` and limited to the unsigned 256-bit range. The matching `*_asi` columns are `NUMERIC(155,77)`, and the generated totals in `balance_states` are one digit wider. Each of the tables `blocks`, `transfers`, `validators`, `validator_bonds` and `balance_states` carries a `token_decimals` column. The tables `validators`, `pending_deploys`, `epoch_transitions`, `network_stats`, `indexer_state` and `network_metrics_buckets` have no foreign keys. A `validators` row is linked to `validator_bonds` only by the public key value.
 
 See [container images](/general/container-images/) for the published frontend and indexer revisions and [data flow](/architecture/data-flow/) for revision boundaries.

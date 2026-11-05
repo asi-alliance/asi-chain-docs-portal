@@ -1,6 +1,6 @@
 # State Diagrams
 
-Node startup and runtime behavior of the Rust node. The diagrams follow `node_runtime.rs` and `casper_launch.rs` in [asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node), and the log lines quoted on these pages come from the `node-rust` image `0.4.46-dev.20261104-e18defd44d43`.
+Node startup and runtime behavior of the Rust node from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). The log lines quoted on these pages come from the `node-rust` image `0.4.46-dev.20261104-e18defd44d43`.
 
 ← [Back to Architecture Overview](../)
 

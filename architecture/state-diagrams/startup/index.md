@@ -8,7 +8,7 @@ How the Rust node gets from process start to the Running state.
 
 ```mermaid
 flowchart TD
-    A[Load configuration, keys and storage] --> B[CasperLaunch chooses launch mode]
+    A[Load configuration, keys and storage] --> B[Choose launch mode]
     B --> C[Start servers: transport, Kademlia, gRPC, HTTP]
     C --> D[Start node discovery and clear-connections loops]
     D --> E{Standalone?}
@@ -19,7 +19,7 @@ flowchart TD
     G -->|error| X[Node shuts down]
 ```
 
-1. The node loads its configuration, the TLS key that defines its node ID, and its stores, and then `CasperLaunch::launch` picks one of four modes (next section). The log line `Launching Casper...` marks this step, and the chosen mode is logged as one `Approved block ...` line.
+1. The node loads its configuration, the TLS key that defines its node ID, and its stores, and then picks one of four launch modes (next section). The log line `Launching Casper...` marks this step, and the chosen mode is logged as one `Approved block ...` line.
 2. The transport server and the Kademlia discovery server start, followed by the gRPC and HTTP API servers. The node discovery loop and the clear-connections loop start next, so that they can help to find the first peer.
 3. Unless the node runs with `--standalone`, it polls once per second until it has at least one peer connection.
 4. The engine selected in step 1 runs its `init`, which is where the modes differ.
@@ -36,7 +36,7 @@ stateDiagram-v2
     Launch --> Initializing : no approved block, join an existing network
 
     Reconnect --> Running : build Casper from storage
-    GenesisValidator --> Initializing : ApprovedBlock received
+    GenesisValidator --> Initializing : candidate genesis block signed
     CeremonyMaster --> Running : approvals collected, genesis approved
     Initializing --> Running : state imported from the network
     Running --> [*]
@@ -45,7 +45,7 @@ stateDiagram-v2
 | Mode | Condition | Log line at launch | Path to Running |
 |------|-----------|--------------------|-----------------|
 | Reconnect | The block store holds an approved block, which is any restart on existing data. | `Approved block found, reconnecting to existing network` | Builds Casper from local storage and goes to Running directly, in about a second. |
-| Genesis validator | No approved block and `genesis_validator_mode` is set. | `Approved block not found, taking part in ceremony as genesis validator` | Verifies and signs the candidate genesis block. When the ApprovedBlock arrives, the node moves to Initializing and then Running. |
+| Genesis validator | No approved block and `genesis_validator_mode` is set. | `Approved block not found, taking part in ceremony as genesis validator` | Verifies and signs the candidate genesis block and then moves to Initializing, where it waits for the approved block like a joining node. |
 | Ceremony master | No approved block and `ceremony_master_mode` is set. A standalone node starts in this mode. | `Approved block not found, taking part in ceremony as ceremony master` | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
 | Join | No approved block and neither ceremony mode is set. | `Approved block not found, connecting to existing network` | Initializing. |
 
@@ -89,7 +89,7 @@ Search the log for the line that starts the state download.
 docker logs <container> 2>&1 | grep "request_approved_state"
 ```
 
-The line shows `min_height`, the lowest block of the imported window. A node that keeps fetching blocks far below its own `min_height` is not converging, so capture the logs and ask the shard operator instead of waiting.
+The line shows `min_height`, the lowest block of the imported window. If the node stays in Initializing, save the logs and ask the shard operator.
 
 ### Data directory
 

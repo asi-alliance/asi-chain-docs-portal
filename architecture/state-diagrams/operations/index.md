@@ -32,7 +32,7 @@ flowchart TD
     R --> W
 ```
 
-The proposer checks every `casper.heartbeat.check-interval`, which is 5 seconds by default, and a deploy submission wakes it immediately. It proposes when there are pending deploys, and it also proposes empty blocks when the last finalized block is older than `max-lfb-age`, so that finalization keeps moving on a quiet shard. A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals. A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
+The proposer checks every `casper.heartbeat.check-interval`, which is 5 seconds by default, and a deploy submission wakes it immediately. It proposes when there are pending deploys. When the last finalized block is older than `max-lfb-age` (5 seconds by default), the shard counts as stalled, and every bonded validator proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval. A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals. A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
 
 ## Block Validation
 
@@ -40,7 +40,7 @@ A block from a peer passes these checks in order. A block that fails one of them
 
 ```mermaid
 flowchart TD
-    RX[Block received] --> F{Format, signature and hash valid?}
+    RX[Block received] --> F{Format and signature valid?}
     F -->|No| REJ[Reject]
     F -->|Yes| P[Parents in DAG?]
     P -->|No| BUF[Buffer until parents arrive]
@@ -56,6 +56,10 @@ flowchart TD
     V -->|invalid| REJ
     CP -->|state hash mismatch| REJ
     BC -->|invalid| REJ
+    NI -->|invalid| REJ
+    NE -->|invalid| REJ
+    PP -->|invalid| REJ
+    EQ -->|equivocation| REJ
 ```
 
 Voting is not a separate step. A validator endorses blocks by listing them in the justifications of its next block, and finalization is computed from the DAG by the clique oracle, so every node reaches it on its own.
