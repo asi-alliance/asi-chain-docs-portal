@@ -15,7 +15,7 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 | Node image | The commands on the node pages are run in Docker on a local machine, apart from bonding and enrollment. |
 | Wallet CLI | The published image is pulled and its commands are run against DevNet. |
 | Wallet SDK | The examples are compiled against `@asichain/asi-wallet-sdk` 2.1.0, and read-only calls are made to the DevNet node. |
-| Network addresses | They are compared with the team's environment description and requested directly. |
+| Network addresses | They are confirmed with the network team and requested directly. |
 | README | The commands in README.md are run in a clean Node.js 24 container. |
 | External links | Every external link is requested once. |
 
@@ -25,7 +25,7 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 - The `history` and `export` commands of the Wallet CLI need a WebSocket address for GraphQL, which this portal does not publish.
 - The commands that change the validator set, bonding and enrollment, were not run. Those pages follow the source code and `--help` output of the tools.
 - Faucet requests were not made as part of the checks, apart from one request for a test wallet. The faucet page describes the behavior found in the faucet source code.
-- No page describes TestNet. The team's environment description lists only the documentation address for it.
+- No page describes TestNet yet.
 
 ## Contributing Verified Instructions
 

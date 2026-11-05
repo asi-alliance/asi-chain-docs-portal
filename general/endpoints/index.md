@@ -1,6 +1,6 @@
 # Network Endpoints
 
-This page lists the public DevNet addresses. Other pages link here instead of repeating them. The addresses were checked on 2026-11-05 against the team's environment description (version 60 of 2026-10-19) and by direct requests.
+This page lists the public DevNet addresses. Other pages link here instead of repeating them. The addresses were checked with direct requests on 2026-11-05.
 
 ::: info DevNet runs a Scala node
 On 2026-11-05 the public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`. It is not the Rust node described in the [node image](/shard-nodes/validator-image/) guide. Clients that need to know which node dialect they talk to must be set to the Scala profile for DevNet.
@@ -19,7 +19,7 @@ All four answer on HTTPS. Plain HTTP is redirected to HTTPS.
 
 ## Node
 
-DevNet has one public node address, Validator 1 at `34.196.119.4`. It serves both reads and writes. The environment description tells readers to use Validator 1 as the observer, and there is no separate public observer.
+DevNet has one public node address, Validator 1 at `34.196.119.4`. It serves both reads and writes. DevNet also has a dedicated observer, but it is not stable yet, so read from Validator 1 as well.
 
 | Service | Address | Used for |
 |---|---|---|
@@ -55,10 +55,10 @@ The other ports of a node (P2P, discovery, internal gRPC and admin HTTP) are not
 
 The wallet and the [Wallet SDK](/wallet-sdk/overview/) take three addresses per network and a node profile.
 
-| Setting | Role | DevNet value |
+| Setting | Role | DevNet value for scripts, SDK and CLI |
 |---|---|---|
 | `ValidatorURL` | Receives deploys (`POST /api/deploy`) and status requests | Validator 1 HTTP API from the table above |
-| `ReadOnlyURL` | Answers balance queries and deploy lookups | The same Validator 1 HTTP API, since DevNet has no public observer |
+| `ReadOnlyURL` | Answers balance queries and deploy lookups | The same Validator 1 HTTP API, because the observer is not stable yet |
 | `IndexerURL` | GraphQL endpoint with transaction history | Not published |
 | `nodeApiProfile` | Request format of the node | `scala` |
 

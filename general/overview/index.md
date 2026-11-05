@@ -28,4 +28,4 @@ The native token is ASI. It has 8 decimal places, so 1 ASI is `100000000` in the
 
 ## Before you start
 
-If you only want to try the network, get tokens from the [faucet](/quick-start/get-asi/) and open the [wallet](/wallet/usage/). Documentation that is still being reviewed is listed on [Documentation Status](/general/documentation-status/).
+If you only want to try the network, get tokens from the [faucet](/quick-start/get-asi/) and open the [wallet](/wallet/usage/). Known limits of these pages are listed on [Documentation Status](/general/documentation-status/).

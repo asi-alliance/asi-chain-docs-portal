@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-1A1A1A?style=for-the-badge)](LICENSE.md)
 [![Docs](https://img.shields.io/badge/Docs-Available-C4F0C1?style=for-the-badge)](https://docs.asichain.io)
 
-<h3>Official documentation portal for ASI Chain blockchain network</h3>
+<h3>Official documentation portal for ASI:Chain blockchain network</h3>
 
 Part of the [**Artificial Superintelligence Alliance**](https://superintelligence.io) ecosystem
 
@@ -29,7 +29,7 @@ Part of the [**Artificial Superintelligence Alliance**](https://superintelligenc
 
 ## Overview
 
-This repository contains the source code for the ASI Chain documentation portal, built with VitePress. The documentation covers all aspects of the ASI Chain ecosystem, including the wallet, Wallet SDK and Wallet CLI, block explorer, faucet, node setup and architecture.
+This repository contains the source code for the ASI:Chain documentation portal, built with VitePress. The documentation covers all aspects of the ASI:Chain ecosystem, including the wallet, Wallet SDK and Wallet CLI, block explorer, faucet, node setup and architecture.
 
 **Live Documentation:** [https://docs.asichain.io](https://docs.asichain.io)
 
