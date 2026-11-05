@@ -2,7 +2,7 @@
 
 A private shard needs its own genesis, validator identities, bonds, token metadata, storage and network configuration. It does not join an existing network by reusing that network's bootstrap identity.
 
-Use the maintained [Rust source at the selected revision](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) and a published digest from the [validator image](/shard-nodes/validator-image/#select-the-image) page. The upstream [Docker guide](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/README.md) and [shard topology](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/shard.yml) are development references. Review image and build settings. Sample keys and public host mappings must not become production settings.
+Use the maintained [Rust source at the selected revision](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) and a published digest from the [validator image](/nodes/image/#select-the-image) page. The upstream [Docker guide](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/README.md) and [shard topology](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/shard.yml) are development references. Review image and build settings. Sample keys and public host mappings must not become production settings.
 
 ## Required Decisions
 
@@ -28,7 +28,7 @@ A single node can create its own genesis with `--standalone`. It is enough to ch
 
 - `bonds.txt` has one line per bonded validator, `<public-key> <stake>`. The public key is the uncompressed secp256k1 key of the validator, 130 hex characters starting with `04`.
 - `wallets.txt` has one line per funded vault, `<vault-address>,<balance>`, with the balance in the smallest unit (10^-8 of a token).
-- The key pair and the vault address come from the ASI client, as in [Prepare and Enroll a Rust Validator](/quick-start/validator-enrollment/). `generate-key-pair --save` writes `private_key.hex`, the value for `VALIDATOR_PRIVATE_KEY`, and `public_key.hex`, the public key for `bonds.txt`. `generate-vault-address` prints the vault address for `wallets.txt`.
+- The key pair and the vault address come from the ASI client, as in [Enroll a Validator](/nodes/validator-enrollment/). `generate-key-pair --save` writes `private_key.hex`, the value for `VALIDATOR_PRIVATE_KEY`, and `public_key.hex`, the public key for `bonds.txt`. `generate-vault-address` prints the vault address for `wallets.txt`.
 
 ```bash
 NODE_IMAGE=<image from the catalog>
@@ -81,4 +81,4 @@ Less than 15 seconds after the container starts, `curl -s http://localhost:40453
 
 For several validators, follow the upstream shard topology above.
 
-Use fresh private credentials. Do not reuse published development keys or older deployment helpers. See [validator image](/shard-nodes/validator-image/) for paths, ports and flags, and [architecture](/architecture/) for consumer data paths.
+Use fresh private credentials. Do not reuse published development keys or older deployment helpers. See [validator image](/nodes/image/) for paths, ports and flags, and [architecture](/architecture/) for consumer data paths.

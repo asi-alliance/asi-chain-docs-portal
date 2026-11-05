@@ -1,4 +1,4 @@
-# Prepare and Enroll a Rust Validator
+# Enroll a Validator
 
 The ASI Rust client provides the key-generation and bonding operations needed to enroll a validator. A separate configurator or connector image is optional packaging around these operations. Older helper containers target a previous workflow, so do not assume they work with current Rust nodes.
 
@@ -80,13 +80,13 @@ The default Docker bridge must reach the operator's URLs. For local container ne
 
 ## Start and Synchronize the Joining Node
 
-Prepare storage and the key, and start the node as described in [Join as a Validator](/quick-start/join-validator/#start-the-node). Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
+Prepare storage and the key, and start the node as described in [Run a Validator](/nodes/validator/#start-the-node). Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
 
 - `--bootstrap` with the operator's URI.
 - `--network-id` equal to the shard's `networkId`.
 - `--shard-name` equal to the shard's `shardId`.
 - `--host` with the address that other nodes use to reach this node.
-- `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY` and `--validator-private-key-path` with the key converted from `private_key.hex` as shown in [Validator Key](/quick-start/join-validator/#validator-key). The node does not read `private_key.hex` itself.
+- `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY` and `--validator-private-key-path` with the key converted from `private_key.hex` as shown in [Validator Key](/nodes/validator/#validator-key). The node does not read `private_key.hex` itself.
 - The token flags `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` when the shard does not use the defaults.
 
 The pinned [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/e18defd44d43fe460379efefb88223797709a0cf/node/src/rust/configuration/commandline/options.rs) list every flag. Keep management APIs and metrics private and confirm container-to-host port mappings.

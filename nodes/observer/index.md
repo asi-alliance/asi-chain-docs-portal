@@ -1,9 +1,9 @@
-# Join as an Observer
+# Run an Observer
 
-An observer is a Rust node that follows the chain and answers read requests. It runs the same image as a validator and is started without a validator key. The [image catalog](/general/container-images/) has no separate observer image.
+An observer is a Rust node that follows the chain and answers read requests. It runs the same image as a validator and is started without a validator key. The [image catalog](/reference/container-images/) has no separate observer image.
 
 ::: warning DevNet runs the Scala node
-As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust image described here does not connect to it. A Rust observer started with the DevNet bootstrap and `--network-id devnet1` listed eight nodes in `/api/status` but opened no connection to them, and `/api/ready` kept returning 503 for more than five minutes. Use this guide for a Rust shard that you or your operator run. DevNet reads go through the addresses on [Network Endpoints](/general/endpoints/).
+As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust image described here does not connect to it. A Rust observer started with the DevNet bootstrap and `--network-id devnet1` listed eight nodes in `/api/status` but opened no connection to them, and `/api/ready` kept returning 503 for more than five minutes. Use this guide for a Rust shard that you or your operator run. DevNet reads go through the addresses on [Network Endpoints](/reference/endpoints/).
 :::
 
 ## What an Observer Does
@@ -20,7 +20,7 @@ Which routes external clients can reach depends on the gateway in front of the n
 
 Ask the operator of the shard for these values.
 
-- The image tag or digest that the shard accepts. See [Validator Node Image](/shard-nodes/validator-image/).
+- The image tag or digest that the shard accepts. See [Node Image](/nodes/image/).
 - The bootstrap URI, which looks like `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. The node ID is the `address` field of `GET /api/status` on the bootstrap node.
 - The `--network-id` value, which must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from other networks.
 - The `--shard-name` value, which must equal the `shardId` that the bootstrap node reports. The default is `root`. With another value the node gets a peer but stays at `Waiting for first connection...`.
@@ -48,7 +48,7 @@ docker run -d --name observer --platform linux/amd64 \
   --host "$PUBLIC_HOST" --bootstrap "$BOOTSTRAP_URI"
 ```
 
-The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. The image entrypoint already passes `--profile=docker`, and the node exits with an error if you pass `--profile` as well, so do not add one. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/shard-nodes/validator-image/#default-container-ports).
+The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. The image entrypoint already passes `--profile=docker`, and the node exits with an error if you pass `--profile` as well, so do not add one. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/nodes/image/#default-container-ports).
 
 ## Check the Node
 
@@ -60,7 +60,7 @@ docker inspect observer --format '{{.State.Health.Status}}'
 
 The node is ready when `/api/ready` returns `{"ready":true}` and `/api/status` shows `isReady: true`, a positive `peers` count and a growing `lastFinalizedBlockNumber`. The image healthcheck calls `/api/ready` on container port `40403`, so a joining node reports `unhealthy` until it has a peer and reaches the Running state. The same happens if you move the HTTP port, even when the node works. A joining node takes the last finalized state and recent blocks from its peers and does not download the whole history. Compare `lastFinalizedBlockNumber` with a trusted peer before you serve reads from it.
 
-If `peers` stays at 0, follow [Troubleshooting](/quick-start/troubleshooting/#no-peer-connection).
+If `peers` stays at 0, follow [Troubleshooting](/help/troubleshooting/#no-peer-connection).
 
 ## Data
 

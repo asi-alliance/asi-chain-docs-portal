@@ -4,7 +4,7 @@ This page records what was checked against running software and published source
 
 ## Public DevNet
 
-The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`, so it runs a Scala node. The node guides in this portal describe the Rust node and its images. An image from [Container Images](/general/container-images/) was started on a local machine. It reached the DevNet bootstrap node and found other nodes through discovery, but after 6.5 minutes it was still at `Waiting for first connection` with no peers. Treat the node guides as instructions for the Rust node, not as a way to join the public DevNet today. [Network Endpoints](/general/endpoints/) lists what DevNet offers now.
+The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`, so it runs a Scala node. The node guides in this portal describe the Rust node and its images. An image from [Container Images](/reference/container-images/) was started on a local machine. It reached the DevNet bootstrap node and found other nodes through discovery, but after 6.5 minutes it was still at `Waiting for first connection` with no peers. Treat the node guides as instructions for the Rust node, not as a way to join the public DevNet today. [Network Endpoints](/reference/endpoints/) lists what DevNet offers now.
 
 ## What Was Checked
 
@@ -13,7 +13,7 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 | Site | The portal was built (the build fails on dead internal links and unclosed tags), and its pages were opened in a browser with the console watched for errors. |
 | Container images | Tags and digests were looked up in ECR Public, and the commands on the image pages were run against the published node image. |
 | Node image | The commands on the node pages were run in Docker on a local machine, apart from bonding and enrollment. |
-| Wallet CLI | The published image was pulled and the CLI was built from source. `create` was run against DevNet, and `balance` and `send` against a private Rust shard set up as described in [Set Up a Private Shard](/shard-nodes/own-shard/). |
+| Wallet CLI | The published image was pulled and the CLI was built from source. `create` was run against DevNet, and `balance` and `send` against a private Rust shard set up as described in [Set Up a Private Shard](/nodes/private-shard/). |
 | Wallet SDK | The examples were compiled against `@asichain/asi-wallet-sdk` 2.1.0, and read-only calls were made to the DevNet node. |
 | Network addresses | The addresses were taken from the network team's environment description and requested directly. |
 | README | The commands in README.md were run in clean Node.js 20 and Node.js 24 containers. |

@@ -29,7 +29,7 @@ flowchart TB
   Casper --> Common
 ```
 
-The runtime binary is `/opt/docker/bin/node`; no Scala/JVM runtime configuration is required. See [Validator Image](/shard-nodes/validator-image/) for entrypoint, defaults, ports and access boundaries. Native-token metadata is part of shard/genesis configuration; upstream defaults do not set ASI token metadata for a deployed chain.
+The runtime binary is `/opt/docker/bin/node`; no Scala/JVM runtime configuration is required. See [Validator Image](/nodes/image/) for entrypoint, defaults, ports and access boundaries. Native-token metadata is part of shard/genesis configuration; upstream defaults do not set ASI token metadata for a deployed chain.
 
 ## API
 

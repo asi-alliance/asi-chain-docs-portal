@@ -34,7 +34,7 @@ The package ships ES module and CommonJS builds with type declarations.
 - `IndexerURL` is the GraphQL indexer that serves transaction history.
 - `nodeApiProfile` selects the request format of the node, `NodeApiProfile.SCALA` or `NodeApiProfile.RUST`.
 
-`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. The public DevNet runs a Scala node, so use `NodeApiProfile.SCALA` for it. The DevNet node addresses are listed on [Network Endpoints](/general/endpoints/). The indexer address is not published there, so ask the network operator for it if you need transaction history.
+`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. The public DevNet runs a Scala node, so use `NodeApiProfile.SCALA` for it. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). The indexer address is not published there, so ask the network operator for it if you need transaction history.
 
 ::: warning Rust nodes and SDK 2.1.0
 With `NodeApiProfile.RUST`, Wallet SDK 2.1.0 cannot read balances, because a Rust node returns them as `ExprBigInt` and the SDK reads only `ExprInt`. `getBalance` then fails with `BALANCE_UNAVAILABLE`, and so does every transfer. `watchDeploy` also never reports a deploy as finalized on a Rust node. See [Balance Query Flow](/architecture/sequence-diagrams/balance/) and [Transaction Flow](/architecture/sequence-diagrams/transaction/).
@@ -234,4 +234,4 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 
 ## Related Resources
 
-Repositories of the node, the wallet, the explorer and the faucet, and the DevNet service addresses are listed on the [Useful Links](/general/useful-links/) page.
+Repositories of the node, the wallet, the explorer and the faucet, and the DevNet service addresses are listed on the [Useful Links](/reference/links/) page.

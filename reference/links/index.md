@@ -9,7 +9,7 @@
 | Explorer | [explorer.dev.asichain.io](https://explorer.dev.asichain.io) |
 | Faucet | [faucet.dev.asichain.io](https://faucet.dev.asichain.io) |
 
-Node addresses are on [Network Endpoints](/general/endpoints/).
+Node addresses are on [Network Endpoints](/reference/endpoints/).
 
 ## Packages
 
@@ -38,8 +38,8 @@ Check the branch or tag you build from, because the default branch of a reposito
 
 ## Guides
 
-- [Network Endpoints](/general/endpoints/): DevNet applications and node addresses.
-- [Container Images](/general/container-images/): published images, tags and digests.
+- [Network Endpoints](/reference/endpoints/): DevNet applications and node addresses.
+- [Container Images](/reference/container-images/): published images, tags and digests.
 - [Wallet CLI](/cli/usage/): command-line wallet.
 - [Wallet SDK](/wallet-sdk/overview/): TypeScript SDK.
 - [Architecture](/architecture/): how node, indexer, GraphQL and applications connect.

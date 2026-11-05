@@ -37,7 +37,7 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 
 ## Select Compatible Artifacts
 
-- Latest ASI dev node: the `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([github.com/F1R3FLY-io/f1r3node-rust/pull/941](https://github.com/F1R3FLY-io/f1r3node-rust/pull/941)), 12 commits after `e18defd4`. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `e18defd4`. Its manifest, `org.opencontainers.image.revision` label and a container start were checked on 5 November 2026. This catalog records no CI result for this exact revision and no client check against it. See [validator image](/shard-nodes/validator-image/) for how to run it.
+- Latest ASI dev node: the `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([github.com/F1R3FLY-io/f1r3node-rust/pull/941](https://github.com/F1R3FLY-io/f1r3node-rust/pull/941)), 12 commits after `e18defd4`. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `e18defd4`. Its manifest, `org.opencontainers.image.revision` label and a container start were checked on 5 November 2026. This catalog records no CI result for this exact revision and no client check against it. See [validator image](/nodes/image/) for how to run it.
 
 - Previous ASI dev node: the `e18defd4` image was compiled from a clean LF export of the ASI `dev` branch. When this entry was recorded, the [upstream CI run for this source](https://github.com/F1R3FLY-io/f1r3node-rust/actions/runs/41875249228) had failed in the casper test shard (`Test (casper 1/2)` and `Test Gate (casper)`), and the [authority adapter run](https://github.com/F1R3FLY-io/f1r3node-rust/actions/runs/41875248335) had failed too. This source does not contain the known-peers change from [PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927). Checks of the client and of deployments with this image are separate and not recorded here.
 
@@ -52,7 +52,7 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 
 | Artifact | Runtime contract |
 |---|---|
-| Node | Rust binary, role-specific configuration, persistent state and private TLS/signing inputs; see [node image](/shard-nodes/validator-image/) |
+| Node | Rust binary, role-specific configuration, persistent state and private TLS/signing inputs; see [node image](/nodes/image/) |
 | Indexer | Explicit `NODE_HOST`, `GRPC_PORT`, `HTTP_PORT` and database settings; PostgreSQL and Hasura are separate services |
 | Explorer / wallet frontends | nginx on container port `8080`; public runtime endpoint URLs; no browser-visible admin secrets |
 | Faucet frontend | nginx on container port `8080`; runtime `VITE_BASE_URL` points to the faucet API |
@@ -71,4 +71,4 @@ Wallet `REACT_APP_EXPLORER_URL` and `REACT_APP_FAUCET_URL` are optional public l
 
 The frontend images substitute endpoint URLs at startup. Supply the image-specific public URL variables, permit their startup write paths, and recreate containers when changing endpoints. Source-repository Dockerfiles can differ from these published packages; inspect the artifact before assuming a runtime configuration contract.
 
-See [documentation status](/general/documentation-status/) for review scope and [useful links](/general/useful-links/) for public component repositories.
+See [documentation status](/help/documentation-status/) for review scope and [useful links](/reference/links/) for public component repositories.

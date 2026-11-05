@@ -71,14 +71,17 @@ asi-chain-docs-portal/
 ├── cli/                  # Wallet CLI guide
 ├── components/           # Vue components of the theme
 ├── config/               # Language registration for code blocks
+├── build/                # Landing for developers
 ├── explorer/             # Block explorer guide
-├── faq/                  # Frequently asked questions
 ├── faucet/               # Faucet guide
-├── general/              # Overview, endpoints, images, links
+├── help/                 # FAQ, troubleshooting, documentation status
+├── nodes/                # Node roles, images and setup guides
+├── overview/             # What is ASI:Chain
+├── reference/            # Endpoints, container images, links
 ├── public/               # Static assets
 ├── quick-start/          # Getting started guides
-├── shard-nodes/          # Node setup documentation
 ├── utils/                # Constants of the feedback form
+├── use/                  # Landing for users
 ├── wallet/               # Wallet guide
 ├── wallet-sdk/           # Wallet SDK reference
 ├── .gitignore

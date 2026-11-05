@@ -1,18 +1,18 @@
 # Troubleshooting
 
-Start by checking the image tag or digest, the source revision, the configuration and the host port mappings. The node runtime is Rust, so JVM tuning and the older configurator and connector commands do not apply. Node commands on this page use the container name from the `docker run --name` option of [Join as an Observer](/quick-start/join-observer/) or [Join as a Validator](/quick-start/join-validator/):
+Start by checking the image tag or digest, the source revision, the configuration and the host port mappings. The node runtime is Rust, so JVM tuning and the older configurator and connector commands do not apply. Node commands on this page use the container name from the `docker run --name` option of [Run an Observer](/nodes/observer/) or [Run a Validator](/nodes/validator/):
 
 ```bash
 NODE=observer
 ```
 
 ::: warning DevNet runs the Scala node
-As of 5 November 2026 the public DevNet runs a Scala node, and the Rust image does not connect to it. A Rust node started with the DevNet bootstrap lists other nodes in `/api/status` but keeps `peers` at 0. This was observed on two separate hosts with the settings from these guides. See [Join as an Observer](/quick-start/join-observer/).
+As of 5 November 2026 the public DevNet runs a Scala node, and the Rust image does not connect to it. A Rust node started with the DevNet bootstrap lists other nodes in `/api/status` but keeps `peers` at 0. This was observed on two separate hosts with the settings from these guides. See [Run an Observer](/nodes/observer/).
 :::
 
 ## Image Pull or Startup Fails
 
-Use a tag or digest from [Container Images](/general/container-images/) and pass `--platform linux/amd64`, because the images exist for that platform only. Check Docker connectivity and disk capacity. Do not silently substitute another build for a missing ARM image.
+Use a tag or digest from [Container Images](/reference/container-images/) and pass `--platform linux/amd64`, because the images exist for that platform only. Check Docker connectivity and disk capacity. Do not silently substitute another build for a missing ARM image.
 
 Inspect your own container:
 
@@ -24,7 +24,7 @@ docker logs --tail 100 "$NODE"
 
 The first lines of the log usually name the cause.
 
-- `The data dir must be a directory and have read and write permissions` means the volume belongs to `root`. Change its owner to `daemon` (uid 1) with the `chown` command from [Join as an Observer](/quick-start/join-observer/#start-the-observer).
+- `The data dir must be a directory and have read and write permissions` means the volume belongs to `root`. Change its owner to `daemon` (uid 1) with the `chown` command from [Run an Observer](/nodes/observer/#start-the-observer).
 - `unexpected argument '--profile' found` means a `--profile` option was passed after `run`, and `the argument '--profile <PROFILE>' cannot be used multiple times` means one was passed before `run`. The image entrypoint already adds `--profile=docker`, so remove yours.
 - `Failed to parse bootstrap peer address: Parse error: missing node ID` means the bootstrap URI lacks the node ID. The form is `rnode://<node-id>@<host>?protocol=40400&discovery=40404`.
 - `No such device or address` with `--validator-private-key-path` means the node asked for the key password and found no terminal. Set the `F1R3NODE_VALIDATOR_PASSWORD` environment variable.
@@ -68,7 +68,7 @@ The image healthcheck calls `/api/ready` on container port `40403` every 30 seco
 
 ## CLI or Indexer Response Mismatch
 
-Check which source revision the CLI or indexer was built from, and for the CLI also which client commit its `rust-client` submodule points to. An image does not include changes merged after it was built. The [catalog](/general/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
+Check which source revision the CLI or indexer was built from, and for the CLI also which client commit its `rust-client` submodule points to. An image does not include changes merged after it was built. The [catalog](/reference/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
 
 Check the selected node's HTTP and Protobuf contract before you change a consumer. Cost-accounting APIs and newer integer and transfer representations need compatible clients and separate acceptance checks. The Rust client commands `wallet-balance`, `validator-status`, `bonds` and `active-validators` fail against the Scala DevNet node.
 
@@ -104,4 +104,4 @@ A transfer can fail for several reasons.
 
 ## Reporting a Problem
 
-Open an issue in the affected [public component repository](/general/useful-links/). Include the digest, the public source revision, a sanitized error and reproduction steps. Do not include keys, real environment files, credentials or internal endpoints.
+Open an issue in the affected [public component repository](/reference/links/). Include the digest, the public source revision, a sanitized error and reproduction steps. Do not include keys, real environment files, credentials or internal endpoints.

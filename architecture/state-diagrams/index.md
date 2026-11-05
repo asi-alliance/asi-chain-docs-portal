@@ -43,4 +43,4 @@ docker logs <container> 2>&1 | grep "transition to Running"
 
 - [Component Diagrams](/architecture/component-diagrams/): node internals
 - [Sequence Diagrams](/architecture/sequence-diagrams/): interaction flows
-- [Troubleshooting](/quick-start/troubleshooting/): common issues
+- [Troubleshooting](/help/troubleshooting/): common issues

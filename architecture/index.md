@@ -1,6 +1,6 @@
 # Technical Architecture
 
-The maintained node is implemented in Rust. It combines CBC Casper consensus, Rholang execution and RSpace++ storage with P2P, gRPC and HTTP services. See the [pinned node source](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) and the [node image](/shard-nodes/validator-image/) page.
+The maintained node is implemented in Rust. It combines CBC Casper consensus, Rholang execution and RSpace++ storage with P2P, gRPC and HTTP services. See the [pinned node source](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) and the [node image](/nodes/image/) page.
 
 ::: warning DevNet runs a different node
 As of 5 November 2026 the public DevNet runs a Scala node (`RChain Node 1.0.0-SNAPSHOT`), and the Rust node image described in this documentation does not join it. DevNet uses the same node roles and port numbers. Default configuration, flags, routes, data-flow details and images on these pages apply to the `node-rust` image only.
@@ -18,5 +18,5 @@ Public implementation references: [indexer node client](https://github.com/asi-a
 - [Data flow](/architecture/data-flow/): deploy lifecycle, and which data comes from the node and which from GraphQL.
 - [Component diagrams](/architecture/component-diagrams/): [node](/architecture/component-diagrams/node/), [explorer](/architecture/component-diagrams/explorer/) and [wallet](/architecture/component-diagrams/wallet/) components.
 - [Sequence diagrams](/architecture/sequence-diagrams/) and [state diagrams](/architecture/state-diagrams/).
-- [Container images](/general/container-images/): exact image and source pairs.
-- [Documentation status](/general/documentation-status/): what was checked and when.
+- [Container images](/reference/container-images/): exact image and source pairs.
+- [Documentation status](/help/documentation-status/): what was checked and when.

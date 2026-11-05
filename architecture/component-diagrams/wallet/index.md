@@ -1,4 +1,4 @@
-# Wallet Architecture
+# Wallet Components
 
 The ASI Wallet is a browser-based React application for managing accounts and sending transactions. It does not talk to the node on its own. Every call goes through the [Wallet SDK](/wallet-sdk/overview/), which signs deploys, keeps wallets in the browser and calls the node and the indexer.
 
@@ -105,7 +105,7 @@ The SDK reads three addresses and a node profile for every network from its conf
 | `IndexerURL` | GraphQL endpoint with transaction history |
 | `nodeApiProfile` | `scala` or `rust`. It selects the Rholang terms, the request body of balance queries and the finalization threshold |
 
-The preinstalled network of the hosted wallet uses addresses that are built into the application. For the endpoints of the public network, see [Network Endpoints](/general/endpoints/).
+The preinstalled network of the hosted wallet uses addresses that are built into the application. For the endpoints of the public network, see [Network Endpoints](/reference/endpoints/).
 
 Which call goes to which address:
 

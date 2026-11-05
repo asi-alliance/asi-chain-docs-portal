@@ -1,9 +1,9 @@
-# Validator Node Image
+# Node Image
 
 The image contains the maintained Rust implementation of CBC Casper, Rholang and RSpace++. Its source is [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5).
 
 ::: warning DevNet runs a Scala node
-As of 5 November 2026 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. A node started from this Rust image with the DevNet bootstrap and `--network-id devnet1` found DevNet peers through discovery but stayed at `peers: 0` and never became ready. Use this image to run your own shard ([private shard](/shard-nodes/own-shard/)) or when the operator of a network tells you it runs the Rust node. DevNet addresses are listed in [network endpoints](/general/endpoints/).
+As of 5 November 2026 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. A node started from this Rust image with the DevNet bootstrap and `--network-id devnet1` found DevNet peers through discovery but stayed at `peers: 0` and never became ready. Use this image to run your own shard ([private shard](/nodes/private-shard/)) or when the operator of a network tells you it runs the Rust node. DevNet addresses are listed in [network endpoints](/reference/endpoints/).
 :::
 
 ## Select the Image
@@ -15,7 +15,7 @@ Checked on 5 November 2026 with `docker buildx imagetools inspect`. Pin the dige
 | Latest | `0.4.46-dev.20261105-8e6517d630e2` | `sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55` |
 | Previous | `0.4.46-dev.20261104-e18defd44d43` | `sha256:e06a0a4ca43d9e60309c514a19f4c664d27eb216796b9b52d1bc67c10947694e` |
 
-Both are published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The latest build is 12 commits after the previous one. The Dockerfile, the entrypoint, `defaults.conf` and the example shard configuration are identical in both, so everything below applies to either. The [catalog](/general/container-images/) lists the other published node builds and the application images. Choose the node revision together with its client and API contract. A newer tag does not upgrade a running shard.
+Both are published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The latest build is 12 commits after the previous one. The Dockerfile, the entrypoint, `defaults.conf` and the example shard configuration are identical in both, so everything below applies to either. The [catalog](/reference/container-images/) lists the other published node builds and the application images. Choose the node revision together with its client and API contract. A newer tag does not upgrade a running shard.
 
 ```bash
 NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
@@ -99,7 +99,7 @@ curl -s http://localhost:40403/api/status
 
 `/api/ready` answers `{"ready":true}` with HTTP 200 once the node is ready and HTTP 503 with `{"ready":false}` before that. In `/api/status` look at `networkId`, `peers`, `isReady` and `lastFinalizedBlockNumber`. The image healthcheck always probes port 40403 inside the container. If you change the HTTP port with `--api-port-http`, the container reports `unhealthy` while the node works.
 
-For a network of your own, add `--standalone` and a genesis directory as described in [private shard](/shard-nodes/own-shard/).
+For a network of your own, add `--standalone` and a genesis directory as described in [private shard](/nodes/private-shard/).
 
 After a restart the node reconnects only through `--bootstrap`. This source does not contain the [known-peers change in PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927), which is still open. If the bootstrap is unreachable, the node waits at `Waiting for first connection...`.
 
@@ -107,4 +107,4 @@ After a restart the node reconnects only through `--bootstrap`. This source does
 
 Obtain the target shard's bootstrap peer, shard and genesis settings, native-token metadata, approved digest and admission process. Prepare persistent storage owned by `daemon` and private TLS and signing inputs. A running container or configured validator key does not establish active bonded stake, synchronization or finalization.
 
-Follow [join as validator](/quick-start/join-validator/) for the checks. Legacy configurator and connector recipes and JVM options do not configure this Rust image.
+Follow [join as validator](/nodes/validator/) for the checks. Legacy configurator and connector recipes and JVM options do not configure this Rust image.

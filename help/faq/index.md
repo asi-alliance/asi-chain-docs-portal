@@ -68,7 +68,7 @@ The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/
 
 ### Which container registry should I use?
 
-`public.ecr.aws/l2u2v4a8/asi-chain/`. Use the versioned tags and digests from the [container images](/general/container-images/) catalog and pin a digest. The catalog lists the node, indexer, explorer, wallet, faucet, Wallet CLI and ASI client images.
+`public.ecr.aws/l2u2v4a8/asi-chain/`. Use the versioned tags and digests from the [container images](/reference/container-images/) catalog and pin a digest. The catalog lists the node, indexer, explorer, wallet, faucet, Wallet CLI and ASI client images.
 
 ### Does a newer image mean I should upgrade?
 
@@ -80,7 +80,7 @@ Ask the network operator for the current URLs and the bootstrap identity. Old IP
 
 ### Which ports must be reachable?
 
-Peers connect over TCP on `40400` and `40404`. Clients need access to the external gRPC and HTTP ports you decide to expose. Keep internal gRPC, admin HTTP and `/metrics` private. See the [port table](/shard-nodes/validator-image/#default-container-ports).
+Peers connect over TCP on `40400` and `40404`. Clients need access to the external gRPC and HTTP ports you decide to expose. Keep internal gRPC, admin HTTP and `/metrics` private. See the [port table](/nodes/image/#default-container-ports).
 
 ### Does an observer reject writes?
 
@@ -104,8 +104,8 @@ No. Run `git submodule update --init --recursive` and keep the committed client 
 
 ### Are all pages verified?
 
-See [documentation status](/general/documentation-status/). A VitePress build checks that internal links resolve, not that diagrams render or that the described API is correct.
+See [documentation status](/help/documentation-status/). A VitePress build checks that internal links resolve, not that diagrams render or that the described API is correct.
 
 ### Where can I ask a question or report a problem?
 
-For node problems start with [troubleshooting](/quick-start/troubleshooting/). Otherwise open an issue in the repository of the component: [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet), [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer), [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet), [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) or [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal).
+For node problems start with [troubleshooting](/help/troubleshooting/). Otherwise open an issue in the repository of the component: [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet), [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer), [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet), [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) or [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal).

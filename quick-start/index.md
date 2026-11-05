@@ -15,15 +15,15 @@ You want an account, some test tokens and a way to see what happens on the chain
 You want to take part in the network as an observer or a validator.
 
 ::: warning DevNet runs the Scala node
-As of 5 November 2026 the public DevNet runs a Scala node, and the Rust node from these guides does not connect to it. Use the guides with a Rust shard that you or your operator run. [Documentation Status](/general/documentation-status/) has the details.
+As of 5 November 2026 the public DevNet runs a Scala node, and the Rust node from these guides does not connect to it. Use the guides with a Rust shard that you or your operator run. [Documentation Status](/help/documentation-status/) has the details.
 :::
 
-1. Look up the image versions and their source revisions in the [container images](/general/container-images/) catalog.
-2. Start an [observer](/quick-start/join-observer/) to follow the chain, or prepare a [validator](/quick-start/join-validator/).
-3. To bond a validator, follow [validator enrollment](/quick-start/validator-enrollment/).
-4. If a node does not connect or stays out of sync, see [troubleshooting](/quick-start/troubleshooting/).
+1. Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.
+2. Start an [observer](/nodes/observer/) to follow the chain, or prepare a [validator](/nodes/validator/).
+3. To bond a validator, follow [validator enrollment](/nodes/validator-enrollment/).
+4. If a node does not connect or stays out of sync, see [troubleshooting](/help/troubleshooting/).
 
-Public DevNet services are listed on [Network Endpoints](/general/endpoints/). Ask the network operator for the bootstrap identity before you connect a node.
+Public DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the bootstrap identity before you connect a node.
 
 ## Build on ASI:Chain
 

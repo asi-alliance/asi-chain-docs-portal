@@ -3,7 +3,7 @@
 This page lists the public DevNet addresses. Other pages link here instead of repeating them. The addresses were checked with direct requests on 5 November 2026.
 
 ::: info DevNet runs a Scala node
-On 5 November 2026 the public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`. It is not the Rust node described in the [node image](/shard-nodes/validator-image/) guide. Clients that need to know which node dialect they talk to must be set to the Scala profile for DevNet.
+On 5 November 2026 the public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`. It is not the Rust node described in the [node image](/nodes/image/) guide. Clients that need to know which node dialect they talk to must be set to the Scala profile for DevNet.
 :::
 
 ## Applications
@@ -49,7 +49,7 @@ The node also returns its own `address`, the `peers` count and the `nodes` count
 The node address uses `http://`. A web page served over HTTPS cannot call it directly, because browsers block mixed content. Use it from scripts, the SDK in Node.js or the [Wallet CLI](/cli/usage/). The hosted wallet at wallet.dev.asichain.io already contains its DevNet settings, so you enter nothing there.
 :::
 
-The other ports of a node (P2P, discovery, internal gRPC and admin HTTP) are not public entry points. They are described in the [port table](/shard-nodes/validator-image/) for the Rust image.
+The other ports of a node (P2P, discovery, internal gRPC and admin HTTP) are not public entry points. They are described in the [port table](/nodes/image/) for the Rust image.
 
 ## Wallet and SDK Roles
 

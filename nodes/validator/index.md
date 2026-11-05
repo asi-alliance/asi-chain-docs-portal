@@ -1,6 +1,6 @@
-# Join as a Validator
+# Run a Validator
 
-This page prepares a Rust node that is meant to become a validator. Preparation comes first. Key generation, funding and the bond transaction follow on [Prepare and Enroll a Rust Validator](/quick-start/validator-enrollment/). The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node.
+This page prepares a Rust node that is meant to become a validator. Preparation comes first. Key generation, funding and the bond transaction follow on [Enroll a Validator](/nodes/validator-enrollment/). The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node.
 
 ::: warning DevNet runs the Scala node
 As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust image described here does not connect to it. A Rust node started with the DevNet bootstrap and `--network-id devnet1` listed eight nodes in `/api/status` but opened no connection to them. Use this guide for a Rust shard that you or your operator run.
@@ -19,7 +19,7 @@ Check storage, CPU, memory and retention requirements with the operator. No sizi
 
 ## 2. Inspect the Published Image
 
-Follow [Validator Node Image](/shard-nodes/validator-image/) to pull the image, read its labels and run `run --help`. The [catalog](/general/container-images/) lists the builds, all for `linux/amd64`. Confirm which exact revision the target shard accepts.
+Follow [Node Image](/nodes/image/) to pull the image, read its labels and run `run --help`. The [catalog](/reference/container-images/) lists the builds, all for `linux/amd64`. Confirm which exact revision the target shard accepts.
 
 ## 3. Prepare Storage, Configuration and Keys
 
@@ -55,7 +55,7 @@ docker run --rm --platform linux/amd64 --entrypoint cat \
   -v validator-data:/var/lib/rnode "$NODE_IMAGE" /var/lib/rnode/f1r3fly.pub.hex
 ```
 
-To keep the key that the ASI client saved in `validator-keys/private_key.hex` during [enrollment](/quick-start/validator-enrollment/), convert it to an encrypted PEM file with OpenSSL 3 and copy the result into the volume. `openssl pkcs8` asks for the password of the new file. The temporary files that hold the plain key are removed at the end, and the public key does not change: it remains the one in `validator-keys/public_key.hex`.
+To keep the key that the ASI client saved in `validator-keys/private_key.hex` during [enrollment](/nodes/validator-enrollment/), convert it to an encrypted PEM file with OpenSSL 3 and copy the result into the volume. `openssl pkcs8` asks for the password of the new file. The temporary files that hold the plain key are removed at the end, and the public key does not change: it remains the one in `validator-keys/public_key.hex`.
 
 ```bash
 umask 077
@@ -100,7 +100,7 @@ Add the token flags `--native-token-name`, `--native-token-symbol` and `--native
 
 ## 4. Review Networking
 
-Peers must reach TCP `40400` and `40404`. Configure client access separately, and keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. See the [port table](/shard-nodes/validator-image/#default-container-ports). The `api-server.host` setting applies to every API listener, so enforce boundaries with host port bindings, firewall rules and gateway routes.
+Peers must reach TCP `40400` and `40404`. Configure client access separately, and keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. See the [port table](/nodes/image/#default-container-ports). The `api-server.host` setting applies to every API listener, so enforce boundaries with host port bindings, firewall rules and gateway routes.
 
 ## 5. Validate the Node
 
@@ -119,4 +119,4 @@ The node is synchronized when `/api/status` shows `isReady: true`, a positive `p
 
 A bond and a withdrawal take effect only at an epoch boundary. Between boundaries a new bond is recorded but not active. Confirm the actual validator set before you count the node as a consensus participant.
 
-Do not run live transfers as an installation test. See [Troubleshooting](/quick-start/troubleshooting/) if the node does not start or does not find peers.
+Do not run live transfers as an installation test. See [Troubleshooting](/help/troubleshooting/) if the node does not start or does not find peers.

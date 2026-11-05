@@ -2,7 +2,7 @@
 
 ASI Wallet is a browser wallet for ASI:Chain. It has no backend of its own: it keeps your keys in the browser, signs transactions locally and talks directly to the network nodes and the indexer. A Rholang editor for deploying contracts is built in.
 
-The DevNet wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It connects to DevNet out of the box, so there is nothing to configure. Node and service addresses are listed on [Network Endpoints](/general/endpoints/), and a wallet for your own node is described in [Custom Network](/wallet/custom-network/).
+The DevNet wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It connects to DevNet out of the box, so there is nothing to configure. Node and service addresses are listed on [Network Endpoints](/reference/endpoints/), and a wallet for your own node is described in [Custom Network](/wallet/custom-network/).
 
 ::: warning Back up your recovery phrase
 The wallet shows the recovery phrase once, when the wallet is created. Anyone who has it can control your accounts, and if you lose both the phrase and the browser data you lose access for good. Write the phrase down, keep it offline, and never put it in a screenshot or a text file.

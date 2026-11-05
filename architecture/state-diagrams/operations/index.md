@@ -72,4 +72,4 @@ curl -s http://localhost:40403/api/status
 
 - [Node Startup](/architecture/state-diagrams/startup/): before Running
 - [Component Diagrams](/architecture/component-diagrams/): node internals
-- [Troubleshooting](/quick-start/troubleshooting/): common issues
+- [Troubleshooting](/help/troubleshooting/): common issues

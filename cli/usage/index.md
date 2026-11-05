@@ -9,7 +9,7 @@ public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli:0.1.0-dev.20261103-8f6c20ea43eb
 public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
 ```
 
-This image was built from the wallet CLI at commit `8f6c20ea43ebc6d333783f936372d4220e449681` ([github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681)), with ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. Its compatibility tests target the node image `5dafbc37` listed in [Container Images](/general/container-images/). Later changes to the source do not modify this image.
+This image was built from the wallet CLI at commit `8f6c20ea43ebc6d333783f936372d4220e449681` ([github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681)), with ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. Its compatibility tests target the node image `5dafbc37` listed in [Container Images](/reference/container-images/). Later changes to the source do not modify this image.
 
 Show the help text without connecting to a network:
 
@@ -28,7 +28,7 @@ The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet
 `balance` and `send` stop with `Wrong native token: expected ASI, node reports `, because the DevNet node status has no token symbol. With `EXPECTED_TOKEN_SYMBOL` set to an empty value they stop with `HTTP 404` on `/api/balance/<address>`. `history` and `export` could not connect to the DevNet GraphQL endpoint either (see [Configuration](#configuration)).
 :::
 
-Use a Rust node, such as one started from the [validator image](/shard-nodes/validator-image/) or a [private shard](/shard-nodes/own-shard/), for `balance` and `send`.
+Use a Rust node, such as one started from the [validator image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
 
 ## Run the Image
 
@@ -107,7 +107,7 @@ The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappi
 
 ### Private Shard
 
-To try `balance` and `send` on the shard from [Set Up a Private Shard](/shard-nodes/own-shard/), start its validator and its read-only node. Then add `--network shard-net` to the `docker run` command from [Run the Image](#run-the-image) and use the container names in `.env`:
+To try `balance` and `send` on the shard from [Set Up a Private Shard](/nodes/private-shard/), start its validator and its read-only node. Then add `--network shard-net` to the `docker run` command from [Run the Image](#run-the-image) and use the container names in `.env`:
 
 ```env
 VALIDATOR_GRPC_URL=http://my-shard:40401

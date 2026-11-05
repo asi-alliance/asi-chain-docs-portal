@@ -53,4 +53,4 @@ A successful API response or an indexed row alone does not prove a successful, f
 
 The wallet reads balances through the SDK from the node, and its history from GraphQL.
 
-Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision. Later cost-accounting and API changes do not change the [published indexer image](/general/container-images/) automatically.
+Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision. Later cost-accounting and API changes do not change the [published indexer image](/reference/container-images/) automatically.

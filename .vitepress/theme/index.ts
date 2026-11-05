@@ -23,9 +23,9 @@ export default {
             "doc-before": () => [
                 h("div", { class: "docs-review-note" }, [
                     "Documentation review in progress. ",
-                    h("a", { href: "/general/documentation-status/" }, "Check the verified scope"),
+                    h("a", { href: "/help/documentation-status/" }, "Check the verified scope"),
                     " and ",
-                    h("a", { href: "/general/container-images/" }, "published container images"),
+                    h("a", { href: "/reference/container-images/" }, "published container images"),
                     " before using setup or API examples.",
                 ]),
                 h(SectionLabel),

@@ -98,7 +98,7 @@ The green icon next to the page title downloads a CSV file with up to 5,000 reco
 
 ## Data Source
 
-The explorer does not read the node directly. The indexer reads blocks from the node and writes them into PostgreSQL, and the explorer queries that database through a GraphQL API. A block therefore shows up in the explorer shortly after the node finalizes it. See [Data Flow](/architecture/data-flow/) for the whole path and [Overview](/general/overview/) for the components.
+The explorer does not read the node directly. The indexer reads blocks from the node and writes them into PostgreSQL, and the explorer queries that database through a GraphQL API. A block therefore shows up in the explorer shortly after the node finalizes it. See [Data Flow](/architecture/data-flow/) for the whole path and [Overview](/overview/) for the components.
 
 ## Links
 

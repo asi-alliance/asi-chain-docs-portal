@@ -13,7 +13,7 @@ A shard combines peer connectivity, consensus, execution and persistent state. T
 | Observer | Follows chain state without proposing validator blocks |
 | External joining node | Needs accepted configuration and a network-specific admission and bonding process |
 
-The same [Rust node image](/shard-nodes/validator-image/) serves the different roles. A role label, configured signing key or running container alone does not establish synchronization, active stake or canonical finalization. A bootstrap is not automatically a bonded validator.
+The same [Rust node image](/nodes/image/) serves the different roles. A role label, configured signing key or running container alone does not establish synchronization, active stake or canonical finalization. A bootstrap is not automatically a bonded validator.
 
 ## Applications and Indexing
 
@@ -21,6 +21,6 @@ The Python indexer calls node gRPC and HTTP directly, then writes to PostgreSQL.
 
 ## Connection Details
 
-DevNet addresses for wallets, tools and the explorer are on [network endpoints](/general/endpoints/). DevNet does not publish a separate observer address, and reads go through the same validator as writes. For any other network, request the bootstrap URI, approved image digest, shard and genesis settings, API URLs and resource requirements from its operator. This page does not publish a host inventory or node counts.
+DevNet addresses for wallets, tools and the explorer are on [network endpoints](/reference/endpoints/). DevNet does not publish a separate observer address, and reads go through the same validator as writes. For any other network, request the bootstrap URI, approved image digest, shard and genesis settings, API URLs and resource requirements from its operator. This page does not publish a host inventory or node counts.
 
-Follow [validator preparation](/quick-start/join-validator/), [observer preparation](/quick-start/join-observer/) or [private shard planning](/shard-nodes/own-shard/) for the applicable workflow.
+Follow [validator preparation](/nodes/validator/), [observer preparation](/nodes/observer/) or [private shard planning](/nodes/private-shard/) for the applicable workflow.

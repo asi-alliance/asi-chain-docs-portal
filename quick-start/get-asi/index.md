@@ -1,4 +1,4 @@
-# How Can I Get DevNet ASI?
+# Get DevNet ASI
 
 DevNet ASI is a test token for trying out transfers and contract deployments on the ASI:Chain DevNet.
 

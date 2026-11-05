@@ -1,6 +1,6 @@
 # Custom Network Connection
 
-The ASI Wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) comes with one built-in network, DevNet. To use the wallet with your own node, such as a local observer or a private shard, add a custom network on the Network Settings page. The public DevNet addresses are listed on the [Network Endpoints](/general/endpoints/) page.
+The ASI Wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) comes with one built-in network, DevNet. To use the wallet with your own node, such as a local observer or a private shard, add a custom network on the Network Settings page. The public DevNet addresses are listed on the [Network Endpoints](/reference/endpoints/) page.
 
 ## Open the Form
 
@@ -48,13 +48,13 @@ For a node on your own machine, the values depend on the ports the node publishe
 | Read-only URL | `http://localhost:40403` |
 | Indexer URL | `http://localhost:8080/v1/graphql` |
 
-A Rust validator started without developer mode refuses balance queries with `readonly_node_required`. For such a shard, set Read-only URL to a read-only node, for example the one from [Set Up a Private Shard](/shard-nodes/own-shard/#read-only-node) on port `40453`.
+A Rust validator started without developer mode refuses balance queries with `readonly_node_required`. For such a shard, set Read-only URL to a read-only node, for example the one from [Set Up a Private Shard](/nodes/private-shard/#read-only-node) on port `40453`.
 
 ::: warning Rust node profile
 This version of the wallet uses Wallet SDK 2.1.0, which cannot read balances from a Rust node or send transfers through it. See [Wallet SDK](/wallet-sdk/overview/).
 :::
 
-The compose files in [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) publish different ports. `chain/validator/validator.yml` maps the validator HTTP API to `40443`, and `chain/genesis/devnet-observer/observer.yml` maps the observer HTTP API to `40403`. Set the URLs to the port that your own compose file publishes. The compose files need their `.env` values and a bootstrap address, so start from the [observer guide](/quick-start/join-observer/) or the [validator guide](/quick-start/join-validator/) instead of running them as they are.
+The compose files in [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) publish different ports. `chain/validator/validator.yml` maps the validator HTTP API to `40443`, and `chain/genesis/devnet-observer/observer.yml` maps the observer HTTP API to `40403`. Set the URLs to the port that your own compose file publishes. The compose files need their `.env` values and a bootstrap address, so start from the [observer guide](/nodes/observer/) or the [validator guide](/nodes/validator/) instead of running them as they are.
 
 Check the node before you save the network.
 
@@ -116,5 +116,5 @@ A wallet served from `http://localhost:3000` talks to nodes on `localhost` witho
 ## Support
 
 - Check the DevNet state on [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
-- For a node you run yourself, see the [observer guide](/quick-start/join-observer/) and the [validator guide](/quick-start/join-validator/).
-- For general questions, see the [FAQ](/faq/).
+- For a node you run yourself, see the [observer guide](/nodes/observer/) and the [validator guide](/nodes/validator/).
+- For general questions, see the [FAQ](/help/faq/).

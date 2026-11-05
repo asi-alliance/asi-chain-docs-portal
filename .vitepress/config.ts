@@ -41,10 +41,10 @@ export default withMermaid(defineConfig({
         ]
       },
       { text: 'Nodes', items: [
-          { text: 'Join as an Observer', link: '/quick-start/join-observer/' },
-          { text: 'Join as a Validator', link: '/quick-start/join-validator/' },
-          { text: 'Validator Node Image', link: '/shard-nodes/validator-image/' },
-          { text: 'Set Up a Private Shard', link: '/shard-nodes/own-shard/' },
+          { text: 'Join as an Observer', link: '/nodes/observer/' },
+          { text: 'Join as a Validator', link: '/nodes/validator/' },
+          { text: 'Validator Node Image', link: '/nodes/image/' },
+          { text: 'Set Up a Private Shard', link: '/nodes/private-shard/' },
         ]
       },
       { text: 'Architecture', link: '/architecture/' },
@@ -68,11 +68,11 @@ export default withMermaid(defineConfig({
         text: 'General',
         collapsed: false,
         items: [
-          { text: 'General Overview', link: '/general/overview/' },
-          { text: 'Network Endpoints', link: '/general/endpoints/' },
-          { text: 'Documentation Status', link: '/general/documentation-status/' },
-          { text: 'Container Images', link: '/general/container-images/' },
-          { text: 'Useful Links', link: '/general/useful-links/' },
+          { text: 'General Overview', link: '/overview/' },
+          { text: 'Network Endpoints', link: '/reference/endpoints/' },
+          { text: 'Documentation Status', link: '/help/documentation-status/' },
+          { text: 'Container Images', link: '/reference/container-images/' },
+          { text: 'Useful Links', link: '/reference/links/' },
         ]
       },
       {
@@ -81,19 +81,19 @@ export default withMermaid(defineConfig({
         items: [
           { text: 'Get Started', link: '/quick-start/' },
           { text: 'How Can I Get DevNet ASI?', link: '/quick-start/get-asi/' },
-          { text: 'Join as an Observer', link: '/quick-start/join-observer/' },
-          { text: 'Join as a Validator', link: '/quick-start/join-validator/' },
-          { text: 'Prepare and Enroll a Rust Validator', link: '/quick-start/validator-enrollment/' },
-          { text: 'Troubleshooting', link: '/quick-start/troubleshooting/' },
+          { text: 'Join as an Observer', link: '/nodes/observer/' },
+          { text: 'Join as a Validator', link: '/nodes/validator/' },
+          { text: 'Prepare and Enroll a Rust Validator', link: '/nodes/validator-enrollment/' },
+          { text: 'Troubleshooting', link: '/help/troubleshooting/' },
         ]
       },
       {
         text: 'Shard & Nodes',
         collapsed: false,
         items: [
-          { text: 'Shard and Node Roles', link: '/shard-nodes/devnet-structure/' },
-          { text: 'Validator Node Image', link: '/shard-nodes/validator-image/' },
-          { text: 'Set Up a Private Shard', link: '/shard-nodes/own-shard/' },
+          { text: 'Shard and Node Roles', link: '/nodes/roles/' },
+          { text: 'Validator Node Image', link: '/nodes/image/' },
+          { text: 'Set Up a Private Shard', link: '/nodes/private-shard/' },
         ]
       },
       {

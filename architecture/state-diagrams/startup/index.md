@@ -100,5 +100,5 @@ Do not delete the data directory of a node that its peers already know. The TLS 
 ## Related Documentation
 
 - [Running Node](/architecture/state-diagrams/operations/): after startup
-- [Validator Setup](/quick-start/join-validator/): setup guide
-- [Troubleshooting](/quick-start/troubleshooting/): common issues
+- [Validator Setup](/nodes/validator/): setup guide
+- [Troubleshooting](/help/troubleshooting/): common issues
