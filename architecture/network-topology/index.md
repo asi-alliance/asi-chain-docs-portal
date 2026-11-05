@@ -11,7 +11,7 @@ This page describes node roles and default listeners. Current DevNet addresses a
 | Observer | Follows chain state and serves queries without proposing blocks |
 | Indexer | Reads node APIs and stores derived chain data in PostgreSQL |
 | Hasura | Exposes approved database data through GraphQL |
-| Applications | Wallet, SDK, CLI and faucet send requests to a node API and read history through GraphQL |
+| Applications | Wallet, SDK, CLI and faucet send requests to a node API. The wallet and SDK read history through GraphQL, and the CLI uses GraphQL only for `history` and `export` |
 
 A bootstrap peer is not automatically a bonded validator. After the first connection every node talks to its peers through discovery, so the bootstrap peer is not a hub for traffic.
 
@@ -25,7 +25,8 @@ flowchart LR
     Bootstrap <--> Observer
     Validator <--> Observer
   end
-  Apps["Wallet, SDK, CLI, faucet"] -->|"HTTP 40403, gRPC 40401"| Validator
+  Apps["Wallet, SDK, CLI"] -->|"HTTP 40403, gRPC 40401"| Validator
+  Faucet[Faucet] -->|"HTTP 40403, gRPC 40401"| Validator
   Indexer[Indexer] -->|"gRPC / HTTP"| Validator
   Indexer -->|writes| DB[(PostgreSQL)]
   Hasura[Hasura GraphQL] -->|reads| DB

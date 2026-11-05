@@ -33,7 +33,7 @@ The runtime binary is `/opt/docker/bin/node`; no Scala/JVM runtime configuration
 
 ## API
 
-The HTTP API on port 40403 serves everything below under `/api`. Swagger UI is at `/swagger-ui`. All block and deploy endpoints accept `?view=full|summary`.
+The HTTP API listens on port 40403. Most routes are under `/api`, while `/status`, `/version`, `/metrics` and the `/ws/events` WebSocket sit at the root. Swagger UI is at `/swagger-ui`. The block routes (`/api/block/{hash}`, `/api/last-finalized-block` and the `/api/blocks` routes) and `/api/deploy/{deploy_id}` take `?view=full|summary`, and the default differs by route.
 
 | Endpoints | Purpose |
 |---|---|

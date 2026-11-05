@@ -33,7 +33,7 @@ flowchart LR
 |---|---|---|
 | Pending | The node accepted the deploy and holds it in its local queue. Observers always answer with an empty list | `GET /api/pending-deploys` |
 | In a block | A validator included the deploy, executed its Rholang and signed the block | `GET /api/deploy/{deploy_id}` |
-| Finalized | The block is finalized, and the deploy's effects are part of canonical state | `GET /api/is-finalized/{hash}`, `GET /api/deploy-finalization-status/{sig}` |
+| Finalized | The block that holds the deploy is finalized. Whether the deploy's effects were kept is reported per deploy | `GET /api/is-finalized/{hash}`, `GET /api/deploy-finalization-status/{sig}` |
 
 A validator creates a block when its proposer triggers and both the synchrony and the height constraints hold. By default the heartbeat proposer checks every 5 seconds. Peers that receive the block validate it before adding it to their DAG.
 
