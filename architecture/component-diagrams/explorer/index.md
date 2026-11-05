@@ -19,21 +19,21 @@ The indexer writes these tables to PostgreSQL. Hasura serves all of them except 
 
 | Table | Key | Related Tables | Main Columns |
 |---|---|---|---|
-| `blocks` | `block_hash` | `block_parents`, `deployments`, `transfers`, `validator_bonds`, `block_validators`, `balance_states`, `native_transfer_calls` and `native_transfer_results`, each by `block_hash` | `block_number`, `proposer`, `finalization_status`, `deployment_count`, `token_decimals` |
-| `block_parents` | `block_hash`, `parent_hash` | `blocks` by `block_hash` | `parent_index` |
-| `deployments` | `deploy_id` | `blocks` by `block_hash`. `transfers`, `native_transfer_calls` and `native_transfer_results` by `deploy_id` | `block_hash`, `deployer_address`, `phlo_cost`, `errored`, `status` |
-| `transfers` | `id` | `blocks` by `block_hash`, `deployments` by `deploy_id`, and at most one `native_transfer_results` row by `native_result_id` | `deploy_id`, `block_hash`, `from_address`, `to_address`, `amount_dust`, `event_index`, `native_result_id` |
-| `native_transfer_calls` | `id` | `blocks` by `block_hash`, `deployments` by `deploy_id`, and `native_transfer_results` by `call_id` | `block_hash`, `deploy_id`, `event_index`, `requested_amount` |
-| `native_transfer_results` | `id` | `blocks` by `block_hash`, `deployments` by `deploy_id`, `native_transfer_calls` by `call_id`, and at most one `transfers` row by `native_result_id` | `call_id`, `block_hash`, `deploy_id`, `phase`, `success` |
-| `validator_bonds` | `id` | `blocks` by `block_hash` | `block_hash`, `validator_public_key`, `stake` |
-| `block_validators` | `block_hash`, `validator_public_key` | `blocks` by `block_hash` | none besides the key |
-| `balance_states` | `id` | `blocks` by `block_hash` | `address`, `block_hash`, `unbonded_balance_dust`, `bonded_balance_dust` |
-| `validators` | `public_key` | none | `status`, `total_stake` |
-| `pending_deploys` | `sig` | none | `deployer_address`, `is_rejected` |
-| `epoch_transitions` | `id` | none | `epoch_number`, `start_block`, `end_block` |
-| `network_stats` | `id` | none | `block_number`, `active_validators`, `consensus_status` |
-| `indexer_state` | `key` | none | `value` |
-| `network_metrics_buckets` | `bucket_start` | none | `deployments_count`, `transfers_count` |
+| `blocks` | `block_hash` varchar | `block_parents`, `deployments`, `transfers`, `validator_bonds`, `block_validators`, `balance_states`, `native_transfer_calls` and `native_transfer_results`, each by `block_hash` | `block_number` bigint, `proposer` varchar, `finalization_status` varchar, `deployment_count` int, `token_decimals` int |
+| `block_parents` | `block_hash` varchar, `parent_hash` varchar | `blocks` by `block_hash` | `parent_index` int |
+| `deployments` | `deploy_id` varchar | `blocks` by `block_hash`. `transfers`, `native_transfer_calls` and `native_transfer_results` by `deploy_id` | `block_hash` varchar, `deployer_address` varchar, `phlo_cost` bigint, `errored` boolean, `status` varchar |
+| `transfers` | `id` bigint | `blocks` by `block_hash`, `deployments` by `deploy_id`, and at most one `native_transfer_results` row by `native_result_id` | `deploy_id` varchar, `block_hash` varchar, `from_address` varchar, `to_address` varchar, `amount_dust` numeric, `event_index` int, `native_result_id` varchar |
+| `native_transfer_calls` | `id` varchar | `blocks` by `block_hash`, `deployments` by `deploy_id`, and `native_transfer_results` by `call_id` | `block_hash` varchar, `deploy_id` varchar, `event_index` int, `requested_amount` text |
+| `native_transfer_results` | `id` varchar | `blocks` by `block_hash`, `deployments` by `deploy_id`, `native_transfer_calls` by `call_id`, and at most one `transfers` row by `native_result_id` | `call_id` varchar, `block_hash` varchar, `deploy_id` varchar, `phase` varchar, `success` boolean |
+| `validator_bonds` | `id` bigint | `blocks` by `block_hash` | `block_hash` varchar, `validator_public_key` varchar, `stake` numeric |
+| `block_validators` | `block_hash` varchar, `validator_public_key` varchar | `blocks` by `block_hash` | none besides the key |
+| `balance_states` | `id` bigint | `blocks` by `block_hash` | `address` varchar, `block_hash` varchar, `unbonded_balance_dust` numeric, `bonded_balance_dust` numeric |
+| `validators` | `public_key` varchar | none | `status` varchar, `total_stake` numeric |
+| `pending_deploys` | `sig` varchar | none | `deployer_address` varchar, `is_rejected` boolean |
+| `epoch_transitions` | `id` bigint | none | `epoch_number` bigint, `start_block` bigint, `end_block` bigint |
+| `network_stats` | `id` bigint | none | `block_number` bigint, `active_validators` int, `consensus_status` varchar |
+| `indexer_state` | `key` varchar | none | `value` text |
+| `network_metrics_buckets` | `bucket_start` timestamptz | none | `deployments_count` bigint, `transfers_count` bigint |
 
 After migration 001, amounts in the smallest token unit (`amount_dust`, `stake`, `total_stake`, `bonded_balance_dust` and `unbonded_balance_dust`) are `NUMERIC(78,0)` and limited to the unsigned 256-bit range. The matching `*_asi` columns are `NUMERIC(155,77)`, and the generated totals in `balance_states` are one digit wider. Each of the tables `blocks`, `transfers`, `validators`, `validator_bonds` and `balance_states` carries a `token_decimals` column. The tables `validators`, `pending_deploys`, `epoch_transitions`, `network_stats`, `indexer_state` and `network_metrics_buckets` have no foreign keys. A `validators` row is linked to `validator_bonds` only by the public key value.
 
