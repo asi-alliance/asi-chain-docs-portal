@@ -1,8 +1,17 @@
 # Codec
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/codec/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/codec/index.ts)
 
-Encoding and decoding helpers for Base16, Base58, and Base64.
+Encoding and decoding helpers for Base16, Base58 and Base64, plus a few byte conversions. All of them are plain functions exported from the package root.
+
+```ts
+import { encodeBase16, decodeBase16, encodeBase58, decodeBase58 } from '@asichain/asi-wallet-sdk';
+
+const bytes = decodeBase16('00ff10ab');
+console.log(encodeBase16(bytes)); // 00ff10ab
+console.log(encodeBase58('00ff10ab'));
+console.log(decodeBase58(encodeBase58('00ff10ab')).length); // 4
+```
 
 ## `encodeBase58`
 
@@ -26,7 +35,7 @@ Converts a hex string to a Base58-encoded string.
 decodeBase58(value: string): Uint8Array
 ```
 
-Decodes a Base58-encoded string into a `Uint8Array`.
+Decodes a Base58 string into a `Uint8Array`. Throws if the string contains characters outside the Base58 alphabet.
 
 **Parameters:**
 
@@ -48,9 +57,11 @@ Parses a hex string into a `Uint8Array`.
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `hex` | `string` | Yes | Hex string (even length). |
+| `hex` | `string` | Yes | Hex string of even length. |
 
 **Returns:** `Uint8Array` — decoded bytes.
+
+The function does not validate its input. With an odd length the last digit is silently dropped, and a non-hex pair becomes the byte `0`, so check the string before calling.
 
 ## `encodeBase16`
 
@@ -99,3 +110,53 @@ Converts a Base64 string to an `ArrayBuffer`.
 | `base64` | `string` | Yes | Base64 string to decode. |
 
 **Returns:** `ArrayBuffer`.
+
+## `toUint8Array`
+
+```ts
+toUint8Array(value: unknown): Uint8Array
+```
+
+Converts the byte containers that appear after JSON round trips into a `Uint8Array`. It accepts a `Uint8Array` (returned as is), a Node.js `Buffer` serialized as `{ type: 'Buffer', data: number[] }`, an array of bytes, and an object with consecutive numeric keys `"0"`, `"1"`, and so on.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `value` | `unknown` | Yes | Value to convert. |
+
+**Returns:** `Uint8Array`.
+
+**Throws:** `Error("Invalid byte value")` if an element is not an integer from 0 to 255, and `Error("Unsupported data format")` for any other input.
+
+## `bufferToBigInt`
+
+```ts
+bufferToBigInt(buffer: Uint8Array): bigint
+```
+
+Reads the bytes as one big-endian unsigned integer.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `buffer` | `Uint8Array` | Yes | Bytes to convert. An empty array throws a `SyntaxError`. |
+
+**Returns:** `bigint`.
+
+## `bigIntToBuffer`
+
+```ts
+bigIntToBuffer(num: bigint): Uint8Array
+```
+
+Writes a non-negative integer as big-endian bytes, left-padded with zeros to at least 32 bytes. It is the inverse of `bufferToBigInt` for 32-byte values such as private keys.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `num` | `bigint` | Yes | Non-negative integer. |
+
+**Returns:** `Uint8Array`.

@@ -1,6 +1,6 @@
 # Polyfills
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/polyfills/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/polyfills/index.ts)
 
 ## `setupBufferPolyfill`
 
@@ -8,8 +8,8 @@
 setupBufferPolyfill(): void
 ```
 
-Ensures `window.Buffer` is available in browser environments by assigning Node's `Buffer` from the `buffer` package when missing. No-op in non-browser environments.
+Sets `window.Buffer` to the `Buffer` class from the `buffer` package when it is missing. Outside a browser, where `window` is undefined, the call does nothing.
 
-Call this once at application startup if using the SDK in a browser context without a bundler that provides `Buffer` globally.
+The `KeyDerivation` and `Mnemonic` modules call it themselves when they are imported, so an application that imports them needs no extra call. Call it once at startup only if code that needs a global `Buffer` runs before those imports and your bundler does not provide one.
 
 **Returns:** `void`.

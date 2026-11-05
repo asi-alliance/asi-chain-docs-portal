@@ -1,71 +1,95 @@
-# MnemonicService
+# Mnemonic
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Mnemonic/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Mnemonic/index.ts)
 
-BIP-39 mnemonic generation and validation.
+BIP-39 mnemonic generation, validation and conversion. The package exports the class as `Mnemonic` and the enum as `MnemonicStrength`, and all methods are static. Importing the module also calls [`setupBufferPolyfill`](/wallet-sdk/api-reference/polyfills/).
+
+```ts
+import { Mnemonic, MnemonicStrength } from '@asichain/asi-wallet-sdk';
+
+const phrase = Mnemonic.generateMnemonic(MnemonicStrength.TWENTY_FOUR_WORDS);
+console.log(Mnemonic.isMnemonicValid(phrase)); // true
+console.log(Mnemonic.mnemonicToWordArray(phrase).length); // 24
+```
 
 **Enum `MnemonicStrength`:**
 
 | Value | Constant | Entropy |
 |-------|----------|---------|
-| `128` | `TWELVE_WORDS` | 128 bits → 12 words |
-| `256` | `TWENTY_FOUR_WORDS` | 256 bits → 24 words |
+| `128` | `TWELVE_WORDS` | 128 bits, 12 words |
+| `256` | `TWENTY_FOUR_WORDS` | 256 bits, 24 words |
 
 ## `generateMnemonic`
 
 ```ts
-generateMnemonic(strength?: MnemonicStrength): string
+static generateMnemonic(strength?: MnemonicStrength): string
 ```
 
-Generates a new BIP-39 mnemonic phrase.
+Generates a BIP-39 mnemonic.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `strength` | `MnemonicStrength` | No | Entropy bits. Defaults to `MnemonicStrength.TWELVE_WORDS` (128 bits, 12 words). |
+| `strength` | `MnemonicStrength` | No | Entropy in bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
 
-**Returns:** `string` — space-separated mnemonic phrase.
+**Returns:** `string` — space-separated mnemonic.
 
 ## `generateMnemonicArray`
 
 ```ts
-generateMnemonicArray(strength?: MnemonicStrength): string[]
+static generateMnemonicArray(strength?: MnemonicStrength): string[]
 ```
 
-Generates a mnemonic and returns it split into individual words.
+Generates a mnemonic and returns it as an array of words.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `strength` | `MnemonicStrength` | No | Entropy bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
+| `strength` | `MnemonicStrength` | No | Entropy in bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
 
-**Returns:** `string[]` — array of mnemonic words.
+**Returns:** `string[]` — mnemonic words.
 
 ## `isMnemonicValid`
 
 ```ts
-isMnemonicValid(mnemonic: string): boolean
+static isMnemonicValid(mnemonic: string): boolean
 ```
 
-Validates a BIP-39 mnemonic phrase (checks wordlist membership and checksum).
+Checks the words against the BIP-39 English wordlist and verifies the checksum. The check is strict about spacing and case, so run user input through `normalizeMnemonic` first.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `mnemonic` | `string` | Yes | Mnemonic phrase to validate. |
+| `mnemonic` | `string` | Yes | Mnemonic to validate. |
 
 **Returns:** `boolean` — `true` if the mnemonic is valid.
+
+## `normalizeMnemonic`
+
+```ts
+static normalizeMnemonic(mnemonic: string): string
+```
+
+Trims the string, lowercases it and collapses any run of whitespace into a single space.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `mnemonic` | `string` | Yes | Raw mnemonic text, for example pasted by a user. |
+
+**Returns:** `string` — normalized mnemonic.
 
 ## `mnemonicToWordArray`
 
 ```ts
-mnemonicToWordArray(mnemonic: string): string[]
+static mnemonicToWordArray(mnemonic: string): string[]
 ```
 
-Splits a mnemonic string into an array of words by whitespace.
+Trims the string and splits it on a single space. Several spaces in a row produce empty strings in the result, so normalize the text first if it comes from user input.
 
 **Parameters:**
 
@@ -73,20 +97,37 @@ Splits a mnemonic string into an array of words by whitespace.
 |------|------|----------|-------------|
 | `mnemonic` | `string` | Yes | Mnemonic string. |
 
-**Returns:** `string[]` — individual words.
+**Returns:** `string[]` — words.
 
 ## `wordArrayToMnemonic`
 
 ```ts
-wordArrayToMnemonic(words: string[]): string
+static wordArrayToMnemonic(words: string[]): string
 ```
 
-Joins an array of mnemonic words into a space-separated string.
+Joins the words with single spaces.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `words` | `string[]` | Yes | Array of BIP-39 words. |
+| `words` | `string[]` | Yes | Mnemonic words. |
 
-**Returns:** `string` — mnemonic phrase.
+**Returns:** `string` — mnemonic.
+
+## `mnemonicToSeed`
+
+```ts
+static mnemonicToSeed(mnemonic: string | string[], passphrase?: string): Promise<Uint8Array>
+```
+
+Converts a mnemonic to a 64-byte BIP-39 seed. [`KeyDerivation.mnemonicToSeed`](/wallet-sdk/api-reference/key-derivation/#mnemonictoseed) gives the same result.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `mnemonic` | `string \| string[]` | Yes | Mnemonic as a string or an array of words. |
+| `passphrase` | `string` | No | BIP-39 passphrase. Defaults to `""`. |
+
+**Returns:** `Promise<Uint8Array>` — seed (64 bytes).
