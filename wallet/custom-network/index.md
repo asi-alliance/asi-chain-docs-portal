@@ -1,386 +1,119 @@
 # Custom Network Connection
 
-Guide for connecting ASI Wallet to custom networks, including DevNet, local nodes, and private shards.
+The ASI Wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) comes with one built-in network, DevNet. To use the wallet with your own node, such as a local observer or a private shard, add a custom network on the Network Settings page. The public DevNet addresses are listed on the [Network Endpoints](/general/endpoints/) page.
 
-## Overview
+## Open The Form
 
-ASI Wallet supports connecting to different networks:
-- **DevNet** - Official development network
-- **Local Network** - Your local validator/observer node
-- **Custom Networks** - Private shards or other networks
+1. Open the wallet and unlock it.
+2. Choose **Network Settings** in the menu.
+3. The **Custom Network Configuration** card holds the form. The **Existing Custom Networks** card below it lists the networks you have saved.
 
-## Accessing Network Settings
+DevNet is built into the wallet. It is not listed on this page and cannot be edited or deleted here. You select it in the network selector in the header, next to the connection status.
 
-1. Open [ASI Wallet](https://wallet.dev.asichain.io)
-2. Navigate to **Settings** page
-3. View current network configurations
-4. Edit or add new networks
+![Custom Network Configuration form](/images/wallet/custom-network-form.png)
 
-## DevNet Configuration
+## Form Fields
 
-DevNet is the default network for testing and development.
+`Network Name` is the label shown in the network selector. It cannot be empty and must differ, ignoring case, from the name of every other network, including DevNet.
 
-### DevNet Endpoints
+`Node API Profile` tells the wallet which node implementation answers on the URLs below. The list offers `Scala node` (stable) and `Rust node` (experimental), and the default is `Scala node`. Public DevNet currently runs a Scala node.
 
-**Validator 1** (handles all wallet HTTP/gRPC operations):
-- Host: `34.196.119.4`
-- gRPC Port: `40401`
-- HTTP Port: `40403`
-- HTTP URL: `http://34.196.119.4:40403`
+`Validator URL` is where the wallet sends deploys and transfers.
 
-::: warning
-The standalone observer node (`mettacycle-devnet-5`) is currently unstable. Validator 1 (`34.196.119.4`) is used for both write (deploys, transfers) and read (balance, queries) operations.
-:::
+`Read-only URL` is where it sends read queries, such as balances, deploy status and blocks. There is no fallback to the validator URL, so enter the same address again if one node serves both.
 
-::: tip Bootstrap node
-The bootstrap node (`54.152.57.201`) is the network's peer-discovery entry point — used in the `rnode://...@54.152.57.201?protocol=40400&discovery=40404` URI when starting your own node. The wallet does not connect to it directly.
-:::
+`Indexer URL` is the GraphQL endpoint the wallet reads transaction history from. The field cannot be left empty, and without a working indexer the Transactions page has no history to show.
 
-### How It Works
+Each URL must use `http` or `https` and contain a host. Do not add a path such as `/api`, because the wallet appends `/api/...` to the address itself. The **Direct Links** block under the fields lists the filled URLs as links, so you can open each one in a new tab.
 
-The wallet sends both write (deploys, transfers) and read (balance, queries) operations to **Validator 1** (`34.196.119.4:40403`) via HTTP/gRPC.
+**Save Custom Network** validates the form, and the first problem it finds is shown next to the field, for example `Network name is required.` or `Validator URL: URL must use http or https protocol`. After a successful save the form is cleared. **Clear form** does the same at any time and restores the default profile.
 
-### Editing DevNet Configuration
+## Switch To The Network
 
-1. Go to Settings page
-2. Find Devnet Configuration section
-3. Click **Edit Configuration** button
-4. Update endpoint URLs if needed
-5. Save changes
+After saving, the network appears in the **Existing Custom Networks** card and in the selector in the header. Saving does not switch to it, so pick it in the selector.
 
-> **Note:** DevNet configuration is pre-configured and usually doesn't need changes.
+The header then shows `Connected` or `Disconnected`. The wallet checks `GET <validator-url>/api/status` when you switch and then every 60 seconds.
 
-## Local Network Configuration
+The networks are stored in the browser together with your wallets. Clearing the browser data removes them, and the form has to be filled in again.
 
-Connect to your own local validator or observer node.
+## Local Node
 
-### Setup Local Node First
+For a node on your own machine, the values depend on the ports the node publishes. A node on the default ports, with one HTTP API on `40403` serving both reads and writes, looks like this.
 
-Before configuring the wallet, ensure you have a running node:
+| Field | Value |
+| --- | --- |
+| Network Name | `Local Node` |
+| Node API Profile | `Rust node` or `Scala node`, as your node is built |
+| Validator URL | `http://localhost:40403` |
+| Read-only URL | `http://localhost:40403` |
+| Indexer URL | `http://localhost:8080/v1/graphql` |
 
-**For Validator:**
+The compose files in [asi-chain](https://github.com/asi-alliance/asi-chain) publish different ports. `chain/validator/validator.yml` maps the validator HTTP API to `40443`, and `chain/genesis/devnet-observer/observer.yml` maps the observer HTTP API to `40403`. Set the URLs to the port that your own compose file publishes. The compose files need their `.env` values and a bootstrap address, so start from the [observer guide](/quick-start/join-observer/) or the [validator guide](/quick-start/join-validator/) instead of running them as they are.
+
+Check the node before you save the network.
+
 ```bash
-cd asi-chain/chain
-sudo docker compose -f validator.yml up -d
+curl -4 http://localhost:40403/api/status
 ```
 
-**For Observer:**
-```bash
-cd asi-chain/chain  
-sudo docker compose -f observer.yml up -d
-```
+A running node answers with JSON that contains its `version`. If the command fails, the wallet will not connect either.
 
-### Local Network Settings
+The hosted wallet runs on HTTPS, and Chrome asks the page for permission before it lets a public site talk to `localhost`. Without that permission the requests fail with `Permission was denied for this request to access the loopback address space`, and the header shows `Disconnected`. Allow access to the local network for the wallet site in the browser, or run the wallet yourself (see the last section).
 
-**Configuration:**
-- Validator URL: `http://localhost:40403`
-- Observer URL: `http://localhost:40403` (or your observer's host:port)
-- Admin URL: `http://localhost:40405`
+The node must also answer the browser's CORS preflight. The Rust node allows any origin by default. If you put something in front of the node, make sure it passes the node's CORS headers through.
 
-### How to Configure
+## Remote Node
 
-1. Go to Settings page in wallet
-2. Find Local Network section
-3. Click **Edit Network** button
-4. Verify URLs:
-   ```
-   Validator: http://localhost:40403
-   Observer: http://localhost:40403
-   Admin: http://localhost:40405
-   ```
-5. Save configuration
+The hosted wallet is served over HTTPS, so the browser blocks every `http://` address except `localhost`. The console reports `Mixed Content ... This request has been blocked`, and the header shows `Disconnected`. A node on another machine therefore needs an HTTPS front, for example nginx with a certificate for its domain.
 
-### Switch to Local Network
-
-To use your local node:
-1. Select Local Network from network dropdown
-2. Wallet will now connect to localhost
-3. All operations use your local node
-
-## Custom Network Configuration
-
-Connect to a private shard or custom deployment.
-
-### Requirements
-
-Before connecting to a custom network, you need:
-- IP address or domain of the network
-- HTTP port for validator node
-- HTTP port for observer node (if available)
-- Confirmation that network is accessible
-
-### Adding Custom Network
-
-1. Go to Settings page
-2. Look for option to add custom network (if available)
-3. Provide network details:
-   - **Network Name:** Friendly name
-   - **Validator URL:** `http://<ip>:<port>`
-   - **Observer URL:** `http://<ip>:<port>` (optional)
-
-### Example Custom Network
-
-For a private shard with one validator and one observer on separate hosts (each node on its own VM uses the standard `40400-40405` range):
-
-```
-Network Name: Private Test
-Validator URL: http://192.168.1.100:40403
-Observer URL: http://192.168.1.101:40403
-```
-
-If your private shard runs everything on a single VM, the nodes use the `404XY` pattern (`X=0` bootstrap, `X=1` validator1, `X=5` observer) — for example `http://192.168.1.100:40413` for validator and `http://192.168.1.100:40453` for observer.
-
-## Network Selection
-
-### Switching Networks
-
-The wallet allows switching between configured networks:
-
-1. Find network selector (typically in header or settings)
-2. Click current network name
-3. Select desired network from dropdown
-4. Wallet reconnects to selected network
-
-**Important:** Switching networks changes:
-- Which blockchain you're connected to
-- Available accounts (different networks = different balances)
-- Transaction history shown
-
-### Active Network Indicator
-
-The wallet shows which network is currently active:
-- Look for network name in header or status bar
-- Connection indicator (green = connected)
-- Real-time updates when switched
-
-## Troubleshooting Network Connections
-
-### Cannot Connect to DevNet
-
-**Symptoms:**
-- "Connection failed" error
-- Transactions timing out
-- Balance not loading
-
-**Solutions:**
-1. Check internet connection
-2. Verify firewall isn't blocking requests
-3. Try refreshing the page
-4. Check if DevNet is operational at [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-
-### Cannot Connect to Local Network
-
-**Symptoms:**
-- Wallet can't reach localhost
-- "Network unreachable" error
-
-**Solutions:**
-1. Verify node is running:
-   ```bash
-   docker ps | grep validator
-   ```
-
-2. Check node logs:
-   ```bash
-   docker logs validator -f
-   ```
-
-3. Test endpoint manually:
-   ```bash
-   curl http://localhost:40403/status
-   ```
-
-4. Verify ports are correct:
-   - Validator HTTP: 40403
-   - Observer HTTP: 40403 (typically same port, different host/VM)
-
-5. Check if ports are listening:
-   ```bash
-   netstat -an | grep 40403
-   ```
-
-### Cannot Connect to Custom Network
-
-**Symptoms:**
-- "Cannot reach network" error
-- Timeout errors
-
-**Solutions:**
-1. **Verify IP and ports are correct**
-   - Double-check IP address
-   - Confirm port numbers
-   - Test with curl: `curl http://<ip>:<port>/status`
-
-2. **Check firewall rules**
-   - Ensure ports are open
-   - Verify network security groups (if cloud)
-
-3. **Test network connectivity**
-   ```bash
-   ping <ip>
-   telnet <ip> <port>
-   ```
-
-4. **Verify node is running**
-   - Check if target node is operational
-   - Review node logs for errors
-
-### CORS Issues
-
-If you see CORS errors:
-
-**Problem:** Browser security blocks cross-origin requests
-
-**Solution for local development:**
-- Run wallet locally, not from hosted site
-- Configure node to allow CORS
-- Use browser extension to bypass CORS (development only)
-
-**For production:**
-- Ensure nodes have proper CORS headers
-- Use same domain for wallet and nodes
-- Or use reverse proxy
-
-## Advanced Network Configuration
-
-### Port Forwarding
-
-If running node on local network but accessing from outside:
-
-1. **Configure Router:**
-   - Forward ports 40400-40405
-   - Point to local node IP
-
-2. **Update Wallet:**
-   - Use public IP instead of localhost
-   - Example: `http://<your-public-ip>:40403`
-
-3. **Security:**
-   - Consider VPN instead of public exposure
-   - Use firewall rules
-   - Monitor for unauthorized access
-
-### Reverse Proxy Setup
-
-For production deployments, use reverse proxy:
-
-**Nginx Example:**
 ```nginx
 server {
-    listen 80;
-    server_name wallet.example.com;
-    
+    listen 443 ssl;
+    server_name node.example.com;
+
+    ssl_certificate     /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
+
     location /api/ {
-        proxy_pass http://localhost:40403/;
+        proxy_pass http://127.0.0.1:40403;
+        proxy_set_header Host $host;
+    }
+
+    location = /status {
+        proxy_pass http://127.0.0.1:40403;
         proxy_set_header Host $host;
     }
 }
 ```
 
-**Then connect wallet to:**
-```
-http://wallet.example.com/api/
-```
+`proxy_pass` has no path after the port, so nginx forwards the request path unchanged and `/api/status` reaches the node as `/api/status`. With `proxy_pass http://127.0.0.1:40403/;` nginx would cut the `/api/` prefix, so the node would receive `/deploy` instead of `/api/deploy` and answer 404. The status check would still pass, because the node also serves `/status`, and the header would show `Connected` while deploys and queries fail.
 
-### SSL/TLS Configuration
+Then fill in the form with the domain only.
 
-For secure connections:
+| Field | Value |
+| --- | --- |
+| Validator URL | `https://node.example.com` |
+| Read-only URL | `https://node.example.com` |
+| Indexer URL | `https://indexer.example.com/v1/graphql` |
 
-1. **Get SSL certificate**
-   - Use Let's Encrypt
-   - Or commercial certificate
+Only expose the HTTP API port through the proxy. The gRPC and admin ports (`40401`, `40402` and `40405` by default) stay private.
 
-2. **Configure proxy with SSL**
-   ```nginx
-   server {
-       listen 443 ssl;
-       ssl_certificate /path/to/cert.pem;
-       ssl_certificate_key /path/to/key.pem;
-       ...
-   }
-   ```
+## Troubleshooting
 
-3. **Update wallet URLs**
-   ```
-   https://secure.example.com
-   ```
+When the header shows `Disconnected`, open the browser console on the wallet page and look at the first error.
 
-## Network Performance
+- `Mixed Content` means a URL starts with `http://` on a host other than `localhost`. Use an HTTPS front, as in the section above.
+- `blocked by CORS policy: No 'Access-Control-Allow-Origin' header` means the node or the proxy in front of it does not send CORS headers.
+- `Permission was denied for this request to access the loopback address space` means the browser has not been allowed to reach `localhost` from the wallet site.
+- `404` on `/api/deploy` or `/api/explore-deploy` behind a proxy, while the header shows `Connected`, usually means that `proxy_pass` cuts the `/api/` prefix.
+- A timeout means the host or port is unreachable from your machine. Test it with `curl -4 <validator-url>/api/status`.
 
-### Monitoring Connection
+## Run The Wallet Yourself
 
-Check connection quality:
-- **Latency:** Response time for requests
-- **Reliability:** Success rate of operations
-- **Bandwidth:** Data transfer speed
-
-### Optimizing Performance
-
-**For Better Performance:**
-1. Use observer node for read operations
-2. Connect to geographically close nodes
-3. Use wired connection over WiFi
-4. Close unnecessary browser tabs
-
-**Node-Side Optimization:**
-1. Ensure adequate server resources
-2. Use SSD storage
-3. Optimize network settings
-4. Monitor node performance
-
-## Security Considerations
-
-### Secure Connections
-
-**Best Practices:**
-- Use HTTPS for public networks
-- Verify SSL certificates
-- Don't connect to untrusted nodes
-- Monitor for unusual activity
-
-### Private Keys
-
-**Network-Independent Security:**
-- Private keys work across all networks
-- But balances are network-specific
-- Keep keys secure regardless of network
-- Same key = same address on all networks
-
-### Network Trust
-
-**When Connecting to Custom Networks:**
-- Only connect to networks you trust
-- Verify node operators
-- Understand network rules
-- Be aware of risks
-
-## Multi-Network Strategy
-
-### Why Use Multiple Networks?
-
-**Development Workflow:**
-1. **DevNet:** Initial testing and learning
-2. **Local:** Development and debugging
-3. **Private:** Staging and integration testing
-4. **Mainnet:** Production deployment (when available)
-
-### Managing Multiple Networks
-
-**Organization Tips:**
-- Use descriptive network names
-- Document network configurations
-- Keep endpoint lists updated
-- Test connections regularly
+A wallet served from `http://localhost:3000` talks to nodes on `localhost` without the mixed content and local network prompts. The wallet reads its built-in networks from the `NETWORKS` variable at build time, and the build fails without it. Follow the [Local Development](https://github.com/asi-alliance/asi-chain-wallet#local-development) steps in the wallet repository, and fill `NETWORKS` and the bridge variables in `.env` before `npm start`. The published Docker image always serves the networks it was built with, so your own configuration needs your own image.
 
 ## Support
 
-For network connection issues:
-
-- **DevNet Problems:** Check [explorer status](https://explorer.dev.asichain.io)
-- **Local Issues:** Review [validator setup guide](/quick-start/join-validator/)
-- **Custom Networks:** Contact network administrator
-- **General Help:** See [FAQ](/faq/)
-
----
-
-**Network configurations are saved locally in your browser and persist across sessions.**
+- Check the DevNet state on [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
+- For a node you run yourself, see the [observer guide](/quick-start/join-observer/) and the [validator guide](/quick-start/join-validator/).
+- For general questions, see the [FAQ](/faq/).
