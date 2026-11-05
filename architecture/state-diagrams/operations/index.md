@@ -1,106 +1,82 @@
-# Node Operational States
+# Running Node
 
-Runtime states for active validator and observer nodes.
+What the node does after it reaches the Running state.
 
 ← [Back to State Diagrams](../)
 
-## Validator States
+## Roles
 
-Active validator nodes cycle through consensus states.
+A node in the Running state has one of two roles, and both use the same engine.
+
+| Role | `/api/status` | Behavior |
+|------|---------------|----------|
+| Validator | `isValidator: true` | Proposes blocks while it is bonded and in the active set, validates blocks from peers, serves the API. |
+| Read-only | `isValidator: false`, `isReadOnly: true` | Receives and validates blocks, keeps the DAG and serves queries. Does not propose. |
+
+`isValidator` reports only that the node has a validator key configured, not that it is bonded. A validator that is not yet bonded behaves like a read-only node. It skips proposing and picks up its bond without a restart once the bond takes effect at an epoch boundary.
+
+## Block Proposal
+
+A validator proposes through the heartbeat proposer, which is enabled by default.
 
 ```mermaid
 flowchart TD
-    subgraph Consensus["Consensus Cycle"]
-        Active((Active))
-        Proposing[Proposing]
-        Voting[Voting]
-        Finalizing[Finalizing]
-        
-        Active --> |Create block| Proposing
-        Active --> |Validate block| Voting
-        Active --> |Commit block| Finalizing
-        
-        Proposing --> Active
-        Voting --> Active
-        Finalizing --> Active
-    end
-    
-    subgraph Recovery["Connection Recovery"]
-        Disconnected[Disconnected]
-        Reconnecting[Reconnecting]
-    end
-    
-    Active --> |Network loss| Disconnected
-    Disconnected --> |Auto retry| Reconnecting
-    Reconnecting --> |Restored| Active
+    T[Heartbeat check every 5 seconds or deploy submitted] --> A{Bonded and active?}
+    A -->|No| W[Wait]
+    A -->|Yes| C{Synchrony and height constraints met?}
+    C -->|No| W
+    C -->|Yes| B[Create block from deploy pool]
+    B --> E[Execute deploys]
+    E --> S[Sign block]
+    S --> R[Add to DAG and relay to peers]
+    R --> W
 ```
 
-## Observer States
+The proposer checks every `casper.heartbeat.check-interval`, which is 5 seconds by default, and a deploy submission wakes it immediately. It proposes when there are pending deploys, and it also proposes empty blocks when the last finalized block is older than `max-lfb-age`, so that finalization keeps moving on a quiet shard. A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals. A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
 
-Observer nodes monitor without participating in consensus.
+## Block Validation
+
+A block from a peer passes these checks in order. A block that fails one of them is rejected and handled as invalid.
 
 ```mermaid
-flowchart LR
-    subgraph Normal["Normal Operation"]
-        Observer((Observer))
-    end
-    
-    subgraph Recovery["Connection Recovery"]
-        Disconnected[Disconnected]
-        Reconnecting[Reconnecting]
-    end
-    
-    Observer --> |Network loss| Disconnected
-    Disconnected --> |Auto retry| Reconnecting
-    Reconnecting --> |Restored| Observer
+flowchart TD
+    RX[Block received] --> F{Format, signature and hash valid?}
+    F -->|No| REJ[Reject]
+    F -->|Yes| P[Parents in DAG?]
+    P -->|No| BUF[Buffer until parents arrive]
+    BUF --> P
+    P -->|Yes| V[Block summary]
+    V --> CP[State checkpoint]
+    CP --> BC[Bonds cache]
+    BC --> NI[Neglected invalid blocks]
+    NI --> NE[Neglected equivocations]
+    NE --> PP[Phlo price]
+    PP --> EQ[Equivocation check]
+    EQ --> ADD[Add to DAG and relay]
+    V -->|invalid| REJ
+    CP -->|state hash mismatch| REJ
+    BC -->|invalid| REJ
 ```
 
-::: tip Observer Mode
-Observer nodes continuously receive and store blocks but do not participate in consensus voting.
-:::
+Voting is not a separate step. A validator endorses blocks by listing them in the justifications of its next block, and finalization is computed from the DAG by the clique oracle, so every node reaches it on its own.
 
-## State Descriptions
+## Connection Loss
 
-### Active (Validator)
+The node has no Disconnected or Reconnecting state. Two background loops keep the peer list current.
 
-| State | Trigger | Description |
-|-------|---------|-------------|
-| **Proposing** | Block slot | Creating new block proposal |
-| **Voting** | Received block | Validating peer's block |
-| **Finalizing** | Consensus reached | Committing finalized block |
+- The clear-connections loop checks peers every `cleanup-interval` (10 seconds) and drops a peer after `heartbeat-failure-threshold` (3) failed checks in a row. A single success resets the count.
+- The node discovery loop looks up new peers through Kademlia, so a dropped peer can return when it answers again.
 
-### Observer
-
-| State | Description |
-|-------|-------------|
-| **Observer** | Receiving and storing blocks |
-| **Disconnected** | Network connection lost |
-| **Reconnecting** | Attempting to restore connection |
-
-## Monitoring
-
-Check current node activity:
+Check peers and the last finalized block from the status endpoint.
 
 ```bash
-# Watch consensus activity
-docker logs -f validator 2>&1 | grep -E "propose|vote|finalized"
-
-# Check connection status
-docker logs validator 2>&1 | grep -i "connected\|disconnected"
+curl -s http://localhost:40403/api/status
 ```
-
-## Connection Recovery
-
-| Scenario | Auto-Recovery |
-|----------|---------------|
-| Brief network drop | Yes, automatic |
-| Extended outage | Yes, with resync |
-| Bootstrap unreachable | Retry with backoff |
 
 ---
 
 ## Related Documentation
 
-- [Startup States](../startup/) - Node initialization
-- [Network Topology](../../network-topology/) - Node connections
+- [Node Startup](../startup/) - Before Running
+- [Component Diagrams](../../component-diagrams/) - Node internals
 - [Troubleshooting](/quick-start/troubleshooting/) - Common issues

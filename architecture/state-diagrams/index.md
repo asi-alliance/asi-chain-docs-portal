@@ -1,49 +1,40 @@
 # State Diagrams
 
-Node lifecycle and state transitions.
+Node startup and runtime behavior of the Rust node. The diagrams follow `node_runtime.rs` and `casper_launch.rs` in [asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node), and the log lines quoted on these pages come from the `node-rust` image `0.4.46-dev.20261104-e18defd44d43`.
 
 ← [Back to Architecture Overview](../)
 
-## Available Diagrams
+## Pages
 
-### [Startup States](./startup/)
+- [Node Startup](./startup/) covers the steps from process start to the Running state and the four launch modes.
+- [Running Node](./operations/) covers what a validator and a read-only node do after startup.
 
-States during node initialization.
+## Lifecycle
 
-- Initializing → Connecting → Bootstrapping → Syncing → Ready
-- Common startup issues and solutions
-
-### [Operational States](./operations/)
-
-Runtime states for active nodes.
-
-- Validator consensus cycle (Proposing, Voting, Finalizing)
-- Observer monitoring state
-- Connection recovery
-
-## Simplified Lifecycle
+The node has no single state machine for startup. It runs a fixed sequence of steps, and the launch mode chosen in step 2 decides how it reaches the Running state.
 
 ```mermaid
-graph LR
-    Start[Start] --> Init[Initialize]
-    Init --> Sync[Synchronize]
-    Sync --> Run[Running]
-    Run --> |Validator| Cons[Consensus]
-    Run --> |Observer| Mon[Monitoring]
+flowchart LR
+    Setup[Load config, keys and storage] --> Launch[Choose launch mode]
+    Launch --> Servers[Start servers and discovery]
+    Servers --> Conn[Wait for first peer]
+    Conn --> Init[Run engine init]
+    Init --> Run[Running]
 ```
 
-::: warning
-The sync phase can take 1-12 hours for new nodes. See [Troubleshooting](/quick-start/troubleshooting/) for details.
-:::
+A node started with `--standalone` skips the wait for the first peer. Once the node is Running, `GET /api/ready` returns 200 and `GET /api/status` reports `"isReady": true`.
 
-## Monitoring Commands
+## Check the Current State
 
 ```bash
-# Check current state
-docker logs rnode.validator 2>&1 | tail -50
+# Readiness probe: 200 when Running, 503 before that
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:40403/api/ready
 
-# Monitor state changes
-docker logs -f rnode.validator 2>&1 | grep -E "state|sync|connected"
+# Role and readiness
+curl -s http://localhost:40403/api/status
+
+# Log line written on the transition
+docker logs <container> 2>&1 | grep "transition to Running"
 ```
 
 ---
