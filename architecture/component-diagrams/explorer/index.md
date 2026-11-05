@@ -4,7 +4,7 @@ The explorer at [github.com/asi-alliance/asi-chain-explorer](https://github.com/
 
 The frontend uses two connections.
 
-- Queries and mutations go over HTTP (GraphQL over HTTP) to `REACT_APP_GRAPHQL_URL`.
+- Queries and mutations go to `REACT_APP_GRAPHQL_URL` as GraphQL over HTTP.
 - Live updates (new blocks, transfers, deployments, network statistics) arrive as GraphQL subscriptions over WebSocket at `REACT_APP_GRAPHQL_WS_URL`.
 
 The source also contains a wallet balance lookup (`WalletSearch` and `walletService`) that would send a Rholang query to `REACT_APP_RCHAIN_NODE_URL` with `POST /api/explore-deploy`. No page of the explorer uses it at this revision, so the explorer does not call a node.

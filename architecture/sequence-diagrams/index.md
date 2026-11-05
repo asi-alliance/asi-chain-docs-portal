@@ -36,7 +36,7 @@ The wallet takes the address of every node role from the network configuration. 
 
 ## Next Steps
 
-<CardGrid columns="3">
+<CardGrid columns="2">
 <DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="architecture">Internal architecture</DocCard>
 <DocCard title="State Diagrams" href="/architecture/state-diagrams/" icon="diagram">Node lifecycle</DocCard>
 <DocCard title="Wallet Usage" href="/wallet/usage/" icon="wallet">User guide</DocCard>
