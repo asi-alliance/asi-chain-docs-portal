@@ -1,3 +1,69 @@
 # Network Endpoints
 
-This page is being rewritten.
+This page lists the public DevNet addresses. Other pages link here instead of repeating them. The addresses were checked on 2026-11-05 against the team's environment description (version 60 of 2026-10-19) and by direct requests.
+
+::: info DevNet runs a Scala node
+On 2026-11-05 the public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`. It is not the Rust node described in the [node image](/shard-nodes/validator-image/) guide. Clients that need to know which node dialect they talk to must be set to the Scala profile for DevNet.
+:::
+
+## Applications
+
+| Application | URL |
+|---|---|
+| Wallet | [wallet.dev.asichain.io](https://wallet.dev.asichain.io) |
+| Explorer | [explorer.dev.asichain.io](https://explorer.dev.asichain.io) |
+| Faucet | [faucet.dev.asichain.io](https://faucet.dev.asichain.io) |
+| Documentation | [docs.asichain.io](https://docs.asichain.io) |
+
+All four answer on HTTPS. Plain HTTP is redirected to HTTPS.
+
+## Node
+
+DevNet has one public node address, Validator 1 at `34.196.119.4`. It serves both reads and writes. The environment description tells readers to use Validator 1 as the observer, and there is no separate public observer.
+
+| Service | Address | Used for |
+|---|---|---|
+| HTTP API | `http://34.196.119.4:40403` | Status, balance queries, deploy submission, deploy and block lookup |
+| Public gRPC API | `34.196.119.4:40401` | gRPC clients |
+
+Check that the node is reachable:
+
+```bash
+curl http://34.196.119.4:40403/api/status
+```
+
+The reply is JSON. These fields identify the network:
+
+```json
+{
+  "version": { "api": "1", "node": "RChain Node 1.0.0-SNAPSHOT (2994310d2edd764cfeb46579efdb00737e5e67b3)" },
+  "networkId": "devnet1",
+  "shardId": "root",
+  "minPhloPrice": 1
+}
+```
+
+The node also returns its own `address`, the `peers` count and the `nodes` count. The last two change over time.
+
+::: warning Plain HTTP only
+The node address uses `http://`. A web page served over HTTPS cannot call it directly, because browsers block mixed content. Use it from scripts, the SDK in Node.js or the [Wallet CLI](/cli/usage/). The hosted wallet at wallet.dev.asichain.io already contains its DevNet settings, so you enter nothing there.
+:::
+
+The other ports of a node (P2P, discovery, internal gRPC and admin HTTP) are not public entry points. They are described in the [port table](/shard-nodes/validator-image/) for the Rust image.
+
+## Wallet and SDK roles
+
+The wallet and the [Wallet SDK](/wallet-sdk/overview/) take three addresses per network and a node profile.
+
+| Setting | Role | DevNet value |
+|---|---|---|
+| `ValidatorURL` | Receives deploys (`POST /api/deploy`) and status requests | Validator 1 HTTP API from the table above |
+| `ReadOnlyURL` | Answers balance queries and deploy lookups | The same Validator 1 HTTP API, since DevNet has no public observer |
+| `IndexerURL` | GraphQL endpoint with transaction history | Not published |
+| `nodeApiProfile` | Request format of the node | `scala` |
+
+The wallet does not fall back from `ReadOnlyURL` to `ValidatorURL`, so both must be set even when they hold the same address. For a network of your own, see [Custom Network](/wallet/custom-network/).
+
+## Not published
+
+The GraphQL address of the indexer and the address behind the faucet are not listed here. Request tokens through the [faucet](https://faucet.dev.asichain.io), as described in the [guide to getting DevNet ASI](/quick-start/get-asi/). If you need the indexer address for your own client, ask the network operator.
