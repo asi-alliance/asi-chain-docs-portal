@@ -127,7 +127,7 @@ Converts the byte containers that appear after JSON round trips into a `Uint8Arr
 
 **Returns:** `Uint8Array`.
 
-**Throws:** `Error("Invalid byte value")` if an element is not an integer from 0 to 255, and `Error("Unsupported data format")` for any other input.
+**Throws:** `Error("Invalid byte value")` if an element is not an integer from 0 to 255 or if the keys of an object are not the consecutive indexes `"0"`, `"1"` and so on. `Error("Unsupported data format")` for any other input, such as a string, a number or `null`.
 
 ## `bufferToBigInt`
 
