@@ -40,7 +40,7 @@ export default {
     opts: { colGaps: [12], rowGaps: [80, 80, 10, 10, 10, 76, 10, 76, 10, 10] },
     nodes: {
       app: { col: 0.5, row: 0 },
-      client: { col: 0.5, row: 1, w: 268, sub: '' },
+      client: { col: 0.5, row: 1, w: 268, sub: ['wallets · sessions · networks', 'transfers · events'] },
       wallets: { col: 0, row: 2 }, mnemonic: { col: 1, row: 2 },
       kd: { col: 0, row: 3 }, km: { col: 1, row: 3 },
       crypto: { col: 0, row: 4 }, signer: { col: 1, row: 4 },

@@ -32,7 +32,8 @@ export default {
     { from: 'api', to: 'idx', via: [[1.5, 1], [1.5, 2]] },
   ],
   narrow: {
-    opts: { colGaps: [18], rowGaps: [26, 26, 66, 30, 66, 30, 30], wrap: 14 },
+    opts: { colGaps: [30], rowGaps: [26, 26, 66, 30, 66, 30, 30], wrap: 14 },
+    groups: { net: { pad: { r: 44 } } },
     nodes: {
       ui: { col: 0, row: 0, w: 150 }, redux: { col: 0, row: 1, w: 150 }, svc: { col: 0, row: 2, w: 150 },
       client: { col: 0, row: 3, w: 150 }, idb: { col: 1, row: 3, w: 100 }, api: { col: 0, row: 4, w: 150 },

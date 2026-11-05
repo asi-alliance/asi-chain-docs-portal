@@ -48,7 +48,9 @@ export default {
       'grpc>node': { via: [[0.5, 0], [0.5, 2]], toOff: -12 },
       'http>node': {},
       'node>comm': { fromOff: 12, toOff: 12 },
-      'casper>common': { via: [[0.5, 3], [0.5, 5]] },
+      'casper>comm': { fromOff: -10, toOff: 18 },
+      'casper>rholang': { fromOff: 10, toOff: -18 },
+      'casper>common': { via: [[1.7, 3], [1.7, 5]] },
     },
   },
 };

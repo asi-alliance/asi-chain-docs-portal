@@ -20,7 +20,7 @@ export default {
     { from: 'dag', to: 'final', label: 'clique oracle' },
   ],
   narrow: {
-    opts: { colGaps: [], rowGaps: [48, 52, 52, 40, 40], labelWrap: 30 },
+    opts: { colGaps: [], rowGaps: [48, 56, 56, 48, 48], labelWrap: 36 },
     nodes: {
       client: { col: 0, row: 0, wrap: 20 }, pool: { col: 0, row: 1, wrap: 20 }, block: { col: 0, row: 2, wrap: 20 },
       broadcast: { col: 0, row: 3, wrap: 20 }, dag: { col: 0, row: 4, wrap: 20 }, final: { col: 0, row: 5, wrap: 20 },
