@@ -28,9 +28,10 @@ A single node can create its own genesis with `--standalone`. It is enough to ch
 
 - `bonds.txt` has one line per bonded validator, `<public-key> <stake>`. The public key is the uncompressed secp256k1 key of the validator, 130 hex characters starting with `04`.
 - `wallets.txt` has one line per funded vault, `<vault-address>,<balance>`, with the balance in the smallest unit (10^-8 of a token).
+- The key pair and the vault address come from the ASI client, as in [Prepare and Enroll a Rust Validator](/quick-start/validator-enrollment/). `generate-key-pair --save` writes `private_key.hex`, the value for `VALIDATOR_PRIVATE_KEY`, and `public_key.hex`, the public key for `bonds.txt`. `generate-vault-address` prints the vault address for `wallets.txt`.
 
 ```bash
-NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
+NODE_IMAGE=<image from the catalog>
 docker volume create shard-data
 docker run --rm --platform linux/amd64 -u root --entrypoint sh \
   -v shard-data:/var/lib/rnode "$NODE_IMAGE" -c 'chown daemon:daemon /var/lib/rnode'
@@ -53,6 +54,6 @@ About 15 seconds after the start, `curl -s http://localhost:40403/api/status` re
 "networkId":"my-shard-net","shardId":"my-shard","nativeTokenDecimals":8,"isValidator":true,"isReady":true,"lastFinalizedBlockNumber":1
 ```
 
-For several validators follow the upstream shard topology above: the ceremony master (`--ceremony-master-mode`) creates genesis from the same two files, and the others join through its bootstrap URI.
+For several validators follow the upstream shard topology above.
 
 Use fresh private credentials. Do not reuse published development keys or retired deployment helpers. See [validator image](/shard-nodes/validator-image/) for paths, ports and flags, and [architecture](/architecture/) for consumer data paths.
