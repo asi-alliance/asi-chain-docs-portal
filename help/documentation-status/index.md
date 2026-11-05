@@ -8,7 +8,7 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 
 ## What Was Checked
 
-| Area | How it was checked |
+| Area | How It Was Checked |
 |---|---|
 | Site | The portal was built (the build fails on dead internal links and unclosed tags), and its pages were opened in a browser with the console watched for errors. |
 | Container images | Tags and digests were looked up in ECR Public, and the commands on the image pages were run against the published node image. |
@@ -31,3 +31,12 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 ## Contributing Verified Instructions
 
 When you add an instruction, link the source file or the command output it comes from. Keep container defaults separate from host port mappings, and run `npm run docs:build` before you open a pull request. A successful build shows that internal links resolve. It does not check diagrams, which render in the browser, and it does not show that a command works. Never publish keys, real `.env` files or administrator credentials.
+
+## Next Steps
+
+<CardGrid columns="2">
+  <DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">What DevNet offers now.</DocCard>
+  <DocCard title="Container Images" href="/reference/container-images/" icon="image">Tags and digests checked in ECR Public.</DocCard>
+  <DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">What works against DevNet today.</DocCard>
+  <DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Checks for common node and wallet problems.</DocCard>
+</CardGrid>

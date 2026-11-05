@@ -1,5 +1,7 @@
 # Useful Links
 
+This page collects the public applications, packages and source repositories of ASI:Chain.
+
 ## Applications
 
 | Application | URL |
@@ -36,12 +38,15 @@ The repository [github.com/asi-alliance/asi-chain](https://github.com/asi-allian
 
 Check the branch or tag you build from, because the default branch of a repository does not always hold the current ASI integration.
 
-## Guides
-
-- [Network Endpoints](/reference/endpoints/): DevNet applications and node addresses.
-- [Container Images](/reference/container-images/): published images, tags and digests.
-- [Wallet CLI](/cli/usage/): command-line wallet.
-- [Wallet SDK](/wallet-sdk/overview/): TypeScript SDK.
-- [Architecture](/architecture/): how node, indexer, GraphQL and applications connect.
+## Report a Problem
 
 To report a problem, open an issue in the affected repository. Describe how to reproduce it, and leave out keys and `.env` values.
+
+## Next Steps
+
+<CardGrid columns="2">
+  <DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">DevNet applications and node addresses.</DocCard>
+  <DocCard title="Container Images" href="/reference/container-images/" icon="image">Published images, tags and digests.</DocCard>
+  <DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">TypeScript SDK.</DocCard>
+  <DocCard title="Architecture" href="/architecture/" icon="architecture">How node, indexer, GraphQL and applications connect.</DocCard>
+</CardGrid>

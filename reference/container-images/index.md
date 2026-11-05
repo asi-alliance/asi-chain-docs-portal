@@ -8,7 +8,7 @@ The catalog covers eight components and twelve listed artifacts, including five 
 
 Repository paths in the table are relative to the namespace above. Each source link pins the application revision; release packaging can add runtime configuration and provenance without changing that application's source identity.
 
-| Component / repository | Versioned tag | Manifest digest | Public application source |
+| Component / Repository | Versioned Tag | Manifest Digest | Public Application Source |
 |---|---|---|---|
 | Latest ASI dev build / `node-rust` | `0.4.46-dev.20261105-8e6517d630e2` | `sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55` | [8e6517d630e2](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) |
 | Previous ASI dev build / `node-rust` | `0.4.46-dev.20261104-e18defd44d43` | `sha256:e06a0a4ca43d9e60309c514a19f4c664d27eb216796b9b52d1bc67c10947694e` | [e18defd44d43](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) |
@@ -36,13 +36,9 @@ docker image inspect "$IMAGE" --format '{{json .Config.Labels}}'
 Anonymous pulls do not require AWS credentials. The ECR Public gallery at [gallery.ecr.aws/l2u2v4a8](https://gallery.ecr.aws/l2u2v4a8) also exposes the public registry. Verify the source/revision labels and selected digest before writing a deployment manifest. Avoid mutable `latest` and `dev` tags.
 
 ## Select Compatible Artifacts
-
 - Latest ASI dev node: the `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([github.com/F1R3FLY-io/f1r3node-rust/pull/941](https://github.com/F1R3FLY-io/f1r3node-rust/pull/941)), 12 commits after `e18defd4`. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `e18defd4`. Its manifest, `org.opencontainers.image.revision` label and a container start were checked on 5 November 2026. This catalog records no CI result for this exact revision and no client check against it. See [validator image](/nodes/image/) for how to run it.
-
 - Previous ASI dev node: the `e18defd4` image was compiled from a clean LF export of the ASI `dev` branch. When this entry was recorded, the [upstream CI run for this source](https://github.com/F1R3FLY-io/f1r3node-rust/actions/runs/41875249228) had failed in the casper test shard (`Test (casper 1/2)` and `Test Gate (casper)`), and the [authority adapter run](https://github.com/F1R3FLY-io/f1r3node-rust/actions/runs/41875248335) had failed too. This source does not contain the known-peers change from [PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927). Checks of the client and of deployments with this image are separate and not recorded here.
-
 - Earlier ASI dev node: the `72c9126` image comes from the ASI fork of the maintained pure-Rust repository. Checks of the version and help output, provenance, runtime lock and anonymous pull by digest passed. The [upstream CI run for the same source](https://github.com/F1R3FLY-io/f1r3node-rust/actions/runs/41746432130) passed the crate tests but failed the Soak Harness Tests (a CbC runtime and lockfile mismatch), and the integration gates were skipped. The separate [authority adapter run](https://github.com/F1R3FLY-io/f1r3node-rust/actions/runs/41746432069) failed as well. Client and deployment checks of older builds do not carry over to this image.
-
 - Node baseline vs. compatibility target: `e6ecf238` and `5dafbc37` are separate published builds. The ASI client/Wallet CLI compatibility suites target the latter digest. Listing it does not promote it over the former for an existing deployment. See the [pinned client workflow](https://github.com/asi-alliance/asi-chain-client/blob/40f2a9408040252dd23761cd06adb9f1407ef228/.github/workflows/build-and-test.yml) and [Wallet CLI workflow](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.github/workflows/compatibility.yml).
 - Wallet CLI: the `8f6c20e` image embeds the ASI client at submodule commit `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. It does not acquire later `dev` or PR changes. The standalone client image is a separate operator tool, and the listed `client` tag was built from a different commit than that submodule commit. The image built from the submodule commit is tagged `0.2.9-pr3.20261103-77cbdc8180d8`, digest `sha256:b3ba6dcb31dd08b7d89c57193672947821d0c13eb65bd33527d62ada409cfc19`.
 - Indexer: the `0bb60e8` image includes the merged PR #20 behavior, the PostgreSQL 18.6 and Hasura v2.51.4 upgrade (PR #25) and CI for pull requests (PR #26). Later API or cost-accounting candidates are separate work. PostgreSQL, migrations and Hasura metadata/permissions remain deployment inputs.
@@ -50,7 +46,7 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 
 ## Runtime Configuration
 
-| Artifact | Runtime contract |
+| Artifact | Runtime Contract |
 |---|---|
 | Node | Rust binary, role-specific configuration, persistent state and private TLS/signing inputs; see [node image](/nodes/image/) |
 | Indexer | Explicit `NODE_HOST`, `GRPC_PORT`, `HTTP_PORT` and database settings; PostgreSQL and Hasura are separate services |
@@ -61,7 +57,7 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 
 ### Frontend URL Variables
 
-| Image | Required public runtime values |
+| Image | Required Public Runtime Values |
 |---|---|
 | Explorer | `REACT_APP_GRAPHQL_URL` (HTTP/S, including `/v1/graphql`), `REACT_APP_GRAPHQL_WS_URL` (WS/S, including `/v1/graphql`) |
 | Wallet | `WALLET_VALIDATOR_URL`, `WALLET_OBSERVER_URL`, `WALLET_INDEXER_URL` (the SDK's indexer endpoint contract) |
@@ -71,4 +67,10 @@ Wallet `REACT_APP_EXPLORER_URL` and `REACT_APP_FAUCET_URL` are optional public l
 
 The frontend images substitute endpoint URLs at startup. Supply the image-specific public URL variables, permit their startup write paths, and recreate containers when changing endpoints. Source-repository Dockerfiles can differ from these published packages; inspect the artifact before assuming a runtime configuration contract.
 
-See [documentation status](/help/documentation-status/) for review scope and [useful links](/reference/links/) for public component repositories.
+## Next Steps
+
+<CardGrid columns="2">
+  <DocCard title="Validator Image" href="/nodes/image/" icon="node">How to run the node image.</DocCard>
+  <DocCard title="Documentation Status" href="/help/documentation-status/" icon="status">Review scope of these pages.</DocCard>
+  <DocCard title="Useful Links" href="/reference/links/" icon="links">Public component repositories.</DocCard>
+</CardGrid>

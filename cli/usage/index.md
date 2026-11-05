@@ -11,7 +11,7 @@ public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d90671
 
 This image was built from the wallet CLI at commit `8f6c20ea43ebc6d333783f936372d4220e449681` ([github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681)), with ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. Its compatibility tests target the node image `5dafbc37` listed in [Container Images](/reference/container-images/). Later changes to the source do not modify this image.
 
-Show the help text without connecting to a network:
+To show the help text without connecting to a network, pull the image and run it with `--network none`:
 
 ```bash
 WALLET_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
@@ -24,7 +24,7 @@ docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --hel
 
 The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet still runs the Scala node, and on 5 November 2026 only `create` works against it.
 
-::: warning DevNet status on 5 November 2026
+::: warning DevNet Status on 5 November 2026
 `balance` and `send` stop with `Wrong native token: expected ASI, node reports `, because the DevNet node status has no token symbol. With `EXPECTED_TOKEN_SYMBOL` set to an empty value they stop with `HTTP 404` on `/api/balance/<address>`. `history` and `export` could not connect to the DevNet GraphQL endpoint either (see [Configuration](#configuration)).
 :::
 
@@ -50,7 +50,13 @@ The container runs as UID `10001`, and the `chown` makes both directories writab
 
 ## Build from Source
 
-The published image is the shorter path. To build the same source yourself, install the build tools first. On Debian or Ubuntu:
+The published image is the shorter path. To build the same source yourself, follow the steps below.
+
+<Steps>
+
+### Install the Build Tools
+
+On Debian or Ubuntu:
 
 ```bash
 sudo apt-get update
@@ -60,7 +66,9 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profil
 . "$HOME/.cargo/env"
 ```
 
-The repository pins `nightly-2026-02-09` in `rust-toolchain.toml`, and `rustup` installs it on the first `cargo build`. Then clone and build:
+The repository pins `nightly-2026-02-09` in `rust-toolchain.toml`, and `rustup` installs it on the first `cargo build`.
+
+### Clone and Build
 
 ```bash
 git clone --branch dev https://github.com/asi-alliance/asi-chain-wallet-cli.git
@@ -72,9 +80,13 @@ cargo build --release --locked
 
 The build downloads its dependencies from crates.io and GitHub. `cargo build` itself takes 6 to 8 minutes on a 12-core machine.
 
+</Steps>
+
+::: warning Select the dev Branch
 Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client.
 
 Do not use `git submodule update --remote`: it replaces the pinned client with the newest commit of its branch.
+:::
 
 ## Configuration
 
@@ -87,7 +99,7 @@ Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-walle
 
 Without them the CLI prints `Error loading configuration: VALIDATOR_HOST is not set`. Instead of a URL you can set `VALIDATOR_HOST` with `VALIDATOR_GRPC_PORT` and `VALIDATOR_HTTP_PORT`, and `OBSERVER_HOST` with `OBSERVER_HTTP_PORT`.
 
-```env
+```env [.env]
 VALIDATOR_GRPC_URL=http://<validator-host>:<grpc-port>
 VALIDATOR_HTTP_URL=http://<validator-host>:<http-port>
 OBSERVER_HTTP_URL=http://<read-only-node-host>:<http-port>
@@ -109,7 +121,7 @@ The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappi
 
 To try `balance` and `send` on the shard from [Set Up a Private Shard](/nodes/private-shard/), start its validator and its read-only node. Then add `--network shard-net` to the `docker run` command from [Run the Image](#run-the-image) and use the container names in `.env`:
 
-```env
+```env [.env]
 VALIDATOR_GRPC_URL=http://my-shard:40401
 VALIDATOR_HTTP_URL=http://my-shard:40403
 OBSERVER_HTTP_URL=http://my-shard-obs:40403
@@ -136,11 +148,11 @@ Run these from the source directory after a build. With the image, put the comma
 
 To send tokens, pass the recipient address and the amount in raw dust, the smallest unit. The command is:
 
-```text
+```bash
 asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 ```
 
-| ASI amount | Raw CLI amount (8 decimals) |
+| ASI Amount | Raw CLI Amount (8 Decimals) |
 |---|---|
 | 0.5 | `50000000` |
 | 1 | `100000000` |
@@ -149,3 +161,12 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 Give amounts as exact integers. The CLI reads them without a size limit, so values above JavaScript's safe integer range (2^53 − 1) stay exact. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 
 The node's native-token configuration and expected symbol must match the target shard. Cost-accounting APIs and later node API changes require a matching source and image of their own, and changing the image tag here does not enable them.
+
+## Next Steps
+
+<CardGrid columns="2">
+  <DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">DevNet applications and node addresses.</DocCard>
+  <DocCard title="Container Images" href="/reference/container-images/" icon="image">Published images, tags and digests.</DocCard>
+  <DocCard title="Private Shard" href="/nodes/private-shard/" icon="shard">Start a shard to try balance and send.</DocCard>
+  <DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Check which revision the CLI was built from.</DocCard>
+</CardGrid>
