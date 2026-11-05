@@ -1,79 +1,76 @@
 # Functions
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/functions/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/functions/index.ts)
 
-Amount conversion helpers between human-readable ASI values and atomic integer representation.
+Amount conversion between human-readable values and atomic integers, plus a few small helpers. All of them are plain functions exported from the package root.
 
-1 ASI = `100_000_000` atomic units (`ASI_BASE_UNIT` = `10^8`).
+An atomic amount is a `bigint` count of the smallest token unit. A token with `decimals` decimal places has `10^decimals` atomic units in one whole token, so for ASI (`ASI_DECIMALS` = `8`) one ASI is `100_000_000` atomic units.
+
+Every conversion takes `decimals` as a required argument. Pass `ASI_DECIMALS` for ASI, or `asset.getDecimals()` when you work with an [`Asset`](/wallet-sdk/api-reference/asset/).
 
 ## `toAtomicAmount`
 
 ```ts
-toAtomicAmount(amount: number | string): bigint
+toAtomicAmount(amount: number | string, decimals: number): bigint
 ```
 
-Converts a human-readable ASI amount to atomic units. Handles thousands separators (commas, spaces), truncates excess fractional digits (with a console warning), and supports negative values.
+Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `amount` | `number \| string` | Yes | Decimal amount (e.g., `"1,234.56"` or `1234.56`). |
+| `amount` | `number \| string` | Yes | Decimal amount, for example `"1,234.56"` or `1234.56`. |
+| `decimals` | `number` | Yes | Number of decimal places of the token. |
 
-**Returns:** `bigint` — atomic amount.
+**Returns:** `bigint`.
 
 **Throws:**
-- `Error("Cannot process empty amount")` — if string is empty.
-- `Error("Invalid amount format")` — if the format cannot be parsed.
-- `Error("Invalid number")` — if a numeric input is not finite.
-
-## `fromAtomicAmountToString`
-
-```ts
-fromAtomicAmountToString(atomicAmount: bigint): string
-```
-
-Converts atomic units to a normalized decimal string. Trailing zeros are trimmed.
-
-**Parameters:**
-
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `atomicAmount` | `bigint` | Yes | Atomic amount. |
-
-**Returns:** `string` — decimal string (e.g., `"1234.56789012"`).
-
-## `fromAtomicAmountToNumber`
-
-```ts
-fromAtomicAmountToNumber(atomicAmount: bigint): number
-```
-
-Converts atomic units to a JavaScript `number`. Logs a warning if the integer part exceeds `Number.MAX_SAFE_INTEGER`.
-
-**Parameters:**
-
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `atomicAmount` | `bigint` | Yes | Atomic amount. |
-
-**Returns:** `number`.
+- `Error("Cannot process empty amount")` for an empty string.
+- `Error("Invalid amount format")` when the string is not a decimal number.
+- `Error("Invalid number")` when a numeric input is not finite.
 
 ## `fromAtomicAmount`
 
 ```ts
-fromAtomicAmount(atomicAmount: bigint): string
+fromAtomicAmount(atomicAmount: bigint, decimals: number): string
 ```
 
-Alias for `fromAtomicAmountToString`.
+Converts atomic units to a decimal string with trailing zeros trimmed, for example `150000000n` with 8 decimals gives `"1.5"`. Negative amounts keep their sign.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `atomicAmount` | `bigint` | Yes | Atomic amount. |
+| `decimals` | `number` | Yes | Number of decimal places of the token. |
 
-**Returns:** `string` — decimal string.
+**Returns:** `string`.
+
+## `fromAtomicAmountToNumber`
+
+```ts
+fromAtomicAmountToNumber(atomicAmount: bigint, decimals: number): number
+```
+
+Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Use `fromAtomicAmount` when exact digits matter.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `atomicAmount` | `bigint` | Yes | Atomic amount. |
+| `decimals` | `number` | Yes | Number of decimal places of the token. |
+
+**Returns:** `number`.
+
+## `parseAtomicAmount`
+
+```ts
+parseAtomicAmount(value: unknown): bigint | null
+```
+
+Reads an atomic amount from a value that came from outside, such as a node response. It returns a `bigint` for a non-negative safe integer or a string of digits only, and `null` for everything else, including negative numbers, fractions and strings like `"1.5"`.
 
 ## `genRandomHex`
 
@@ -81,20 +78,46 @@ Alias for `fromAtomicAmountToString`.
 genRandomHex(size: number): string
 ```
 
-Generates a random hex string of the specified length. Uses `Math.random()` — not cryptographically secure; intended for non-security purposes such as generating identifiers.
+Returns a random hex string of `size` characters. It uses `Math.random()`, so it is not cryptographically secure and fits identifiers only.
 
-**Parameters:**
+## `generateRandomId`
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `size` | `number` | Yes | Number of hex characters to generate. |
+```ts
+generateRandomId(): string
+```
 
-**Returns:** `string` — random hex string of the given length.
+Returns an identifier of the form `res_<timestamp>_<8 hex characters>`. It is built on `genRandomHex` and has the same limits.
+
+## Addresses and URLs
+
+```ts
+normalizeAddress(address: string | undefined): string
+isSameAddress(address: string | undefined, other: string | undefined): boolean
+buildUrl(pathPrefix: string, params?: IUrlParams): string
+```
+
+`normalizeAddress` trims the string and lowercases it, and returns `""` for `undefined`. `isSameAddress` compares two addresses after that normalization and returns `false` when the first one is empty.
+
+`buildUrl` replaces `:name` segments of `pathPrefix` with the values from `params.path` (URL-encoded) and appends `params.query` as a query string. Query values that are `undefined` or `null` are skipped.
 
 ## Example
 
 ```ts
-const atomic = toAtomicAmount("1,234.56789012"); // BigInt(123456789012)
-const str = fromAtomicAmountToString(atomic);    // "1234.56789012"
-const num = fromAtomicAmountToNumber(atomic);    // 1234.56789012
+import {
+    ASI_DECIMALS,
+    fromAtomicAmount,
+    fromAtomicAmountToNumber,
+    parseAtomicAmount,
+    toAtomicAmount,
+} from "@asichain/asi-wallet-sdk";
+
+const atomic = toAtomicAmount("1,234.56789012", ASI_DECIMALS);
+
+console.log(atomic); // 123456789012n
+console.log(fromAtomicAmount(atomic, ASI_DECIMALS)); // "1234.56789012"
+console.log(fromAtomicAmountToNumber(atomic, ASI_DECIMALS)); // 1234.56789012
+console.log(parseAtomicAmount("42")); // 42n
+console.log(parseAtomicAmount("1.5")); // null
 ```
+
+The package also exports other helpers that the SDK uses internally, for example `getErrorMessage`, `runProtected`, `selectByField` and `withSchemaVersion`. Their signatures are in the package typings.
