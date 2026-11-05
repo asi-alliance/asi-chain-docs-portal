@@ -1,6 +1,6 @@
 # Build on ASI:Chain
 
-You want to write an application, a script or a contract. The SDK signs and sends transactions from TypeScript, and the CLI does the same from a terminal.
+Build applications and scripts on ASI:Chain. The Wallet SDK signs and sends transactions from TypeScript, and the Wallet CLI creates wallets, checks balances and sends tokens from a terminal.
 
 ## Tools
 

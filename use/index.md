@@ -1,6 +1,6 @@
 # Use ASI:Chain
 
-You want an account, some test tokens and a way to see what happens on the chain. The wallet, faucet and explorer work with the public ASI:Chain DevNet, and DevNet tokens have no real value.
+Create an account, get test tokens and follow what happens on the chain. The wallet, faucet and explorer work with the public ASI:Chain DevNet, and DevNet tokens have no real value.
 
 ## Guides
 

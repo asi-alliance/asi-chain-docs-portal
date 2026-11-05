@@ -20,7 +20,6 @@ const sidebarUse = [
     text: 'Use',
     items: [
       { text: 'Use ASI:Chain', link: '/use/' },
-      { text: 'Get DevNet ASI', link: '/quick-start/get-asi/' },
       { text: 'ASI Wallet', link: '/wallet/usage/' },
       { text: 'Custom Network Connection', link: '/wallet/custom-network/' },
       { text: 'Faucet', link: '/faucet/usage/' },
