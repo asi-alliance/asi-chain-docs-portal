@@ -3,7 +3,7 @@ export default {
   kind: 'flow',
   title: 'Node components',
   desc: 'Three interfaces sit on top of the Rust node. Transport on 40400 and discovery on 40404 go to comm. The gRPC ports 40401 and 40402 and the HTTP ports 40403 and 40405 go to the node crate, which uses casper and comm. Casper uses rholang, block-storage, comm and the shared crates. Rholang uses rspace++, and block-storage uses the shared crates.',
-  opts: { colGaps: [60, 44, 44], rowGaps: [44, 50, 50, 50], wrap: 20 },
+  opts: { colGaps: [44, 44], colGap: 40, rowGaps: [44, 50, 50, 50], wrap: 18 },
   groups: [
     { id: 'interfaces', label: 'Interfaces', nodes: ['p2p', 'grpc', 'http'] },
   ],
@@ -16,7 +16,7 @@ export default {
     { id: 'casper', label: 'casper: engine, proposer, validation, finality', kind: 'chain', col: 1.5, row: 2 },
     { id: 'rholang', label: 'rholang: interpreter', kind: 'chain', col: 1, row: 3 },
     { id: 'blocks', label: 'block-storage: blocks and DAG on LMDB', kind: 'store', col: 2, row: 3 },
-    { id: 'common', label: 'models, crypto, shared', col: 3, row: 3 },
+    { id: 'common', label: 'models, crypto, shared', col: 2, row: 4 },
     { id: 'rspace', label: 'rspace++: tuple space', kind: 'store', col: 1, row: 4 },
   ],
   edges: [
@@ -28,7 +28,7 @@ export default {
     { from: 'casper', to: 'comm' },
     { from: 'casper', to: 'rholang' },
     { from: 'casper', to: 'blocks' },
-    { from: 'casper', to: 'common', via: [[3, 2]] },
+    { from: 'casper', to: 'common', via: [[2.5, 2], [2.5, 4]] },
     { from: 'rholang', to: 'rspace' },
     { from: 'blocks', to: 'common' },
   ],

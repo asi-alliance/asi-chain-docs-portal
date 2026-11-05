@@ -4,7 +4,7 @@ export default {
   title: 'Network topology',
   desc: 'Wallet, SDK, CLI and the faucet call the validator over HTTP 40403 and gRPC 40401. The bootstrap peer, validator and observer connect to each other over TCP 40400 and 40404. The indexer reads the validator and writes to PostgreSQL. Hasura reads PostgreSQL and serves GraphQL to the explorer, wallet, SDK and CLI.',
   legend: true,
-  opts: { colGaps: [104, 70, 70], rowGaps: [60, 70], labelWrap: 12 },
+  opts: { colGaps: [92, 62, 62], rowGaps: [60, 70], labelWrap: 12 },
   groups: [
     { id: 'clients', label: 'Clients', nodes: ['faucet', 'apps', 'explorer'] },
     { id: 'p2p', label: 'Peer-to-peer network (TCP 40400, 40404)', nodes: ['bootstrap', 'validator', 'observer'], pad: { b: 30 } },
@@ -12,7 +12,7 @@ export default {
   ],
   nodes: [
     { id: 'faucet', label: 'Faucet', col: 0, row: 0 },
-    { id: 'apps', label: 'Wallet, SDK, CLI', col: 0, row: 1, wrap: 14 },
+    { id: 'apps', label: 'Wallet, SDK, CLI', col: 0, row: 1, wrap: 8 },
     { id: 'explorer', label: 'Explorer', col: 0, row: 2 },
     { id: 'validator', label: 'Validator', sub: 'public entry point', kind: 'chain', col: 1, row: 0, w: 136 },
     { id: 'bootstrap', label: 'Bootstrap peer', kind: 'chain', col: 2, row: 0, wrap: 10 },

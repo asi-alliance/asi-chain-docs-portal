@@ -33,10 +33,10 @@ const fail = (spec, msg) => { throw new Error(`${spec.id}: ${msg}`); };
 const WIDE = { gap: 150, wrapMsg: 34, wrapSelf: 36, headWrap: 20, pad: 44, headGap: 16, headPad: 28, msgPad: 22, selfLabel: 'right' };
 
 export function sequence(spec, variant = 'w') {
-  // maxWidth keeps the labels of self-messages inside that many px (308 is the content width of a 390 px page).
+  // maxWidth keeps the labels of self-messages inside that many px (374 is what diagrams.css leaves under the SVG on a 390 px screen: 390 minus 2 x 8 px of figure padding, with the figure running to the screen edges).
   // selfLabel: 'right' puts the text of a self-message beside its loop, 'above' puts it over the loop, centred
   // on the lifeline and kept inside the diagram, which a phone layout needs because the right side is short.
-  const o = { ...WIDE, ...(variant === 'n' ? { selfLabel: 'above', maxWidth: 308, headGap: 6, headPad: 18, msgPad: 10, ...(spec.narrow || {}) } : spec.wide || {}) };
+  const o = { ...WIDE, ...(variant === 'n' ? { selfLabel: 'above', maxWidth: 374, headGap: 6, headPad: 18, msgPad: 10, ...(spec.narrow || {}) } : spec.wide || {}) };
   const above = o.selfLabel === 'above';
   const P = spec.participants;
   const idx = Object.fromEntries(P.map((p, i) => [p.id, i]));

@@ -6,7 +6,7 @@ export default {
   desc: 'The blocks table is the centre of the indexer database. The tables block_parents, block_validators, validator_bonds, balance_states, deployments, transfers, native_transfer_calls and native_transfer_results all refer to blocks by block_hash. Deployments are also referred to by transfers, native_transfer_calls and native_transfer_results by deploy_id, native_transfer_results refer to native_transfer_calls by call_id, and transfers refer to native_transfer_results by native_result_id. Six tables have no foreign keys: validators, pending_deploys, epoch_transitions, network_stats, indexer_state and network_metrics_buckets.',
   legend: true,
   legendLabels: { chain: 'Central table', service: 'Table' },
-  opts: { colGaps: [80, 90], rowGaps: [40, 40, 40, 70, 24], wrap: 30, labelWrap: 20 },
+  opts: { colGaps: [30, 56], colGap: 44, rowGaps: [40, 40, 40, 70, 24], wrap: 30, labelWrap: 20 },
   groups: [
     { id: 'nofk', label: 'Tables without foreign keys', nodes: ['validators', 'pending', 'epochs', 'stats', 'state', 'buckets'] },
   ],
@@ -39,8 +39,8 @@ export default {
     { from: 'deployments', to: 'transfers', dir: 'none', label: 'deploy_id' },
     { from: 'deployments', to: 'calls', dir: 'none', label: 'deploy_id' },
     { from: 'calls', to: 'results', dir: 'none', label: 'call_id' },
-    { from: 'deployments', to: 'results', dir: 'none', label: 'deploy_id', via: [[3, 1], [3, 3]], toOff: -10, labelPos: 0.5 },
-    { from: 'results', to: 'transfers', dir: 'none', label: 'native_result_id', via: [[3.7, 3], [3.7, 0]], fromOff: 10 },
+    { from: 'deployments', to: 'results', dir: 'none', label: 'deploy_id', via: [[2.2, 1], [2.2, 3]], toOff: -10, labelPos: 0.73 },
+    { from: 'results', to: 'transfers', dir: 'none', label: 'native_\nresult_id', labelWrap: 0, labelPos: 0.82, via: [[3, 3], [3, 0]], fromOff: 10 },
   ],
   // Phone layout: one column. Blocks on top with its eight relations on the left trunk, the arcs between the transfer tables on the right.
   narrow: {

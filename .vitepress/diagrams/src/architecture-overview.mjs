@@ -4,7 +4,7 @@ export default {
   title: 'Architecture overview',
   desc: 'The web wallet and SDK call the node over HTTP, and the Wallet CLI and the faucet API call it over gRPC or HTTP. The faucet frontend calls the faucet API. The Python indexer reads the node over gRPC or HTTP and writes to PostgreSQL. Hasura reads PostgreSQL and serves GraphQL to the explorer frontend and the web wallet.',
   legend: true,
-  opts: { colGaps: [104, 104, 72], rowGaps: [44, 44], wrap: 12, labelWrap: 12 },
+  opts: { colGaps: [92, 92, 62], rowGaps: [44, 44], wrap: 12, labelWrap: 12 },
   nodes: [
     { id: 'wallet', label: 'Web wallet / SDK', col: 0, row: 0 },
     { id: 'cli', label: 'Wallet CLI / ASI client', col: 0, row: 1 },

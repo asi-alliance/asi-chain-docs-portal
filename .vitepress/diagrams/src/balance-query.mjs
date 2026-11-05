@@ -20,6 +20,6 @@ export default {
     { from: 'ui', to: 'ui', label: 'Subtract reserved funds' },
     { from: 'ui', to: 'ui', label: 'Convert to ASI and display' },
   ],
-  wide: { gap: 110, pad: 36, wrapMsg: 26, wrapSelf: 24 },
+  wide: { gap: 104, pad: 30, wrapMsg: 26, wrapSelf: 20 },
   narrow: { gap: 20, pad: 0, wrapMsg: 11, wrapSelf: 26, headWrap: 5 },
 };

@@ -7,7 +7,7 @@ export default {
   desc: 'After launch the node picks one of four modes. With an approved block in storage it reconnects by building Casper from storage and goes to Running. With no approved block and genesis validator mode it signs the candidate genesis block and goes to Initializing. With no approved block and ceremony master mode it collects approvals, the genesis block is approved, and it goes to Running. With no approved block and no ceremony mode it joins an existing network, imports the state from the network in Initializing and goes to Running.',
   legend: true,
   legendLabels: { service: 'Launch mode', terminal: 'Start, end or Running' },
-  opts: { colGaps: [176, 64, 40], rowGaps: [30, 30, 30], labelWrap: 20, wrap: 20 },
+  opts: { colGaps: [148, 36, 22], rowGaps: [30, 30, 30], labelWrap: 16, wrap: 20 },
   nodes: [
     { id: 'start', label: 'Start', kind: 'terminal', col: 0, row: 0 },
     { id: 'launch', label: 'Launch', col: 0, row: 1.5 },
