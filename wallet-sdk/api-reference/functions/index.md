@@ -34,7 +34,7 @@ toAtomicAmount(amount: number | string, decimals: number): bigint
 
 Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
 
-::: warning Result Is Wrong for Other Decimals
+::: warning Wrong Result for Decimals Other Than 8
 In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`.
 :::
 
@@ -95,7 +95,7 @@ Reads an atomic amount from a value that came from outside, such as a node respo
 genRandomHex(size: number): string
 ```
 
-Returns a random hex string of `size` characters. It uses `Math.random()`, so it is not cryptographically secure and fits identifiers only.
+Returns a random hex string of `size` characters. It uses `Math.random()`, so it is not cryptographically secure. Use it for identifiers only.
 
 ### generateRandomId()
 
@@ -105,15 +105,27 @@ generateRandomId(): string
 
 Returns an identifier of the form `res_<timestamp>_<8 hex characters>`. It is built on `genRandomHex` and has the same limits.
 
-### Addresses and URLs
+### normalizeAddress()
 
 ```ts
 normalizeAddress(address: string | undefined): string
-isSameAddress(address: string | undefined, other: string | undefined): boolean
-buildUrl(pathPrefix: string, params?: IUrlParams): string
 ```
 
-`normalizeAddress` trims the string and lowercases it, and returns `""` for `undefined`. `isSameAddress` compares two addresses after that normalization and returns `false` when the first one is empty.
+`normalizeAddress` trims the string and lowercases it, and returns `""` for `undefined`.
+
+### isSameAddress()
+
+```ts
+isSameAddress(address: string | undefined, other: string | undefined): boolean
+```
+
+`isSameAddress` compares two addresses after that normalization and returns `false` when the first one is empty.
+
+### buildUrl()
+
+```ts
+buildUrl(pathPrefix: string, params?: IUrlParams): string
+```
 
 `buildUrl` replaces `:name` segments of `pathPrefix` with the values from `params.path` (URL-encoded) and appends `params.query` as a query string. Query values that are `undefined` or `null` are skipped.
 

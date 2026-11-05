@@ -53,7 +53,7 @@ export const networksConfig: TNetworksConfig = {
 console.log(Object.keys(networksConfig));
 ```
 
-`Client.create` rejects a URL that is not valid, so replace the placeholders above before you create a client.
+`Client.create` rejects an invalid URL, so replace the placeholders above before you create a client.
 
 ## Try the SDK
 
@@ -233,7 +233,7 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="API Reference" href="/wallet-sdk/api-reference/" icon="book">A page for every module in the picture</DocCard>
+<DocCard title="API Reference" href="/wallet-sdk/api-reference/" icon="book">A page for every SDK module</DocCard>
 <DocCard title="Client" href="/wallet-sdk/api-reference/client/" icon="sdk">Wallets, networks, balances, transfers and events</DocCard>
 <DocCard title="Error Types" href="/wallet-sdk/api-reference/error-types/" icon="help">Every failure carries a machine-readable code</DocCard>
 <DocCard title="Useful Links" href="/reference/links/" icon="links">Repositories and DevNet service addresses</DocCard>

@@ -137,6 +137,6 @@ interface IHDWalletPrivateKeyDataFromSeed extends IBaseHDWalletPrivateKeyData {
 }
 ```
 
-::: info Mnemonic Derivation
+::: info Mnemonic Derivation Is in KeyDerivation
 `KeysManager` has no `deriveKeyFromMnemonic`. Use `KeyDerivation.deriveKeyFromMnemonic(mnemonic, bip44path)` from the [KeyDerivation](/wallet-sdk/api-reference/key-derivation/) page.
 :::

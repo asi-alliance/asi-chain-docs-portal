@@ -47,7 +47,7 @@ interface IBalanceData {
 It throws:
 
 - `Error("AssetsService.getBalance: Invalid address: <errorCode>")` when `address` fails [`validateAddress`](/wallet-sdk/api-reference/validators/). The code is one of the `AddressValidationErrorCode` values.
-- `BalanceUnavailableError` when the balance cannot be read: the node request fails, the node returns no balance, returns an unexpected value, or the vault replies with an error string.
+- `BalanceUnavailableError` when the balance cannot be read: the node request fails, the node returns no balance or an unexpected value, or the vault replies with an error string.
 
 The method does not return `0n` on failure, so a zero in `amount` is a real zero balance.
 

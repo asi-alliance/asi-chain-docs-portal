@@ -111,7 +111,7 @@ Throws the errors of `decryptWithPassword`, and `CorruptedDataError` if the decr
 | `iv` | `string` | Base64 IV. |
 | `version` | `number` | Profile version, currently `2`. |
 
-## Crypto Profile
+### Crypto Profile
 
 | Parameter | Value |
 |-----------|-------|

@@ -10,11 +10,11 @@ Low-level helpers that create wallet metadata and derive addresses. The package 
 import { Wallets } from '@asichain/asi-wallet-sdk';
 ```
 
+## Methods
+
 ::: tip Low-Level API
 These helpers return plain key material and keep nothing in storage. Applications normally create and store wallets through [`Client`](/wallet-sdk/api-reference/client/) and use this class only to derive an address or a key pair on its own.
 :::
-
-## Methods
 
 ### createWallet()
 

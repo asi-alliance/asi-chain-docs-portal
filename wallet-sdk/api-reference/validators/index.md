@@ -31,7 +31,7 @@ import {
 
 ## Functions
 
-### Account Names
+### validateAccountName()
 
 ```ts
 validateAccountName(name: string, maxLength?: number): { isValid: boolean; error?: string }
@@ -45,14 +45,13 @@ Checks a wallet or account name. `maxLength` defaults to `30`. The forbidden cha
 | Longer than `maxLength` | `Account name must be <maxLength> characters or less` |
 | Contains a forbidden character | `Account name contains invalid characters` |
 
-### Addresses
+### validateAddress()
 
 ```ts
-isAddress(address: string): address is Address
 validateAddress(address: string): AddressValidationResult
 ```
 
-`validateAddress` runs the full decode and checksum check and reports the first failing step. `isAddress` is the same check as a type guard, so after `if (isAddress(value))` the value has the `Address` type.
+`validateAddress` runs the full decode and checksum check and reports the first failing step.
 
 `AddressValidationResult` is `{ isValid: boolean; errorCode?: AddressValidationErrorCode }`. `AddressValidationErrorCode` is an enum exported from the package root, and its member values equal their names.
 
@@ -67,45 +66,123 @@ validateAddress(address: string): AddressValidationResult
 | 7 | `INVALID_CHAIN_PREFIX` | The payload starts with the ASI chain prefix. |
 | 8 | `INVALID_CHECKSUM` | The first 8 hex characters of the Blake2b-256 hash of the payload equal the checksum. |
 
-### URLs and Network Settings
+### isAddress()
+
+```ts
+isAddress(address: string): address is Address
+```
+
+`isAddress` is the same check as `validateAddress`, as a type guard, so after `if (isAddress(value))` the value has the `Address` type.
+
+### validateUrl()
 
 ```ts
 validateUrl(url: string): { isValid: boolean; error?: string }
-isValidUrl(url: string): boolean
-validateNodeApiProfile(profile: unknown): { isValid: boolean; error?: string }
-validateNetworkConfigUrls(config: Partial<INetworkConfig>, { allowEmpty }: { allowEmpty: boolean }): { isValid: boolean; error?: string }
-validateNetworkUniqueness(name: NetworkName, config: INetworkConfig, otherRecords: INetworkRecord[]): { isValid: boolean; error?: string }
 ```
 
 `validateUrl` accepts only `http:` and `https:` URLs with a host. The possible errors are `URL is required`, `URL is not valid`, `URL must use http or https protocol` and `URL must contain a host`.
 
-`validateNodeApiProfile` accepts one of the values of `NODE_API_PROFILES`. `validateNetworkConfigUrls` checks every URL field of a network config and prefixes the error with the field name (`Invalid <field>: ...`). With `allowEmpty: true` an empty string is skipped. `validateNetworkUniqueness` rejects a network that has the same config or the same name as one of `otherRecords`.
+### isValidUrl()
 
-### Keys
+```ts
+isValidUrl(url: string): boolean
+```
+
+### validateNodeApiProfile()
+
+```ts
+validateNodeApiProfile(profile: unknown): { isValid: boolean; error?: string }
+```
+
+`validateNodeApiProfile` accepts one of the values of `NODE_API_PROFILES`.
+
+### validateNetworkConfigUrls()
+
+```ts
+validateNetworkConfigUrls(config: Partial<INetworkConfig>, { allowEmpty }: { allowEmpty: boolean }): { isValid: boolean; error?: string }
+```
+
+`validateNetworkConfigUrls` checks every URL field of a network config and prefixes the error with the field name (`Invalid <field>: ...`). With `allowEmpty: true` an empty string is skipped.
+
+### validateNetworkUniqueness()
+
+```ts
+validateNetworkUniqueness(name: NetworkName, config: INetworkConfig, otherRecords: INetworkRecord[]): { isValid: boolean; error?: string }
+```
+
+`validateNetworkUniqueness` rejects a network that has the same config or the same name as one of `otherRecords`.
+
+### validatePrivateKey()
 
 ```ts
 validatePrivateKey(privateKey: Uint8Array): { isValid: boolean; error?: string }
+```
+
+`validatePrivateKey` requires exactly `PRIVATE_KEY_LENGTH` (32) bytes and a value inside the secp256k1 curve range. The errors are `Private key must be 32 bytes` and `Private key is out of the secp256k1 curve range`.
+
+### isPrivateKeyValid()
+
+```ts
 isPrivateKeyValid(privateKey: Uint8Array): boolean
+```
+
+### isIntegerInRange()
+
+```ts
 isIntegerInRange(value: number, min: number, max: number): boolean
 ```
 
-`validatePrivateKey` requires exactly `PRIVATE_KEY_LENGTH` (32) bytes and a value inside the secp256k1 curve range. The errors are `Private key must be 32 bytes` and `Private key is out of the secp256k1 curve range`. `isIntegerInRange` is true for integers from `min` to `max` inclusive.
+`isIntegerInRange` is true for integers from `min` to `max` inclusive.
 
-### Amounts, Deploys and Keyfiles
+### validatePositiveAmount()
 
 ```ts
 validatePositiveAmount(amount: bigint): { isValid: boolean; error?: string }
-validateDeployPayload({ term, phloLimit, phloPrice, shardId }: TDeployDetails): { isValid: boolean; error?: string }
-validateReservationPayload(payload: TCreateTransactionReservationPayload): { isValid: boolean; error?: string }
-validateReservationUpdateTarget(currentReservation: ITransactionReservation, payload: TCreateTransactionReservationPayload): { isValid: boolean; error?: string }
-validateWalletKeyfile(source: unknown): { isValid: boolean; error?: string }
-validateWalletKeyfileAccounts(source: unknown, walletType: WalletTypes): { isValid: boolean; error?: string }
-ensureValid({ isValid, error }: { isValid: boolean; error?: string }, { context }: IErrorContext): void
 ```
 
-`validatePositiveAmount` fails with `Amount must be greater than zero` for zero and negative values. `validateDeployPayload` requires a non-empty `term`, positive safe integers for `phloLimit` and `phloPrice` when they are set, and a non-empty `shardId` when it is set.
+`validatePositiveAmount` fails with `Amount must be greater than zero` for zero and negative values.
 
-`validateReservationPayload` and `validateReservationUpdateTarget` check the payloads of the transaction reservations that [`Client`](/wallet-sdk/api-reference/client/) creates when you send a transfer or a deploy. `validateWalletKeyfile` and `validateWalletKeyfileAccounts` check the structure of an exported keyfile and of its account list.
+### validateDeployPayload()
+
+```ts
+validateDeployPayload({ term, phloLimit, phloPrice, shardId }: TDeployDetails): { isValid: boolean; error?: string }
+```
+
+`validateDeployPayload` requires a non-empty `term`, positive safe integers for `phloLimit` and `phloPrice` when they are set, and a non-empty `shardId` when it is set.
+
+### validateReservationPayload()
+
+```ts
+validateReservationPayload(payload: TCreateTransactionReservationPayload): { isValid: boolean; error?: string }
+```
+
+`validateReservationPayload` and `validateReservationUpdateTarget` check the payloads of the transaction reservations that [`Client`](/wallet-sdk/api-reference/client/) creates when you send a transfer or a deploy.
+
+### validateReservationUpdateTarget()
+
+```ts
+validateReservationUpdateTarget(currentReservation: ITransactionReservation, payload: TCreateTransactionReservationPayload): { isValid: boolean; error?: string }
+```
+
+### validateWalletKeyfile()
+
+```ts
+validateWalletKeyfile(source: unknown): { isValid: boolean; error?: string }
+```
+
+`validateWalletKeyfile` and `validateWalletKeyfileAccounts` check the structure of an exported keyfile and of its account list.
+
+### validateWalletKeyfileAccounts()
+
+```ts
+validateWalletKeyfileAccounts(source: unknown, walletType: WalletTypes): { isValid: boolean; error?: string }
+```
+
+### ensureValid()
+
+```ts
+ensureValid({ isValid, error }: { isValid: boolean; error?: string }, { context }: IErrorContext): void
+```
 
 `ensureValid` throws `Error("<context>: <error>")` when the result is not valid, and does nothing otherwise.
 

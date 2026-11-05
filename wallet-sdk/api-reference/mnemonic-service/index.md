@@ -52,7 +52,7 @@ Checks the words against the BIP-39 English wordlist and verifies the checksum. 
 |------|------|----------|-------------|
 | `mnemonic` | `string` | Yes | Mnemonic to validate. |
 
-Returns `boolean`, `true` if the mnemonic is valid.
+Returns `boolean`. It is `true` when the mnemonic is valid.
 
 ### normalizeMnemonic()
 

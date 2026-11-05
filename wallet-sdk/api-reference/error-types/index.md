@@ -62,7 +62,7 @@ enum CustomErrorCode {
 
 ### Supporting Enums
 
-`WalletAction`, `ReservationAction`, `CorruptedDataSource`, `StorageOperation`, `ApiSource`, `UnknownErrorReason`, `StorageMigrationChainViolation` and `StorageMigrationInterruptionReason` are exported as well. They supply the values of the `action`, `source`, `operation` and `reason` fields above.
+`WalletAction`, `ReservationAction`, `CorruptedDataSource`, `StorageOperation`, `ApiSource`, `UnknownErrorReason`, `StorageMigrationChainViolation` and `StorageMigrationInterruptionReason` are exported as well. They supply the values of the `action`, `source`, `operation` and `reason` fields in the tables below.
 
 ```ts
 enum ApiSource {

@@ -73,7 +73,7 @@ Creates a BIP-32 master node from a seed with the `bip32` factory. The secp256k1
 |------|------|----------|-------------|
 | `seed` | `any` | Yes | Seed bytes, typically the 64 bytes from `mnemonicToSeed`. |
 
-Returns `BIP32Interface`, the master node.
+Returns `BIP32Interface` with the master node.
 
 ### deriveNextKeyFromMnemonic()
 

@@ -34,7 +34,7 @@ Converts a hex string to a Base58-encoded string.
 |------|------|----------|-------------|
 | `hex` | `string` | Yes | Hex string to encode. |
 
-Returns `string`, the Base58-encoded result.
+Returns `string` with the Base58-encoded result.
 
 ### decodeBase58()
 
@@ -48,7 +48,7 @@ Decodes a Base58 string into a `Uint8Array`. Throws if the string contains chara
 |------|------|----------|-------------|
 | `value` | `string` | Yes | Base58-encoded string. |
 
-Returns `Uint8Array`, the decoded bytes.
+Returns `Uint8Array` with the decoded bytes.
 
 ### decodeBase16()
 
@@ -62,7 +62,7 @@ Parses a hex string into a `Uint8Array`.
 |------|------|----------|-------------|
 | `hex` | `string` | Yes | Hex string of even length. |
 
-Returns `Uint8Array`, the decoded bytes.
+Returns `Uint8Array` with the decoded bytes.
 
 The function does not validate its input. With an odd length the last digit is silently dropped, and a non-hex pair becomes the byte `0`, so check the string before calling.
 
@@ -78,7 +78,7 @@ Encodes bytes to a lowercase hex string (zero-padded).
 |------|------|----------|-------------|
 | `bytes` | `Uint8Array` | Yes | Bytes to encode. |
 
-Returns `string`, a lowercase hex string.
+Returns `string` with the lowercase hex digits.
 
 ### arrayBufferToBase64()
 
@@ -92,7 +92,7 @@ Converts an `ArrayBuffer` to a Base64 string.
 |------|------|----------|-------------|
 | `buffer` | `ArrayBuffer` | Yes | Buffer to encode. |
 
-Returns `string`, the Base64 string.
+Returns `string` with the Base64 encoding.
 
 ### base64ToArrayBuffer()
 

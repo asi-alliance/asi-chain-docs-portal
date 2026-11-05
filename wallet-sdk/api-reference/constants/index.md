@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/constants/index.ts) · [Config](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/config/index.ts)
 
-Constants that the SDK exports from the package root. They live in two files: `utils/constants` holds the chain and encoding constants, and `config` holds the defaults for gas, timeouts and storage. All of them are imported from the package root.
+Constants that the SDK exports from the package root. They live in two files: `utils/constants` holds the chain and encoding constants, and `config` holds the defaults for gas, timeouts and storage.
 
 ## Import
 
