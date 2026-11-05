@@ -1,8 +1,8 @@
 # KeysManager
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/KeysManager/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/KeysManager/index.ts)
 
-secp256k1 key generation and management utilities.
+secp256k1 key generation and HD key derivation helpers. All methods are `static`.
 
 **Interface `KeyPair`:**
 
@@ -77,7 +77,7 @@ Derives the public key from a private key.
 |------|------|----------|-------------|
 | `privateKey` | `Uint8Array` | Yes | secp256k1 private key (32 bytes). |
 
-**Returns:** `Uint8Array` — compressed public key.
+**Returns:** `Uint8Array` — uncompressed public key (65 bytes, starting with `0x04`).
 
 ## `convertKeyToHex`
 
@@ -95,19 +95,52 @@ Converts a binary key to a lowercase hex string.
 
 **Returns:** `string` — hex-encoded key.
 
-## `deriveKeyFromMnemonic`
+## `getInitialHDPathFromOptions`
 
 ```ts
-deriveKeyFromMnemonic(mnemonicWords: string[], options?: Bip44PathOptions): Promise<Uint8Array>
+getInitialHDPathFromOptions(hdWalletOptions: TCreateHDPathWalletOptions): Promise<Bip44Path>
 ```
 
-Convenience wrapper over `KeyDerivationService.deriveKeyFromMnemonic`.
+Returns the BIP-44 path for a new HD wallet. With `{ index }` it builds `m/44'/60'/0'/0/<index>`, and with `{ customHDPath }` it returns that path unchanged.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `mnemonicWords` | `string[]` | Yes | Mnemonic word array. |
-| `options` | `Bip44PathOptions` | No | BIP-44 path options. |
+| `hdWalletOptions` | `TCreateHDPathWalletOptions` | Yes | `{ index: number }` or `{ customHDPath: Bip44Path }`. |
 
-**Returns:** `Promise<Uint8Array>` — derived private key (32 bytes).
+**Returns:** `Promise<Bip44Path>`.
+
+## `getPrivateDataFromSeed`
+
+```ts
+getPrivateDataFromSeed(seed: Uint8Array, path: Bip44Path): Promise<IHDWalletPrivateKeyDataFromSeed>
+```
+
+Derives the private key at `path` from a BIP-39 seed.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `seed` | `Uint8Array` | Yes | Seed bytes, for example from `KeyDerivation.mnemonicToSeed`. |
+| `path` | `Bip44Path` | Yes | Derivation path. |
+
+**Returns:** `Promise<IHDWalletPrivateKeyDataFromSeed>` — `{ privateKey, path, index }`.
+
+## Types
+
+```ts
+interface IBaseHDWalletPrivateKeyData {
+  path: Bip44Path
+  privateKey: Uint8Array
+}
+
+interface IHDWalletPrivateKeyDataFromSeed extends IBaseHDWalletPrivateKeyData {
+  index: number
+}
+```
+
+::: info Mnemonic derivation moved
+`KeysManager` no longer has `deriveKeyFromMnemonic`. Use `KeyDerivation.deriveKeyFromMnemonic(mnemonic, bip44path)` from the [KeyDerivation](/wallet-sdk/api-reference/key-derivation/) page.
+:::

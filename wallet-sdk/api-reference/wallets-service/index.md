@@ -1,8 +1,16 @@
-# WalletsService
+# Wallets
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Wallets/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Wallets/index.ts)
 
-Wallet creation and address derivation.
+Low-level helpers that create wallet metadata and derive addresses. The package exports the class as `Wallets` (it is declared as `WalletsService` inside the SDK), and all four methods are `static`.
+
+```ts
+import { Wallets } from '@asichain/asi-wallet-sdk';
+```
+
+::: tip Low-level API
+These helpers return plain key material and keep nothing in storage. Applications normally create and store wallets through [`Client`](/wallet-sdk/api-reference/client/) and use this class only to derive an address or a key pair on its own.
+:::
 
 ## `createWallet`
 
@@ -17,14 +25,14 @@ Creates wallet metadata from an existing or randomly generated secp256k1 private
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `privateKey` | `Uint8Array` | No | Private key (32 bytes). Generates a new key pair if omitted. |
-| `options` | `CreateWalletOptions` | No | Optional config. Supports `name?: string`. |
+| `options` | `CreateWalletOptions` | No | Accepts `name?: string`, but `createWallet` does not read it, so it has no effect. |
 
-**Returns:** `WalletMeta` — object with `address`, `publicKey`, and `privateKey` fields.
+**Returns:** `WalletMeta` — object with `address`, `publicKey`, and `privateKey` fields. `publicKey` is the 65-byte uncompressed key.
 
-## `createWalletFromMnemonic`
+## `createFirstWalletWithMnemonic`
 
 ```ts
-createWalletFromMnemonic(mnemonic?: string, index?: number): Promise<WalletMeta>
+createFirstWalletWithMnemonic(mnemonic?: string, index?: number): Promise<WalletMeta>
 ```
 
 Builds a wallet from a BIP-39 mnemonic phrase using BIP-44 hierarchical derivation. If `mnemonic` is omitted, a new mnemonic is generated. The returned `WalletMeta` always includes the normalized mnemonic.
@@ -38,7 +46,7 @@ Builds a wallet from a BIP-39 mnemonic phrase using BIP-44 hierarchical derivati
 
 **Returns:** `Promise<WalletMeta>` — includes `address`, `publicKey`, `privateKey`, and `mnemonic` (normalized).
 
-**Throws:** `Error("WalletsService.createWalletFromMnemonic: Recovery mnemonic is missing or invalid")` — if the provided mnemonic fails BIP-39 validation.
+**Throws:** `Error("WalletsService.createFirstWalletWithMnemonic: Recovery mnemonic is missing or invalid")` — if the provided mnemonic fails BIP-39 validation.
 
 ## `deriveAddressFromPrivateKey`
 
@@ -71,3 +79,16 @@ Derives an address from a public key: applies keccak256 hashing, prepends chain 
 | `publicKey` | `Uint8Array` | Yes | secp256k1 public key bytes. |
 
 **Returns:** `Address` — Base58-encoded address prefixed with `"1111"`.
+
+## `WalletMeta`
+
+```ts
+interface WalletMeta {
+  address: string
+  privateKey: Uint8Array
+  publicKey?: Uint8Array
+  mnemonic?: string
+}
+```
+
+`mnemonic` is set only by `createFirstWalletWithMnemonic`.
