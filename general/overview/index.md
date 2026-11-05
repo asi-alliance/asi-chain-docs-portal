@@ -1,6 +1,6 @@
 # General Overview
 
-ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecosystem. Its node is written in Rust and lives in [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). The node uses CBC Casper consensus and keeps state in RSpace++.
+ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecosystem. The node described in this portal is written in Rust and lives in [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). It uses CBC Casper consensus and keeps state in RSpace++. The public DevNet still runs a Scala node, as described under [Networks](#networks).
 
 ## Components
 

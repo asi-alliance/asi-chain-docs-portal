@@ -17,7 +17,7 @@ hero:
       link: /general/container-images/
     - theme: alt
       text: View on GitHub
-      link: https://github.com/asi-alliance/asi-chain
+      link: https://github.com/asi-alliance/asi-chain-rust-node
 features:
   - title: Wallet
     details: Create an account, send and receive ASI and deploy Rholang contracts
@@ -35,7 +35,7 @@ features:
     details: Create wallets, check balances and send tokens from a terminal
     link: /cli/usage/
   - title: Node Setup
-    details: Run a validator or an observer node from the published images
+    details: Run a Rust validator or observer node from the published images
     link: /quick-start/join-validator/
   - title: Architecture
     details: Components, data flow and network topology

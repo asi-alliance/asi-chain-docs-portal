@@ -40,7 +40,7 @@ The wallet refreshes account data every 30 seconds.
 
 ### How do I get test tokens?
 
-Create a wallet account, copy its address and paste it into the [faucet](https://faucet.dev.asichain.io). The guide is in [how to get DevNet ASI](/quick-start/get-asi/). On 5 November 2026 one request credited 10 000 ASI.
+Create a wallet account, copy its address and paste it into the [faucet](https://faucet.dev.asichain.io). The guide is in [how to get DevNet ASI](/quick-start/get-asi/). On 5 November 2026 one request credited 10,000 ASI.
 
 ### Is there a waiting period between requests?
 

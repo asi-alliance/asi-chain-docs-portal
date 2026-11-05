@@ -19,7 +19,7 @@ All four answer on HTTPS. Plain HTTP is redirected to HTTPS.
 
 ## Node
 
-DevNet has one public node address, Validator 1 at `34.196.119.4`. It serves both reads and writes. DevNet also has a dedicated observer, but it is not stable yet, so read from Validator 1 as well.
+DevNet has one public node address, Validator 1 at `34.196.119.4`. It serves both reads and writes. DevNet has no public observer, so read from Validator 1 as well.
 
 | Service | Address | Used for |
 |---|---|---|
@@ -58,7 +58,7 @@ The wallet and the [Wallet SDK](/wallet-sdk/overview/) take three addresses per 
 | Setting | Role | DevNet value for scripts, SDK and CLI |
 |---|---|---|
 | `ValidatorURL` | Receives deploys (`POST /api/deploy`) and status requests | Validator 1 HTTP API from the table above |
-| `ReadOnlyURL` | Answers balance queries and deploy lookups | The same Validator 1 HTTP API, because the observer is not stable yet |
+| `ReadOnlyURL` | Answers balance queries and deploy lookups | The same Validator 1 HTTP API, because DevNet has no public observer |
 | `IndexerURL` | GraphQL endpoint with transaction history | Not published |
 | `nodeApiProfile` | Request format of the node | `scala` |
 

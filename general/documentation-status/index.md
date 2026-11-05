@@ -15,7 +15,7 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 | Node image | The commands on the node pages are run in Docker on a local machine, apart from bonding and enrollment. |
 | Wallet CLI | The published image is pulled and its commands are run against DevNet. |
 | Wallet SDK | The examples are compiled against `@asichain/asi-wallet-sdk` 2.1.0, and read-only calls are made to the DevNet node. |
-| Network addresses | They are confirmed with the network team and requested directly. |
+| Network addresses | The addresses are taken from the network team's environment description and requested directly. |
 | README | The commands in README.md are run in a clean Node.js 24 container. |
 | External links | Every external link is requested once. |
 

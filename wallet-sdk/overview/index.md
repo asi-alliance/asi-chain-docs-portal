@@ -1,6 +1,6 @@
 # Wallet SDK
 
-TypeScript SDK for wallet management and chain access on [ASI Chain](https://github.com/asi-alliance/asi-chain). The pages in this section describe `@asichain/asi-wallet-sdk` 2.1.0, a beta release.
+TypeScript SDK for wallet management and chain access on ASI:Chain. The pages in this section describe `@asichain/asi-wallet-sdk` 2.1.0, a beta release.
 
 **GitHub**: [asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk)
 
@@ -233,7 +233,7 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 | Resource | Link |
 |----------|------|
 | ASI Chain Documentation | [docs.asichain.io](https://docs.asichain.io) |
-| ASI Chain Node | [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) |
+| ASI Chain Node | [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) |
 | ASI Chain Wallet | [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet) |
 | ASI Chain Explorer | [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer) |
 | ASI Chain Faucet | [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
