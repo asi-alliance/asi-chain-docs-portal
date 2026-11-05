@@ -1,4 +1,4 @@
-// Replaces the Mermaid block in architecture/index.md.
+// Shown in architecture/index.md.
 export default {
   kind: 'flow',
   title: 'Architecture overview',

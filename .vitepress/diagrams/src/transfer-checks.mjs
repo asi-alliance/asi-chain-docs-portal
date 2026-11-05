@@ -1,4 +1,4 @@
-// Replaces the first Mermaid block in architecture/sequence-diagrams/transaction/index.md (Phase 1).
+// Shown in architecture/sequence-diagrams/transaction/index.md (phase 1).
 export default {
   kind: 'sequence',
   title: 'Check and reserve',

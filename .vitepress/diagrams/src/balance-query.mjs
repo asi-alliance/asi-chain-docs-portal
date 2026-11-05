@@ -1,4 +1,4 @@
-// Replaces the Mermaid block in architecture/sequence-diagrams/balance/index.md.
+// Shown in architecture/sequence-diagrams/balance/index.md.
 export default {
   kind: 'sequence',
   title: 'Balance query',

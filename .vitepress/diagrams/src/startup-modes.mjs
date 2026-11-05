@@ -1,4 +1,4 @@
-// Replaces the stateDiagram-v2 block in the "Launch Modes" section of architecture/state-diagrams/startup/index.md.
+// Shown in the "Launch Modes" section of architecture/state-diagrams/startup/index.md.
 // A transition label that names what the mode does is the second line of that mode, so only the four conditions that
 // pick a mode stay on lines.
 export default {

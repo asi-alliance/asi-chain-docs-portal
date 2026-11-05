@@ -1,4 +1,4 @@
-// Replaces the Mermaid block of phase 4 in architecture/sequence-diagrams/transaction/index.md.
+// Shown in architecture/sequence-diagrams/transaction/index.md (phase 4).
 export default {
   kind: 'sequence',
   title: 'Deploy status polling',

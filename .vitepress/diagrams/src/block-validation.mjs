@@ -1,4 +1,4 @@
-// Replaces the Mermaid block in the "Block Validation" section of architecture/state-diagrams/operations/index.md.
+// Shown in the "Block Validation" section of architecture/state-diagrams/operations/index.md.
 export default {
   kind: 'flow',
   title: 'Block validation',

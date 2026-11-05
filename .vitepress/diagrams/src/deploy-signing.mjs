@@ -1,4 +1,4 @@
-// Replaces the Mermaid block of phase 2 in architecture/sequence-diagrams/transaction/index.md.
+// Shown in architecture/sequence-diagrams/transaction/index.md (phase 2).
 export default {
   kind: 'sequence',
   title: 'Deploy signing',

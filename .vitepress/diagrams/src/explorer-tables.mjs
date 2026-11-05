@@ -1,4 +1,4 @@
-// Replaces the erDiagram block in the "Indexer Database" section of architecture/component-diagrams/explorer/index.md.
+// Shown in the "Indexer Database" section of architecture/component-diagrams/explorer/index.md.
 // Lines are foreign key relations without a direction. The table under the figure lists every relation and column.
 export default {
   kind: 'flow',

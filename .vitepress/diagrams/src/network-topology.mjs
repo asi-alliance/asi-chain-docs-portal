@@ -1,4 +1,4 @@
-// Replaces the Mermaid block in architecture/network-topology/index.md.
+// Shown in architecture/network-topology/index.md.
 export default {
   kind: 'flow',
   title: 'Network topology',

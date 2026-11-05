@@ -1,4 +1,4 @@
-// Replaces the Mermaid block of phase 3 in architecture/sequence-diagrams/transaction/index.md.
+// Shown in architecture/sequence-diagrams/transaction/index.md (phase 3).
 // The alt frame shows the three outcomes that the text under the diagram describes.
 export default {
   kind: 'sequence',

@@ -1,4 +1,4 @@
-// Replaces the first Mermaid block in architecture/component-diagrams/wallet/index.md.
+// Shown in architecture/component-diagrams/wallet/index.md.
 export default {
   kind: 'flow',
   title: 'Wallet layers',

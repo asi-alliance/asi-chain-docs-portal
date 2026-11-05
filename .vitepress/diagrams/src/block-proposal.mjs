@@ -1,4 +1,4 @@
-// Replaces the Mermaid block in the "Block Proposal" section of architecture/state-diagrams/operations/index.md.
+// Shown in the "Block Proposal" section of architecture/state-diagrams/operations/index.md.
 export default {
   kind: 'flow',
   title: 'Block proposal',

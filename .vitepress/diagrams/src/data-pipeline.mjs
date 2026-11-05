@@ -1,4 +1,4 @@
-// Replaces the Mermaid block in the "Indexing Path" section of architecture/data-flow/index.md.
+// Shown in the "Indexing Path" section of architecture/data-flow/index.md.
 export default {
   kind: 'flow',
   title: 'Data pipeline',

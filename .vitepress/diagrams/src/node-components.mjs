@@ -1,4 +1,4 @@
-// Replaces the first Mermaid block in architecture/component-diagrams/node/index.md.
+// Shown in architecture/component-diagrams/node/index.md.
 export default {
   kind: 'flow',
   title: 'Node components',

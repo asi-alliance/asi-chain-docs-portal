@@ -1,4 +1,4 @@
-// Replaces the Mermaid block in the "Startup Sequence" section of architecture/state-diagrams/startup/index.md
+// Shown in the "Startup Sequence" section of architecture/state-diagrams/startup/index.md.
 // and the lifecycle block in architecture/state-diagrams/index.md.
 export default {
   kind: 'flow',

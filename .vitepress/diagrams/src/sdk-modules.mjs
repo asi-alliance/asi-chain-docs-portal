@@ -1,4 +1,4 @@
-// Replaces public/images/wallet-sdk/module-architecture.svg on the Wallet SDK overview.
+// Shown on wallet-sdk/overview/index.md.
 // The module list repeats in wallet-sdk/api-reference/index.md, wallet-sdk/overview/index.md and the sidebar in
 // .vitepress/config.ts: change all four places together.
 const mods = (ids) => ids;
