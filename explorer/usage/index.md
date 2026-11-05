@@ -10,7 +10,7 @@ New blocks appear without reloading the page. A green check icon in the header s
 
 The menu under the header has five sections: Blocks, Transactions, Validators, Statistics and Indexer. The search box in the header works on every page.
 
-Open the explorer from the start page and use the menu to move between sections. Opening a section address such as `/statistics` directly in a new tab loads the page, but the web server answers it with HTTP 404, so links and bookmarks to those addresses can be flagged as broken by tools that check status codes.
+Open the explorer from the start page and use the menu to move between sections.
 
 ## Blocks
 
