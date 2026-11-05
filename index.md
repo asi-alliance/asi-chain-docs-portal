@@ -21,24 +21,23 @@ hero:
 ## Start Here
 
 <CardGrid columns="3">
-<DocCard title="Use the Wallet" href="/wallet/usage/" icon="wallet">Create an account, send and receive ASI and deploy Rholang contracts</DocCard>
-<DocCard title="Run a Node" href="/quick-start/" icon="node">Run a Rust validator or observer node from the published images</DocCard>
-<DocCard title="Build" href="/wallet-sdk/overview/" icon="sdk">Build wallets and integrations with the TypeScript SDK</DocCard>
+<DocCard title="Use ASI:Chain" href="/use/" icon="wallet">Create an account, get test tokens and follow transfers in the explorer</DocCard>
+<DocCard title="Run a Node" href="/nodes/" icon="node">Run a Rust validator or observer node from the published images</DocCard>
+<DocCard title="Build on ASI:Chain" href="/build/" icon="sdk">Build wallets and integrations with the TypeScript SDK</DocCard>
 </CardGrid>
 
-## Products
+## More
 
 <CardGrid columns="2">
-<DocCard title="Wallet" href="/wallet/usage/" icon="wallet">Create an account, send and receive ASI and deploy Rholang contracts</DocCard>
-<DocCard title="Explorer" href="/explorer/usage/" icon="explorer">Browse blocks, transactions, validators and network statistics</DocCard>
-<DocCard title="Faucet" href="/faucet/usage/" icon="faucet">Request DevNet ASI for testing</DocCard>
-<DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">Build wallets and integrations with the TypeScript SDK</DocCard>
-<DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">Create wallets, check balances and send tokens from a terminal</DocCard>
-<DocCard title="Node Setup" href="/nodes/validator/" icon="node">Run a Rust validator or observer node from the published images</DocCard>
+<DocCard title="What Is ASI:Chain" href="/overview/" icon="book">The node, the indexer and the applications, and how they fit together</DocCard>
 <DocCard title="Architecture" href="/architecture/" icon="architecture">Components, data flow and network topology</DocCard>
-<DocCard title="FAQ" href="/faq/" icon="faq">Answers to common questions about accounts, tokens and nodes</DocCard>
+<DocCard title="Reference" href="/reference/" icon="links">Network endpoints, container images and useful links</DocCard>
+<DocCard title="Help" href="/help/" icon="help">FAQ, troubleshooting and the documentation status</DocCard>
+<DocCard title="DevNet Wallet" href="https://wallet.dev.asichain.io" icon="wallet">wallet.dev.asichain.io</DocCard>
+<DocCard title="DevNet Explorer" href="https://explorer.dev.asichain.io" icon="explorer">explorer.dev.asichain.io</DocCard>
+<DocCard title="DevNet Faucet" href="https://faucet.dev.asichain.io" icon="faucet">faucet.dev.asichain.io</DocCard>
+<DocCard title="Rust Node on GitHub" href="https://github.com/asi-alliance/asi-chain-rust-node" icon="github">github.com/asi-alliance/asi-chain-rust-node</DocCard>
 </CardGrid>
-
 
 ## Before You Start
 
