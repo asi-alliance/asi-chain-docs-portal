@@ -1,10 +1,14 @@
-# Technical architecture
+# Technical Architecture
 
 The maintained node is implemented in Rust. It combines CBC Casper consensus, Rholang execution and RSpace++ storage with P2P, gRPC and HTTP services. See the [pinned node source](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) and [node image](/shard-nodes/validator-image/).
 
+::: warning DevNet runs a different node
+As of 5 November 2026 the public DevNet runs a Scala node (`RChain Node 1.0.0-SNAPSHOT`), and the Rust node image described in this documentation does not join it. The roles, ports and data flow on these pages are common to both implementations. Rust-specific details (default configuration, flags, routes, images) apply to the `node-rust` image only.
+:::
+
 ```mermaid
 flowchart LR
-  Wallet[Web wallet / SDK] -->|HTTP| Node[Rust node]
+  Wallet[Web wallet / SDK] -->|HTTP| Node[Node]
   CLI[Wallet CLI / ASI client] -->|gRPC / HTTP| Node
   Indexer[Python indexer] -->|gRPC / HTTP| Node
   Indexer -->|writes| DB[(PostgreSQL)]
@@ -21,9 +25,9 @@ Public implementation references: [indexer node client](https://github.com/asi-a
 
 ## Guides
 
-- [Network topology](./network-topology/): roles, port boundaries and deployment inputs.
-- [Data flow](./data-flow/): direct API indexing and GraphQL consumers.
-- [Node components](./component-diagrams/node/) and [explorer components](./component-diagrams/explorer/).
-- [Container images](/general/container-images/): exact image/source pairs.
-
-The detailed [transaction](./sequence-diagrams/transaction/), [balance](./sequence-diagrams/balance/), [wallet](./component-diagrams/wallet/) and [state](./state-diagrams/) diagrams retain earlier material and await revision-specific review. Consult [documentation status](/general/documentation-status/) before treating them as an API or runtime contract.
+- [Network topology](/architecture/network-topology/): node roles, ports, access and firewall rules.
+- [Data flow](/architecture/data-flow/): deploy lifecycle, and which data comes from the node and which from GraphQL.
+- [Component diagrams](/architecture/component-diagrams/): [node](/architecture/component-diagrams/node/), [explorer](/architecture/component-diagrams/explorer/) and [wallet](/architecture/component-diagrams/wallet/) components.
+- [Sequence diagrams](/architecture/sequence-diagrams/) and [state diagrams](/architecture/state-diagrams/).
+- [Container images](/general/container-images/): exact image and source pairs.
+- [Documentation status](/general/documentation-status/): what was checked and when.

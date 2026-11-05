@@ -1,8 +1,10 @@
-# Data flow
+# Data Flow
+
+## Indexing Path
 
 ```mermaid
 flowchart LR
-  Node[Rust node] -->|gRPC / HTTP responses| Indexer[Python indexer]
+  Node[Node] -->|gRPC / HTTP responses| Indexer[Python indexer]
   Indexer -->|indexed rows| PG[(PostgreSQL)]
   PG -->|authorized queries| Hasura[Hasura GraphQL]
   Hasura -->|GraphQL responses| Explorer[Explorer frontend]
@@ -12,6 +14,43 @@ flowchart LR
 
 The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py) uses node gRPC and HTTP directly. It does not invoke a Rust CLI. PostgreSQL and Hasura are separate services; the explorer neither extracts chain blocks nor owns the database.
 
-Deploy submission, inclusion, execution results and canonical finalization are separate states. A successful API response or indexed row alone does not prove a successful, finalized token transfer. Use the selected node/client contract and exact raw integer amounts.
+The indexer polls the node every `SYNC_INTERVAL`. Besides blocks it reads bonds and the node's pending deploys. A separate `metrics-cron` service refreshes the aggregated network metrics every three minutes.
 
-Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision. Later cost-accounting/API candidates do not change the [published indexer artifact](/general/container-images/) automatically.
+## Deploy Lifecycle
+
+A deploy passes through separate states. Each one is visible through a different node endpoint, and none of them follows from a successful response to the previous step.
+
+```mermaid
+flowchart LR
+  Client[Client signs deploy] -->|POST /api/deploy| Pool[Pending deploy pool]
+  Pool -->|proposer runs with constraints met| Block[Block created and signed]
+  Block -->|Rholang executed in RSpace++| Broadcast[Broadcast to peers]
+  Broadcast -->|peers validate| DAG[Block in the DAG]
+  DAG -->|safety oracle| Final[Block finalized]
+```
+
+| State | What it means | Where to look |
+|---|---|---|
+| Pending | The node accepted the deploy and holds it in its local queue. Observers always answer with an empty list | `GET /api/pending-deploys` |
+| In a block | A validator included the deploy, executed its Rholang and signed the block | `GET /api/deploy/{deploy_id}` |
+| Finalized | The block is finalized, and the deploy's effects are part of canonical state | `GET /api/is-finalized/{hash}`, `GET /api/deploy-finalization-status/{sig}` |
+
+A validator creates a block when its proposer triggers and both the synchrony and the height constraints hold. By default the heartbeat proposer checks every 5 seconds. Peers that receive the block validate it before adding it to their DAG.
+
+A block can finalize while some of its deploys have their effects dropped during state merge. Poll `deploy-finalization-status` with the deploy signature rather than the block hash alone. According to the OpenAPI description, `GET /api/deploy/{deploy_id}` returns 404 when no finalized block contains the deploy, so a 404 does not mean the deploy was lost.
+
+A successful API response or an indexed row alone does not prove a successful, finalized token transfer. Use exact raw integer amounts.
+
+## Node and GraphQL
+
+| Data | Source | Interface |
+|---|---|---|
+| Balance of an address | Node | `GET /api/balance/{address}`, or a Rholang query through `POST /api/explore-deploy` |
+| Deploy status and finalization | Node | `/api/deploy/{deploy_id}`, `/api/pending-deploys`, `/api/is-finalized/{hash}`, `/api/deploy-finalization-status/{sig}` |
+| Latest blocks, validators, epoch | Node | `/api/last-finalized-block`, `/api/blocks`, `/api/validators`, `/api/epoch` |
+| Transaction history of an address | Indexer through Hasura | GraphQL |
+| Block and transfer lists, network statistics | Indexer through Hasura | GraphQL |
+
+The wallet reads balances through the SDK from the node, and its history from GraphQL.
+
+Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision. Later cost-accounting and API candidates do not change the [published indexer artifact](/general/container-images/) automatically.
