@@ -1,4 +1,4 @@
-# Shard and node roles
+# Shard and Node Roles
 
 ::: warning DevNet runs a Scala node
 As of 2026-11-05 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. The Rust node image described in this section is the one for your own shard and for networks whose operator runs Rust. A Rust node started from it against the DevNet bootstrap did not get past `peers: 0`.

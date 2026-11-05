@@ -4,7 +4,7 @@ import CustomLanguages from "../config/languages";
 
 export default withMermaid(defineConfig({
   title: "ASI:Chain Docs",
-  description: "Complete guide for ASI:Chain blockchain network",
+  description: "Use the wallet, get test tokens, run a node and build on ASI:Chain",
   css: ['custom.css'],
 
   mermaid: {
@@ -21,25 +21,45 @@ export default withMermaid(defineConfig({
     },
     
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Quick Start', link: '/quick-start/join-validator/' },
-      { text: 'Wallet', link: 'https://wallet.dev.asichain.io' },
-      { text: 'Explorer', link: 'https://explorer.dev.asichain.io' },
-      { text: 'Faucet', link: 'https://faucet.dev.asichain.io' },
-      { text: 'Github', items: [
-        {
-          text: 'Explorer repository', link: "https://github.com/asi-alliance/asi-chain-explorer",
-        },
-        {
-          text: 'Wallet repository', link: "https://github.com/asi-alliance/asi-chain-wallet",
-        },
-        {
-          text: 'Wallet CLI repository', link: "https://github.com/asi-alliance/asi-chain-wallet-cli",
-        },
-        {
-          text: 'Faucet repository', link: "https://github.com/asi-alliance/asi-chain-faucet",
-        }
-      ]}
+      { text: 'Get Started', link: '/quick-start/' },
+      { text: 'Guides', items: [
+          { text: 'Documentation', items: [
+              { text: 'Wallet', link: '/wallet/usage/' },
+              { text: 'Wallet SDK', link: '/wallet-sdk/overview/' },
+              { text: 'Wallet CLI', link: '/cli/usage/' },
+              { text: 'Explorer', link: '/explorer/usage/' },
+              { text: 'Faucet', link: '/faucet/usage/' },
+            ]
+          },
+          { text: 'DevNet Apps', items: [
+              { text: 'Wallet', link: 'https://wallet.dev.asichain.io' },
+              { text: 'Explorer', link: 'https://explorer.dev.asichain.io' },
+              { text: 'Faucet', link: 'https://faucet.dev.asichain.io' },
+            ]
+          },
+        ]
+      },
+      { text: 'Nodes', items: [
+          { text: 'Join as an Observer', link: '/quick-start/join-observer/' },
+          { text: 'Join as a Validator', link: '/quick-start/join-validator/' },
+          { text: 'Validator Node Image', link: '/shard-nodes/validator-image/' },
+          { text: 'Set Up a Private Shard', link: '/shard-nodes/own-shard/' },
+        ]
+      },
+      { text: 'Architecture', link: '/architecture/' },
+      { text: 'FAQ', link: '/faq/' },
+      { text: 'GitHub', items: [
+          { text: 'Rust Node', link: 'https://github.com/asi-alliance/asi-chain-rust-node' },
+          { text: 'ASI Client', link: 'https://github.com/asi-alliance/asi-chain-client' },
+          { text: 'Indexer', link: 'https://github.com/asi-alliance/asi-chain-indexer' },
+          { text: 'Wallet SDK', link: 'https://github.com/asi-alliance/asi-chain-wallet-sdk' },
+          { text: 'Wallet', link: 'https://github.com/asi-alliance/asi-chain-wallet' },
+          { text: 'Wallet CLI', link: 'https://github.com/asi-alliance/asi-chain-wallet-cli' },
+          { text: 'Explorer', link: 'https://github.com/asi-alliance/asi-chain-explorer' },
+          { text: 'Faucet', link: 'https://github.com/asi-alliance/asi-chain-faucet' },
+          { text: 'Docs Portal', link: 'https://github.com/asi-alliance/asi-chain-docs-portal' },
+        ]
+      },
     ],
 
     sidebar: [
@@ -47,9 +67,10 @@ export default withMermaid(defineConfig({
         text: 'General',
         collapsed: false,
         items: [
-          { text: 'Overview', link: '/general/overview/' },
+          { text: 'General Overview', link: '/general/overview/' },
+          { text: 'Network Endpoints', link: '/general/endpoints/' },
           { text: 'Documentation Status', link: '/general/documentation-status/' },
-          { text: 'Container Images (ECR)', link: '/general/container-images/' },
+          { text: 'Container Images', link: '/general/container-images/' },
           { text: 'Useful Links', link: '/general/useful-links/' },
         ]
       },
@@ -57,10 +78,11 @@ export default withMermaid(defineConfig({
         text: 'Quick Start',
         collapsed: false,
         items: [
-          { text: 'Rust Validator Enrollment', link: '/quick-start/validator-enrollment/' },
-          { text: 'Join DevNet as Validator', link: '/quick-start/join-validator/' },
-          { text: 'Join DevNet as Observer', link: '/quick-start/join-observer/' },
-          { text: 'How to Get DevNet ASI', link: '/quick-start/get-asi/' },
+          { text: 'Get Started', link: '/quick-start/' },
+          { text: 'How Can I Get DevNet ASI?', link: '/quick-start/get-asi/' },
+          { text: 'Join as an Observer', link: '/quick-start/join-observer/' },
+          { text: 'Join as a Validator', link: '/quick-start/join-validator/' },
+          { text: 'Prepare and Enroll a Rust Validator', link: '/quick-start/validator-enrollment/' },
           { text: 'Troubleshooting', link: '/quick-start/troubleshooting/' },
         ]
       },
@@ -68,17 +90,16 @@ export default withMermaid(defineConfig({
         text: 'Shard & Nodes',
         collapsed: false,
         items: [
-          { text: 'DevNet Structure & Entities', link: '/shard-nodes/devnet-structure/' },
+          { text: 'Shard and Node Roles', link: '/shard-nodes/devnet-structure/' },
           { text: 'Validator Node Image', link: '/shard-nodes/validator-image/' },
-          { text: 'Observer Node Image', link: '/shard-nodes/observer-image/' },
-          { text: 'Own Shard Setting Up', link: '/shard-nodes/own-shard/' },
+          { text: 'Set Up a Private Shard', link: '/shard-nodes/own-shard/' },
         ]
       },
       {
         text: 'Wallet',
         collapsed: false,
         items: [
-          { text: 'Usage Guide', link: '/wallet/usage/' },
+          { text: 'ASI Wallet', link: '/wallet/usage/' },
           { text: 'Custom Network Connection', link: '/wallet/custom-network/' },
         ]
       },
@@ -86,21 +107,21 @@ export default withMermaid(defineConfig({
         text: 'Wallet SDK',
         collapsed: false,
         items: [
-          { text: 'Overview', link: '/wallet-sdk/overview/' },
-          { text: 'API Reference', link: '/wallet-sdk/api-reference/',
+          { text: 'Wallet SDK', link: '/wallet-sdk/overview/' },
+          { text: 'Wallet SDK API Reference', link: '/wallet-sdk/api-reference/',
             items: [
+              { text: 'Client', link: '/wallet-sdk/api-reference/client/' },
               {
                 text: 'Services',
                 collapsed: true,
                 items: [
-                  { text: 'WalletsService', link: '/wallet-sdk/api-reference/wallets-service/' },
-                  { text: 'CryptoService', link: '/wallet-sdk/api-reference/crypto-service/' },
-                  { text: 'MnemonicService', link: '/wallet-sdk/api-reference/mnemonic-service/' },
-                  { text: 'KeyDerivationService', link: '/wallet-sdk/api-reference/key-derivation/' },
+                  { text: 'Wallets', link: '/wallet-sdk/api-reference/wallets-service/' },
+                  { text: 'Crypto', link: '/wallet-sdk/api-reference/crypto-service/' },
+                  { text: 'Mnemonic', link: '/wallet-sdk/api-reference/mnemonic-service/' },
+                  { text: 'KeyDerivation', link: '/wallet-sdk/api-reference/key-derivation/' },
                   { text: 'KeysManager', link: '/wallet-sdk/api-reference/keys-manager/' },
                   { text: 'SignerService', link: '/wallet-sdk/api-reference/signer-service/' },
                   { text: 'AssetsService', link: '/wallet-sdk/api-reference/assets-service/' },
-                  { text: 'DeployResubmitter', link: '/wallet-sdk/api-reference/deploy-resubmitter/' },
                 ]
               },
               {
@@ -108,9 +129,6 @@ export default withMermaid(defineConfig({
                 collapsed: true,
                 items: [
                   { text: 'Wallet', link: '/wallet-sdk/api-reference/wallet/' },
-                  { text: 'Vault', link: '/wallet-sdk/api-reference/vault/' },
-                  { text: 'BlockchainGateway', link: '/wallet-sdk/api-reference/blockchain-gateway/' },
-                  { text: 'EncryptedRecord', link: '/wallet-sdk/api-reference/encrypted-record/' },
                   { text: 'Asset', link: '/wallet-sdk/api-reference/asset/' },
                   { text: 'BrowserStorage', link: '/wallet-sdk/api-reference/browser-storage/' },
                 ]
@@ -141,45 +159,45 @@ export default withMermaid(defineConfig({
         text: 'Wallet CLI',
         collapsed: false,
         items: [
-          { text: 'Usage Guide', link: '/cli/usage/' },
+          { text: 'Wallet CLI', link: '/cli/usage/' },
         ]
       },
       {
         text: 'Explorer',
         collapsed: false,
         items: [
-          { text: 'Usage Guide', link: '/explorer/usage/' },
+          { text: 'ASI Block Explorer', link: '/explorer/usage/' },
         ]
       },
       {
         text: 'Faucet',
         collapsed: false,
         items: [
-          { text: 'Usage Guide', link: '/faucet/usage/' },
+          { text: 'Faucet', link: '/faucet/usage/' },
         ]
       },
       {
         text: 'Architecture',
         collapsed: true,
         items: [
-          { text: 'Overview', link: '/architecture/' },
+          { text: 'Technical Architecture', link: '/architecture/' },
           { text: 'Component Diagrams', link: '/architecture/component-diagrams/',
             items: [
-              { text: 'Wallet', link: '/architecture/component-diagrams/wallet/' },
-              { text: 'Explorer', link: '/architecture/component-diagrams/explorer/' },
-              { text: 'Node', link: '/architecture/component-diagrams/node/' },
+              { text: 'Wallet Architecture', link: '/architecture/component-diagrams/wallet/' },
+              { text: 'Explorer Components', link: '/architecture/component-diagrams/explorer/' },
+              { text: 'Node Components', link: '/architecture/component-diagrams/node/' },
             ]
           },
           { text: 'Sequence Diagrams', link: '/architecture/sequence-diagrams/',
             items: [
               { text: 'Transaction Flow', link: '/architecture/sequence-diagrams/transaction/' },
-              { text: 'Balance Query', link: '/architecture/sequence-diagrams/balance/' },
+              { text: 'Balance Query Flow', link: '/architecture/sequence-diagrams/balance/' },
             ]
           },
           { text: 'State Diagrams', link: '/architecture/state-diagrams/',
             items: [
-              { text: 'Startup States', link: '/architecture/state-diagrams/startup/' },
-              { text: 'Operational States', link: '/architecture/state-diagrams/operations/' },
+              { text: 'Node Startup', link: '/architecture/state-diagrams/startup/' },
+              { text: 'Running Node', link: '/architecture/state-diagrams/operations/' },
             ]
           },
           { text: 'Data Flow', link: '/architecture/data-flow/' },
@@ -237,14 +255,14 @@ export default withMermaid(defineConfig({
     ['meta', { property: 'og:title', content: 'ASI:Chain Documentation' }],
     ['meta', { property: 'og:site_name', content: 'ASI:Chain Docs' }],
     ['meta', { property: 'og:url', content: 'https://docs.asichain.io/' }],
-    ['meta', { property: 'og:description', content: 'Complete guide for ASI:Chain blockchain network - DevNet setup, wallet usage, explorer, faucet, and more' }],
+    ['meta', { property: 'og:description', content: 'Use the wallet, get test tokens, run a node and build on ASI:Chain' }],
     ['meta', { property: 'og:image', content: 'https://docs.asichain.io/logo-light.svg' }],
     ['meta', { property: 'og:image:width', content: '512' }],
     ['meta', { property: 'og:image:height', content: '512' }],
     ['meta', { property: 'og:image:type', content: 'image/svg+xml' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'ASI:Chain Documentation' }],
-    ['meta', { name: 'twitter:description', content: 'Complete guide for ASI:Chain blockchain network - DevNet setup, wallet usage, explorer, faucet, and more' }],
+    ['meta', { name: 'twitter:description', content: 'Use the wallet, get test tokens, run a node and build on ASI:Chain' }],
     ['meta', { name: 'twitter:image', content: 'https://docs.asichain.io/logo-light.svg' }],
   ]
 }))

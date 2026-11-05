@@ -1,4 +1,4 @@
-# Container images
+# Container Images
 
 Registry snapshot checked on **2026-11-05**. Every tag and digest below was read with `docker buildx imagetools inspect` that day. The current namespace is **`public.ecr.aws/l2u2v4a8/asi-chain/`**. Use the versioned tags below to identify artifacts and the digests to pin them. All listed artifacts are **`linux/amd64`**.
 

@@ -1,4 +1,4 @@
-# Validator node image
+# Validator Node Image
 
 The image contains the maintained **Rust** implementation of CBC Casper, Rholang and RSpace++. Its source is [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5).
 

@@ -1,4 +1,4 @@
-# Set up a private shard
+# Set Up a Private Shard
 
 A private shard needs its own genesis, validator identities, bonds, token metadata, storage and network configuration. It does not join an existing network by reusing that network's bootstrap identity.
 
