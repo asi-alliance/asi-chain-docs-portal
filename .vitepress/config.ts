@@ -243,13 +243,23 @@ export default defineConfig({
     config(md) {
       const open = md.renderer.rules.table_open
       const close = md.renderer.rules.table_close
-      // The region name lists the column headers, so a screen reader tells tables on one page apart.
+      // The region name is the nearest heading above the table and the column headers, so a screen reader
+      // tells tables on one page apart. Two tables with the same columns under one heading would still share
+      // a name, so a repeated name gets a number.
+      const plain = (s: string) =>
+        s.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\s*\{#[^}]*\}\s*$/, '').replace(/[`*_]/g, '')
       md.renderer.rules.table_open = (tokens, idx, options, env, self) => {
         const cols: string[] = []
         for (let i = idx + 1; i < tokens.length && tokens[i].type !== 'thead_close'; i++)
-          if (tokens[i].type === 'inline') cols.push(tokens[i].content.replace(/[`*_]/g, ''))
-        const label = md.utils.escapeHtml(cols.length ? 'Table: ' + cols.join(', ') : 'Table')
-        return `<div class="table-wrap" role="region" aria-label="${label}" tabindex="0">` +
+          if (tokens[i].type === 'inline') cols.push(plain(tokens[i].content))
+        let heading = ''
+        for (let i = idx - 1; i >= 0 && !heading; i--)
+          if (tokens[i].type === 'heading_open') heading = plain(tokens[i + 1].content)
+        let label = (heading || 'Table') + (cols.length ? ', columns ' + cols.join(', ') : '')
+        const seen: Record<string, number> = (env.tableLabels ??= {})
+        seen[label] = (seen[label] || 0) + 1
+        if (seen[label] > 1) label += ` (${seen[label]})`
+        return `<div class="table-wrap" role="region" aria-label="${md.utils.escapeHtml(label)}" tabindex="0">` +
           (open ? open(tokens, idx, options, env, self) : self.renderToken(tokens, idx, options))
       }
       md.renderer.rules.table_close = (tokens, idx, options, env, self) =>
