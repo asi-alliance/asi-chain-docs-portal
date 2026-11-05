@@ -6,18 +6,7 @@ How the Rust node gets from process start to the Running state.
 
 ## Startup Sequence
 
-```mermaid
-flowchart TD
-    A[Load configuration, keys and storage] --> B[Choose launch mode]
-    B --> C[Start servers: transport, Kademlia, gRPC, HTTP]
-    C --> D[Start node discovery and clear-connections loops]
-    D --> E{Standalone?}
-    E -->|No| F[Wait for first peer connection]
-    E -->|Yes| G
-    F --> G[Run engine init]
-    G --> H[Running]
-    G -->|error| X[Node shuts down]
-```
+<Diagram name="node-startup" caption="The steps from process start to the Running state, with the branch for a standalone node and the shutdown on an engine init error." />
 
 1. The node loads its configuration, the TLS key that defines its node ID, and its stores, and then picks one of four launch modes (next section). The log line `Launching Casper...` marks this step, and the chosen mode is logged as one `Approved block ...` line.
 2. The transport server and the Kademlia discovery server start, followed by the gRPC and HTTP API servers. The node discovery loop and the clear-connections loop start next, so that they can help to find the first peer.
@@ -27,20 +16,7 @@ flowchart TD
 
 ## Launch Modes
 
-```mermaid
-stateDiagram-v2
-    [*] --> Launch
-    Launch --> Reconnect : approved block in storage
-    Launch --> GenesisValidator : no approved block, genesis validator mode
-    Launch --> CeremonyMaster : no approved block, ceremony master mode
-    Launch --> Initializing : no approved block, join an existing network
-
-    Reconnect --> Running : build Casper from storage
-    GenesisValidator --> Initializing : candidate genesis block signed
-    CeremonyMaster --> Running : approvals collected, genesis approved
-    Initializing --> Running : state imported from the network
-    Running --> [*]
-```
+<Diagram name="startup-modes" caption="The four launch modes, the condition that selects each one and how each reaches the Running state." />
 
 | Mode | Condition | Log line at launch | Path to Running |
 |------|-----------|--------------------|-----------------|
@@ -61,7 +37,7 @@ A restart on the same data directory takes the Reconnect path and does not downl
 
 The transition to Running is logged as one line.
 
-```
+```text
 Making a transition to Running state. Approved Block #<height> (<hash>...)
 ```
 
@@ -95,10 +71,10 @@ The line shows `min_height`, the lowest block of the imported window. If the nod
 
 Do not delete the data directory of a node that its peers already know. The TLS certificate inside it is the node identity, so a wiped directory gives the node a new identity and a full join, while the peers still hold the old one in their routing tables.
 
----
+## Next Steps
 
-## Related Documentation
-
-- [Running Node](/architecture/state-diagrams/operations/): after startup
-- [Validator Setup](/nodes/validator/): setup guide
-- [Troubleshooting](/help/troubleshooting/): common issues
+<CardGrid columns="2">
+<DocCard title="Running Node" href="/architecture/state-diagrams/operations/" icon="node">What the node does after startup.</DocCard>
+<DocCard title="Validator Setup" href="/nodes/validator/" icon="validator">The setup guide.</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Common issues.</DocCard>
+</CardGrid>

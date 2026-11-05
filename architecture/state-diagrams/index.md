@@ -13,15 +13,6 @@ Node startup and runtime behavior of the Rust node from [github.com/asi-alliance
 
 The node has no single state machine for startup. It runs a fixed sequence of steps, and the launch mode it picks after loading storage decides how it reaches the Running state.
 
-```mermaid
-flowchart LR
-    Setup[Load config, keys and storage] --> Launch[Choose launch mode]
-    Launch --> Servers[Start servers and discovery]
-    Servers --> Conn[Wait for first peer]
-    Conn --> Init[Run engine init]
-    Init --> Run[Running]
-```
-
 A node started with `--standalone` skips the wait for the first peer. Once the node is Running, `GET /api/ready` returns 200 and `GET /api/status` reports `"isReady": true`.
 
 ## Check the Current State
@@ -37,10 +28,10 @@ curl -s http://localhost:40403/api/status
 docker logs <container> 2>&1 | grep "transition to Running"
 ```
 
----
+## Next Steps
 
-## Related Documentation
-
-- [Component Diagrams](/architecture/component-diagrams/): node internals
-- [Sequence Diagrams](/architecture/sequence-diagrams/): interaction flows
-- [Troubleshooting](/help/troubleshooting/): common issues
+<CardGrid columns="2">
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="diagram">Node internals.</DocCard>
+<DocCard title="Sequence Diagrams" href="/architecture/sequence-diagrams/" icon="architecture">Interaction flows.</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Common issues.</DocCard>
+</CardGrid>

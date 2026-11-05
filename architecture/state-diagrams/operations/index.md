@@ -27,29 +27,7 @@ The proposer checks every `casper.heartbeat.check-interval`, which is 5 seconds 
 
 A block from a peer passes these checks in order. A block that fails one of them is rejected and handled as invalid.
 
-```mermaid
-flowchart TD
-    RX[Block received] --> F{Format and signature valid?}
-    F -->|No| REJ[Reject]
-    F -->|Yes| P[Parents in DAG?]
-    P -->|No| BUF[Buffer until parents arrive]
-    BUF --> P
-    P -->|Yes| V[Block summary]
-    V --> CP[State checkpoint]
-    CP --> BC[Bonds cache]
-    BC --> NI[Neglected invalid blocks]
-    NI --> NE[Neglected equivocations]
-    NE --> PP[Phlo price]
-    PP --> EQ[Equivocation check]
-    EQ --> ADD[Add to DAG and relay]
-    V -->|invalid| REJ
-    CP -->|state hash mismatch| REJ
-    BC -->|invalid| REJ
-    NI -->|invalid| REJ
-    NE -->|invalid| REJ
-    PP -->|invalid| REJ
-    EQ -->|equivocation| REJ
-```
+<Diagram name="block-validation" caption="The checks a block from a peer passes in order, and the points where it is rejected or buffered." />
 
 Voting is not a separate step. A validator endorses blocks by listing them in the justifications of its next block, and finalization is computed from the DAG by the clique oracle, so every node reaches it on its own.
 
@@ -66,10 +44,10 @@ Read the peer count and the last finalized block from the status endpoint.
 curl -s http://localhost:40403/api/status
 ```
 
----
+## Next Steps
 
-## Related Documentation
-
-- [Node Startup](/architecture/state-diagrams/startup/): before Running
-- [Component Diagrams](/architecture/component-diagrams/): node internals
-- [Troubleshooting](/help/troubleshooting/): common issues
+<CardGrid columns="2">
+<DocCard title="Node Startup" href="/architecture/state-diagrams/startup/" icon="node">What happens before Running.</DocCard>
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="diagram">Node internals.</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Common issues.</DocCard>
+</CardGrid>

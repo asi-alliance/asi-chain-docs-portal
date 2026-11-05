@@ -12,11 +12,13 @@ The indexer calls node APIs directly through its Python gRPC/HTTP client. Hasura
 
 Public implementation references: [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py), [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer/tree/0ae1eea64234c86937b3adf39fc6a5551b228f1a) and [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet/tree/b2e3a45f70d17c05979de38290d7a4fb7e8c42dd).
 
-## Guides
+## Next Steps
 
-- [Network topology](/architecture/network-topology/): node roles, ports, access and firewall rules.
-- [Data flow](/architecture/data-flow/): deploy lifecycle, and which data comes from the node and which from GraphQL.
-- [Component diagrams](/architecture/component-diagrams/): [node](/architecture/component-diagrams/node/), [explorer](/architecture/component-diagrams/explorer/) and [wallet](/architecture/component-diagrams/wallet/) components.
-- [Sequence diagrams](/architecture/sequence-diagrams/) and [state diagrams](/architecture/state-diagrams/).
-- [Container images](/reference/container-images/): exact image and source pairs.
-- [Documentation status](/help/documentation-status/): what was checked and when.
+<CardGrid columns="2">
+<DocCard title="Network Topology" href="/architecture/network-topology/" icon="architecture">Node roles, ports, access and firewall rules.</DocCard>
+<DocCard title="Data Flow" href="/architecture/data-flow/" icon="diagram">Deploy lifecycle, and which data comes from the node and which from GraphQL.</DocCard>
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="node">Node, explorer and wallet components.</DocCard>
+<DocCard title="Sequence Diagrams" href="/architecture/sequence-diagrams/" icon="diagram">Interaction flows.</DocCard>
+</CardGrid>
+
+See also the [state diagrams](/architecture/state-diagrams/), the [container images](/reference/container-images/) with the exact image and source pairs, and [documentation status](/help/documentation-status/) for what was checked and when.

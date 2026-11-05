@@ -32,9 +32,13 @@ Applications and the indexer can talk to any node that exposes the API ports, in
 
 These are the Rust node defaults. Container ports and host mappings differ between setups; see [Validator Image](/nodes/image/#default-container-ports) for the container side.
 
-Discovery runs over TCP. The node's discovery client opens a gRPC channel to `http://<host>:<discovery port>`, even though the field in the peer record is called `udp_port`. Allowing `40404/udp` does nothing for discovery.
+::: warning Discovery Uses TCP
+The node's discovery client opens a gRPC channel to `http://<host>:<discovery port>`, even though the field in the peer record is called `udp_port`. Allowing `40404/udp` does nothing for discovery.
+:::
 
+::: warning API Listeners Are Not Local
 All API listeners bind to `0.0.0.0` by default (`api-server.host`), so the node does not keep 40402 or 40405 local by itself. Restrict them with a firewall or by setting `api-server.host`. The `/metrics` route is registered on the public HTTP router, so it is reachable on 40403; a public gateway in front of the node should pass only the routes you intend to publish.
+:::
 
 ## Firewall
 

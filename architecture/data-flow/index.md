@@ -1,16 +1,10 @@
 # Data Flow
 
+How chain data reaches the explorer and the wallet, and how a deploy moves from signature to finalization.
+
 ## Indexing Path
 
-```mermaid
-flowchart LR
-  Node[Node] -->|gRPC / HTTP responses| Indexer[Python indexer]
-  Indexer -->|indexed rows| PG[(PostgreSQL)]
-  PG -->|authorized queries| Hasura[Hasura GraphQL]
-  Hasura -->|GraphQL responses| Explorer[Explorer frontend]
-  Hasura -->|GraphQL responses| Wallet[Wallet / SDK]
-  Node -->|HTTP responses| Wallet
-```
+<Diagram name="data-pipeline" caption="The indexer copies node data into PostgreSQL, Hasura serves it as GraphQL, and the wallet and SDK also read the node directly." />
 
 The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py) uses node gRPC and HTTP directly. PostgreSQL and Hasura are separate services, and the explorer neither extracts chain blocks nor owns the database.
 
@@ -20,14 +14,7 @@ The indexer polls the node every `SYNC_INTERVAL`. Besides blocks it reads bonds 
 
 A deploy passes through separate states. Each one is visible through a different node endpoint, and a successful response at one step does not guarantee the next state.
 
-```mermaid
-flowchart LR
-  Client[Client signs deploy] -->|POST /api/deploy| Pool[Pending deploy pool]
-  Pool -->|proposer runs with constraints met| Block[Block created and signed]
-  Block -->|Rholang executed in RSpace++| Broadcast[Broadcast to peers]
-  Broadcast -->|peers validate| DAG[Block in the DAG]
-  DAG -->|clique oracle| Final[Block finalized]
-```
+<Diagram name="deploy-lifecycle" caption="The states of a deploy from signature to finalization, and what moves it to the next one." />
 
 | State | What it means | Where to look |
 |---|---|---|

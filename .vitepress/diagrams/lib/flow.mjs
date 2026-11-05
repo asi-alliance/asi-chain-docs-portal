@@ -12,6 +12,7 @@ import { svgOpen, defs, rounded, n2 } from './svg.mjs';
 
 const KINDS = ['chain', 'store', 'service', 'external', 'decision', 'terminal'];
 const LEGEND = { chain: 'Chain node', store: 'Data store', service: 'Service', external: 'External', decision: 'Decision', terminal: 'Start or end' };
+const DECISION_K = 18;
 const eq = (a, b) => Math.abs(a - b) < 0.01;
 const fail = (spec, msg) => { throw new Error(`${spec.id}: ${msg}`); };
 
@@ -153,14 +154,15 @@ export function flow(spec, variant = 'w') {
     // cut both ends at the node border
     const cut = (idx, nxt, n) => {
       const p = pts[idx], q = pts[nxt];
-      if (eq(p.y, q.y)) pts[idx] = { x: p.x + Math.sign(q.x - p.x) * n.w / 2, y: p.y };
+      // the hexagon of a decision narrows by DECISION_K px over half its height, so an offset edge ends on the slanted side
+      if (eq(p.y, q.y)) pts[idx] = { x: p.x + Math.sign(q.x - p.x) * (n.w / 2 - (n.kind === 'decision' ? DECISION_K * Math.min(1, Math.abs(p.y - n.cy) / (n.h / 2)) : 0)), y: p.y };
       else pts[idx] = { x: p.x, y: p.y + Math.sign(q.y - p.y) * n.h / 2 };
     };
     cut(0, 1, a); cut(pts.length - 1, pts.length - 2, b);
     for (let i = 0; i + 1 < pts.length; i++) {
       const p = pts[i], q = pts[i + 1];
       if (!eq(p.x, q.x) && !eq(p.y, q.y)) fail(spec, `edge ${e.key}: segment ${i + 1} is not orthogonal (offsets and via points disagree)`);
-      for (const rc of rects) if (rc.id !== e.from && rc.id !== e.to && segHitsRect(p, q, rc)) fail(spec, `edge ${e.key} runs through node "${rc.id}"`);
+      for (const rc of rects) if (rc.id !== e.from && rc.id !== e.to && segHitsRect(p, q, rc)) fail(spec, `edge ${e.key} runs through node "${rc.id}" (segment ${JSON.stringify([p, q])})`);
     }
     e.pts = pts;
     if (e.label) {
@@ -218,7 +220,7 @@ export function flow(spec, variant = 'w') {
     if (n.kind === 'store') {
       s += `<path d="M${n2(x)} ${n2(y + 7)}v${n2(h - 14)}a${n2(w / 2)} 7 0 0 0 ${n2(w)} 0v${n2(-(h - 14))}a${n2(w / 2)} 7 0 0 0 ${n2(-w)} 0a${n2(w / 2)} 7 0 0 0 ${n2(w)} 0"/>`;
     } else if (n.kind === 'decision') {
-      const k = 18;
+      const k = DECISION_K;
       s += `<polygon points="${n2(x)},${n2(cy)} ${n2(x + k)},${n2(y)} ${n2(x + w - k)},${n2(y)} ${n2(x + w)},${n2(cy)} ${n2(x + w - k)},${n2(y + h)} ${n2(x + k)},${n2(y + h)}"/>`;
     } else {
       s += `<rect x="${n2(x)}" y="${n2(y)}" width="${n2(w)}" height="${n2(h)}" rx="${n.kind === 'terminal' ? n2(h / 2) : 10}"/>`;
