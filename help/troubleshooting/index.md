@@ -1,6 +1,10 @@
 # Troubleshooting
 
-Each section below starts from a symptom, then gives the likely cause and the check. Start by checking the image tag or digest, the source revision, the configuration and the host port mappings. The node runtime is Rust, so JVM tuning and the older configurator and connector commands do not apply.
+Each section below is named after a symptom and lists what to check. Start by checking the image tag or digest, the source revision, the configuration and the host port mappings. The node runtime is Rust, so JVM tuning and the older configurator and connector commands do not apply.
+
+::: warning DevNet Runs the Scala Node
+As of 5 November 2026 the public DevNet runs a Scala node, and the Rust image does not connect to it. A Rust node started with the DevNet bootstrap lists other nodes in `/api/status` but keeps `peers` at 0. This was observed on two separate hosts with the settings from these guides. See [Run an Observer](/nodes/observer/).
+:::
 
 ## Before You Start
 
@@ -10,19 +14,13 @@ Node commands on this page use the container name from the `docker run --name` o
 NODE=observer
 ```
 
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node, and the Rust image does not connect to it. A Rust node started with the DevNet bootstrap lists other nodes in `/api/status` but keeps `peers` at 0. This was observed on two separate hosts with the settings from these guides. See [Run an Observer](/nodes/observer/).
-:::
-
-Node symptoms come first, followed by wallet, faucet and transaction symptoms.
-
 ## Image Pull or Startup Fails
 
-### Likely Causes
+### Requirements
 
 Use a tag or digest from [Container Images](/reference/container-images/) and pass `--platform linux/amd64`, because the images exist for that platform only. Check Docker connectivity and disk capacity. Do not silently substitute another build for a missing ARM image.
 
-### Check
+### Inspect the Container
 
 Inspect your own container:
 
@@ -32,7 +30,7 @@ docker port "$NODE"
 docker logs --tail 100 "$NODE"
 ```
 
-The first lines of the log usually name the cause. These messages have known fixes.
+The first lines of the log usually name the cause. The most common messages are listed below with their fixes.
 
 - `The data dir must be a directory and have read and write permissions` means the volume belongs to `root`. Change its owner to `daemon` (uid 1) with the `chown` command from [Run an Observer](/nodes/observer/#start-the-observer).
 - `unexpected argument '--profile' found` means a `--profile` option was passed after `run`, and `the argument '--profile <PROFILE>' cannot be used multiple times` means one was passed before `run`. The image entrypoint already adds `--profile=docker`, so remove yours.
@@ -45,7 +43,7 @@ Keep keys and TLS private material out of shared diagnostics.
 
 ## No Peer Connection
 
-### Check
+### Read the Peer Count
 
 Read the peer count and the node's own view of the network:
 
@@ -73,7 +71,7 @@ TCP connectivity alone does not establish the correct shard, synchronization or 
 
 ## API Unavailable
 
-### Check
+### Probe the API
 
 Compare the endpoint with the host port mapping and the gateway base path. HTTP may use a different host port from the container default `40403`.
 
@@ -90,17 +88,17 @@ The image healthcheck calls `/api/ready` on container port `40403` every 30 seco
 
 ## CLI or Indexer Response Mismatch
 
-### Check
+### Check the Revision
 
 Check which source revision the CLI or indexer was built from, and for the CLI also which client commit its `rust-client` submodule points to. An image does not include changes merged after it was built. The [catalog](/reference/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
 
-### Likely Causes
+### Compatibility
 
 Check the selected node's HTTP and Protobuf contract before you change a consumer. Cost-accounting APIs and newer integer and transfer representations need compatible clients and separate acceptance checks. The Rust client commands `wallet-balance`, `validator-status`, `bonds` and `active-validators` fail against the Scala DevNet node.
 
 ## Slow Sync or Restart
 
-### Check
+### Expected Behavior
 
 A joining node takes the last finalized state and the recent blocks from its peers and does not download the whole history. It is ready when the log shows `Making a transition to Running state` and `/api/status` reports `isReady: true` with a growing `lastFinalizedBlockNumber`.
 
@@ -112,7 +110,7 @@ Do not delete the data directory of a node that peers already know. The node ide
 
 ## Wallet Does Not Show the Balance
 
-### Check
+### Refresh and Look Up
 
 The wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It asks for the wallet password to unlock and again to sign a transaction.
 
@@ -124,7 +122,7 @@ See [Wallet Usage](/wallet/usage/) for the screens.
 
 ## Faucet and Transactions
 
-### Likely Causes
+### Faucet Limits
 
 The faucet refuses an address only when its balance is above the limit, which is 20,000 ASI in the production web build. The page then shows `Your address is not eligible` and disables the FAUCET button. There is no waiting period between requests. An address starts with `1111`, and the faucet form accepts 50 to 54 characters.
 

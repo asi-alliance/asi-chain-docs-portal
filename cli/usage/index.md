@@ -2,6 +2,10 @@
 
 The ASI wallet CLI creates wallets, queries balances, sends tokens and reads and exports deploy history. It builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, and its image tag for enrollment is built from a different commit than the one in this submodule, so do not swap one for the other.
 
+::: warning DevNet Runs the Scala Node
+As of 5 November 2026, `balance` and `send` stop with `Wrong native token: expected ASI, node reports `, because the DevNet node status has no token symbol. With `EXPECTED_TOKEN_SYMBOL` set to an empty value they stop with `HTTP 404` on `/api/balance/<address>`. `history` and `export` could not connect to the DevNet GraphQL endpoint either (see [Configuration](#configuration)).
+:::
+
 ## Published Image
 
 ```text
@@ -23,10 +27,6 @@ docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --hel
 ## Compatibility
 
 The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet still runs the Scala node, and on 5 November 2026 only `create` works against it.
-
-::: warning DevNet Status on 5 November 2026
-`balance` and `send` stop with `Wrong native token: expected ASI, node reports `, because the DevNet node status has no token symbol. With `EXPECTED_TOKEN_SYMBOL` set to an empty value they stop with `HTTP 404` on `/api/balance/<address>`. `history` and `export` could not connect to the DevNet GraphQL endpoint either (see [Configuration](#configuration)).
-:::
 
 Use a Rust node, such as one started from the [validator image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
 

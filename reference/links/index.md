@@ -45,8 +45,8 @@ To report a problem, open an issue in the affected repository. Describe how to r
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">DevNet applications and node addresses.</DocCard>
   <DocCard title="Container Images" href="/reference/container-images/" icon="image">Published images, tags and digests.</DocCard>
   <DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">TypeScript SDK.</DocCard>
+  <DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">Command-line wallet.</DocCard>
   <DocCard title="Architecture" href="/architecture/" icon="architecture">How node, indexer, GraphQL and applications connect.</DocCard>
 </CardGrid>
