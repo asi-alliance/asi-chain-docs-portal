@@ -1,0 +1,326 @@
+/**
+ * Navigation, sidebar, outline, search, footer and the home hero.
+ * The default theme styles most of these with scoped CSS, so selectors here
+ * start from a parent class to be one step more specific.
+ */
+
+:root {
+  --vp-sidebar-bg-color: var(--vp-c-bg);
+  --vp-nav-bg-color: var(--vp-c-bg);
+  --vp-nav-screen-bg-color: var(--vp-c-bg);
+  --vp-local-nav-bg-color: var(--vp-c-bg);
+}
+
+/* Nav */
+
+.VPNav .VPNavBar:not(.home.top) .content-body,
+.VPNav .VPNavBar:not(.home.top) .container .content-body {
+  background-color: color-mix(in srgb, var(--vp-c-bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.VPNavBar .divider-line {
+  background-color: var(--vp-c-divider);
+}
+
+.VPNavBar .VPNavBarTitle .title {
+  font-family: var(--vp-font-family-mono);
+  font-weight: 700;
+  font-size: 14px !important;
+  color: var(--vp-c-text-1);
+}
+
+.VPNavBar .VPNavBarMenuLink,
+.VPNavBar .VPNavBarMenuGroup .button {
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+  transition: color 0.15s, box-shadow 0.15s;
+}
+
+.VPNavBar .VPNavBarMenuLink:hover,
+.VPNavBar .VPNavBarMenuGroup .button:hover,
+.VPNavBar .VPNavBarMenuGroup:hover .button {
+  color: var(--vp-c-text-1);
+}
+
+.VPNavBar .VPNavBarMenuLink.active,
+.VPNavBar .VPNavBarMenuGroup.active .button {
+  color: var(--vp-c-text-1);
+  box-shadow: inset 0 -2px 0 var(--ds-accent);
+}
+
+/* Search: the box has a border that reaches 3:1 against the page. */
+
+.VPNavBarSearch .DocSearch-Button,
+.VPNavBarSearch .DocSearch.DocSearch-Button {
+  height: 38px;
+  border: 1px solid var(--ds-control-border);
+  border-radius: var(--ds-r-md);
+  background: var(--vp-c-bg-alt);
+  transition: border-color 0.15s;
+}
+
+.VPNavBarSearch .DocSearch-Button:hover {
+  border-color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-alt);
+}
+
+.VPNavBarSearch .DocSearch-Button .DocSearch-Button-Placeholder {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--vp-c-text-2);
+}
+
+.VPNavBarSearch .DocSearch-Button .DocSearch-Button-Key {
+  border: 1px solid var(--vp-c-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vp-c-text-3);
+  box-shadow: none;
+}
+
+.VPNavBar .VPSwitchAppearance,
+.VPNavBar .VPNavBarAppearance .VPSwitch {
+  border-color: var(--ds-control-border);
+}
+
+/* Sidebar */
+
+.VPSidebar {
+  border-right: 1px solid var(--vp-c-divider);
+}
+
+.VPSidebar .VPSidebarItem.level-0 {
+  padding-bottom: 8px;
+}
+
+.VPSidebar .VPSidebarItem.level-0 > .item > .text,
+.VPSidebar .VPSidebarItem.level-0 > .item > .link > .text {
+  padding: 8px 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+}
+
+.VPSidebar .VPSidebarItem.level-0.has-active > .item > .text {
+  color: var(--vp-c-text-2);
+}
+
+.VPSidebar .VPSidebarItem.level-1 .items,
+.VPSidebar .VPSidebarItem.level-2 .items {
+  border-left-color: var(--vp-c-divider);
+}
+
+.VPSidebar .VPSidebarItem .item .link {
+  margin: 1px 0;
+  padding: 0 12px;
+  border-radius: var(--ds-r-sm);
+  transition: background-color 0.15s;
+}
+
+.VPSidebar .VPSidebarItem .item .link > .text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  padding: 5px 0;
+  color: var(--vp-c-text-2);
+}
+
+.VPSidebar .VPSidebarItem.is-link > .item > .link:hover {
+  background-color: var(--vp-c-bg-alt);
+}
+
+.VPSidebar .VPSidebarItem.is-link > .item > .link:hover > .text {
+  color: var(--vp-c-text-1);
+}
+
+.VPSidebar .VPSidebarItem.is-active > .item > .link {
+  background-color: var(--vp-c-brand-soft);
+  box-shadow: inset 2px 0 0 var(--ds-accent);
+}
+
+.VPSidebar .VPSidebarItem.is-active > .item > .link > .text {
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+}
+
+.VPSidebar .VPSidebarItem > .item > .indicator {
+  display: none;
+}
+
+.VPSidebar .VPSidebarItem .caret:focus-visible {
+  outline: 2px solid var(--ds-ring);
+}
+
+/* Outline (right column) */
+
+.VPDocAsideOutline .outline-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+}
+
+.VPDocAsideOutline .outline-link {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--vp-c-text-2);
+  transition: color 0.15s;
+}
+
+.VPDocAsideOutline .outline-link:hover,
+.VPDocAsideOutline .outline-link.active {
+  color: var(--vp-c-brand-1);
+}
+
+.VPDocAsideOutline .outline-marker {
+  background-color: var(--ds-accent);
+}
+
+/* Mobile menu bar */
+
+.VPLocalNav {
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.VPLocalNav .menu,
+.VPLocalNav .outline-button {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+
+/* Prev/next and edit link */
+
+.VPDocFooter .pager-link {
+  border: 1px solid var(--vp-c-border);
+  border-radius: var(--ds-r-md);
+  transition: border-color 0.15s;
+}
+
+.VPDocFooter .pager-link:hover {
+  border-color: var(--ds-accent);
+}
+
+.VPDocFooter .pager-link .desc {
+  color: var(--vp-c-text-3);
+}
+
+.VPDocFooter .pager-link .title {
+  color: var(--vp-c-text-1);
+}
+
+.VPDocFooterLastUpdated .light-text,
+.VPLastUpdated,
+.VPDocFooter .edit-link-button {
+  color: var(--vp-c-text-2);
+}
+
+/* Home */
+
+.VPHome .VPHero {
+  position: relative;
+  padding-top: calc(var(--vp-nav-height) + 40px);
+}
+
+.VPHome .VPHero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(60% 70% at 85% 0%, rgba(147, 226, 124, 0.16), transparent 70%);
+}
+
+.dark .VPHome .VPHero::before {
+  background:
+    radial-gradient(60% 70% at 85% 0%, rgba(51, 228, 255, 0.1), transparent 70%),
+    radial-gradient(40% 50% at 100% 30%, rgba(147, 226, 124, 0.1), transparent 70%);
+}
+
+.VPHero .name,
+.VPHero .text {
+  font-size: clamp(36px, 5vw, 48px);
+  font-weight: 750;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--vp-c-text-1);
+}
+
+.VPHero .name {
+  font-family: var(--vp-font-family-base);
+  font-weight: 750;
+}
+
+.VPHero .tagline {
+  max-width: 34ch;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+
+.VPHero .VPButton {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: var(--ds-r-md);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 42px;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.VPHero .VPButton.alt {
+  border-color: var(--vp-c-border);
+}
+
+/* Text first, terminal under it on a narrow screen, left aligned like the rest of the page. */
+.VPHome .VPHero.has-image .container {
+  text-align: left;
+}
+
+.VPHome .VPHero .main {
+  order: 1;
+}
+
+.VPHome .VPHero .image {
+  order: 2;
+}
+
+.VPHome .VPHero.has-image .name,
+.VPHome .VPHero.has-image .text,
+.VPHome .VPHero.has-image .tagline {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.VPHome .VPHero.has-image .actions {
+  justify-content: flex-start;
+  margin: -6px;
+}
+
+.asi-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+/* Footer */
+
+.VPFooter {
+  border-top: 1px solid var(--vp-c-divider);
+  background-color: var(--vp-c-bg);
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+
+/* Logo (custom components/Logo.vue) keeps its own sizes in custom.css. */

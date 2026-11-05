@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import CustomLanguages from "../config/languages";
+import { deepSpaceLight, deepSpaceDark } from "./theme/shiki";
 
 export default withMermaid(defineConfig({
   title: "ASI:Chain Docs",
@@ -236,7 +237,18 @@ export default withMermaid(defineConfig({
     }
   },
   markdown: {
-    languages: CustomLanguages
+    languages: CustomLanguages,
+    theme: { light: deepSpaceLight, dark: deepSpaceDark },
+    // Tables get a scroll wrapper, so a wide table scrolls in its own box and not the page.
+    config(md) {
+      const open = md.renderer.rules.table_open
+      const close = md.renderer.rules.table_close
+      md.renderer.rules.table_open = (tokens, idx, options, env, self) =>
+        '<div class="table-wrap" role="region" aria-label="Table" tabindex="0">' +
+        (open ? open(tokens, idx, options, env, self) : self.renderToken(tokens, idx, options))
+      md.renderer.rules.table_close = (tokens, idx, options, env, self) =>
+        (close ? close(tokens, idx, options, env, self) : self.renderToken(tokens, idx, options)) + '</div>'
+    }
   },
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
@@ -248,8 +260,9 @@ export default withMermaid(defineConfig({
     ['link', { rel: 'manifest', href: '/site.webmanifest' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-    ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap', rel: 'stylesheet' }],
-    ['meta', { name: 'theme-color', content: '#5f67ee' }],
+    // Roboto Mono for code and the logo text. Inter comes with VitePress.
+    ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap', rel: 'stylesheet' }],
+    ['meta', { name: 'theme-color', content: '#0D1012' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'en' }],
     ['meta', { property: 'og:title', content: 'ASI:Chain Documentation' }],
