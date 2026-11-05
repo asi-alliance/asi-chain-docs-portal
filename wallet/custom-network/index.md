@@ -4,25 +4,33 @@ The ASI Wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) comes
 
 ## Open the Form
 
-1. Open the wallet and unlock it.
-2. Choose **Network Settings** in the menu.
-3. The **Custom Network Configuration** card holds the form. The **Existing Custom Networks** card below it lists the networks you have saved.
+<Steps>
+
+### Unlock the Wallet
+
+Open the wallet and unlock it.
+
+### Open Network Settings
+
+Choose **Network Settings** in the menu.
+
+### Find the Form
+
+The **Custom Network Configuration** card holds the form. The **Existing Custom Networks** card below it lists the networks you have saved.
+
+</Steps>
 
 DevNet is built into the wallet. It is not listed on this page and cannot be edited or deleted here. You select it in the network selector in the header, next to the connection status.
 
-![Custom Network Configuration form](/images/wallet/custom-network-form.png)
+![The Custom Network Configuration form with fields for the network name, node API profile and three URLs.](/images/wallet/custom-network-form.png)
 
 ## Form Fields
 
-`Network Name` is the label shown in the network selector. It cannot be empty and must differ, ignoring case, from the name of every other network, including DevNet.
-
-`Node API Profile` tells the wallet which node implementation answers on the URLs below. The list offers `Scala node` (stable) and `Rust node` (experimental), and the default is `Scala node`. The public DevNet currently runs a Scala node.
-
-`Validator URL` is where the wallet sends deploys and transfers.
-
-`Read-only URL` is where the wallet sends read queries, such as balances, deploy status and blocks. There is no fallback to the validator URL, so enter the same address again if one node serves both.
-
-`Indexer URL` is the GraphQL endpoint the wallet reads transaction history from. The field cannot be left empty, and without a working indexer the Transactions page has no history to show.
+- **Network Name** is the label shown in the network selector. It cannot be empty and must differ, ignoring case, from the name of every other network, including DevNet.
+- **Node API Profile** tells the wallet which node implementation answers on the URLs below. The list offers `Scala node` (stable) and `Rust node` (experimental), and the default is `Scala node`. The public DevNet currently runs a Scala node.
+- **Validator URL** is where the wallet sends deploys and transfers.
+- **Read-only URL** is where the wallet sends read queries, such as balances, deploy status and blocks. There is no fallback to the validator URL, so enter the same address again if one node serves both.
+- **Indexer URL** is the GraphQL endpoint the wallet reads transaction history from. The field cannot be left empty, and without a working indexer the Transactions page has no history to show.
 
 Each URL must use `http` or `https` and contain a host. Do not add a path such as `/api`, because the wallet appends `/api/...` to the address itself. The **Direct Links** block under the fields lists the filled URLs as links, so you can open each one in a new tab.
 
@@ -50,7 +58,7 @@ For a node on your own machine, the values depend on the ports the node publishe
 
 A Rust validator started without developer mode refuses balance queries with `readonly_node_required`. For such a shard, set Read-only URL to a read-only node, for example the one from [Set Up a Private Shard](/nodes/private-shard/#read-only-node) on port `40453`.
 
-::: warning Rust node profile
+::: warning Rust Node Profile
 This version of the wallet uses Wallet SDK 2.1.0, which cannot read balances from a Rust node or send transfers through it. See [Wallet SDK](/wallet-sdk/overview/).
 :::
 
@@ -113,8 +121,11 @@ When the header shows `Disconnected`, open the browser console on the wallet pag
 
 A wallet served from `http://localhost:3000` talks to nodes on `localhost` without the mixed content and local network prompts. The wallet reads its built-in networks from the `NETWORKS` variable at build time, and the build fails without it. Follow the Local Development steps in the wallet repository, [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet#local-development), and fill `NETWORKS` and the bridge variables in `.env` before `npm start`. The published Docker image always serves the networks it was built with, so your own configuration needs your own image.
 
-## Support
+## Next Steps
 
-- Check the DevNet state on [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
-- For a node you run yourself, see the [observer guide](/nodes/observer/) and the [validator guide](/nodes/validator/).
-- For general questions, see the [FAQ](/help/faq/).
+<CardGrid columns="2">
+<DocCard title="Run an Observer" href="/nodes/observer/" icon="observer">Start a node to connect the wallet to</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/" icon="validator">Prepare a Rust validator node</DocCard>
+<DocCard title="Block Explorer" href="https://explorer.dev.asichain.io" icon="explorer">Check the DevNet state on explorer.dev.asichain.io</DocCard>
+<DocCard title="FAQ" href="/help/faq/" icon="faq">Answers to general questions</DocCard>
+</CardGrid>

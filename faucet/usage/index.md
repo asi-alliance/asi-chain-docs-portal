@@ -2,7 +2,7 @@
 
 The ASI:Chain Faucet sends test ASI to a wallet address on the DevNet. These tokens have no real value and are meant for testing transfers and contract deployments. Open it at [faucet.dev.asichain.io](https://faucet.dev.asichain.io).
 
-::: warning Security notice
+::: warning Security Notice
 The faucet never asks you to sign a transaction or to enter a seed phrase, a private key or a password. If a page asks for any of these, you are not on the official faucet.
 :::
 
@@ -18,15 +18,17 @@ The request amount and the limit are the defaults of the faucet server, and the 
 
 ## Request Tokens
 
-### Enter an Address
+<Steps>
+
+### Enter the Address
 
 Paste your wallet address into the **Address** field. A DevNet address is 50 to 54 characters long and starts with `1111`.
 
 As soon as the address is valid, the page loads its balance and shows it under **Address Balance**, next to the **FAUCET** button.
 
-![Faucet Form](/images/faucet/faucet-form.png)
+![The faucet form with the Address field, the address balance and the FAUCET button.](/images/faucet/faucet-form.png)
 
-### Press FAUCET
+### Request the Tokens
 
 Press **FAUCET**. The page shows `Tokens requested successfully.` once the faucet has accepted the request, and the **TX status check** field on the right fills in the `deploy_id` of the transfer. You can also paste a `deploy_id` into that field yourself to follow an older request.
 
@@ -36,9 +38,11 @@ If the balance is above the limit, the button stays disabled and the page shows 
 
 The **TX status check** section shows the current status and `Next check in`, the seconds left until the next automatic check. The page checks the status every 30 seconds. When the status is `Finalized`, the page reloads the balance, which now includes the new tokens.
 
-![Faucet Status](/images/faucet/faucet-status.png)
+![The TX status check section with the current status and the time to the next check.](/images/faucet/faucet-status.png)
 
 If the transfer is still not finalized after 15 minutes, the page stops checking and shows `Polling stopped after 15 minutes.`. To start checking again, clear the field and paste the `deploy_id` back. The page also stops when the node returns an error status or when the status request fails.
+
+</Steps>
 
 ## Statuses
 
@@ -55,7 +59,7 @@ If the transfer is still not finalized after 15 minutes, the page stops checking
 
 ## Troubleshooting
 
-### Your address is not eligible
+### Your Address Is Not Eligible
 
 The balance of the address is above 20,000 ASI. Send some of it to another address or use a different address.
 
@@ -71,9 +75,13 @@ The network may be busy. Wait for the next check. If the page has stopped checki
 
 The balance updates when the status becomes `Finalized`. If it still shows the old value, reload the page and enter the address again. You can also open your account in the wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) or look up the transfer in the explorer at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
 
-## Links
+## Next Steps
 
-- Documentation: [docs.asichain.io](https://docs.asichain.io)
-- Wallet: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
-- Explorer: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-- GitHub: [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet)
+<CardGrid columns="2">
+<DocCard title="ASI Wallet" href="/wallet/usage/" icon="wallet">Open your account at wallet.dev.asichain.io</DocCard>
+<DocCard title="Block Explorer" href="/explorer/usage/" icon="explorer">Look up the transfer at explorer.dev.asichain.io</DocCard>
+<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/" icon="rocket">The short path from a new wallet to a balance</DocCard>
+<DocCard title="Faucet Source" href="https://github.com/asi-alliance/asi-chain-faucet" icon="github">github.com/asi-alliance/asi-chain-faucet</DocCard>
+</CardGrid>
+
+The documentation is at [docs.asichain.io](https://docs.asichain.io).

@@ -26,6 +26,11 @@ A network is made of nodes with different roles. A bootstrap node is the entry p
 
 The native token is ASI. It has 8 decimal places, so 1 ASI is `100000000` in the smallest unit, and the Wallet CLI takes amounts in that unit. Account addresses are Base58 strings that start with `1111`.
 
-## Before You Start
+## Next Steps
 
-If you only want to try the network, get tokens from the [faucet](/quick-start/get-asi/) and open the [wallet](/wallet/usage/). Known limits of these pages are listed on [Documentation Status](/help/documentation-status/).
+<CardGrid columns="2">
+<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/" icon="faucet">Get tokens from the faucet and open the wallet</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/" icon="wallet">Create accounts, send tokens and deploy contracts</DocCard>
+<DocCard title="Architecture" href="/architecture/" icon="architecture">See how the parts exchange data</DocCard>
+<DocCard title="Documentation Status" href="/help/documentation-status/" icon="status">Known limits of these pages</DocCard>
+</CardGrid>

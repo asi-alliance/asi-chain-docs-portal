@@ -4,7 +4,7 @@ ASI Wallet is a browser wallet for ASI:Chain. It has no backend of its own: it k
 
 The DevNet wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It connects to DevNet out of the box, so there is nothing to configure. Node and service addresses are listed on [Network Endpoints](/reference/endpoints/), and a wallet for your own node is described in [Custom Network](/wallet/custom-network/).
 
-::: warning Back up your recovery phrase
+::: warning Back Up Your Recovery Phrase
 The wallet shows the recovery phrase once, when the wallet is created. Anyone who has it can control your accounts, and if you lose both the phrase and the browser data you lose access for good. Write the phrase down, keep it offline, and never put it in a screenshot or a text file.
 :::
 
@@ -12,15 +12,33 @@ The wallet shows the recovery phrase once, when the wallet is created. Anyone wh
 
 The first time you open the wallet it shows the **Welcome** screen with **Create your first wallet**. The **Account Type** switch chooses between an HD wallet and a private key wallet. An HD wallet is built from one 12- or 24-word recovery phrase and can hold any number of accounts. A private key wallet is built from a single key and holds exactly one account.
 
-![Welcome screen](/images/wallet/accounts-create.png)
+![The Welcome screen with the Create your first wallet card and the Account Type switch.](/images/wallet/accounts-create.png)
 
-To create an HD wallet:
+To create an HD wallet, follow these steps.
 
-1. Click **Create Wallet**.
-2. Enter an account name of up to 30 characters and choose a phrase length, 12 or 24 words.
-3. Click **Show**, write the phrase down and click **I've Saved My Phrase**.
-4. Set a wallet password and confirm it. The password needs at least 8 characters, with one uppercase letter, one lowercase letter, one number and one special character.
-5. Click **Continue**. The wallet opens on the **Accounts** page with your first account.
+<Steps>
+
+### Start the Wallet
+
+Click **Create Wallet**.
+
+### Name the Account
+
+Enter an account name of up to 30 characters and choose a phrase length, 12 or 24 words.
+
+### Save the Phrase
+
+Click **Show**, write the phrase down and click **I've Saved My Phrase**.
+
+### Set a Password
+
+Set a wallet password and confirm it. The password needs at least 8 characters, with one uppercase letter, one lowercase letter, one number and one special character.
+
+### Open the Wallet
+
+Click **Continue**. The wallet opens on the **Accounts** page with your first account.
+
+</Steps>
 
 To use an existing wallet, click **Import Wallet** and enter the recovery phrase, or click **Import Wallet from keyfile** and pick a keyfile exported earlier with **Export Keyfile**. A single private key is imported from the **Accounts** page with **Import Private Key**. It becomes its own wallet, with its own password.
 
@@ -34,7 +52,7 @@ Copy your address from **Accounts** or **Receive**, then request tokens from the
 
 The **Wallet** page is the dashboard. It shows the selected account, its balance and its ASI address, with **Send** and **Receive** buttons below. The header shows the same account with a shortened address and its balance, and the **DevNet** indicator next to it shows whether the wallet is connected to the network.
 
-![Dashboard](/images/wallet/dashboard.png)
+![The Wallet page with the selected account, its balance and address, and the Send and Receive buttons.](/images/wallet/dashboard.png)
 
 The menu has these pages: **Wallet**, **Send**, **Bridge**, **Receive**, **Accounts**, **Transactions**, **Deploy** and **Network Settings**.
 
@@ -42,18 +60,33 @@ The menu has these pages: **Wallet**, **Send**, **Bridge**, **Receive**, **Accou
 
 Open **Send** to transfer ASI.
 
-1. Pick the **Account** to send from.
-2. Enter the **Recipient Address**. You can type it, paste it, or paste an image of a QR code from the clipboard.
-3. Enter the **Amount**, or click **Max** to send the balance minus the estimated fee.
-4. Click **Send**.
+<Steps>
+
+### Pick the Account
+
+Pick the **Account** to send from.
+
+### Enter the Recipient
+
+Enter the **Recipient Address**. You can type it, paste it, or paste an image of a QR code from the clipboard.
+
+### Enter the Amount
+
+Enter the **Amount**, or click **Max** to send the balance minus the estimated fee.
+
+### Send the Transfer
+
+Click **Send**.
+
+</Steps>
 
 **Clear all** empties the form.
 
-![Send page](/images/wallet/send-page.png)
+![The Send page with the account, recipient address and amount fields.](/images/wallet/send-page.png)
 
 Before anything is sent, the wallet shows **Confirm Transaction** with the sending account and address, the recipient, the amount, the estimated commission and the total cost. A transfer cannot be reversed. After **Confirm & Send** the wallet asks for the wallet password to sign the transaction.
 
-![Confirm Transaction dialog](/images/wallet/send-confirmation.png)
+![The Confirm Transaction dialog with the sender, recipient, amount, commission and total cost.](/images/wallet/send-confirmation.png)
 
 The transfer then appears in **Transactions**.
 
@@ -64,9 +97,9 @@ The transfer then appears in **Transactions**.
 - **Copy ASI Address** puts the address on the clipboard.
 - **Show QR Code** displays the address as a QR code, and **Download QR** saves it as an image.
 
-![Receive page](/images/wallet/receive.png)
+![The Receive page with the account address, the Copy ASI Address button and the QR code options.](/images/wallet/receive.png)
 
-::: tip
+::: tip Check the Network
 Send only ASI tokens to this address, and check that the wallet is on the right network (the page names it, for example DevNet) before you share the address.
 :::
 
@@ -76,7 +109,7 @@ Send only ASI tokens to this address, and check that the wallet is on the right 
 
 Each row has a date, a type (**Send**, **Receive** or **Deploy**), a status (**Pending**, **Completed** or **Failed**), the sender (**From**), the recipient (**To**), the amount and a **Details** value. The **Export** button under the list is inactive in this version of the wallet.
 
-![Transactions page](/images/wallet/history.png)
+![The Transactions page with the list of transactions and its column filters.](/images/wallet/history.png)
 
 The column headers open filters: a time range (the last hour up to the last 180 days, or custom dates), the type, the status, the sender, the recipient and an amount range. **Clear Filter** removes them all.
 
@@ -102,11 +135,11 @@ new stdout(`rho:io:stdout`), deployerId(`rho:rchain:deployerId`) in {
 }
 ```
 
-![Deploy page](/images/wallet/deploy-page.png)
+![The Deploy page in Lite mode with the Rholang code field, phlo fields and action buttons.](/images/wallet/deploy-page.png)
 
 **Deploy** and **Explore** first open a confirmation dialog. For a deploy it shows the account, the length of the code, the phlo limit and price, the estimated cost and the code itself, with a warning that the deployment will consume gas (the dialog's word for phlo) and cannot be reversed. **Deploy Contract** then asks for the wallet password.
 
-![Confirm Deployment dialog](/images/wallet/deploy-confirmation.png)
+![The Confirm Deployment dialog with the account, code length, phlo limit and price, and estimated cost.](/images/wallet/deploy-confirmation.png)
 
 ### Pro Mode
 
@@ -116,7 +149,7 @@ Pro mode replaces the single field with an editor. A file panel on the left hold
 
 **Accounts** shows the wallet and its accounts.
 
-![Accounts page](/images/wallet/accounts-list.png)
+![The Accounts page with the wallet, its accounts and the account management buttons.](/images/wallet/accounts-list.png)
 
 - **Refresh Balances** reloads the balances.
 - The **Edit** button next to an account name renames the account.
@@ -131,7 +164,7 @@ The account selector in the header switches the active account on every page.
 
 DevNet is built into the wallet, so it does not appear on this page and cannot be edited. **Network Settings** is for networks of your own. The form **Custom Network Configuration** takes a **Network Name**, a **Node API Profile** (the node type the network runs), and the **Validator URL**, **Read-only URL** and **Indexer URL**. All three addresses are required, and **Save Custom Network** reports every field that is empty or invalid. Saved networks are listed under **Existing Custom Networks**.
 
-![Network Settings](/images/wallet/settings-network.png)
+![The Network Settings page with the Custom Network Configuration form.](/images/wallet/settings-network.png)
 
 [Custom Network](/wallet/custom-network/) describes the form field by field, with examples for a local node.
 
@@ -139,9 +172,13 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 
 **Bridge** is the form for transfers from ASI:Chain to an EVM network. On DevNet it offers **ASI Chain** as the source and **Sepolia** as the destination. You pick the account and the **Amount** (up to 8 decimal places), connect an EVM wallet with **Connect EVM Wallet**, enter the **ETH recipient address** and start with **Lock on ASI Chain**.
 
-## Support
+## Next Steps
 
-- Documentation: [docs.asichain.io](https://docs.asichain.io)
-- Block explorer: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-- Faucet: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
-- Source code: [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet)
+<CardGrid columns="2">
+<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/" icon="faucet">Request test tokens for your address</DocCard>
+<DocCard title="Custom Network" href="/wallet/custom-network/" icon="endpoints">Connect the wallet to your own node</DocCard>
+<DocCard title="Block Explorer" href="/explorer/usage/" icon="explorer">Look up blocks and transactions</DocCard>
+<DocCard title="Wallet Source" href="https://github.com/asi-alliance/asi-chain-wallet" icon="github">github.com/asi-alliance/asi-chain-wallet</DocCard>
+</CardGrid>
+
+The documentation is at [docs.asichain.io](https://docs.asichain.io), and the block explorer is at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
