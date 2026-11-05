@@ -1,140 +1,100 @@
 # ASI Wallet
 
-A secure, fully decentralized wallet for the ASI Chain network with an integrated Rholang IDE. The wallet runs entirely in your browser with direct blockchain connection and AES-256 encrypted local storage.
+ASI Wallet is a browser wallet for ASI:Chain. It has no backend of its own: it keeps your keys in the browser, signs transactions locally and talks directly to the network nodes and the indexer. A Rholang editor for deploying contracts is built in.
 
-**Access the wallet**: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
+The DevNet wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It connects to DevNet out of the box, so there is nothing to configure. Node and service addresses are listed on [Network Endpoints](/general/endpoints/), and a wallet for your own node is described in [Custom Network](/wallet/custom-network/).
 
-::: warning SECURITY NOTICE
-This is a decentralized wallet with no backend. You control your keys and data. Keep your private key secure and never share it. There is no recovery mechanism for lost passwords or keys.
+::: warning Back up your recovery phrase
+The wallet shows the recovery phrase once, when the wallet is created. Anyone who has it can control your accounts, and if you lose both the phrase and the browser data you lose access for good. Write the phrase down, keep it offline, and never put it in a screenshot or a text file.
 :::
 
-## Getting Started
+## Create a Wallet
 
-### Step 1: Create or Import Your Account
+The first time you open the wallet it shows the **Welcome** screen with **Create your first wallet**. The **Account Type** switch chooses between an HD wallet and a private key wallet. An HD wallet is built from one 12- or 24-word recovery phrase and can hold any number of accounts. A private key wallet is built from a single key and holds exactly one account.
 
-Navigate to the [Accounts page](https://wallet.dev.asichain.io/#/accounts) to create a new account or import an existing one.
+![Welcome screen](/images/wallet/accounts-create.png)
 
-**Create New Account:**
-1. Enter an account name (maximum 30 characters)
-2. Click "Create Account" button
-3. The wallet will generate a secure private key automatically
-4. Your account will appear with "UNLOCKED" status
+To create an HD wallet:
 
-**Import Existing Account:**
-1. Enter an account name (maximum 30 characters)
-2. Select import type:
-   - **Private Key**: Full account access
-   - **Ethereum Address (Watch Only)**: Monitor-only mode
-   - **ASI Address (Watch Only)**: Monitor-only mode
-3. Enter the corresponding value
-4. Click "Import Account"
+1. Click **Create Wallet**.
+2. Enter an account name of up to 30 characters and choose a phrase length, 12 or 24 words.
+3. Click **Show**, write the phrase down and click **I've Saved My Phrase**.
+4. Set a wallet password and confirm it. The password needs at least 8 characters, with one uppercase letter, one lowercase letter, one number and one special character.
+5. Click **Continue**. The wallet opens on the **Accounts** page with your first account.
 
-![Accounts Page](/images/wallet/accounts-create.png)
+To use an existing wallet, click **Import Wallet** and enter the recovery phrase, or click **Import Wallet from keyfile** and pick a keyfile exported earlier with **Export Keyfile**. A single private key is imported from the **Accounts** page with **Import Private Key**. It becomes its own wallet, with its own password.
 
-### Step 2: Configure Network Connection
+The password is asked every time you open the wallet in a browser that already holds one (**Unlock Wallet**, then **Unlock**). **Logout** in the header locks the wallet again.
 
-After creating your account, configure the network connection on the [Settings page](https://wallet.dev.asichain.io/#/settings).
+## Get Test Tokens
 
-**Devnet Configuration:**
+Copy your address from **Accounts** or **Receive**, then request tokens on the [ASI Chain Faucet](https://faucet.dev.asichain.io). The steps are in [Faucet Usage](/faucet/usage/) and [Get ASI](/quick-start/get-asi/). The balance shows up in the wallet after the transfer is finalized.
 
-**Validator 1** (handles both write and read operations):
-- Host: `34.196.119.4`
-- gRPC Port: `40401`
-- HTTP Port: `40403`
+## Wallet
 
-::: tip
-The standalone observer is currently unstable, so Validator 1 serves both write (deploys, transfers) and read (balance, queries) operations. Bootstrap (`54.152.57.201`) is used only for the initial peer-discovery handshake when nodes join the network — not by the wallet directly.
-:::
-
-![Network Settings](/images/wallet/settings-network.png)
-
-### Step 3: Request Test Tokens
-
-Visit the [ASI Chain Faucet](https://faucet.dev.asichain.io) and request tokens for your wallet address.
-
-## Dashboard
-
-The [Dashboard](https://wallet.dev.asichain.io/#/dashboard) provides an overview of your account with balance information, quick actions, and network status.
-
-**Account Information:**
-- Current balance
-- Account name
-- ASI Address (click to copy)
-- ETH Address (click to copy)
-- Last update timestamp
-
-**Quick Actions:**
-- Send ASI
-- Receive ASI
-- Manage Accounts
-- Deploy Contract
-- IDE
-- Transaction History
+The **Wallet** page is the dashboard. It shows the selected account, its balance and its ASI address, with **Send** and **Receive** buttons below. The header shows the same account with a shortened address and its balance, and the **DevNet** indicator next to it shows whether the wallet is connected to the network.
 
 ![Dashboard](/images/wallet/dashboard.png)
 
-## Send Tokens
+The menu has these pages: **Wallet**, **Send**, **Bridge**, **Receive**, **Accounts**, **Transactions**, **Deploy** and **Network Settings**.
 
-The [Send page](https://wallet.dev.asichain.io/#/send) allows you to transfer ASI tokens.
+## Send
 
-**Sending Process:**
-1. **Enter Recipient Address**: Type or paste the ASI address, scan a QR code with camera button, or paste a QR code image from clipboard
-2. **Enter Amount**: Type the amount or click "Max" to send maximum available balance
-3. **Send Transaction**: Click the button and confirm transaction details
+Open **Send** to transfer ASI.
 
-**Features:**
-- Real-time balance display
-- QR code scanning for recipient address
-- Maximum amount button
-- Transaction confirmation dialog
+1. Pick the **Account** to send from.
+2. Enter the **Recipient Address**. You can type it, paste it, or paste an image of a QR code from the clipboard.
+3. Enter the **Amount**, or click **Max** to send the balance minus the estimated fee.
+4. Click **Send**.
 
-![Send Page](/images/wallet/send-page.png)
+**Clear all** empties the form.
 
-After clicking "Send Transaction", a confirmation dialog appears with transaction details.
+![Send page](/images/wallet/send-page.png)
 
-![Send Confirmation](/images/wallet/send-confirmation.png)
+Before anything is sent, the wallet shows **Confirm Transaction** with the sending account and address, the recipient, the amount, the estimated commission and the total cost. A transfer cannot be reversed. After **Confirm & Send** the wallet asks for the wallet password to sign the transaction.
 
-## Receive Tokens
+![Confirm Transaction dialog](/images/wallet/send-confirmation.png)
 
-The [Receive page](https://wallet.dev.asichain.io/#/receive) displays your address for receiving tokens.
+The transfer then appears in **Transactions**.
 
-**Address Display:**
-- Toggle between "ASI Address" and "ETH Address" tabs
-- Full address text (click to copy)
-- QR code for easy scanning
-- "Copy Address" and "Download QR Code" buttons
+## Receive
+
+**Receive** shows the address of the selected account. The only **Address Format** is **ASI**.
+
+- **Copy ASI Address** puts the address on the clipboard.
+- **Show QR Code** displays the address as a QR code, and **Download QR** saves it as an image.
+
+![Receive page](/images/wallet/receive.png)
 
 ::: tip
-Only send ASI tokens to the ASI Address. The ETH address is for compatibility purposes only.
+Send only ASI tokens to this address, and check that the wallet is on the right network (the page names it, for example DevNet) before you share the address.
 :::
 
-![Receive Page](/images/wallet/receive.png)
+## Transactions
 
-## Transaction History
+**Transactions** lists the transactions of the selected account and refreshes itself every 30 seconds. The history comes from the indexer.
 
-The [History page](https://wallet.dev.asichain.io/#/history) shows all your transactions with auto-refresh every 30 seconds.
+Each row has a date, a type (**Send**, **Receive** or **Deploy**), a status (**Pending**, **Completed** or **Failed**), the sender, the recipient, the amount and a **Details** value.
 
-**Features:**
-- Auto-refresh and manual refresh
-- Export to JSON or CSV
-- Filter by type (All, Send, Deploy) and status (All, Pending, Confirmed, Failed)
-- Transaction statistics (total, sent, deployments)
+![Transactions page](/images/wallet/history.png)
 
-**Transaction Details:**
-Each transaction shows type, status, amount, recipient address, timestamp, and block information when confirmed.
+The column headers open filters: a time range (the last hour up to the last 180 days, or custom dates), the type, the status, the sender, the recipient and an amount range. **Clear Filter** removes them all.
 
-![Transaction History](/images/wallet/history.png)
+## Deploy
 
-## Deploy Contracts
+**Deploy** sends Rholang code to the network. The **Mode** switch at the top has two settings.
 
-The [Deploy page](https://wallet.dev.asichain.io/#/deploy) provides a simple interface for deploying Rholang contracts.
+### Lite Mode
 
-**Deployment Process:**
-1. **Enter Rholang Code**: Type or paste your contract, or click "Load Example" for a sample
-2. **Configure Parameters**: Set Phlo Limit (default: 100000000) and Phlo Price (default: 1)
-3. **Deploy**: Click "Deploy" to deploy to the network or "Explore (Read-only)" to test without deploying
+Lite mode is a single code field with the **Phlo Limit** (100000000 by default) and the **Phlo Price** (1, fixed by the network and read-only).
 
-**Default Example Contract:**
+- **Load Example** fills the field with a sample contract.
+- **Explore** runs the code read-only, without a deploy.
+- **Deploy** sends the code to the network.
+- **Clear** empties the field.
+
+The sample contract is:
+
 ```rholang
 new stdout(`rho:io:stdout`), deployerId(`rho:rchain:deployerId`) in {
   stdout!("Hello from ASI Wallet!") |
@@ -142,120 +102,46 @@ new stdout(`rho:io:stdout`), deployerId(`rho:rchain:deployerId`) in {
 }
 ```
 
-![Deploy Page](/images/wallet/deploy-page.png)
+![Deploy page](/images/wallet/deploy-page.png)
 
-After clicking "Deploy", a confirmation dialog appears with deployment details.
+**Deploy** and **Explore** first open a confirmation dialog. For a deploy it shows the account, the length of the code, the phlo limit and price, the estimated cost and the code itself, with a warning that the deploy consumes gas and cannot be reversed. **Deploy Contract** then asks for the wallet password.
 
-![Deploy Confirmation](/images/wallet/deploy-confirmation.png)
+![Confirm Deployment dialog](/images/wallet/deploy-confirmation.png)
 
-## Integrated Development Environment
+### Pro Mode
 
-The [IDE page](https://wallet.dev.asichain.io/#/ide) provides a full-featured development environment with Monaco editor, file management, and console output.
+Pro mode replaces the single field with an editor. A file panel on the left holds your files and a folder of **Examples**, the editor opens files in tabs, and the **Console** under it prints the result of **Explore** and **Deploy**. **Import Workspace** and **Export Workspace** load and save the whole file tree. The phlo fields and the **Load Example**, **Deploy**, **Explore** and **Clear** buttons work as in Lite mode.
 
-**Interface Layout:**
-- **Left Sidebar**: File tree and workspace management
-- **Center**: Monaco code editor with Rholang syntax highlighting
-- **Bottom**: Console output for deployment results
+## Accounts
 
-**File Management:**
-- Create new files and folders
-- Import `.rho` files from your computer
-- Organize files in folders
-- Export/Import entire workspace as JSON
+**Accounts** shows the wallet and its accounts.
 
-**Deployment Controls:**
-- Set Phlo Limit and Phlo Price
-- Explore code in read-only mode
-- Deploy to network with console feedback
+![Accounts page](/images/wallet/accounts-list.png)
 
-![IDE Page](/images/wallet/ide.png)
+- **Refresh Balances** reloads the balances.
+- The **Edit** button next to an account name renames the account.
+- **Create Account** derives a new account from the recovery phrase of an HD wallet. A private key wallet has no such button.
+- **Import Wallet**, **Import Private Key** and **Import Wallet from keyfile** add another wallet.
+- **Export Keyfile**, in **Wallet backup**, saves the wallet to a keyfile that **Import Wallet from keyfile** can read back.
+- **Delete Wallet** removes the wallet and all its accounts from this browser. Restoring it needs the recovery phrase or the private key.
 
-## Account Management
-
-The [Accounts page](https://wallet.dev.asichain.io/#/accounts) displays all your accounts with balances and provides account management options.
-
-**Account Information:**
-Each account card shows:
-- Account name
-- Shortened ASI address
-- Current balance
-- Status badges ("SELECTED", "UNLOCKED")
-
-**Account Actions:**
-- **Refresh Balances**: Update all account balances
-- **Export Account**: Save encrypted account data
-- **Remove Account**: Delete account (cannot be undone)
-- **Select Account**: Click to make it active
-
-**Quick Account Switcher:**
-Access the account switcher from the header to switch between accounts without re-authentication.
-
-![Accounts List](/images/wallet/accounts-list.png)
-
-## Generate Keys
-
-The [Generate Keys page](https://wallet.dev.asichain.io/#/keys) provides cryptographic key generation for validator setup.
-
-**Generate New Keypair:**
-1. Click "Generate New Keypair" button
-2. System creates a new random keypair
-3. Save all displayed credentials:
-   - Private Key (64 hex characters)
-   - Public Key (130+ hex characters with '04' prefix)
-   - Ethereum Address (with '0x' prefix)
-   - ASI Address (50-54 characters starting with '1111')
-
-**Import Private Key:**
-1. Enter your 64-character hexadecimal private key
-2. Click "Import" button
-3. System derives and displays all keys
-
-::: tip
-The ETH address is compatible with MetaMask and Ethereum wallets. The ASI Address is specific to the ASI Chain network.
-:::
-
-![Generate Keys](/images/wallet/generate-keys.png)
+The account selector in the header switches the active account on every page.
 
 ## Network Settings
 
-The [Settings page](https://wallet.dev.asichain.io/#/settings) manages network configurations and private keys.
+DevNet is built into the wallet, so it does not appear on this page and cannot be edited. **Network Settings** is for networks of your own. The form **Custom Network Configuration** takes a **Network Name**, a **Node API Profile** (the node type the network runs), and the **Validator URL**, **Read-only URL** and **Indexer URL**. All three addresses are required, and **Save Custom Network** reports every field that is empty or invalid. Saved networks are listed under **Existing Custom Networks**.
 
-**Devnet Configuration:**
+![Network Settings](/images/wallet/settings-network.png)
 
-Devnet is the primary network for development and testing.
+Field by field, with examples for a local node, the form is described in [Custom Network](/wallet/custom-network/).
 
-**Validator 1** (handles both write and read operations):
-- Host: `34.196.119.4`
-- gRPC Port: `40401`
-- HTTP Port: `40403`
+## Bridge
 
-::: tip
-The dedicated observer is currently unstable, so Validator 1 (`34.196.119.4`) handles both deploys and read queries. Bootstrap (`54.152.57.201`) is reserved for peer discovery during node startup and is not used by the wallet directly.
-:::
+**Bridge** is the form for transfers from ASI Chain to an EVM network. On DevNet it offers **ASI Chain** as the source and **Sepolia** as the destination. You pick the account and the **Amount** (up to 8 decimal places), connect an EVM wallet with **Connect EVM Wallet**, enter the **ETH recipient address** and start with **Lock on ASI Chain**.
 
-**Local Network Configuration:**
+## Support
 
-Local Network is for local development with your own node.
-
-**Configuration:**
-- Validator URL: `http://localhost:40403`
-- Observer URL: `http://localhost:40403` (or your observer's host/port)
-- Admin URL: `http://localhost:40405`
-
-**Private Keys Management:**
-
-View and manage private keys for all accounts with password protection.
-
-![Settings Page](/images/wallet/settings-network.png)
-
-## Support Resources
-
-- **Documentation**: [docs.asichain.io](https://docs.asichain.io)
-- **Block Explorer**: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-- **Network Indexer**: [explorer.dev.asichain.io/indexer-status](https://explorer.dev.asichain.io/indexer-status)
-- **Faucet**: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
-- **GitHub**: [asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet)
-
----
-
-**Remember**: With decentralized wallets, you have complete control and complete responsibility. There is no central authority to recover lost keys or reverse transactions. Always maintain secure backups and follow security best practices.
+- Documentation: [docs.asichain.io](https://docs.asichain.io)
+- Block explorer: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
+- Faucet: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
+- Source code: [asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet)
