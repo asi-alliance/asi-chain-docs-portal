@@ -1,7 +1,7 @@
 # Shard and Node Roles
 
 ::: warning DevNet runs a Scala node
-As of 2026-11-05 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. The Rust node image described in this section is the one for your own shard and for networks whose operator runs Rust. A Rust node started from it against the DevNet bootstrap did not get past `peers: 0`.
+As of 5 November 2026 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. Use the Rust node image described in this section for your own shard or for a network whose operator runs Rust. A Rust node started from it against the DevNet bootstrap did not get past `peers: 0`.
 :::
 
 A shard combines peer connectivity, consensus, execution and persistent state. The exact genesis, native token, active bonded validator set and admission policy belong to the selected network.
@@ -11,15 +11,15 @@ A shard combines peer connectivity, consensus, execution and persistent state. T
 | Bootstrap | Peer entry point; ceremony behavior depends on its configuration |
 | Validator | Participates in consensus according to active bonded stake |
 | Observer | Follows chain state without proposing validator blocks |
-| External joining node | Needs accepted configuration and a network-specific admission/bonding process |
+| External joining node | Needs accepted configuration and a network-specific admission and bonding process |
 
 The same [Rust node image](/shard-nodes/validator-image/) serves the different roles. A role label, configured signing key or running container alone does not establish synchronization, active stake or canonical finalization. A bootstrap is not automatically a bonded validator.
 
-## Applications and indexing
+## Applications and Indexing
 
-The Python indexer calls node gRPC and HTTP directly, then writes PostgreSQL. Hasura exposes GraphQL for the explorer and other consumers. Wallets also use node HTTP. See [architecture](/architecture/) and [data flow](/architecture/data-flow/).
+The Python indexer calls node gRPC and HTTP directly, then writes to PostgreSQL. Hasura exposes GraphQL for the explorer and other consumers. Wallets also use node HTTP. See [architecture](/architecture/) and [data flow](/architecture/data-flow/).
 
-## Connection details
+## Connection Details
 
 DevNet addresses for wallets, tools and the explorer are on [network endpoints](/general/endpoints/). DevNet does not publish a separate observer address, and reads go through the same validator as writes. For any other network, request the bootstrap URI, approved image digest, shard and genesis settings, API URLs and resource requirements from its operator. This page does not publish a host inventory or node counts.
 

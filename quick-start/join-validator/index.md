@@ -1,6 +1,6 @@
 # Join as a Validator
 
-This page prepares a Rust node that is meant to become a validator. Preparation comes first. Key generation, funding and the bond transaction follow on [Prepare and Enroll a Rust Validator](/quick-start/validator-enrollment/). The former `asi-chain/chain/validator` configurator and connector workflow is retired from this guide.
+This page prepares a Rust node that is meant to become a validator. Preparation comes first. Key generation, funding and the bond transaction follow on [Prepare and Enroll a Rust Validator](/quick-start/validator-enrollment/). The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node.
 
 ::: warning DevNet runs the Scala node
 As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust image described here does not connect to it. A Rust node started with the DevNet bootstrap and `--network-id devnet1` listed eight nodes in `/api/status` but opened no connection to them. Use this guide for a Rust shard that you or your operator run.
@@ -8,7 +8,7 @@ As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `
 
 ## 1. Obtain Network Inputs
 
-Ask the operator for the bootstrap URI, the shard and genesis configuration, the native-token metadata, the admission and bonding process and the node image that the shard accepts. A matching version number or a downloaded image does not show that your node is compatible with a running network.
+Ask the shard operator for the bootstrap URI, the shard and genesis configuration, the native-token metadata, the admission and bonding process and the node image that the shard accepts. A matching version number or a downloaded image does not show that your node is compatible with a running network.
 
 - The bootstrap URI looks like `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. The node ID is the `address` field of `GET /api/status` on the bootstrap node.
 - The `--network-id` value must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from any other network.
@@ -40,7 +40,7 @@ The node keeps its state, its TLS certificate and its identity in `/var/lib/rnod
 
 ### Validator Key
 
-The validator key reaches the node in one of two ways, and both go with `--validator-public-key`. The node does not check at start that the public key belongs to the private key, so take both from the same key pair.
+The validator key reaches the node in one of two ways, and both are used together with `--validator-public-key`. The node does not check at start that the public key belongs to the private key, so take both from the same key pair.
 
 - `--validator-private-key-path` takes an encrypted PEM file. The node asks for its password at start, or reads it from the `F1R3NODE_VALIDATOR_PASSWORD` environment variable. Without a terminal and without that variable the node exits with `No such device or address`, and with a wrong password it exits with `Could not decrypt PEM file`. The plain hex file saved by the ASI client is not accepted and fails with `malformedframing`.
 - `--validator-private-key` takes the hex key itself. The option is hidden from `run --help`, and the key then shows in `docker inspect` and in the process list, so use it only on a host that nobody else can read.
@@ -54,7 +54,7 @@ docker run --rm --platform linux/amd64 --entrypoint cat \
   -v validator-data:/var/lib/rnode "$NODE_IMAGE" /var/lib/rnode/f1r3fly.pub.hex
 ```
 
-To keep the key that the ASI client saved in `validator-keys/private_key.hex` during [enrollment](/quick-start/validator-enrollment/), convert it to an encrypted PEM file with OpenSSL 3 and copy the result into the volume. `openssl pkcs8` asks for the password of the new file. The temporary files that hold the plain key are removed at the end, and the public key stays the one in `validator-keys/public_key.hex`.
+To keep the key that the ASI client saved in `validator-keys/private_key.hex` during [enrollment](/quick-start/validator-enrollment/), convert it to an encrypted PEM file with OpenSSL 3 and copy the result into the volume. `openssl pkcs8` asks for the password of the new file. The temporary files that hold the plain key are removed at the end, and the public key does not change: it remains the one in `validator-keys/public_key.hex`.
 
 ```bash
 umask 077
@@ -80,7 +80,7 @@ Peers must reach TCP `40400` and `40404`. Configure client access separately, an
 
 ## 5. Validate the Node
 
-After you start the node, check these in order.
+After you start the node, run these checks in order.
 
 ```bash
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready

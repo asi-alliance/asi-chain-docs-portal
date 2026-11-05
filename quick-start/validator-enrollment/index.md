@@ -1,6 +1,6 @@
 # Prepare and Enroll a Rust Validator
 
-The ASI Rust client provides the key-generation and bonding operations needed to enroll a validator. A separate configurator or connector image is optional packaging around these operations. The historical helper containers target an older workflow and should not be assumed compatible with current Rust nodes.
+The ASI Rust client provides the key-generation and bonding operations needed to enroll a validator. A separate configurator or connector image is optional packaging around these operations. Older helper containers target a previous workflow, so do not assume they work with current Rust nodes.
 
 ::: warning DevNet runs the Scala node
 As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust client commands on this page do not work against it. In a test against Validator 1, `wallet-balance` returned HTTP 404, and `validator-status`, `bonds` and `active-validators` failed with `unexpected exploratory deploy response from the node: missing field cost`. The same commands passed against a Rust node. Run this procedure only against a Rust shard.
@@ -31,7 +31,7 @@ STAKE_BASE_UNITS=<stake in base units>
 
 ## Create and Protect the Identity
 
-The published standalone ASI client is available as:
+The standalone ASI client is published as this image:
 
 ```bash
 CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:f26511e261ca9d21c568b2a523fee916630ed7ac2622e65cebd2099e72db4fe7'
@@ -76,7 +76,7 @@ VALIDATOR_ADDRESS="$(client generate-vault-address --private-key-file /keys/priv
 
 `generate-key-pair --save` writes the public key to `public_key.hex` as 130 hex characters (uncompressed). The vault address starts with `1111`.
 
-The default Docker bridge must reach the operator's URLs. For local container networks, add `--network <name>` with the explicitly named Docker network to the `client` function. Container `localhost` refers to that container. Use the client's `--ca-cert` option and a read-only CA mount when the operator supplies private HTTPS endpoints.
+The default Docker bridge must reach the operator's URLs. For local container networks, add `--network <name>` to the `client` function, where `<name>` is the Docker network you name explicitly. Container `localhost` refers to that container. Use the client's `--ca-cert` option and a read-only CA mount when the operator supplies private HTTPS endpoints.
 
 ## Start and Synchronize the Joining Node
 
@@ -127,7 +127,7 @@ client bonds --http "$OBSERVER_HTTP"
 client active-validators --http "$OBSERVER_HTTP"
 ```
 
-Record the deploy ID and outcome. A timeout can leave the transaction's outcome unknown, and the verdict for a deploy appears only after its block finalizes, so do not repeat the bond. Check the deploy first, either with `client deploy-status --sig <deploy signature> --http "$OBSERVER_HTTP"` or with `GET <observer HTTP URL>/api/deploy/<deploy ID>`. An underfunded vault does not reject the deploy. The deploy lands in a block and fails there with `Deploy payment failed: Insufficient funds`, and the client may not show that message. Read errors must not be interpreted as an unbonded validator.
+Record the deploy ID and outcome. A timeout can leave the transaction's outcome unknown, and the verdict for a deploy appears only after its block finalizes, so do not repeat the bond. Check the deploy first, either with `client deploy-status --sig <deploy signature> --http "$OBSERVER_HTTP"` or with `GET <observer HTTP URL>/api/deploy/<deploy ID>`. An underfunded vault does not reject the deploy. The deploy lands in a block and fails there with `Deploy payment failed: Insufficient funds`, and the client may not show that message. Do not treat a read error as proof that the validator is unbonded.
 
 Bonded membership and active membership are separate. Activation follows the shard's epoch and active-set rules, so `validator-status` reports `BONDED` first and `ACTIVE` after the boundary, and a full active set can prevent activation. Confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The CLI `blocks` command shows the observer's recent block JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`.
 

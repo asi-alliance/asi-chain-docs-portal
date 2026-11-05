@@ -1,21 +1,21 @@
 # Validator Node Image
 
-The image contains the maintained **Rust** implementation of CBC Casper, Rholang and RSpace++. Its source is [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5).
+The image contains the maintained Rust implementation of CBC Casper, Rholang and RSpace++. Its source is [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5).
 
 ::: warning DevNet runs a Scala node
-As of 2026-11-05 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. A node started from this Rust image with the DevNet bootstrap and `--network-id devnet1` found DevNet peers through discovery but stayed at `peers: 0` and never became ready. Use this image to run your own shard ([private shard](/shard-nodes/own-shard/)) or when the operator of a network tells you it runs the Rust node. DevNet addresses are listed in [network endpoints](/general/endpoints/).
+As of 5 November 2026 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. A node started from this Rust image with the DevNet bootstrap and `--network-id devnet1` found DevNet peers through discovery but stayed at `peers: 0` and never became ready. Use this image to run your own shard ([private shard](/shard-nodes/own-shard/)) or when the operator of a network tells you it runs the Rust node. DevNet addresses are listed in [network endpoints](/general/endpoints/).
 :::
 
-## Select the image
+## Select the Image
 
-Checked on 2026-11-05 with `docker buildx imagetools inspect`. Pin the digest, not the tag. Tags in the registry can be removed, and the floating `dev` tag moves with every build, so do not use it.
+Checked on 5 November 2026 with `docker buildx imagetools inspect`. Pin the digest, not the tag. Tags in the registry can be removed, and the floating `dev` tag moves with every build, so do not use it.
 
 | Build | Tag | Manifest digest |
 |---|---|---|
 | Latest | `0.4.46-dev.20261105-8e6517d630e2` | `sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55` |
 | Previous | `0.4.46-dev.20261104-e18defd44d43` | `sha256:e06a0a4ca43d9e60309c514a19f4c664d27eb216796b9b52d1bc67c10947694e` |
 
-Both live under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The latest build is 12 commits after the previous one. The Dockerfile, the entrypoint, `defaults.conf` and the example shard configuration are identical in both, so everything below applies to either. The [catalog](/general/container-images/) lists the other published node builds and the application images. Choose the node revision together with its client and API contract. A newer tag does not upgrade a running shard.
+Both are published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The latest build is 12 commits after the previous one. The Dockerfile, the entrypoint, `defaults.conf` and the example shard configuration are identical in both, so everything below applies to either. The [catalog](/general/container-images/) lists the other published node builds and the application images. Choose the node revision together with its client and API contract. A newer tag does not upgrade a running shard.
 
 ```bash
 NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
@@ -27,7 +27,7 @@ docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" run --help
 
 These commands inspect the image without starting a network. The `org.opencontainers.image.revision` label holds the source commit. The image is published for `linux/amd64` only, so keep `--platform` on Apple silicon and other ARM hosts.
 
-## Runtime and configuration
+## Runtime and Configuration
 
 The pinned [Dockerfile](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/node/Dockerfile) and [entrypoint](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/node/docker-entrypoint-rust.sh) define:
 
@@ -38,14 +38,14 @@ The pinned [Dockerfile](https://github.com/asi-alliance/asi-chain-rust-node/blob
 | Default command | `run` |
 | Runtime user | `daemon` (uid 1) |
 | Docker data directory | `/var/lib/rnode/` |
-| Healthcheck | `curl -fsS 127.0.0.1:40403/api/ready`, every 30 s, first 120 s are a grace period |
+| Healthcheck | `curl -fsS 127.0.0.1:40403/api/ready`, every 30 s, the first 120 s are a grace period |
 | Configuration | Built-in HOCON defaults, then the override file, then command-line flags |
 
-The entrypoint always adds `--profile=docker`. Do not pass `--profile` yourself: the node rejects it with `the argument '--profile <PROFILE>' cannot be used multiple times`. Keep this in mind when you move flags over from a command written for another node.
+The entrypoint always adds `--profile=docker`. Do not pass `--profile` yourself: the node rejects it with `the argument '--profile <PROFILE>' cannot be used multiple times`. This matters when you copy flags from a command written for another node.
 
 Read the [defaults.conf at the same revision](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/node/src/main/resources/defaults.conf). The node reads `/var/lib/rnode/f1r3fly.conf` when it exists, and falls back to the older name `rnode.conf` with a warning. `run --config-file /path/to/node.conf` selects a file explicitly and takes priority over both. Command-line flags override the file, and the file overrides the defaults. The upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/conf/default.conf) show the structure. Development keys and genesis files from that directory are not inputs for joining another network.
 
-## Network settings
+## Network Settings
 
 | Setting | Flag | Default | Note |
 |---|---|---|---|
@@ -57,7 +57,7 @@ Read the [defaults.conf at the same revision](https://github.com/asi-alliance/as
 
 Add `--allow-private-addresses` when peers use container or private addresses, and `--no-upnp` when you forward ports by hand.
 
-## Default container ports
+## Default Container Ports
 
 | TCP port | Service | Exposure |
 |---|---|---|
@@ -68,11 +68,11 @@ Add `--allow-private-addresses` when peers use container or private addresses, a
 | 40404 | Peer discovery | Reachable by intended peers |
 | 40405 | Admin HTTP | Private operator access |
 
-The image declares `EXPOSE` only for 40400 to 40404. The node still listens on 40405 inside the container, so `docker run -P` does not publish it and an explicit `-p 40405:40405` does. Host mappings are independent of container defaults. Binding `40403` publicly exposes all enabled routes on that listener unless a gateway filters them. Do not open the entire `40400:40405` range or copy all development mappings to a public host.
+The image declares `EXPOSE` only for 40400 to 40404. The node still listens on 40405 inside the container, so `docker run -P` does not publish it, while an explicit `-p 40405:40405` does. Host mappings are independent of container defaults. Binding `40403` publicly exposes all enabled routes on that listener unless a gateway filters them. Do not open the entire `40400:40405` range or copy all development mappings to a public host.
 
-## Run a node
+## Run a Node
 
-A new Docker volume belongs to root, but the node runs as `daemon`. Without the `chown` below the container exits with code 1 and `The data dir must be a directory and have read and write permissions: /var/lib/rnode`.
+A new Docker volume is owned by `root`, but the node runs as `daemon`. Without the `chown` below the container exits with code 1 and `The data dir must be a directory and have read and write permissions: /var/lib/rnode`.
 
 ```bash
 docker volume create node-data
@@ -102,8 +102,8 @@ For a network of your own, add `--standalone` and a genesis directory as describ
 
 After a restart the node reconnects only through `--bootstrap`. This source does not contain the [known-peers change in PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927), which is still open. If the bootstrap is unreachable, the node waits at `Waiting for first connection...`.
 
-## Before starting a validator
+## Before Starting a Validator
 
 Obtain the target shard's bootstrap peer, shard and genesis settings, native-token metadata, approved digest and admission process. Prepare persistent storage owned by `daemon` and private TLS and signing inputs. A running container or configured validator key does not establish active bonded stake, synchronization or finalization.
 
-Follow [join as validator](/quick-start/join-validator/) for checks. Legacy configurator and connector recipes and JVM options do not configure this Rust image.
+Follow [join as validator](/quick-start/join-validator/) for the checks. Legacy configurator and connector recipes and JVM options do not configure this Rust image.

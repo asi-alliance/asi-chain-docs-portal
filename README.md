@@ -8,7 +8,7 @@
 
 <h3>Official documentation portal for ASI:Chain blockchain network</h3>
 
-Part of the [**Artificial Superintelligence Alliance**](https://superintelligence.io) ecosystem
+Part of the [Artificial Superintelligence Alliance](https://superintelligence.io) ecosystem
 
 *Uniting Fetch.ai, SingularityNET, and CUDOS*
 
@@ -29,9 +29,9 @@ Part of the [**Artificial Superintelligence Alliance**](https://superintelligenc
 
 ## Overview
 
-This repository contains the source code for the ASI:Chain documentation portal, built with VitePress. The documentation covers all aspects of the ASI:Chain ecosystem, including the wallet, Wallet SDK and Wallet CLI, block explorer, faucet, node setup and architecture.
+This repository contains the source code for the ASI:Chain documentation portal, built with VitePress. The documentation covers the wallet, Wallet SDK and Wallet CLI, block explorer, faucet, node setup and architecture.
 
-**Live Documentation:** [https://docs.asichain.io](https://docs.asichain.io)
+Live documentation: [docs.asichain.io](https://docs.asichain.io)
 
 ---
 
@@ -109,8 +109,8 @@ The values are not stored in the repository, so ask the maintainers for them. Wi
 
 ## Contributing
 
-Known issues and bugs are tracked in the [Issues](https://github.com/asi-alliance/asi-chain-docs-portal/issues) section.  
-If you encounter a problem that is not listed, please feel free to open a new issue and provide as much detail as possible.
+Known issues and bugs are tracked in the [Issues](https://github.com/asi-alliance/asi-chain-docs-portal/issues) section.
+If you encounter a problem that is not listed, open a new issue with as much detail as possible.
 
 ---
 
@@ -118,7 +118,7 @@ If you encounter a problem that is not listed, please feel free to open a new is
 
 Copyright 2025 Artificial Superintelligence Alliance
 
-Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE.md) file for details.
+Licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE.md) file for details.
 
 ---
 

@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Start with the image tag or digest, the source revision, the configuration and the host port mappings. The node runtime is Rust, so JVM tuning and the former configurator and connector commands do not apply. Node commands on this page use the container name from the `docker run --name` option of [Join as an Observer](/quick-start/join-observer/) or [Join as a Validator](/quick-start/join-validator/):
+Start by checking the image tag or digest, the source revision, the configuration and the host port mappings. The node runtime is Rust, so JVM tuning and the older configurator and connector commands do not apply. Node commands on this page use the container name from the `docker run --name` option of [Join as an Observer](/quick-start/join-observer/) or [Join as a Validator](/quick-start/join-validator/):
 
 ```bash
 NODE=observer
@@ -67,7 +67,7 @@ The image healthcheck calls `/api/ready` on container port `40403` every 30 seco
 
 ## CLI or Indexer Response Mismatch
 
-Confirm the consumer source and client gitlink. Images do not inherit later merges. The [catalog](/general/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
+Confirm the consumer source and client gitlink. An image does not include changes merged after it was built. The [catalog](/general/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
 
 Check the selected node's HTTP and Protobuf contract before you change a consumer. Cost-accounting APIs and newer integer and transfer representations need compatible clients and separate acceptance checks. The Rust client commands `wallet-balance`, `validator-status`, `bonds` and `active-validators` fail against the Scala DevNet node.
 
@@ -84,7 +84,7 @@ Do not delete the data directory of a node that peers already know. The node ide
 The wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It asks for the wallet password to unlock and again to sign a transaction.
 
 - Open the Accounts page and use the refresh button. The wallet also polls account data every 30 seconds.
-- If you expect tokens from a faucet or a transfer, look up the transaction in the [explorer](https://explorer.dev.asichain.io) before you assume that it failed.
+- If you expect tokens from a faucet or a transfer, look up the transaction in [explorer.dev.asichain.io](https://explorer.dev.asichain.io) before you assume that it failed.
 - If the wallet cannot reach the network, open Network Settings. The built-in DevNet entry cannot be edited, and your own network is added with the Custom Network form described on [Custom Network](/wallet/custom-network/).
 
 See [Wallet Usage](/wallet/usage/) for the screens.
@@ -103,4 +103,4 @@ A transfer can fail for several reasons.
 
 ## Reporting a Problem
 
-Open an issue in the affected [public component repository](/general/useful-links/). Include the digest, the public source revision, a sanitized error and reproduction steps. Include no keys, real environment files, credentials or internal endpoints.
+Open an issue in the affected [public component repository](/general/useful-links/). Include the digest, the public source revision, a sanitized error and reproduction steps. Do not include keys, real environment files, credentials or internal endpoints.

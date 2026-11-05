@@ -12,7 +12,7 @@ The [Get Started](/quick-start/) page has one path for using the network, one fo
 
 ### What does an ASI address look like?
 
-It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. Amounts are counted in 8 decimal places, so one ASI is `100000000` in the smallest unit.
+It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. Amounts are have 8 decimal places, so one ASI is `100000000` in the smallest unit.
 
 ## Wallet and keys
 
@@ -40,7 +40,7 @@ The wallet refreshes account data every 30 seconds.
 
 ### How do I get test tokens?
 
-Create a wallet account, copy its address and paste it into the [faucet](https://faucet.dev.asichain.io). The guide is in [how to get DevNet ASI](/quick-start/get-asi/). On 5 November 2026 one request credited 10,000 ASI.
+Create a wallet account, copy its address and paste it into the faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io). The guide is in [how to get DevNet ASI](/quick-start/get-asi/). On 5 November 2026 one request credited 10,000 ASI.
 
 ### Is there a waiting period between requests?
 
@@ -68,7 +68,7 @@ The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/
 
 ### Which container registry should I use?
 
-`public.ecr.aws/l2u2v4a8/asi-chain/`. Use the versioned tags and digests from the [container images](/general/container-images/) catalog and pin a digest. It lists the node, indexer, explorer, wallet, faucet, Wallet CLI and ASI client images.
+`public.ecr.aws/l2u2v4a8/asi-chain/`. Use the versioned tags and digests from the [container images](/general/container-images/) catalog and pin a digest. The catalog lists the node, indexer, explorer, wallet, faucet, Wallet CLI and ASI client images.
 
 ### Does a newer image mean I should upgrade?
 
@@ -108,4 +108,4 @@ See [documentation status](/general/documentation-status/). A VitePress build ch
 
 ### Where can I ask a question or report a problem?
 
-For node problems start with [troubleshooting](/quick-start/troubleshooting/). Otherwise open an issue in the repository of the component: [wallet](https://github.com/asi-alliance/asi-chain-wallet), [explorer](https://github.com/asi-alliance/asi-chain-explorer), [faucet](https://github.com/asi-alliance/asi-chain-faucet), [Wallet CLI](https://github.com/asi-alliance/asi-chain-wallet-cli) or [this portal](https://github.com/asi-alliance/asi-chain-docs-portal).
+For node problems start with [troubleshooting](/quick-start/troubleshooting/). Otherwise open an issue in the repository of the component: [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet), [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer), [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet), [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) or [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal).

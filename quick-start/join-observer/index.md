@@ -14,7 +14,7 @@ A node without a validator key is read-only, so `/api/status` shows `"isReadOnly
 - A propose request fails with `Propose error: read-only node`.
 - An exploratory deploy, which runs Rholang without committing it, succeeds. Only a read-only node accepts one by default.
 
-Which routes outsiders can reach also depends on the gateway in front of the node.
+Which routes external clients can reach depends on the gateway in front of the node.
 
 ## Inputs
 
@@ -46,7 +46,7 @@ docker run -d --name observer --platform linux/amd64 \
   --bootstrap "$BOOTSTRAP_URI"
 ```
 
-The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. The image entrypoint already passes `--profile=docker`, so do not pass `--profile` yourself, because the node rejects it twice. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/shard-nodes/validator-image/#default-container-ports).
+The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. The image entrypoint already passes `--profile=docker`, so do not pass `--profile` yourself, because the node rejects a repeated option. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/shard-nodes/validator-image/#default-container-ports).
 
 ## Check the Node
 
@@ -56,7 +56,7 @@ curl -s http://127.0.0.1:40403/api/status
 docker inspect observer --format '{{.State.Health.Status}}'
 ```
 
-The node is ready when `/api/ready` returns `{"ready":true}` and `/api/status` shows `isReady: true`, a positive `peers` count and a growing `lastFinalizedBlockNumber`. The image healthcheck calls `/api/ready` on container port `40403`, so a joining node reports `unhealthy` until it has a peer and reaches the Running state. The same applies if you move the HTTP port, even when the node is fine. A joining node takes the last finalized state and recent blocks from its peers and does not download the whole history. Compare `lastFinalizedBlockNumber` with a trusted peer before you serve reads from it.
+The node is ready when `/api/ready` returns `{"ready":true}` and `/api/status` shows `isReady: true`, a positive `peers` count and a growing `lastFinalizedBlockNumber`. The image healthcheck calls `/api/ready` on container port `40403`, so a joining node reports `unhealthy` until it has a peer and reaches the Running state. The same happens if you move the HTTP port, even when the node works. A joining node takes the last finalized state and recent blocks from its peers and does not download the whole history. Compare `lastFinalizedBlockNumber` with a trusted peer before you serve reads from it.
 
 If `peers` stays at 0, follow [Troubleshooting](/quick-start/troubleshooting/#no-peer-connection).
 

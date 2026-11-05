@@ -1,6 +1,6 @@
 # General Overview
 
-ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecosystem. The node described in this portal is written in Rust and lives in [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). It uses CBC Casper consensus and keeps state in RSpace++. The public DevNet still runs a Scala node, as described under [Networks](#networks).
+ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecosystem. The node described in this portal is written in Rust and lives in [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). It uses CBC Casper consensus and keeps state in RSpace++. The public DevNet still runs a Scala node, as described under [Networks](#networks).
 
 ## Components
 
@@ -18,7 +18,7 @@ ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecos
 
 ## Networks
 
-DevNet is the public development network at `dev.asichain.io`. Its tokens have no real value. The addresses of DevNet are on [Network Endpoints](/general/endpoints/). The public DevNet currently runs a Scala node, while the node guides in this portal describe the Rust node.
+DevNet is the public development network at `dev.asichain.io`. Its tokens have no real value. The DevNet addresses are on [Network Endpoints](/general/endpoints/). The public DevNet currently runs a Scala node, while the node guides in this portal describe the Rust node.
 
 A network is made of nodes with different roles. A bootstrap node is the entry point for new peers. A validator proposes and validates blocks. An observer follows the chain and answers read requests without taking part in consensus. [Shard and Node Roles](/shard-nodes/devnet-structure/) describes them in more detail.
 

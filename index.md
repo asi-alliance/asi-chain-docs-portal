@@ -1,7 +1,7 @@
 ---
 layout: home
 title: Home
-description: Documentation for the ASI:Chain DevNet - wallet, explorer, faucet, node setup and developer tools
+description: Documentation for the ASI:Chain DevNet (wallet, explorer, faucet, node setup and developer tools)
 hero:
   name: "ASI:Chain"
   text: "DevNet Documentation"

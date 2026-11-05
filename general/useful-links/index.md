@@ -21,18 +21,18 @@ Node addresses are on [Network Endpoints](/general/endpoints/).
 
 | Component | Repository |
 |---|---|
-| Rust node | [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) |
-| Rust node upstream | [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust) |
-| ASI node client | [asi-alliance/asi-chain-client](https://github.com/asi-alliance/asi-chain-client) |
-| Wallet CLI | [asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) |
-| Indexer | [asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer) |
-| Explorer | [asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer) |
-| Web wallet | [asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet) |
-| Wallet SDK | [asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk) |
-| Faucet | [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
-| Documentation | [asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal) |
+| Rust node | [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) |
+| Rust node upstream | [github.com/F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust) |
+| ASI node client | [github.com/asi-alliance/asi-chain-client](https://github.com/asi-alliance/asi-chain-client) |
+| Wallet CLI | [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) |
+| Indexer | [github.com/asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer) |
+| Explorer | [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer) |
+| Web wallet | [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet) |
+| Wallet SDK | [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk) |
+| Faucet | [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
+| Documentation | [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal) |
 
-The repository [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) is the legacy deployment repository. Do not use it as the source for node setup.
+The repository [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) is the legacy deployment repository. Do not use it as the source for node setup.
 
 Check the branch or tag you build from, because the default branch of a repository does not always hold the current ASI integration.
 
