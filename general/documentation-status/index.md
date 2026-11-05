@@ -16,7 +16,7 @@ The public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and n
 | Wallet CLI | The published image was pulled and the CLI was built from source. `create` was run against DevNet, and `balance` and `send` against a private Rust shard set up as described in [Set Up a Private Shard](/shard-nodes/own-shard/). |
 | Wallet SDK | The examples were compiled against `@asichain/asi-wallet-sdk` 2.1.0, and read-only calls were made to the DevNet node. |
 | Network addresses | The addresses were taken from the network team's environment description and requested directly. |
-| README | The commands in README.md were run in a clean Node.js 24 container. |
+| README | The commands in README.md were run in clean Node.js 20 and Node.js 24 containers. |
 | External links | Every external link was requested once. |
 
 ## Known Limits

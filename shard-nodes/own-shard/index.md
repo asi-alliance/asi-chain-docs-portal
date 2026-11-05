@@ -77,7 +77,7 @@ docker run -d --name my-shard-obs --network shard-net --platform linux/amd64 \
   --bootstrap "$BOOTSTRAP"
 ```
 
-About 45 seconds after the container starts, `curl -s http://localhost:40453/api/status` reports `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. Each node reports its own token settings, so a node started without the flags reports `F1R3` even when the validator reports `ASI`.
+Less than 15 seconds after the container starts, `curl -s http://localhost:40453/api/status` reports `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. Each node reports its own token settings, so a node started without the flags reports `F1R3` even when the validator reports `ASI`.
 
 For several validators, follow the upstream shard topology above.
 
