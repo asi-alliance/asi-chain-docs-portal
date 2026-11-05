@@ -1,57 +1,64 @@
-# Prepare and enroll a Rust validator
+# Prepare and Enroll a Rust Validator
 
-The ASI Rust client provides the key-generation and bonding operations needed
-to enroll a validator. A separate configurator or connector image is optional
-packaging around these operations. The historical helper containers target
-an older workflow and should not be assumed compatible with current Rust nodes.
+The ASI Rust client provides the key-generation and bonding operations needed to enroll a validator. A separate configurator or connector image is optional packaging around these operations. The historical helper containers target an older workflow and should not be assumed compatible with current Rust nodes.
 
-## Obtain the network inputs
+::: warning DevNet runs the Scala node
+As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust client commands on this page do not work against it. In a test against Validator 1, `wallet-balance` returned HTTP 404, and `validator-status`, `bonds` and `active-validators` failed with `unexpected exploratory deploy response from the node: missing field cost`. The same commands passed against a Rust node. Run this procedure only against a Rust shard.
+:::
 
-Ask the network operator for the admitted node/client pair, exact node image
-digest, full bootstrap URI, shard ID, genesis files and effective shared
-configuration. Obtain a bonded validator's external gRPC and HTTP URLs and a
-read-only observer's HTTP URL. Confirm admission, stake limits, active-set
-capacity, network access and storage requirements.
+## Obtain the Network Inputs
 
-Validators included in the initial genesis bonds use the network's genesis
-ceremony. They do not need a second dynamic bonding transaction. The steps
-below concern a new validator joining an existing shard.
+Ask the network operator for the following.
 
-## Create and protect the identity
+- The admitted node and client pair and the exact node image digest.
+- The full bootstrap URI, the `networkId`, the shard ID, the genesis files and the effective shared configuration. The shard ID is the node's `casper.shard-name`, and it is the `shardId` field of `GET /api/status`. The built-in default is `root`.
+- The external gRPC and HTTP URLs of a bonded validator, and the HTTP and gRPC URLs of a read-only observer.
+- The shard's minimum stake. The node option `--bond-minimum` sets it at genesis, and a stake below it is refused.
+- The active-set capacity, network access and storage requirements.
+
+Validators included in the initial genesis bonds use the network's genesis ceremony. They do not need a second dynamic bonding transaction. The steps below concern a new validator joining an existing shard.
+
+The commands below read their inputs from these variables. Set them to the values you received.
+
+```bash
+BONDED_VALIDATOR_GRPC=<gRPC URL of a bonded validator>
+BONDED_VALIDATOR_HTTP=<HTTP URL of a bonded validator>
+OBSERVER_GRPC=<gRPC URL of the observer>
+OBSERVER_HTTP=<HTTP URL of the observer>
+SHARD_ID=<shard ID>
+STAKE_BASE_UNITS=<stake in base units>
+```
+
+## Create and Protect the Identity
 
 The published standalone ASI client is available as:
 
 ```bash
 CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:f26511e261ca9d21c568b2a523fee916630ed7ac2622e65cebd2099e72db4fe7'
-docker pull "$CLIENT_IMAGE"
+docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 ```
 
-This image contains client 0.2.9 from ASI dev source
-[`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228).
-Confirm compatibility with the operator's selected node digest. The same
-version label on another image does not establish compatibility.
+This image contains client 0.2.9 from ASI dev source [`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228). The image exists for `linux/amd64` only. Confirm compatibility with the operator's selected node digest, because the same version label on another image does not establish compatibility.
 
-On Linux or a WSL Linux filesystem, create a new protected directory and save
-keys without printing the private key:
+On Linux or a WSL Linux filesystem, create a new protected directory and save keys without printing the private key:
 
 ```bash
 mkdir -m 700 ./validator-keys
-docker run --rm --network none --read-only --cap-drop ALL \
+docker run --rm --platform linux/amd64 --network none --read-only --cap-drop ALL \
   --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
   --mount "type=bind,src=$PWD/validator-keys,dst=/keys" \
   "$CLIENT_IMAGE" generate-key-pair --save --output-dir /keys
 ```
 
-Keep `private_key.hex` owned by the signing user with mode 0600. Save a
-protected backup; never place a private key in a command argument, documentation
-or container image. A validator signing identity and its P2P TLS identity are
-different. Do not run the same validator identity on two machines.
+::: warning Protect the private key
+`private_key.hex` is the validator's signing key and holds its funds. Keep it owned by the signing user with mode 0600 and save a protected backup. Never place it in a command argument, in documentation or in a container image, and do not run the same validator identity on two machines. The signing identity and the P2P TLS identity of the node are different keys.
+:::
 
 For the remaining client commands, mount the key directory read-only:
 
 ```bash
 client() {
-  docker run --rm --read-only --cap-drop ALL \
+  docker run --rm --platform linux/amd64 --read-only --cap-drop ALL \
     --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
     --mount "type=bind,src=$PWD/validator-keys,dst=/keys,readonly" \
     "$CLIENT_IMAGE" "$@"
@@ -59,44 +66,54 @@ client() {
 client generate-vault-address --private-key-file /keys/private_key.hex
 ```
 
-The default Docker bridge must reach the operator's URLs. For local container
-networks, select the explicitly named Docker network instead. Container
-`localhost` refers to that container. Use the client's `--ca-cert` option and a
-read-only CA mount when the operator supplies private HTTPS endpoints.
+The command prints the public key and the vault address. The later commands use both, so keep them in variables:
 
-## Start and synchronize the joining node
+```bash
+VALIDATOR_PUBLIC_KEY="$(cat validator-keys/public_key.hex)"
+VALIDATOR_ADDRESS="$(client generate-vault-address --private-key-file /keys/private_key.hex \
+  | sed -n 's/^ *Vault address: //p')"
+```
 
-Use the operator-reviewed Rust node manifest and persistent storage. Configure
-its public key and protected signing-key input, advertised host and bootstrap
-URI. Joining an existing shard does not require `--genesis-validator`. Keep
-management APIs and metrics private and confirm container-to-host port mappings.
+`generate-key-pair --save` writes the public key to `public_key.hex` as 130 hex characters (uncompressed). The vault address starts with `1111`.
 
-Check peers, synchronization and advancing canonical finalization before
-bonding. A ready HTTP endpoint or `isValidator` flag alone does not establish
-active consensus participation. See the selected source's
-[node configuration](https://github.com/asi-alliance/asi-chain-rust-node) and the
-operator's deployment manifest for the exact options.
+The default Docker bridge must reach the operator's URLs. For local container networks, add `--network <name>` with the explicitly named Docker network to the `client` function. Container `localhost` refers to that container. Use the client's `--ca-cert` option and a read-only CA mount when the operator supplies private HTTPS endpoints.
 
-## Fund the validator
+## Start and Synchronize the Joining Node
 
-The new validator's vault must cover the stake and the bond transaction's
-execution budget: `stake + phlo_limit * phlo_price`. Amounts are integer base
-units. In this client, `bond-validator` defaults to a phlo limit of
-5,000,000,000 and price 1. Confirm the native token's decimals and the shard's
-required prices instead of assuming a whole-token amount.
+Prepare storage, options and the key input as described in [Join as a Validator](/quick-start/join-validator/). Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
 
-Use an approved transfer or faucet process to fund the derived address. A
-normal transfer does not require changing genesis wallets or restarting the
-network. Check the resulting balance on the read-only observer:
+- `--bootstrap` with the operator's URI.
+- `--network-id` equal to the shard's `networkId`.
+- `--host` with the address that other nodes use to reach this node.
+- `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY`, and a signing-key input accepted by the node. The node does not read the client's `private_key.hex` through `--validator-private-key-path`, which expects an encrypted PEM file.
+
+The pinned [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/e18defd44d43fe460379efefb88223797709a0cf/node/src/rust/configuration/commandline/options.rs) list every flag. Keep management APIs and metrics private and confirm container-to-host port mappings.
+
+Check peers, synchronization and advancing canonical finalization before bonding. A ready HTTP endpoint or `isValidator` flag alone does not establish active consensus participation.
+
+## Fund the Validator
+
+The new validator's vault must cover the stake and the bond transaction's execution budget: `stake + phlo_limit * phlo_price`. Amounts are integer base units. In this client, `bond-validator` defaults to a phlo limit of 5,000,000,000 and price 1. Confirm the native token's decimals and the shard's required prices instead of assuming a whole-token amount.
+
+Use an approved transfer or faucet process to fund the derived address. A normal transfer does not require changing genesis wallets or restarting the network. Check the resulting balance on the read-only observer:
 
 ```bash
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
 ```
 
-## Submit the bond once and verify participation
+## Check the Epoch
 
-Supply actual URLs and the operator's shard ID. Send the deploy to an already
-bonded validator; use the read-only observer for status and result queries.
+A bond is recorded when its deploy finalizes, but it becomes active only at the next epoch boundary. The client reads the epoch from the observer's gRPC port:
+
+```bash
+client epoch-info --grpc "$OBSERVER_GRPC"
+```
+
+The output shows the current block and epoch, the epoch length and the quarantine length in blocks, and the progress through the epoch. In a shard with default settings the epoch is 10,000 blocks long. A withdrawal also takes effect at a boundary, and the stake is paid out after the quarantine period.
+
+## Submit the Bond Once and Verify Participation
+
+Send the deploy to an already bonded validator, because a node that cannot propose accepts a deploy and never includes it. Do not send it to the joining node itself or to the bootstrap or ceremony-master node. Use the read-only observer for status and result queries. The stake must be at least the shard's `bond-minimum`, and bonding the same key twice fails with `already bonded`.
 
 ```bash
 client bond-validator --stake "$STAKE_BASE_UNITS" \
@@ -110,17 +127,8 @@ client bonds --http "$OBSERVER_HTTP"
 client active-validators --http "$OBSERVER_HTTP"
 ```
 
-Record the deploy ID and outcome. A timeout can leave the transaction's outcome
-unknown: inspect that deploy before submitting another bond. Read errors must
-not be interpreted as an unbonded validator.
+Record the deploy ID and outcome. A timeout can leave the transaction's outcome unknown, and the verdict for a deploy appears only after its block finalizes, so do not repeat the bond. Check the deploy first, either with `client deploy-status --sig <deploy signature> --http "$OBSERVER_HTTP"` or with `GET <observer HTTP URL>/api/deploy/<deploy ID>`. An underfunded vault does not reject the deploy. The deploy lands in a block and fails there with `Deploy payment failed: Insufficient funds`, and the client may not show that message. Read errors must not be interpreted as an unbonded validator.
 
-Bonded membership and active membership are separate. Activation follows the
-shard's epoch and active-set rules; a full active set can prevent activation.
-Confirm that the node authors blocks, that its authored blocks finalize, and
-that the network continues finalizing. The CLI `blocks` command can inspect
-the observer's recent block JSON, including `blockInfo.sender`, `blockHash`
-and `isFinalized`.
+Bonded membership and active membership are separate. Activation follows the shard's epoch and active-set rules, so `validator-status` reports `BONDED` first and `ACTIVE` after the boundary, and a full active set can prevent activation. Confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The CLI `blocks` command shows the observer's recent block JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`.
 
-The client's pinned [validator lifecycle guide](https://github.com/asi-alliance/asi-chain-client/blob/40f2a9408040252dd23761cd06adb9f1407ef228/docs/guides/bonding-a-validator.md)
-explains bonding, activation, withdrawal and troubleshooting. Its example
-topology and ports are test fixtures, not the target network's connection data.
+The client's pinned [validator lifecycle guide](https://github.com/asi-alliance/asi-chain-client/blob/40f2a9408040252dd23761cd06adb9f1407ef228/docs/guides/bonding-a-validator.md) explains bonding, activation, withdrawal and troubleshooting. Its example topology and ports are test fixtures, not the target network's connection data.

@@ -1,51 +1,105 @@
 # Troubleshooting
 
-Start with the image digest, source revision, configuration and host mappings. The runtime is Rust; JVM tuning and former configurator/connector commands do not apply.
-
-## Image pull or startup fails
-
-Use a digest from [container images](/general/container-images/) and `--platform linux/amd64`. Check Docker connectivity and disk capacity. Do not silently substitute another build for a missing ARM image.
-
-For your own container, inspect:
+Start with the image tag or digest, the source revision, the configuration and the host port mappings. The node runtime is Rust, so JVM tuning and the former configurator and connector commands do not apply. Node commands on this page use the container name from the `docker run --name` option of [Join as an Observer](/quick-start/join-observer/) or [Join as a Validator](/quick-start/join-validator/):
 
 ```bash
-docker inspect validator --format '{{.Config.Image}}'
-docker port validator
-docker logs --tail 100 validator
+NODE=observer
 ```
 
-Replace `validator` with its actual name. Check configuration paths and permissions for the image user. Keep keys and TLS private material out of shared diagnostics.
+::: warning DevNet runs the Scala node
+As of 5 November 2026 the public DevNet runs a Scala node, and the Rust image does not connect to it. A Rust node started with the DevNet bootstrap lists other nodes in `/api/status` but keeps `peers` at 0. This is not a configuration error on your side. See [Join as an Observer](/quick-start/join-observer/).
+:::
 
-## No peer connection
+## Image Pull or Startup Fails
 
-Confirm the operator-provided bootstrap identity/host and TCP peer ports. Discovery uses TCP `40404` for the documented Rust revision. Do not open all API/admin ports to fix P2P connectivity.
+Use a tag or digest from [Container Images](/general/container-images/) and pass `--platform linux/amd64`, because the images exist for that platform only. Check Docker connectivity and disk capacity. Do not silently substitute another build for a missing ARM image.
 
-Check DNS, routing, advertised host and firewall policy on both ends. TCP connectivity alone does not establish the correct shard, synchronization or finalization.
-
-## API unavailable
-
-Compare the endpoint with the host mapping and gateway base path. HTTP may use a different host port from container default `40403`.
+Inspect your own container:
 
 ```bash
-curl --fail --show-error http://127.0.0.1:40403/api/ready
+docker inspect "$NODE" --format '{{.Config.Image}}'
+docker port "$NODE"
+docker logs --tail 100 "$NODE"
 ```
 
-This example is for a locally mapped management endpoint. A `503` during initialization is different from a transport failure. Public gateways may intentionally omit this route.
+The first lines of the log usually name the cause.
 
-Keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. Do not disable TLS or expose privileged listeners as a diagnostic shortcut.
+- `The data dir must be a directory and have read and write permissions` means the volume belongs to `root`. Change its owner to `daemon` (uid 1) with the `chown` command from [Join as an Observer](/quick-start/join-observer/#start-the-observer).
+- `the argument '--profile <PROFILE>' cannot be used multiple times` means a `--profile` option was passed. The image entrypoint already adds `--profile=docker`, so remove yours.
+- `Failed to parse bootstrap peer address: Parse error: missing node ID` means the bootstrap URI lacks the node ID. The form is `rnode://<node-id>@<host>?protocol=40400&discovery=40404`.
+- `No such device or address` with `--validator-private-key-path` means the node asked for the key password and found no terminal. Set the `F1R3NODE_VALIDATOR_PASSWORD` environment variable.
+- `malformedframing` with the same option means the file is not an encrypted PEM key. The hex file written by the ASI client is not accepted there.
 
-## CLI or indexer response mismatch
+Keep keys and TLS private material out of shared diagnostics.
 
-Confirm the consumer source and client gitlink. Images do not inherit later merges. The [catalog](/general/container-images/) identifies client/CLI artifacts; [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
+## No Peer Connection
 
-Check the selected node's HTTP/Protobuf contract before changing a consumer. Cost-accounting APIs and newer integer/transfer representations require compatible clients and separate acceptance checks.
+Read the peer count and the node's own view of the network:
 
-## Slow sync or uncertain transfer result
+```bash
+curl -s http://127.0.0.1:40403/api/status
+```
 
-Compare peer progress, readiness and canonical finalization separately. Retain the original deploy ID when a transfer outcome is unknown; investigate before sending again. A timeout is not proof that payment failed.
+A node that has not connected yet reports `"peers": 0` and `"isReady": false`, and the log repeats `Waiting for first connection...`. Check these in order.
 
-Back up state and private inputs before an operator-reviewed recovery. Deleting chain data or running Docker-wide prune commands is not a routine troubleshooting step.
+1. The bootstrap URI is complete and the node ID in it belongs to the bootstrap node. The ID is the `address` field of `/api/status` on that node.
+2. `--network-id` equals the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from other networks.
+3. `--host` is an address that the other nodes can reach. A joining node must be reachable as well as able to connect out, because the bootstrap node answers the handshake on the advertised address. Add `--allow-private-addresses` if the shard uses private or container addresses, and `--no-upnp` if you forward the ports by hand.
+4. TCP `40400` and TCP `40404` are open for peers. Discovery on `40404` uses TCP. Do not open the API and admin ports to fix P2P connectivity.
 
-## Reporting a problem
+A restarted node reconnects only through its configured bootstrap node, because the image does not include the known-peers change from upstream PR #927. If the bootstrap node is down, the log stays on `Waiting for first connection...`.
 
-Open an issue in the affected [public component repository](/general/useful-links/). Include digest, public source revision, sanitized error and reproduction steps. Include no keys, real environment files, credentials or internal endpoints.
+TCP connectivity alone does not establish the correct shard, synchronization or finalization.
+
+## API Unavailable
+
+Compare the endpoint with the host port mapping and the gateway base path. HTTP may use a different host port from the container default `40403`.
+
+```bash
+curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
+docker inspect "$NODE" --format '{{.State.Health.Status}}'
+```
+
+The route returns `{"ready":true}` with HTTP 200 when the node is up, and `{"ready":false}` with HTTP 503 while it starts or has no peers. A `503` is not a transport failure, and a refused or timed-out connection is. Public gateways may omit this route.
+
+The image healthcheck calls `/api/ready` on container port `40403` every 30 seconds, with a 120-second start period. The container reports `unhealthy` while the node has no peers. It also reports `unhealthy` after you move the HTTP port with `--api-port-http`, even if the node works. Keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. Do not disable TLS or expose privileged listeners as a diagnostic shortcut.
+
+## CLI or Indexer Response Mismatch
+
+Confirm the consumer source and client gitlink. Images do not inherit later merges. The [catalog](/general/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
+
+Check the selected node's HTTP and Protobuf contract before you change a consumer. Cost-accounting APIs and newer integer and transfer representations need compatible clients and separate acceptance checks. The Rust client commands `wallet-balance`, `validator-status`, `bonds` and `active-validators` fail against the Scala DevNet node.
+
+## Slow Sync or Restart
+
+A joining node takes the last finalized state and the recent blocks from its peers and does not download the whole history. It is ready when the log shows `Making a transition to Running state` and `/api/status` reports `isReady: true` with a growing `lastFinalizedBlockNumber`. A restart on the same data directory takes about a second.
+
+Compare peer progress, readiness and canonical finalization separately.
+
+Do not delete the data directory of a node that peers already know. The node identity is the TLS certificate in that directory, so a new directory produces a new identity and a full re-join, while peers keep the old identity in their routing tables. Back up state and private inputs before any recovery, and do not run Docker-wide prune commands as a troubleshooting step.
+
+## Wallet Does Not Show the Balance
+
+The wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It asks for the wallet password to unlock and again to sign a transaction.
+
+- Open the Accounts page and use the refresh button. The wallet also polls account data every 30 seconds.
+- If you expect tokens from a faucet or a transfer, look up the transaction in the [explorer](https://explorer.dev.asichain.io) before you assume that it failed.
+- If the wallet cannot reach the network, open Network Settings. The built-in DevNet entry cannot be edited, and your own network is added with the Custom Network form described on [Custom Network](/wallet/custom-network/).
+
+See [Wallet Usage](/wallet/usage/) for the screens.
+
+## Faucet and Transactions
+
+The faucet refuses an address only when its balance is above the limit, which is 20,000 ASI in the production web build. The page then shows `Your address is not eligible` and disables the FAUCET button. There is no waiting period between requests. An address starts with `1111`, and the faucet form accepts 50 to 54 characters.
+
+After a request the faucet page checks the deploy every 30 seconds and stops after 15 minutes with `Polling stopped after 15 minutes.` It also stops on an error status with `Polling stopped due to error status returned by node.` The status is one of `Deploying`, `Finalized`, `DeployError` or `Unknown`, and some builds also report `Finalizing` and `FinalizationError`. Paste the deploy ID into the TX status check field on the faucet page to see the current status. Do not send a second request until you have checked the first.
+
+A transfer can fail for several reasons.
+
+- The sender's balance does not cover the amount and the fee. The wallet warns with `Insufficient balance to cover the estimated fee.` A deploy that runs out of funds after it was accepted fails inside its block with `Deploy payment failed: Insufficient funds`.
+- The recipient address is not a valid ASI address. Addresses start with `1111`.
+- The result is still pending. Keep the original deploy ID and check it in the explorer before you send again. A timeout is not proof that the payment failed.
+
+## Reporting a Problem
+
+Open an issue in the affected [public component repository](/general/useful-links/). Include the digest, the public source revision, a sanitized error and reproduction steps. Include no keys, real environment files, credentials or internal endpoints.
