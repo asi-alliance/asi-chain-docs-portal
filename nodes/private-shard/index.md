@@ -28,7 +28,7 @@ A sample topology's count is not a universal minimum or a fault-tolerance guaran
 
 ### Start a Single-Node Shard
 
-A single node can create its own genesis with `--standalone`. It is enough to check the setup before you plan several validators. Prepare a directory named `genesis` with the two genesis files, and have a fresh validator key ready:
+A single node can create its own genesis with `--standalone`. This is enough to check the setup before you plan several validators. Prepare a directory named `genesis` with the two genesis files, and have a fresh validator key ready:
 
 - `bonds.txt` has one line per bonded validator, `<public-key> <stake>`. The public key is the uncompressed secp256k1 key of the validator, 130 hex characters starting with `04`.
 - `wallets.txt` has one line per funded vault, `<vault-address>,<balance>`, with the balance in the smallest unit (10^-8 of a token).
@@ -85,7 +85,7 @@ docker run -d --name my-shard-obs --network shard-net --platform linux/amd64 \
   --bootstrap "$BOOTSTRAP"
 ```
 
-Less than 15 seconds after the container starts, `curl -s http://localhost:40453/api/status` reports `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. Each node reports its own token settings, so a node started without the flags reports `F1R3` even when the validator reports `ASI`.
+Within 15 seconds after the container starts, `curl -s http://localhost:40453/api/status` reports `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. Each node reports its own token settings, so a node started without the flags reports `F1R3` even when the validator reports `ASI`.
 
 </Steps>
 

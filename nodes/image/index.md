@@ -103,7 +103,7 @@ curl -s http://localhost:40403/api/ready
 curl -s http://localhost:40403/api/status
 ```
 
-`/api/ready` answers `{"ready":true}` with HTTP 200 once the node is ready and HTTP 503 with `{"ready":false}` before that. In `/api/status` look at `networkId`, `peers`, `isReady` and `lastFinalizedBlockNumber`. The image healthcheck always probes port `40403` inside the container. If you change the HTTP port with `--api-port-http`, the container reports `unhealthy` while the node works.
+`/api/ready` answers `{"ready":true}` with HTTP 200 once the node is ready and HTTP 503 with `{"ready":false}` before that. In `/api/status`, check `networkId`, `peers`, `isReady` and `lastFinalizedBlockNumber`. The image healthcheck always probes port `40403` inside the container. If you change the HTTP port with `--api-port-http`, the container reports `unhealthy` while the node works.
 
 </Steps>
 
@@ -117,7 +117,7 @@ After a restart the node reconnects only through `--bootstrap`. This source does
 
 Obtain the target shard's bootstrap peer, shard and genesis settings, native-token metadata, approved digest and admission process. Prepare persistent storage owned by `daemon` and private TLS and signing inputs. A running container or configured validator key does not establish active bonded stake, synchronization or finalization.
 
-Legacy configurator and connector recipes and JVM options do not configure this Rust image.
+Follow [Run a Validator](/nodes/validator/) for the checks. Legacy configurator and connector recipes and JVM options do not configure this Rust image.
 
 ## Next Steps
 
