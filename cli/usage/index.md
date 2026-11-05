@@ -1,6 +1,6 @@
 # Wallet CLI
 
-The ASI wallet CLI creates wallets, queries balances, sends tokens and reads/exports deploy history. It embeds its repository-local ASI client dependency; the standalone client container is a separate tool.
+The ASI wallet CLI creates wallets, queries balances, sends tokens and reads/exports deploy history. It builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, and its image tag for enrollment is built from another commit than this submodule, so do not swap one for the other.
 
 ## Published image
 
@@ -20,11 +20,40 @@ docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" --help
 docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --help
 ```
 
-For actual commands, pass a protected environment file and mount the required credential/output directories. The container runs as UID `10001`; arrange ownership and paths explicitly. Host loopback URLs do not reach host services from a normal Docker bridge container.
+## Compatibility
 
-## Source installation
+The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet still runs the Scala node, and on 5 November 2026 only `create` works against it.
 
-For current integration development, explicitly select `dev`, inspect its full SHA and committed gitlink, and follow that revision's prerequisites. To reproduce the published application source:
+::: warning DevNet status on 5 November 2026
+`balance` and `send` stop with `Wrong native token: expected ASI, node reports `, because the DevNet node status has no token symbol. With `EXPECTED_TOKEN_SYMBOL` set to an empty value they stop with `HTTP 404` on `/api/balance/<address>`. `history` and `export` could not connect to the DevNet GraphQL endpoint either (see [Configuration](#configuration)).
+:::
+
+Use a Rust node, such as one started from the [validator image](/shard-nodes/validator-image/) or a [private shard](/shard-nodes/own-shard/), for `balance` and `send`.
+
+## Run the image
+
+The image reads its settings from the environment and keeps wallet files and exports in directories under `/app`. Pass the settings with `--env-file` and mount the directories as volumes:
+
+```bash
+mkdir -p credentials exports
+docker run --rm --platform linux/amd64   --env-file .env   -v "$PWD/credentials:/app/credentials"   -v "$PWD/exports:/app/exports"   "$WALLET_IMAGE" create --save
+```
+
+`.env` sets `OUTPUT_DIR=/app/credentials` here, so the wallet file ends up in `credentials/wallet_info.json` on the host. Replace `create --save` with `balance`, `send`, `history` or `export` for the other commands, and keep the same two volumes so they find the wallet file and write exports to `exports/`.
+
+The container runs as UID `10001`. On a Linux host, make both directories writable for that user (`sudo chown 10001:10001 credentials exports`), otherwise `create --save` cannot write the wallet file. Inside a container `127.0.0.1` is the container itself, so `.env` needs an address that the container can reach, not the host loopback.
+
+## Build from source
+
+The published image is the shorter path. To build the same source yourself, install the build tools first. On Debian or Ubuntu:
+
+```bash
+sudo apt-get install -y git curl ca-certificates build-essential cmake libclang-dev   libprotobuf-dev libssl-dev perl pkg-config protobuf-compiler
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
+. "$HOME/.cargo/env"
+```
+
+The repository pins `nightly-2026-02-09` in `rust-toolchain.toml`, and `rustup` installs it on the first `cargo build`. Then clone and build:
 
 ```bash
 git clone --branch dev https://github.com/asi-alliance/asi-chain-wallet-cli.git
@@ -34,16 +63,27 @@ git submodule update --init --recursive
 cargo build --release --locked
 ```
 
-Use the pinned `rust-toolchain.toml`, `Cargo.lock` and submodule. Do not use `git submodule update --remote`: it replaces the reviewed dependency with a moving head. The default release branch and a sibling client checkout are not substitutes for the gitlink.
+The build downloads its dependencies from crates.io and GitHub. `cargo build` itself took 5 minutes 46 seconds on a 12-core machine.
+
+Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client. Pull request #3 (`dev` into `main`) is open, and the advice goes away once it is merged.
+
+Do not use `git submodule update --remote`: it replaces the pinned client with the newest commit of its branch.
 
 ## Configuration
 
-Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. Replace these local mapping examples with actual approved URLs:
+Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
+
+- `VALIDATOR_GRPC_URL`, the gRPC endpoint of a validator, which `send` uses to submit the deploy.
+- `VALIDATOR_HTTP_URL`, the HTTP endpoint of the same validator.
+- `OBSERVER_HTTP_URL`, the HTTP endpoint that `balance` queries and `send` uses to confirm finalization.
+- `OUTPUT_DIR`, the directory with `wallet_info.json`.
+
+Without them the CLI prints `Error loading configuration: VALIDATOR_HOST is not set`. Instead of a URL you can set `VALIDATOR_HOST` with `VALIDATOR_GRPC_PORT` and `VALIDATOR_HTTP_PORT`, and `OBSERVER_HOST` with `OBSERVER_HTTP_PORT`.
 
 ```dotenv
-VALIDATOR_GRPC_URL=http://127.0.0.1:40412
-VALIDATOR_HTTP_URL=http://127.0.0.1:40413
-OBSERVER_HTTP_URL=http://127.0.0.1:40453
+VALIDATOR_GRPC_URL=http://<validator-host>:<grpc-port>
+VALIDATOR_HTTP_URL=http://<validator-host>:<http-port>
+OBSERVER_HTTP_URL=http://<validator-host>:<http-port>
 OUTPUT_DIR=./credentials
 EXPECTED_TOKEN_SYMBOL=ASI
 SHARD_ID=root
@@ -54,15 +94,13 @@ NODE_TIMEOUT_SECONDS=30
 GRAPHQL_URL=
 ```
 
-The example gRPC port is a locally mapped validator **internal** listener. Keep it private. HTTP ports are independent mappings, not inferred from gRPC. HTTPS URLs use TLS; optional `NODE_CA_CERT` supplies a private CA.
+The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports. `send` submits through the gRPC endpoint, and a node exposes it on an internal port that should not be open to the internet. HTTP ports are separate mappings. HTTPS URLs use TLS, and `NODE_CA_CERT` supplies a private CA.
 
-Legacy `VALIDATOR_HOST` with `VALIDATOR_GRPC_PORT` / `VALIDATOR_HTTP_PORT` is supported. For observers, supply `OBSERVER_HTTP_URL` or `OBSERVER_HOST` with **`OBSERVER_HTTP_PORT`**. `OBSERVER_GRPC_PORT` is no longer used.
-
-`GRAPHQL_URL` is needed for history/export only. Configure the actual Hasura schema, permissions and WebSocket endpoint without putting admin credentials in public URLs. Full deployment acceptance for history/export remains tracked in [wallet CLI issue #5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
+`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL and with `wss://explorer.dev.asichain.io/v1/graphql` both commands ended with `Failed to connect to WebSocket` on 5 November 2026, so there is no public GraphQL endpoint that is known to work. Do not put Hasura admin credentials into the URL. Acceptance of `history` and `export` on a deployment is tracked in [wallet CLI issue #5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
 
 ## Commands
 
-Run from the configured source directory:
+Run these from the source directory after a build. With the image, put the command after `"$WALLET_IMAGE"` as shown above.
 
 ```bash
 ./target/release/asi-chain-wallet-cli --help

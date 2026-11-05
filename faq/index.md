@@ -1,41 +1,111 @@
-# Frequently asked questions
+# Frequently Asked Questions
 
-## Which container registry should I use?
+## Getting started
 
-Use `public.ecr.aws/l2u2v4a8/asi-chain/` and the versioned tags/digests in [container images](/general/container-images/). Pin a digest. The catalog includes the node, indexer, explorer, wallet, faucet frontend/API, wallet CLI and ASI client.
+### What are DevNet tokens?
 
-## Which node implementation is maintained?
+DevNet ASI is a test token for trying out transfers, contracts and nodes. It has no real value and cannot be exchanged for real currency.
 
-The pure Rust source is [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New ASI images record this source; historical images retain their original provenance. Old combined/Scala repositories and legacy deployment helpers are not the setup source for these images.
+### Where do I begin?
 
-## Does a newer image mean I should upgrade?
+The [Get Started](/quick-start/) page has one path for using the network, one for running a node and one for building on it.
 
-Select the image with the target network's accepted configuration and client/API contract. The new ASI dev `e18defd4` build, historical `e6ecf238` baseline and `5dafbc37` compatibility target are distinct artifacts. Publication and packaging checks do not establish live deployment acceptance.
+### What does an ASI address look like?
 
-## Can I use a hard-coded public node IP from an older page?
+It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. Amounts are counted in 8 decimal places, so one ASI is `100000000` in the smallest unit.
 
-Obtain current URLs and bootstrap identity from the operator. Historical IPs and observer availability are not a current network inventory. Host mappings can differ from container defaults.
+## Wallet and keys
 
-## Which ports must be reachable?
+### How do I create an account?
 
-Intended peers use TCP `40400` and `40404`. External gRPC and HTTP need approved client access. Keep internal gRPC, admin HTTP and `/metrics` private. See the [port table](/shard-nodes/validator-image/#default-container-ports).
+Open the [wallet](/wallet/usage/) and create a wallet on first launch. It is protected by a password you choose and comes with a recovery phrase.
 
-## Does an observer enforce read-only API access?
+### Who can see my recovery phrase or private key?
 
-Its role describes consensus behavior. API permissions and allowed routes are configured separately; do not assume all writes are rejected because it is unbonded.
+Nobody but you, if you keep them private. The faucet only needs an address and never asks for a key or a recovery phrase. Write the phrase down and keep it offline. The wallet can also export a keyfile as a backup.
 
-## Does the explorer run the indexer?
+### Where does the wallet keep my accounts?
 
-The explorer is a frontend querying Hasura GraphQL. The separate Python indexer reads node gRPC/HTTP and stores PostgreSQL data. It does not invoke the standalone Rust CLI.
+In the storage of your browser (IndexedDB), together with your custom networks. Clearing the site data of the browser removes them, so back up the recovery phrase or a keyfile first.
 
-## Should I update the wallet CLI submodule with --remote?
+### Can the wallet connect to my own network?
 
-Use `git submodule update --init --recursive` at the selected parent revision. Preserve its committed client gitlink. See [wallet CLI](/cli/usage/) for the published artifact's exact dependency.
+Yes. The wallet has a network settings page where you add a custom network with its node and indexer URLs. See [custom networks](/wallet/custom-network/).
 
-## What amount does the wallet CLI expect?
+### How often does the wallet update balances?
 
-Raw integer dust: `100000000` represents one ASI with eight decimals. Keep exact integers. Investigate an unknown transfer outcome using its original deploy ID before sending again.
+The wallet refreshes account data every 30 seconds.
 
-## Are all portal pages verified?
+## Faucet
 
-See [documentation status](/general/documentation-status/). UI walkthroughs, the SDK reference and detailed transaction/state diagrams still need revision-specific review. A VitePress build validates rendering rather than API accuracy.
+### How do I get test tokens?
+
+Create a wallet account, copy its address and paste it into the [faucet](https://faucet.dev.asichain.io). The guide is in [how to get DevNet ASI](/quick-start/get-asi/). On 5 November 2026 one request credited 10 000 ASI.
+
+### Is there a waiting period between requests?
+
+No. The faucet API has no time limit. It refuses an address only when the balance of that address is above the faucet's limit, and then the page shows `Your address is not eligible`.
+
+### The tokens have not arrived. What should I do?
+
+The faucet page checks the transfer status every 30 seconds and stops after 15 minutes. If nothing arrived by then, look the transfer up in the [explorer](/explorer/usage/) by its deploy ID before you ask again. A second request sends a second amount as long as your balance is below the limit.
+
+## Explorer
+
+### What does the explorer show?
+
+Blocks, transactions, validators and network statistics. See [explorer usage](/explorer/usage/).
+
+### Does the explorer run the indexer?
+
+No. The explorer is a web frontend that queries a Hasura GraphQL API. A separate indexer reads the node over gRPC and HTTP and stores what it finds in PostgreSQL. The indexer does not use the Wallet CLI.
+
+## Nodes
+
+### Which node implementation is maintained?
+
+The Rust node, [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New images record this source. The older Scala repositories and deployment helpers are not the setup source for the current images.
+
+### Which container registry should I use?
+
+`public.ecr.aws/l2u2v4a8/asi-chain/`. Use the versioned tags and digests from the [container images](/general/container-images/) catalog and pin a digest. It lists the node, indexer, explorer, wallet, faucet, Wallet CLI and ASI client images.
+
+### Does a newer image mean I should upgrade?
+
+Not by itself. Pick the image that matches the network's accepted configuration and the API your clients use. A published image does not show that a network runs it.
+
+### Can I use a node IP address from an older page?
+
+Ask the network operator for the current URLs and the bootstrap identity. Old IP addresses and the availability of a particular observer are not a current inventory, and host port mappings can differ from the container defaults.
+
+### Which ports must be reachable?
+
+Peers connect over TCP on `40400` and `40404`. Clients need access to the external gRPC and HTTP ports you decide to expose. Keep internal gRPC, admin HTTP and `/metrics` private. See the [port table](/shard-nodes/validator-image/#default-container-ports).
+
+### Does an observer reject writes?
+
+Not necessarily. The observer role describes its part in consensus. Which API routes are allowed is configured separately, so do not assume that an unbonded node refuses writes.
+
+## Tools
+
+### Does the Wallet CLI work with DevNet?
+
+On 5 November 2026 only `create` does, because the public DevNet still runs the Scala node and the CLI is written for the Rust node API. See [Wallet CLI](/cli/usage/#compatibility).
+
+### What amount does the Wallet CLI expect?
+
+An integer in the smallest unit: `100000000` is one ASI. Keep the exact integer, and if a transfer ends with an unknown result, check its deploy ID before sending again.
+
+### Should I update the Wallet CLI submodule with `--remote`?
+
+No. Run `git submodule update --init --recursive` and keep the committed client revision. The [Wallet CLI](/cli/usage/) page names the revision of the published image.
+
+## More help
+
+### Are all pages verified?
+
+See [documentation status](/general/documentation-status/). A VitePress build checks that pages render and links resolve, not that the described API is correct.
+
+### Where can I ask a question or report a problem?
+
+For node problems start with [troubleshooting](/quick-start/troubleshooting/). Otherwise open an issue in the repository of the component: [wallet](https://github.com/asi-alliance/asi-chain-wallet), [explorer](https://github.com/asi-alliance/asi-chain-explorer), [faucet](https://github.com/asi-alliance/asi-chain-faucet), [Wallet CLI](https://github.com/asi-alliance/asi-chain-wallet-cli) or [this portal](https://github.com/asi-alliance/asi-chain-docs-portal).
