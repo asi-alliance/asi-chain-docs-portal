@@ -13,7 +13,7 @@ class CustomError extends Error {
 }
 ```
 
-Test errors with `instanceof` or `code`. `name` is set from the class name, but the published bundle is minified and the name comes out as a short string such as `Je`. `status` is a hint for the UI and not a response from a server. For example, `403` on `WalletLockedError` means "ask for the password again".
+Check errors with `instanceof` or `code`. `name` is set from the class name, but the published bundle is minified and the name comes out as a short string such as `Je`. `status` is a hint for the UI and not a response from a server. For example, `403` on `WalletLockedError` means "ask for the password again".
 
 ```ts
 import { CustomError, CustomErrorCode } from '@asichain/asi-wallet-sdk';
@@ -122,7 +122,7 @@ A well-formed keyfile with a wrong password gives `InvalidKeyfilePasswordError`,
 | `BalanceUnavailableError` | `BALANCE_UNAVAILABLE` | 502 | `address`, `reason` |
 
 - `DomainClosedError` means the `Client` was closed for good. Create a new one instead of retrying.
-- `OperationsSuspendedError` is thrown while `clearPersistence` or `removeWallet` runs, and can be retried after it finishes.
+- `OperationsSuspendedError` is thrown while `clearPersistence` or `removeWallet` runs. Retry the operation after that call finishes.
 - `NetworkBusyError` is thrown when a network is switched, updated or removed while it still has an operation in flight.
 - `DeploySubmissionRejectedError` extends `ApiRequestError` and means the node refused the deploy with a 4xx status. The deploy will not land and its reservation is released. Any other submission failure is a plain `ApiRequestError`, and the deploy may still have been accepted. `isRejectedByServer(error)` applies the same rule.
 - `DeployTimeoutError` means the deploy was not finalized within the watch timeout. It may still be processed by the network.

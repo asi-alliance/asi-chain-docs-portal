@@ -25,9 +25,9 @@ Generates cryptographically secure random bytes.
 |------|------|----------|-------------|
 | `length` | `number` | No | Number of bytes. Defaults to `32`. Must be a positive integer. |
 
-**Returns:** `Uint8Array` — random bytes.
+**Returns:** `Uint8Array` with the random bytes.
 
-**Throws:** `Error("PrivateKeyLength must be a positive integer")` — if `length` is not a positive integer.
+**Throws:** `Error("PrivateKeyLength must be a positive integer")` if `length` is not a positive integer.
 
 ## `generateKeyPair`
 
@@ -43,9 +43,9 @@ Generates a random secp256k1 key pair.
 |------|------|----------|-------------|
 | `keyLength` | `number` | No | Private key length in bytes. Defaults to `32`. |
 
-**Returns:** `KeyPair` — `{ privateKey, publicKey }`.
+**Returns:** `KeyPair` as `{ privateKey, publicKey }`.
 
-**Throws:** `Error("PrivateKeyLength must be a positive integer")` — if `keyLength` is invalid.
+**Throws:** `Error("PrivateKeyLength must be a positive integer")` if `keyLength` is invalid.
 
 ## `getKeyPairFromPrivateKey`
 
@@ -61,7 +61,7 @@ Derives a `KeyPair` from an existing private key.
 |------|------|----------|-------------|
 | `privateKey` | `Uint8Array` | Yes | secp256k1 private key (32 bytes). |
 
-**Returns:** `KeyPair` — `{ privateKey, publicKey }`.
+**Returns:** `KeyPair` as `{ privateKey, publicKey }`.
 
 ## `getPublicKeyFromPrivateKey`
 
@@ -77,7 +77,7 @@ Derives the public key from a private key.
 |------|------|----------|-------------|
 | `privateKey` | `Uint8Array` | Yes | secp256k1 private key (32 bytes). |
 
-**Returns:** `Uint8Array` — uncompressed public key (65 bytes, starting with `0x04`).
+**Returns:** `Uint8Array` with the uncompressed public key (65 bytes, starting with `0x04`).
 
 ## `convertKeyToHex`
 
@@ -93,7 +93,7 @@ Converts a binary key to a lowercase hex string.
 |------|------|----------|-------------|
 | `key` | `Uint8Array` | Yes | Key bytes to encode. |
 
-**Returns:** `string` — hex-encoded key.
+**Returns:** `string` with the hex-encoded key.
 
 ## `getInitialHDPathFromOptions`
 
@@ -126,7 +126,7 @@ Derives the private key at `path` from a BIP-39 seed.
 | `seed` | `Uint8Array` | Yes | Seed bytes, for example from `KeyDerivation.mnemonicToSeed`. |
 | `path` | `Bip44Path` | Yes | Derivation path. |
 
-**Returns:** `Promise<IHDWalletPrivateKeyDataFromSeed>` — `{ privateKey, path, index }`.
+**Returns:** `Promise<IHDWalletPrivateKeyDataFromSeed>` with `{ privateKey, path, index }`.
 
 ## Types
 
@@ -141,6 +141,6 @@ interface IHDWalletPrivateKeyDataFromSeed extends IBaseHDWalletPrivateKeyData {
 }
 ```
 
-::: info Mnemonic derivation moved
-`KeysManager` no longer has `deriveKeyFromMnemonic`. Use `KeyDerivation.deriveKeyFromMnemonic(mnemonic, bip44path)` from the [KeyDerivation](/wallet-sdk/api-reference/key-derivation/) page.
+::: info Mnemonic derivation
+`KeysManager` has no `deriveKeyFromMnemonic`. Use `KeyDerivation.deriveKeyFromMnemonic(mnemonic, bip44path)` from the [KeyDerivation](/wallet-sdk/api-reference/key-derivation/) page.
 :::

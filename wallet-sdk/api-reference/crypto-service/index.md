@@ -68,7 +68,7 @@ Decrypts an `EncryptedData` object.
 | `payload` | `EncryptedData` | Yes | Object produced by `encryptWithPassword`. |
 | `passphrase` | `string` | Yes | Password used for encryption. |
 
-**Returns:** `Promise<string>` — plaintext.
+**Returns:** `Promise<string>` with the plaintext.
 
 **Throws:**
 
@@ -106,7 +106,7 @@ static generateDataKeySecret(): string
 
 Generates 32 random bytes with `crypto.getRandomValues` and returns them as Base64. The SDK uses it as the data key that protects stored wallet data.
 
-**Returns:** `string` — Base64 secret.
+**Returns:** `string` with the Base64 secret.
 
 ## `decryptSignerData`
 

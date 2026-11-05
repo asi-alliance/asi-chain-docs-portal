@@ -18,7 +18,7 @@ These helpers return plain key material and keep nothing in storage. Application
 createWallet(privateKey?: Uint8Array, options?: CreateWalletOptions): WalletMeta
 ```
 
-Creates wallet metadata from an existing or randomly generated secp256k1 private key. If `privateKey` is omitted, a new key pair is generated automatically.
+Creates wallet metadata from an existing or randomly generated secp256k1 private key. If `privateKey` is omitted, the method generates a new key pair.
 
 **Parameters:**
 
@@ -27,7 +27,7 @@ Creates wallet metadata from an existing or randomly generated secp256k1 private
 | `privateKey` | `Uint8Array` | No | Private key (32 bytes). Generates a new key pair if omitted. |
 | `options` | `CreateWalletOptions` | No | Accepts `name?: string`, but `createWallet` does not read it, so it has no effect. |
 
-**Returns:** `WalletMeta` — object with `address`, `publicKey`, and `privateKey` fields. `publicKey` is the 65-byte uncompressed key.
+**Returns:** `WalletMeta` with the `address`, `publicKey`, and `privateKey` fields. `publicKey` is the 65-byte uncompressed key.
 
 ## `createFirstWalletWithMnemonic`
 
@@ -44,9 +44,9 @@ Builds a wallet from a BIP-39 mnemonic phrase using BIP-44 hierarchical derivati
 | `mnemonic` | `string` | No | BIP-39 mnemonic (12 or 24 words). Generates a new one if omitted. |
 | `index` | `number` | No | BIP-44 address index. Defaults to `0`. |
 
-**Returns:** `Promise<WalletMeta>` — includes `address`, `publicKey`, `privateKey`, and `mnemonic` (normalized).
+**Returns:** `Promise<WalletMeta>` with `address`, `publicKey`, `privateKey`, and the normalized `mnemonic`.
 
-**Throws:** `Error("WalletsService.createFirstWalletWithMnemonic: Recovery mnemonic is missing or invalid")` — if the provided mnemonic fails BIP-39 validation.
+**Throws:** `Error("WalletsService.createFirstWalletWithMnemonic: Recovery mnemonic is missing or invalid")` if the provided mnemonic fails BIP-39 validation.
 
 ## `deriveAddressFromPrivateKey`
 
@@ -62,7 +62,7 @@ Derives a blockchain address from a private key by first computing the public ke
 |------|------|----------|-------------|
 | `privateKey` | `Uint8Array` | Yes | secp256k1 private key (32 bytes). |
 
-**Returns:** `Address` — Base58-encoded address with chain prefix and checksum.
+**Returns:** `Address`, a Base58-encoded address with the chain prefix and checksum.
 
 ## `deriveAddressFromPublicKey`
 
@@ -70,7 +70,7 @@ Derives a blockchain address from a private key by first computing the public ke
 deriveAddressFromPublicKey(publicKey: Uint8Array): Address
 ```
 
-Derives an address from a public key: applies keccak256 hashing, prepends chain prefix, computes blake2b checksum, and encodes with Base58.
+Derives an address from a public key: applies keccak256 hashing, prepends the chain prefix, computes a blake2b checksum, and encodes the result with Base58.
 
 **Parameters:**
 
@@ -78,7 +78,7 @@ Derives an address from a public key: applies keccak256 hashing, prepends chain 
 |------|------|----------|-------------|
 | `publicKey` | `Uint8Array` | Yes | secp256k1 public key bytes. |
 
-**Returns:** `Address` — Base58-encoded address prefixed with `"1111"`.
+**Returns:** `Address`, a Base58-encoded address prefixed with `"1111"`.
 
 ## `WalletMeta`
 

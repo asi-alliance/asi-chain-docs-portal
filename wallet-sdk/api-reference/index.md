@@ -2,7 +2,7 @@
 
 API reference for `@asichain/asi-wallet-sdk` 2.1.0. Applications start with `Client`. The services below it are low-level primitives that `Client` builds on, and you rarely call them directly.
 
-**Source code**: [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk)
+The source code is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
 ## Client
 

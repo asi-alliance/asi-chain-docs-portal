@@ -33,7 +33,7 @@ Generates a BIP-39 mnemonic.
 |------|------|----------|-------------|
 | `strength` | `MnemonicStrength` | No | Entropy in bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
 
-**Returns:** `string` — space-separated mnemonic.
+**Returns:** `string` with the space-separated mnemonic.
 
 ## `generateMnemonicArray`
 
@@ -49,7 +49,7 @@ Generates a mnemonic and returns it as an array of words.
 |------|------|----------|-------------|
 | `strength` | `MnemonicStrength` | No | Entropy in bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
 
-**Returns:** `string[]` — mnemonic words.
+**Returns:** `string[]` with the mnemonic words.
 
 ## `isMnemonicValid`
 
@@ -65,7 +65,7 @@ Checks the words against the BIP-39 English wordlist and verifies the checksum. 
 |------|------|----------|-------------|
 | `mnemonic` | `string` | Yes | Mnemonic to validate. |
 
-**Returns:** `boolean` — `true` if the mnemonic is valid.
+**Returns:** `boolean`, `true` if the mnemonic is valid.
 
 ## `normalizeMnemonic`
 
@@ -81,7 +81,7 @@ Trims the string, lowercases it and collapses any run of whitespace into a singl
 |------|------|----------|-------------|
 | `mnemonic` | `string` | Yes | Raw mnemonic text, for example pasted by a user. |
 
-**Returns:** `string` — normalized mnemonic.
+**Returns:** `string` with the normalized mnemonic.
 
 ## `mnemonicToWordArray`
 
@@ -97,7 +97,7 @@ Trims the string and splits it on a single space. Several spaces in a row produc
 |------|------|----------|-------------|
 | `mnemonic` | `string` | Yes | Mnemonic string. |
 
-**Returns:** `string[]` — words.
+**Returns:** `string[]` with the words.
 
 ## `wordArrayToMnemonic`
 
@@ -113,7 +113,7 @@ Joins the words with single spaces.
 |------|------|----------|-------------|
 | `words` | `string[]` | Yes | Mnemonic words. |
 
-**Returns:** `string` — mnemonic.
+**Returns:** `string` with the mnemonic.
 
 ## `mnemonicToSeed`
 
@@ -130,4 +130,4 @@ Converts a mnemonic to a 64-byte BIP-39 seed. [`KeyDerivation.mnemonicToSeed`](/
 | `mnemonic` | `string \| string[]` | Yes | Mnemonic as a string or an array of words. |
 | `passphrase` | `string` | No | BIP-39 passphrase. Defaults to `""`. |
 
-**Returns:** `Promise<Uint8Array>` — seed (64 bytes).
+**Returns:** `Promise<Uint8Array>` with the seed (64 bytes).

@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Wallet/index.ts)
 
-A `Wallet` owns one `Signer` and a set of `Account`s. It is either a private-key wallet with a single account or an HD wallet with accounts derived from a mnemonic. This page also covers `Account`, `Signer` and `SigningSession`, which a wallet is built from.
+A `Wallet` owns one `Signer` and a set of `Account`s. It is either a private-key wallet with a single account or an HD (hierarchical deterministic) wallet with accounts derived from a mnemonic. This page also covers `Account`, `Signer` and `SigningSession`, which a wallet is built from.
 
 ::: tip Use Client in applications
 `Client` creates, stores, opens and removes wallets for you. Use these classes directly only when you need the low-level pieces, for example to build a wallet in memory without storage. See [Client](/wallet-sdk/api-reference/client/).
@@ -187,7 +187,7 @@ interface ITransferDetails {
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Account/index.ts)
 
-One address inside a wallet with its asset portfolio.
+An `Account` is one address inside a wallet, together with its asset portfolio.
 
 ```ts
 class Account {
@@ -215,7 +215,7 @@ class Account {
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Signer/index.ts)
 
-The signing boundary. It holds the encrypted secret and produces signatures without handing key bytes to callers. `HDSigner` and `PrivateKeySigner` implement it. `Wallet.getSigner()` returns the wallet's signer.
+A `Signer` is the signing boundary. It holds the encrypted secret and produces signatures without handing key bytes to callers. `HDSigner` and `PrivateKeySigner` implement it. `Wallet.getSigner()` returns the wallet's signer.
 
 ```ts
 abstract class Signer {
@@ -237,13 +237,13 @@ type THDSigningContext = { passwordProvider?: SecretsProvider; index: number }
 type TSigningContext = TPKSigningContext | THDSigningContext
 ```
 
-`sign` uses the in-memory secret when a session is active and otherwise decrypts with `signingContext.passwordProvider`. It throws `WalletLockedError` when neither is available. The private key is zeroed after an ephemeral decrypt. `resolveDataKey` returns the second secret that encrypts non-secret user data at rest, such as transaction reservations, and never signs anything.
+`sign` uses the in-memory secret when a session is active and otherwise decrypts with `signingContext.passwordProvider`. It throws `WalletLockedError` when neither is available. The private key is zeroed after an ephemeral decrypt. `resolveDataKey` returns the second secret that encrypts non-secret user data at rest, such as transaction reservations. It is never used for signing.
 
 ## SigningSession
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/SigningSession/index.ts)
 
-The in-memory session of one signer. A `Signer` creates it and keeps it for its whole life, so you rarely build one yourself.
+A `SigningSession` is the in-memory session of one signer. A `Signer` creates it and keeps it for its whole life, so you rarely build one yourself.
 
 ```ts
 class SigningSession {

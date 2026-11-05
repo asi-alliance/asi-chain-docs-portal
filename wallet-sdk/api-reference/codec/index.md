@@ -27,7 +27,7 @@ Converts a hex string to a Base58-encoded string.
 |------|------|----------|-------------|
 | `hex` | `string` | Yes | Hex string to encode. |
 
-**Returns:** `string` — Base58-encoded result.
+**Returns:** `string`, the Base58-encoded result.
 
 ## `decodeBase58`
 
@@ -43,7 +43,7 @@ Decodes a Base58 string into a `Uint8Array`. Throws if the string contains chara
 |------|------|----------|-------------|
 | `value` | `string` | Yes | Base58-encoded string. |
 
-**Returns:** `Uint8Array` — decoded bytes.
+**Returns:** `Uint8Array`, the decoded bytes.
 
 ## `decodeBase16`
 
@@ -59,7 +59,7 @@ Parses a hex string into a `Uint8Array`.
 |------|------|----------|-------------|
 | `hex` | `string` | Yes | Hex string of even length. |
 
-**Returns:** `Uint8Array` — decoded bytes.
+**Returns:** `Uint8Array`, the decoded bytes.
 
 The function does not validate its input. With an odd length the last digit is silently dropped, and a non-hex pair becomes the byte `0`, so check the string before calling.
 
@@ -77,7 +77,7 @@ Encodes bytes to a lowercase hex string (zero-padded).
 |------|------|----------|-------------|
 | `bytes` | `Uint8Array` | Yes | Bytes to encode. |
 
-**Returns:** `string` — hex string.
+**Returns:** `string`, a lowercase hex string.
 
 ## `arrayBufferToBase64`
 
@@ -93,7 +93,7 @@ Converts an `ArrayBuffer` to a Base64 string.
 |------|------|----------|-------------|
 | `buffer` | `ArrayBuffer` | Yes | Buffer to encode. |
 
-**Returns:** `string` — Base64 string.
+**Returns:** `string`, the Base64 string.
 
 ## `base64ToArrayBuffer`
 
@@ -127,7 +127,7 @@ Converts the byte containers that appear after JSON round trips into a `Uint8Arr
 
 **Returns:** `Uint8Array`.
 
-**Throws:** `Error("Invalid byte value")` if an element is not an integer from 0 to 255 or if the keys of an object are not the consecutive indexes `"0"`, `"1"` and so on. `Error("Unsupported data format")` for any other input, such as a string, a number or `null`.
+**Throws:** `Error("Invalid byte value")` if an element is not an integer from 0 to 255 or if the keys of an object are not the consecutive indexes `"0"`, `"1"` and so on. It throws `Error("Unsupported data format")` for any other input, such as a string, a number or `null`.
 
 ## `bufferToBigInt`
 

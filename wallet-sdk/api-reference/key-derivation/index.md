@@ -20,7 +20,7 @@ console.log(privateKey.length); // 32
 static deriveKeyFromMnemonic(mnemonic: string | string[], bip44path: string | Bip44Path): Promise<Uint8Array>
 ```
 
-Full pipeline: mnemonic, seed, master node, private key at the given path. The seed is zeroed after use.
+Runs the whole pipeline from the mnemonic through the seed and the master node to the private key at the given path. The seed is zeroed after use.
 
 **Parameters:**
 
@@ -29,7 +29,7 @@ Full pipeline: mnemonic, seed, master node, private key at the given path. The s
 | `mnemonic` | `string \| string[]` | Yes | Mnemonic as a space-separated string or an array of words. |
 | `bip44path` | `string \| Bip44Path` | Yes | Derivation path. There is no default, so the call fails to compile without it. A string is passed to BIP-32 as is. |
 
-**Returns:** `Promise<Uint8Array>` — private key (32 bytes).
+**Returns:** `Promise<Uint8Array>` with the private key (32 bytes).
 
 **Throws:** `Error("No private key at derived node")` if the derived node has no private key.
 
@@ -48,7 +48,7 @@ Derives a private key from a BIP-32 master node along `path.toString()`.
 | `masterNode` | `BIP32Interface` | Yes | Master node, for example from `seedToMasterNode`. |
 | `path` | `Bip44Path` | Yes | Derivation path. Unlike `deriveKeyFromMnemonic`, a string is not accepted. |
 
-**Returns:** `Uint8Array` — private key (32 bytes).
+**Returns:** `Uint8Array` with the private key (32 bytes).
 
 **Throws:** `Error("No private key at derived node")` if the derived node has no private key.
 
@@ -67,7 +67,7 @@ Converts a mnemonic to a 64-byte BIP-39 seed (PBKDF2-HMAC-SHA512, as defined by 
 | `mnemonicWords` | `string[] \| string` | Yes | Mnemonic as an array or a space-separated string. |
 | `passphrase` | `string` | No | BIP-39 passphrase. Defaults to `""`. |
 
-**Returns:** `Promise<Uint8Array>` — seed (64 bytes).
+**Returns:** `Promise<Uint8Array>` with the seed (64 bytes).
 
 ## `seedToMasterNode`
 
@@ -83,7 +83,7 @@ Creates a BIP-32 master node from a seed with the `bip32` factory. The secp256k1
 |------|------|----------|-------------|
 | `seed` | `any` | Yes | Seed bytes, typically the 64 bytes from `mnemonicToSeed`. |
 
-**Returns:** `BIP32Interface` — master node.
+**Returns:** `BIP32Interface`, the master node.
 
 ## `deriveNextKeyFromMnemonic`
 
@@ -105,7 +105,7 @@ Derives the key at `currentIndex + 1`.
 | `currentIndex` | `number` | Yes | Current address index. The key is derived at `currentIndex + 1`. |
 | `options` | `Omit<IBip44PathOptions, 'index'>` | No | Coin type, account and change. Defaults to `DEFAULT_BIP_44_PATH_OPTIONS`. |
 
-**Returns:** `Promise<Uint8Array>` — private key at the next index.
+**Returns:** `Promise<Uint8Array>` with the private key at the next index.
 
 ## `compareIndexes`
 
@@ -122,7 +122,7 @@ Comparator for address indexes, usable with `Array.prototype.sort`. A `null` ind
 | `firstIndex` | `number \| null` | Yes | First index. |
 | `secondIndex` | `number \| null` | Yes | Second index. |
 
-**Returns:** `number` — `0` if both are `null`, `1` if only the first is `null`, `-1` if only the second is `null`, otherwise `firstIndex - secondIndex`.
+**Returns:** `number`. It is `0` if both are `null`, `1` if only the first is `null`, `-1` if only the second is `null`, otherwise `firstIndex - secondIndex`.
 
 ## `Bip44Path`
 
@@ -162,4 +162,4 @@ declare class Bip44Path {
 }
 ```
 
-The static property `Bip44Path.MAX_COMPONENT_VALUE` equals `2^31 - 1`. `parse` accepts only six components starting with `m`, with `44'` as the purpose, hardened coin type and account, and canonical numbers without leading zeros. Anything else throws. `isValid` returns `false` instead of throwing. `toString` gives the full path, `toRootPathString` the path without the last `index` component, and `nextIndex` returns a new path with `index + 1`. The setters validate their argument like the constructor.
+The static property `Bip44Path.MAX_COMPONENT_VALUE` equals `2^31 - 1`. `parse` accepts only a path of six components that starts with `m`. The purpose must be `44'`, the coin type and the account must be hardened, and every number must be canonical, without leading zeros. Anything else throws. `isValid` returns `false` instead of throwing. `toString` gives the full path, `toRootPathString` the path without the last `index` component, and `nextIndex` returns a new path with `index + 1`. The setters validate their argument like the constructor.

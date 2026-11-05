@@ -2,7 +2,7 @@
 
 TypeScript SDK for wallet management and chain access on ASI:Chain. The pages in this section describe `@asichain/asi-wallet-sdk` 2.1.0, a beta release.
 
-**GitHub**: [asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk)
+The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
 ## Key Features
 
@@ -183,23 +183,27 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 
 <img src="/images/wallet-sdk/module-architecture.svg" alt="Module Architecture" style="width: 100%; max-width: 900px;" />
 
-**Client**
+### Client
+
 - [`Client`](/wallet-sdk/api-reference/client/) manages wallets, networks, balances, transfers, events and keyfiles.
 
-**Services**
+### Services
+
 - [`Wallets`](/wallet-sdk/api-reference/wallets-service/) creates key pairs and derives ASI addresses.
 - [`Mnemonic`](/wallet-sdk/api-reference/mnemonic-service/), [`KeyDerivation`](/wallet-sdk/api-reference/key-derivation/) and [`KeysManager`](/wallet-sdk/api-reference/keys-manager/) form the derivation pipeline from BIP-39 words through BIP-44 paths to secp256k1 keys.
 - [`Crypto`](/wallet-sdk/api-reference/crypto-service/) encrypts stored secrets with PBKDF2 and AES-GCM.
 - [`SignerService`](/wallet-sdk/api-reference/signer-service/) serializes deploy data for signing.
 - [`AssetsService`](/wallet-sdk/api-reference/assets-service/) reads the balance of an address.
 
-**Domains**
+### Domains
+
 - [`Wallet`](/wallet-sdk/api-reference/wallet/) holds a wallet with its accounts and its signing session.
 - [`Asset`](/wallet-sdk/api-reference/asset/) is the token model, with an identifier, a name and decimal precision.
 - [`BrowserStorage`](/wallet-sdk/api-reference/browser-storage/) is IndexedDB storage behind a table interface.
 - [`CustomError`](/wallet-sdk/api-reference/error-types/) is the base class of the typed SDK errors.
 
-**Utilities**
+### Utilities
+
 - [`Codec`](/wallet-sdk/api-reference/codec/) encodes Base16, Base58 and Base64.
 - [`Functions`](/wallet-sdk/api-reference/functions/) converts between display and atomic amounts.
 - [`Validators`](/wallet-sdk/api-reference/validators/) checks addresses and account names.
@@ -230,10 +234,4 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 
 ## Related Resources
 
-| Resource | Link |
-|----------|------|
-| ASI Chain Documentation | [docs.asichain.io](https://docs.asichain.io) |
-| ASI Chain Node | [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) |
-| ASI Chain Wallet | [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet) |
-| ASI Chain Explorer | [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer) |
-| ASI Chain Faucet | [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
+Repositories of the node, the wallet, the explorer and the faucet, and the DevNet service addresses are listed on the [Useful Links](/general/useful-links/) page.

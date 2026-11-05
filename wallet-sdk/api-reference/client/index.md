@@ -34,7 +34,7 @@ interface ICreateClientOptions {
 | `flags` | `{ withInsensitiveCacheStorage }` keeps a cache of public account data, which `getInsensitiveAccountsData()` reads. |
 | `security` | Signing session policy. |
 
-`create` also brings storage up to date. It refuses to touch data written by a newer SDK build, a broken migration chain, or a migration that an earlier run left unfinished. In those cases it rejects with `StorageSchemaError`, whose `isStorageIntact` flag says whether the data on disk is still readable.
+`create` also brings storage up to date. It refuses to continue when the data was written by a newer SDK build, when the migration chain is broken, or when an earlier run left a migration unfinished. In those cases it rejects with `StorageSchemaError`, whose `isStorageIntact` flag says whether the data on disk is still readable.
 
 `nodeApiProfile` is required on every network and has no default, so a missing or unknown value makes `create` throw. Every URL must be valid.
 
@@ -49,7 +49,7 @@ interface ISessionPolicy {
 
 `requirePassword` is `"once-per-session"` (the default) or `"every-signature"`. In the first mode, `openWallet`, `unlockWallet` or the first call that carries a password starts a session, and later operations reuse the decrypted secret until the session ends. `autoLockMs` is the length of the session and defaults to `DEFAULT_AUTO_LOCK_MS`, 15 minutes. Activity does not extend a session.
 
-In the second mode no session is ever held, every signature needs the password, and `unlockWallet` throws. A non-positive `autoLockMs` switches the client to this mode whatever `requirePassword` says.
+In the second mode no session is ever held, every signature needs the password, and `unlockWallet` throws. A non-positive `autoLockMs` switches the client to this mode regardless of `requirePassword`.
 
 ```ts
 import {
@@ -126,7 +126,7 @@ unlockWallet(walletId: string, password: string): Promise<void>
 lockWallet(walletId: string): void
 ```
 
-`unlockWallet` addresses a wallet that is already open by its wallet id, not a stored signer by its signer id. `lockWallet` ends the session and clears the secret from memory, and the `walletLocked` event fires. Signing after the session expired, without a password, throws `WalletLockedError` with status `403`, so a UI can handle it like an expired token and ask for the password again.
+`unlockWallet` addresses a wallet that is already open by its wallet id, not a stored signer by its signer id. `lockWallet` ends the session and clears the secret from memory, and the `walletLocked` event fires. Signing without a password after the session has expired throws `WalletLockedError` with status `403`, so a UI can handle it like an expired token and ask for the password again.
 
 ## Accounts
 
@@ -314,7 +314,7 @@ Both also carry `deployId`, `pendingAmount` and `gasCost`. `pendingAmount` is th
 - `gasCost` is not negative and does not exceed `pendingAmount`.
 - For a transfer, `to` is a valid checksummed address, `amount` is positive, and `amount + gasCost` fits inside `pendingAmount`.
 
-`updateTransactionReservation` keeps the reservation id and checks the balance against the change of `pendingAmount`, so shrinking a reservation never fails on funds. It cannot move a reservation to another account or network, which takes a remove and an add. A second action on the same account, deploy or reservation throws `ReservationActionInProgressError`.
+`updateTransactionReservation` keeps the reservation id and checks the balance against the change of `pendingAmount`, so shrinking a reservation never fails on funds. It cannot move a reservation to another account or network, which takes a remove and an add. While an action on an account, deploy or reservation is running, a second action on the same one throws `ReservationActionInProgressError`.
 
 A reservation expires after `RESERVATION_EXPIRATION_TIME` and is released when the deploy is confirmed.
 
@@ -335,7 +335,7 @@ interface ITransactionsHistoryOptions {
 
 The two sides come from different backends, because a reservation is released when the node confirms the deploy and the indexer ingests the block later. For a short time a transaction can therefore be in both lists or in neither.
 
-The SDK team lists a known limitation, [issue 178](https://github.com/asi-alliance/asi-chain-wallet-sdk/issues/178). Only the first page of the executed history is reliable, because the indexer query applies `offset` and `limit` to transfers and deployments separately.
+A known limitation is tracked in [github.com/asi-alliance/asi-chain-wallet-sdk/issues/178](https://github.com/asi-alliance/asi-chain-wallet-sdk/issues/178). Only the first page of the executed history is reliable, because the indexer query applies `offset` and `limit` to transfers and deployments separately.
 
 ## Keyfiles
 

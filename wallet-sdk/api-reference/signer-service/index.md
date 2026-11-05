@@ -18,7 +18,7 @@ Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3),
 |------|------|----------|-------------|
 | `deployData` | `DeployData` | Yes | Deploy fields to encode. |
 
-**Returns:** `Uint8Array` — protobuf-encoded deploy.
+**Returns:** `Uint8Array` with the protobuf-encoded deploy.
 
 ## Types
 

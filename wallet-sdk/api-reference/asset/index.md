@@ -2,9 +2,9 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Asset/index.ts)
 
-Token model. An `Asset` holds the identifier, the name and the number of decimals of a token, and optionally the address of its contract. `AssetsService.getBalance` takes an `Asset` and returns it together with the balance.
+An `Asset` is the model of a token. It holds the identifier, the name and the number of decimals of a token, and optionally the address of its contract. `AssetsService.getBalance` takes an `Asset` and returns it together with the balance.
 
-**Types:** `AssetId = string`, `Assets = Map<AssetId, Asset>`.
+The module also defines the types `AssetId = string` and `Assets = Map<AssetId, Asset>`.
 
 ## Constructor
 
