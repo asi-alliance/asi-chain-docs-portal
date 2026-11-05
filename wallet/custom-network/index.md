@@ -56,7 +56,7 @@ For a node on your own machine, the values depend on the ports the node publishe
 | Read-only URL | `http://localhost:40403` |
 | Indexer URL | `http://localhost:8080/v1/graphql` |
 
-A Rust validator started without developer mode refuses balance queries with `readonly_node_required`. For such a shard, set Read-only URL to a read-only node, for example the one from [Set Up a Private Shard](/nodes/private-shard/#read-only-node) on port `40453`.
+A Rust validator started without developer mode refuses balance queries with `readonly_node_required`. For such a shard, set Read-only URL to a read-only node, for example the one from [Set Up a Private Shard](/nodes/private-shard/#start-a-read-only-node) on port `40453`.
 
 ::: warning Rust Node Profile
 This version of the wallet uses Wallet SDK 2.1.0, which cannot read balances from a Rust node or send transfers through it. See [Wallet SDK](/wallet-sdk/overview/).
