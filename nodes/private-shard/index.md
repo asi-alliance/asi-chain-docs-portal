@@ -2,7 +2,7 @@
 
 A private shard needs its own genesis, validator identities, bonds, token metadata, storage and network configuration. It does not join an existing network by reusing that network's bootstrap identity.
 
-Use the maintained [Rust source at the selected revision](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) and a published digest from the [validator image](/nodes/image/#select-the-image) page. The upstream [Docker guide](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/README.md) and [shard topology](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/shard.yml) are development references. Review image and build settings. Sample keys and public host mappings must not become production settings.
+Use the maintained [Rust source at the selected revision](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) and a published digest from the [node image](/nodes/image/#select-the-image) page. The upstream [Docker guide](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/README.md) and [shard topology](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/shard.yml) are development references. Review image and build settings. Sample keys and public host mappings must not become production settings.
 
 ## Required Decisions
 

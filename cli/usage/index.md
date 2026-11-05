@@ -28,7 +28,7 @@ docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --hel
 
 The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet still runs the Scala node, and on 5 November 2026 only `create` works against it.
 
-Use a Rust node, such as one started from the [validator image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
+Use a Rust node, such as one started from the [node image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
 
 ## Run the Image
 
