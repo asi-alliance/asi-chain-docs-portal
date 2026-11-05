@@ -1,9 +1,8 @@
 <div align="center">
 
-# ASI Chain: Documentation Portal
+# ASI:Chain Documentation Portal
 
 [![Status](https://img.shields.io/badge/Status-BETA-FFA500?style=for-the-badge)](https://github.com/asi-alliance/asi-chain-docs-portal)
-[![Version](https://img.shields.io/badge/Version-0.1.0-A8E6A3?style=for-the-badge)](https://github.com/asi-alliance/asi-chain-docs-portal/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-1A1A1A?style=for-the-badge)](LICENSE.md)
 [![Docs](https://img.shields.io/badge/Docs-Available-C4F0C1?style=for-the-badge)](https://docs.asichain.io)
 
@@ -15,8 +14,6 @@ Part of the [**Artificial Superintelligence Alliance**](https://superintelligenc
 
 </div>
 
-> **Documentation review — 2026-11-04:** operational guides are being updated for the Rust node and versioned ECR images. See [documentation status](general/documentation-status/index.md) for the verified scope and remaining review, and [container images](general/container-images/index.md) for tags, digests and public source revisions. A successful VitePress build validates rendering, not API accuracy or live deployment acceptance.
-
 ---
 
 ## Table of Contents
@@ -24,14 +21,15 @@ Part of the [**Artificial Superintelligence Alliance**](https://superintelligenc
 1. [Overview](#overview)
 2. [Quick Start](#quick-start)
 3. [Project Structure](#project-structure)
-4. [Contributing](#contributing)
-5. [License](#license)
+4. [Feedback Form](#feedback-form)
+5. [Contributing](#contributing)
+6. [License](#license)
 
 ---
 
 ## Overview
 
-This repository contains the source code for the ASI Chain documentation portal, built with VitePress. The documentation covers all aspects of the ASI Chain ecosystem, including wallet usage, block explorer, faucet, validator setup, and smart contract development.
+This repository contains the source code for the ASI Chain documentation portal, built with VitePress. The documentation covers all aspects of the ASI Chain ecosystem, including the wallet, Wallet SDK and Wallet CLI, block explorer, faucet, node setup and architecture.
 
 **Live Documentation:** [https://docs.asichain.io](https://docs.asichain.io)
 
@@ -41,8 +39,8 @@ This repository contains the source code for the ASI Chain documentation portal,
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm or yarn
+- Node.js 20 or later
+- npm
 
 ### Local Development
 
@@ -66,19 +64,46 @@ npm run docs:preview
 
 ```
 asi-chain-docs-portal/
-├── .vitepress/           # VitePress configuration
-├── architecture/         # Technical architecture diagrams
-├── cli/                  # CLI documentation
-├── explorer/             # Block explorer guides
+├── .github/              # CI workflows
+├── .vitepress/           # VitePress configuration and theme
+├── architecture/         # Architecture diagrams
+├── assets/               # Syntax highlighting grammars
+├── cli/                  # Wallet CLI guide
+├── components/           # Vue components of the theme
+├── config/               # Language registration for code blocks
+├── explorer/             # Block explorer guide
 ├── faq/                  # Frequently asked questions
-├── faucet/               # Faucet usage guides
-├── general/              # General information
+├── faucet/               # Faucet guide
+├── general/              # Overview, endpoints, images, links
+├── public/               # Static assets
 ├── quick-start/          # Getting started guides
 ├── shard-nodes/          # Node setup documentation
-├── wallet/               # Wallet documentation
-├── public/               # Static assets
-└── index.md              # Homepage
+├── utils/                # Constants of the feedback form
+├── wallet/               # Wallet guide
+├── wallet-sdk/           # Wallet SDK reference
+├── .gitignore
+├── index.md              # Homepage
+├── LICENSE.md
+├── package.json
+├── README.md
+└── sonar-project.properties
 ```
+
+Every directory with an `index.md` is a page, and its address is the directory path with a trailing slash. The sidebar and the top menu are written by hand in `.vitepress/config.ts`, so a new page appears in the menu only after it is added there.
+
+---
+
+## Feedback Form
+
+The feedback form at the top of each page needs a `.env` file in the repository root with three variables.
+
+```env
+VITE_FEEDBACK_FORM_URL=
+VITE_JSAPI_URL=
+VITE_CAPTCHA_TOKEN=
+```
+
+The values are not stored in the repository, so ask the maintainers for them. Without them the console shows `Captcha configuration missing` and the form does not send anything. The rest of the site works, so you do not need the file to edit text. `.env` is listed in `.gitignore`.
 
 ---
 
