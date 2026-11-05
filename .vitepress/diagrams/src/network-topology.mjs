@@ -1,0 +1,56 @@
+// Replaces the Mermaid block in architecture/network-topology/index.md.
+export default {
+  kind: 'flow',
+  title: 'Network topology',
+  desc: 'Wallet, SDK, CLI and the faucet call the validator over HTTP 40403 and gRPC 40401. The bootstrap peer, validator and observer connect to each other over TCP 40400 and 40404. The indexer reads the validator and writes to PostgreSQL. Hasura reads PostgreSQL and serves GraphQL to the explorer, wallet, SDK and CLI.',
+  legend: true,
+  opts: { colGaps: [104, 70, 70], rowGaps: [60, 70], labelWrap: 12 },
+  groups: [
+    { id: 'clients', label: 'Clients', nodes: ['faucet', 'apps', 'explorer'] },
+    { id: 'p2p', label: 'Peer-to-peer network (TCP 40400, 40404)', nodes: ['bootstrap', 'validator', 'observer'], pad: { b: 30 } },
+    { id: 'data', label: 'Data services', nodes: ['hasura', 'db', 'indexer'] },
+  ],
+  nodes: [
+    { id: 'faucet', label: 'Faucet', col: 0, row: 0 },
+    { id: 'apps', label: 'Wallet, SDK, CLI', col: 0, row: 1, wrap: 14 },
+    { id: 'explorer', label: 'Explorer', col: 0, row: 2 },
+    { id: 'validator', label: 'Validator', sub: 'public entry point', kind: 'chain', col: 1, row: 0, w: 136 },
+    { id: 'bootstrap', label: 'Bootstrap peer', kind: 'chain', col: 2, row: 0, wrap: 10 },
+    { id: 'observer', label: 'Observer', kind: 'chain', col: 3, row: 0 },
+    { id: 'hasura', label: 'Hasura GraphQL', col: 1, row: 2, wrap: 8 },
+    { id: 'db', label: 'PostgreSQL', kind: 'store', col: 2, row: 2 },
+    { id: 'indexer', label: 'Indexer', col: 3, row: 2 },
+  ],
+  edges: [
+    { from: 'apps', to: 'validator', label: 'HTTP 40403, gRPC 40401', fromOff: -14, toOff: -40 },
+    { from: 'faucet', to: 'validator', label: 'HTTP 40403, gRPC 40401' },
+    { from: 'indexer', to: 'validator', label: 'gRPC / HTTP', via: [[3, 1.25], [1, 1.25]] },
+    { from: 'indexer', to: 'db', label: 'writes' },
+    { from: 'hasura', to: 'db', label: 'reads' },
+    { from: 'explorer', to: 'hasura', label: 'GraphQL' },
+    { from: 'apps', to: 'hasura', label: 'GraphQL', fromOff: 14, toOff: -30 },
+    { from: 'bootstrap', to: 'validator', style: 'strong', dir: 'both' },
+    { from: 'bootstrap', to: 'observer', style: 'strong', dir: 'both' },
+    { from: 'validator', to: 'observer', style: 'strong', dir: 'both', via: [[1, 0.3], [3, 0.3]], fromOff: 40 },
+  ],
+  // Phone layout: two columns, the data services below, edges to the validator share the gap between them.
+  narrow: {
+    opts: { colGaps: [130], rowGaps: [40, 36, 40, 64, 50], labelWrap: 12 },
+    groups: { p2p: { pad: { b: 18, r: 36 } } },
+    nodes: {
+      faucet: { col: 0, row: 0, wrap: 8 }, apps: { col: 0, row: 1, wrap: 8 }, explorer: { col: 0, row: 3 },
+      validator: { col: 1, row: 0, w: 128 }, bootstrap: { col: 1, row: 1 }, observer: { col: 1, row: 2 },
+      hasura: { col: 0, row: 4 }, indexer: { col: 1, row: 4 }, db: { col: 0.5, row: 5 },
+    },
+    edges: {
+      'apps>validator': { via: [[0.3, 1], [0.3, 0]], fromOff: -10, toOff: 0, labelAt: [0.3, 0.5] },
+      'faucet>validator': { fromOff: -16, toOff: -16 },
+      'indexer>validator': { via: [[0.8, 4], [0.8, 0]], toOff: 16, labelAt: [0.8, 3], labelWrap: 8 },
+      'explorer>hasura': { labelPos: 0.3 },
+      'indexer>db': { route: 'vh' },
+      'hasura>db': { route: 'vh' },
+      'apps>hasura': { via: [[0.55, 1], [0.55, 4]], fromOff: 10, toOff: 0, labelAt: [0.55, 2] },
+      'validator>observer': { via: [[1.5, 0], [1.5, 2]] },
+    },
+  },
+};

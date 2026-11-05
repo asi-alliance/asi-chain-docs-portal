@@ -1,0 +1,90 @@
+/*
+ * Diagram colours. The SVG files carry classes only, so this file is the one place that maps them to the
+ * site theme. Everything derives from --vp-c-* tokens, which html.dark switches, so a diagram follows the
+ * site toggle and not the OS setting. Chain nodes use the brand colour, data stores the tip colour,
+ * decisions and notes the warning colour, services stay neutral and external parts are dashed.
+ */
+:root {
+  --d-text: var(--vp-c-text-1);
+  --d-muted: var(--vp-c-text-2);
+  --d-edge: var(--vp-c-text-3);
+  --d-surface: var(--vp-c-bg);
+  --d-service-bg: var(--vp-c-bg);
+  --d-service-line: var(--vp-c-text-3);
+  --d-group-bg: var(--vp-c-bg-soft);
+  --d-group-line: var(--vp-c-divider);
+  --d-chain-bg: var(--vp-c-brand-soft);
+  --d-chain-line: var(--vp-c-brand-1);
+  --d-store-bg: var(--vp-c-tip-soft);
+  --d-store-line: var(--vp-c-tip-1);
+  --d-decision-bg: var(--vp-c-warning-soft);
+  --d-decision-line: var(--vp-c-warning-1);
+  --d-note-bg: var(--vp-c-warning-soft);
+  --d-note-line: var(--vp-c-warning-1);
+  --d-accent: var(--vp-c-brand-1);
+  --d-accent-bg: var(--vp-c-brand-soft);
+}
+
+/* Figure and caption. The counter gives every diagram on a page its number. */
+.vp-doc { counter-reset: diagram; }
+figure.diagram {
+  container-type: inline-size;
+  margin: 24px 0;
+  padding: 16px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background: var(--d-surface);
+}
+figure.diagram > .diagram-wide,
+figure.diagram > .diagram-narrow { overflow-x: auto; }
+figure.diagram .diagram-narrow { display: none; }
+figure.diagram figcaption {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--vp-c-text-2);
+}
+figure.diagram figcaption::before {
+  counter-increment: diagram;
+  content: "Figure " counter(diagram) ". ";
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+@container (max-width: 560px) {
+  figure.diagram:not(.diagram-solo) .diagram-wide { display: none; }
+  figure.diagram:not(.diagram-solo) .diagram-narrow { display: block; }
+}
+
+.dgm { display: block; max-width: 100%; height: auto; margin: 0 auto; font-family: var(--vp-font-family-mono); }
+.dgm text { font-family: var(--vp-font-family-mono); }
+
+/* Nodes */
+.dgm .d-group rect { fill: var(--d-group-bg); stroke: var(--d-group-line); stroke-width: 1; }
+.dgm .d-gtitle { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; fill: var(--d-muted); font-weight: 500; }
+.dgm .d-node rect, .dgm .d-node path, .dgm .d-node polygon { fill: var(--d-service-bg); stroke: var(--d-service-line); stroke-width: 1.25; stroke-linejoin: round; }
+.dgm .d-chain rect, .dgm .d-chain path { fill: var(--d-chain-bg); stroke: var(--d-chain-line); }
+.dgm .d-store rect, .dgm .d-store path { fill: var(--d-store-bg); stroke: var(--d-store-line); }
+.dgm .d-decision polygon { fill: var(--d-decision-bg); stroke: var(--d-decision-line); }
+.dgm .d-external rect { stroke-dasharray: 5 4; }
+.dgm .d-label { font-size: 13px; font-weight: 500; fill: var(--d-text); }
+.dgm .d-meta { font-size: 11px; fill: var(--d-muted); }
+.dgm .d-strong { font-weight: 700; fill: var(--d-text); }
+
+/* Edges and labels */
+.dgm .d-edge { fill: none; stroke: var(--d-edge); stroke-width: 1.5; stroke-linecap: round; }
+.dgm .d-edge-strong { stroke: var(--d-chain-line); stroke-width: 2; }
+.dgm .d-dashed { stroke-dasharray: 5 4; }
+.dgm .d-arrow { fill: none; stroke: var(--d-edge); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.dgm .d-arrow-strong { stroke: var(--d-chain-line); }
+.dgm .d-chip { fill: var(--d-surface); stroke: var(--d-group-line); stroke-width: 1; }
+.dgm .d-elabel { font-size: 11.5px; fill: var(--d-muted); }
+
+/* Sequence parts */
+.dgm .d-seqlabel { font-size: 11.5px; fill: var(--d-muted); paint-order: stroke; stroke: var(--d-surface); stroke-width: 5px; stroke-linejoin: round; }
+.dgm .d-life { stroke: var(--d-group-line); stroke-width: 1.25; stroke-dasharray: 3 5; }
+.dgm .d-fragment rect { fill: var(--d-group-bg); fill-opacity: .6; stroke: var(--d-group-line); }
+.dgm .d-fragline { stroke: var(--d-group-line); fill: none; }
+.dgm .d-badge circle { fill: var(--d-accent-bg); stroke: var(--d-accent); stroke-width: 1; }
+.dgm .d-badge text { font-size: 10px; font-weight: 700; fill: var(--d-text); }
+.dgm .d-note rect { fill: var(--d-note-bg); stroke: var(--d-note-line); stroke-width: 1; }
+.dgm .d-notetext { fill: var(--d-text); }

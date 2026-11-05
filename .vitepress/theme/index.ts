@@ -3,6 +3,7 @@ import FeedbackForm from "../../components/FeedbackForm.vue";
 import Steps from "../../components/Steps.vue";
 import CardGrid from "../../components/CardGrid.vue";
 import DocCard from "../../components/DocCard.vue";
+import Diagram from "../../components/Diagram.vue";
 import HeroTerminal from "../../components/HeroTerminal.vue";
 import SectionLabel from "../../components/SectionLabel.vue";
 import type { Theme } from "vitepress";
@@ -11,6 +12,7 @@ import "./style.css";
 import "./content.css";
 import "./chrome.css";
 import "./blocks.css";
+import "./diagrams.css";
 import { captchaPlugin } from "./captchaFetch";
 
 export default {
@@ -39,5 +41,6 @@ export default {
         app.component("Steps", Steps);
         app.component("CardGrid", CardGrid);
         app.component("DocCard", DocCard);
+        app.component("Diagram", Diagram);
     },
 } satisfies Theme;
