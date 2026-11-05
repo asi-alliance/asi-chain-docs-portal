@@ -2,7 +2,7 @@
 
 An observer is a Rust node that follows the chain and answers read requests. It runs the same image as a validator and is started without a validator key. The [image catalog](/reference/container-images/) has no separate observer image.
 
-::: warning DevNet runs the Scala node
+::: warning DevNet Runs the Scala Node
 As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust image described here does not connect to it. A Rust observer started with the DevNet bootstrap and `--network-id devnet1` listed eight nodes in `/api/status` but opened no connection to them, and `/api/ready` kept returning 503 for more than five minutes. Use this guide for a Rust shard that you or your operator run. DevNet reads go through the addresses on [Network Endpoints](/reference/endpoints/).
 :::
 
@@ -16,7 +16,7 @@ A node without a validator key is read-only, so `/api/status` shows `"isReadOnly
 
 Which routes external clients can reach depends on the gateway in front of the node.
 
-## Inputs
+## Before You Start
 
 Ask the operator of the shard for these values.
 
@@ -27,7 +27,11 @@ Ask the operator of the shard for these values.
 - The `--host` value, which is the address other nodes use to reach this node. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks.
 - The native-token flags and other genesis settings, but only when they differ from the built-in defaults. Each node reports its own token settings, so a node started without the flags reports `F1R3` even on a shard with another symbol.
 
-## Start the Observer
+## Run the Observer
+
+<Steps>
+
+### Start the Observer
 
 A new Docker volume is owned by `root`, but the image runs as `daemon` (uid 1). Without the `chown` below, the node exits with `The data dir must be a directory and have read and write permissions`.
 
@@ -50,7 +54,7 @@ docker run -d --name observer --platform linux/amd64 \
 
 The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. The image entrypoint already passes `--profile=docker`, and the node exits with an error if you pass `--profile` as well, so do not add one. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/nodes/image/#default-container-ports).
 
-## Check the Node
+### Check the Node
 
 ```bash
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
@@ -62,10 +66,20 @@ The node is ready when `/api/ready` returns `{"ready":true}` and `/api/status` s
 
 If `peers` stays at 0, follow [Troubleshooting](/help/troubleshooting/#no-peer-connection).
 
-## Data
+</Steps>
 
+::: danger Keep the Data Directory
 Do not delete the data directory of an observer that peers already know. The node identity is the TLS certificate stored there, so a new directory means a new identity and a full re-join.
+:::
 
 ## Who Reads the Observer
 
 Applications can call the node HTTP API directly or use the indexer's Hasura GraphQL. The [explorer](/explorer/usage/) reads Hasura only. The indexer reads the node over gRPC and HTTP, stores blocks in PostgreSQL, and Hasura serves that database.
+
+## Next Steps
+
+<CardGrid columns="2">
+<DocCard title="Node Image" href="/nodes/image/" icon="image">Image selection, ports and configuration flags</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/" icon="validator">Prepare a node that is meant to become a validator</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">What to check when peers stay at 0</DocCard>
+</CardGrid>

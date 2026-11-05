@@ -6,7 +6,7 @@ Use the maintained [Rust source at the selected revision](https://github.com/asi
 
 ## Required Decisions
 
-| Input | Define before initialization |
+| Input | Define Before Initialization |
 |---|---|
 | Node and client pair | Exact revisions, digests and API compatibility |
 | Network ID | `--network-id`, default `testnet`. Every node of the shard must use the same value, and nodes drop messages from other IDs. |
@@ -22,7 +22,11 @@ The ASI wallet and SDK use eight decimals, which is also the node default, so th
 
 A sample topology's count is not a universal minimum or a fault-tolerance guarantee. Validate the actual bonded set and stake assumptions. Fixed block times and safety thresholds cannot be copied from older examples without review.
 
-## Single-Node Shard
+## Start the Shard
+
+<Steps>
+
+### Start a Single-Node Shard
 
 A single node can create its own genesis with `--standalone`. It is enough to check the setup before you plan several validators. Prepare a directory named `genesis` with the two genesis files, and have a fresh validator key ready:
 
@@ -49,7 +53,11 @@ docker run -d --name my-shard --network shard-net --platform linux/amd64 \
   --validator-private-key "$VALIDATOR_PRIVATE_KEY"
 ```
 
-The `chown` is required because a new Docker volume is owned by `root` and the node runs as `daemon`. `--host` is the name under which other containers on `shard-net` reach the node. It resolves to a private address, so the node also needs `--allow-private-addresses`. The token flags give the shard the ASI name and symbol that the [Wallet CLI](/cli/usage/) checks. Without them the node reports the upstream `F1R3CAP` and `F1R3`. A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
+The `chown` is required because a new Docker volume is owned by `root` and the node runs as `daemon`. `--host` is the name under which other containers on `shard-net` reach the node. It resolves to a private address, so the node also needs `--allow-private-addresses`. The token flags give the shard the ASI name and symbol that the [Wallet CLI](/cli/usage/) checks. Without them the node reports the upstream `F1R3CAP` and `F1R3`.
+
+::: danger Throwaway Keys Only
+A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
+:::
 
 About 15 seconds after the container starts, `curl -s http://localhost:40403/api/status` reports the values you chose. The line below shows selected fields of the answer, and `lastFinalizedBlockNumber` keeps growing.
 
@@ -57,7 +65,7 @@ About 15 seconds after the container starts, `curl -s http://localhost:40403/api
 "networkId":"my-shard-net","shardId":"my-shard","nativeTokenSymbol":"ASI","nativeTokenDecimals":8,"isValidator":true,"isReady":true,"lastFinalizedBlockNumber":1
 ```
 
-## Read-Only Node
+### Start a Read-Only Node
 
 Balance queries run as exploratory deploys, and a validator refuses them with `HTTP 400 (readonly_node_required)`. Wallets, the SDK and the [Wallet CLI](/cli/usage/) read balances from a read-only node, so start one next to the validator. When the validator reports `"isReady":true`, copy the `address` field from its `/api/status`. It has the form `rnode://<node-id>@my-shard?protocol=40400&discovery=40404`.
 
@@ -79,6 +87,18 @@ docker run -d --name my-shard-obs --network shard-net --platform linux/amd64 \
 
 Less than 15 seconds after the container starts, `curl -s http://localhost:40453/api/status` reports `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. Each node reports its own token settings, so a node started without the flags reports `F1R3` even when the validator reports `ASI`.
 
+</Steps>
+
 For several validators, follow the upstream shard topology above.
 
-Use fresh private credentials. Do not reuse published development keys or older deployment helpers. See [validator image](/nodes/image/) for paths, ports and flags, and [architecture](/architecture/) for consumer data paths.
+::: danger Use Fresh Credentials
+Use fresh private credentials. Do not reuse published development keys or older deployment helpers.
+:::
+
+## Next Steps
+
+<CardGrid columns="2">
+<DocCard title="Node Image" href="/nodes/image/" icon="image">Paths, ports and flags</DocCard>
+<DocCard title="Architecture" href="/architecture/" icon="architecture">Consumer data paths</DocCard>
+<DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">Check balances against the shard's read-only node</DocCard>
+</CardGrid>

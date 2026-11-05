@@ -2,11 +2,15 @@
 
 This page prepares a Rust node that is meant to become a validator. Preparation comes first. Key generation, funding and the bond transaction follow on [Enroll a Validator](/nodes/validator-enrollment/). The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node.
 
-::: warning DevNet runs the Scala node
+::: warning DevNet Runs the Scala Node
 As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust image described here does not connect to it. A Rust node started with the DevNet bootstrap and `--network-id devnet1` listed eight nodes in `/api/status` but opened no connection to them. Use this guide for a Rust shard that you or your operator run.
 :::
 
-## 1. Obtain Network Inputs
+## Prepare the Validator
+
+<Steps>
+
+### Obtain Network Inputs
 
 Ask the shard operator for the bootstrap URI, the shard and genesis configuration, the native-token metadata, the admission and bonding process and the node image that the shard accepts. A matching version number or a downloaded image does not show that your node is compatible with a running network.
 
@@ -17,11 +21,11 @@ Ask the shard operator for the bootstrap URI, the shard and genesis configuratio
 
 Check storage, CPU, memory and retention requirements with the operator. No sizing has been measured for these images.
 
-## 2. Inspect the Published Image
+### Inspect the Published Image
 
 Follow [Node Image](/nodes/image/) to pull the image, read its labels and run `run --help`. The [catalog](/reference/container-images/) lists the builds, all for `linux/amd64`. Confirm which exact revision the target shard accepts.
 
-## 3. Prepare Storage, Configuration and Keys
+### Prepare Storage, Configuration and Keys
 
 A new Docker volume is owned by `root`, but the image runs as `daemon` (uid 1). Change the owner before the first start, otherwise the node exits with `The data dir must be a directory and have read and write permissions`.
 
@@ -71,7 +75,9 @@ docker run --rm -u root --platform linux/amd64 --entrypoint install \
   "$NODE_IMAGE" -o daemon -g daemon -m 600 /tmp/f1r3fly.key /var/lib/rnode/f1r3fly.key
 ```
 
+::: danger Never Publish Keys
 Never publish a key or a TLS file in logs, examples or Git.
+:::
 
 ### Start the Node
 
@@ -96,13 +102,17 @@ docker run -d --name validator --platform linux/amd64 \
   --validator-private-key-path /var/lib/rnode/f1r3fly.key
 ```
 
-Add the token flags `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` when the shard does not use the defaults. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. The password stays in the container environment, so `docker inspect validator` shows it to anyone with access to Docker on the host.
+Add the token flags `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` when the shard does not use the defaults. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand.
 
-## 4. Review Networking
+::: danger Password Is Visible to Docker Users
+The password stays in the container environment, so `docker inspect validator` shows it to anyone with access to Docker on the host.
+:::
+
+### Review Networking
 
 Peers must reach TCP `40400` and `40404`. Configure client access separately, and keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. See the [port table](/nodes/image/#default-container-ports). The `api-server.host` setting applies to every API listener, so enforce boundaries with host port bindings, firewall rules and gateway routes.
 
-## 5. Validate the Node
+### Validate the Node
 
 After you start the node, run these checks in order.
 
@@ -120,3 +130,13 @@ The node is synchronized when `/api/status` shows `isReady: true`, a positive `p
 A bond and a withdrawal take effect only at an epoch boundary. Between boundaries a new bond is recorded but not active. Confirm the actual validator set before you count the node as a consensus participant.
 
 Do not run live transfers as an installation test. See [Troubleshooting](/help/troubleshooting/) if the node does not start or does not find peers.
+
+</Steps>
+
+## Next Steps
+
+<CardGrid columns="2">
+<DocCard title="Enroll a Validator" href="/nodes/validator-enrollment/" icon="key">Generate keys, fund the vault and submit the bond</DocCard>
+<DocCard title="Node Image" href="/nodes/image/" icon="image">Image selection, ports and configuration flags</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">What to check when the node does not start or does not find peers</DocCard>
+</CardGrid>

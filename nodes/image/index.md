@@ -2,7 +2,7 @@
 
 The image contains the maintained Rust implementation of CBC Casper, Rholang and RSpace++. Its source is [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5).
 
-::: warning DevNet runs a Scala node
+::: warning DevNet Runs the Scala Node
 As of 5 November 2026 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. A node started from this Rust image with the DevNet bootstrap and `--network-id devnet1` found DevNet peers through discovery but stayed at `peers: 0` and never became ready. Use this image to run your own shard ([private shard](/nodes/private-shard/)) or when the operator of a network tells you it runs the Rust node. DevNet addresses are listed in [network endpoints](/reference/endpoints/).
 :::
 
@@ -68,9 +68,13 @@ Add `--allow-private-addresses` when peers use container or private addresses, a
 | 40404 | Peer discovery | Reachable by intended peers |
 | 40405 | Admin HTTP | Private operator access |
 
-The image declares `EXPOSE` only for 40400 to 40404. The node still listens on 40405 inside the container, so `docker run -P` does not publish it, while an explicit `-p 40405:40405` does. Host mappings are independent of container defaults. Binding `40403` publicly exposes all enabled routes on that listener unless a gateway filters them. Do not open the entire `40400:40405` range or copy all development mappings to a public host.
+The image declares `EXPOSE` only for `40400` to `40404`. The node still listens on `40405` inside the container, so `docker run -P` does not publish it, while an explicit `-p 40405:40405` does. Host mappings are independent of container defaults. Binding `40403` publicly exposes all enabled routes on that listener unless a gateway filters them. Do not open the entire `40400:40405` range or copy all development mappings to a public host.
 
 ## Run a Node
+
+<Steps>
+
+### Start the Node
 
 A new Docker volume is owned by `root`, but the node runs as `daemon`. Without the `chown` below the container exits with code 1 and `The data dir must be a directory and have read and write permissions: /var/lib/rnode`.
 
@@ -89,7 +93,9 @@ docker run -d --name my-node --platform linux/amd64 \
   --bootstrap '<bootstrap-uri>'
 ```
 
-Replace `my-node` with your own container name in every later command. Check the node:
+Replace `my-node` with your own container name in every later command.
+
+### Check the Node
 
 ```bash
 docker inspect my-node --format '{{.State.Health.Status}}'
@@ -97,14 +103,26 @@ curl -s http://localhost:40403/api/ready
 curl -s http://localhost:40403/api/status
 ```
 
-`/api/ready` answers `{"ready":true}` with HTTP 200 once the node is ready and HTTP 503 with `{"ready":false}` before that. In `/api/status` look at `networkId`, `peers`, `isReady` and `lastFinalizedBlockNumber`. The image healthcheck always probes port 40403 inside the container. If you change the HTTP port with `--api-port-http`, the container reports `unhealthy` while the node works.
+`/api/ready` answers `{"ready":true}` with HTTP 200 once the node is ready and HTTP 503 with `{"ready":false}` before that. In `/api/status` look at `networkId`, `peers`, `isReady` and `lastFinalizedBlockNumber`. The image healthcheck always probes port `40403` inside the container. If you change the HTTP port with `--api-port-http`, the container reports `unhealthy` while the node works.
+
+</Steps>
 
 For a network of your own, add `--standalone` and a genesis directory as described in [private shard](/nodes/private-shard/).
 
+::: warning Restart Needs the Bootstrap
 After a restart the node reconnects only through `--bootstrap`. This source does not contain the [known-peers change in PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927), which is still open. If the bootstrap is unreachable, the node waits at `Waiting for first connection...`.
+:::
 
-## Before Starting a Validator
+## Before You Start a Validator
 
 Obtain the target shard's bootstrap peer, shard and genesis settings, native-token metadata, approved digest and admission process. Prepare persistent storage owned by `daemon` and private TLS and signing inputs. A running container or configured validator key does not establish active bonded stake, synchronization or finalization.
 
-Follow [join as validator](/nodes/validator/) for the checks. Legacy configurator and connector recipes and JVM options do not configure this Rust image.
+Legacy configurator and connector recipes and JVM options do not configure this Rust image.
+
+## Next Steps
+
+<CardGrid columns="2">
+<DocCard title="Run a Validator" href="/nodes/validator/" icon="validator">Checks before a node joins as a validator</DocCard>
+<DocCard title="Set Up a Private Shard" href="/nodes/private-shard/" icon="shard">Run a node with your own genesis</DocCard>
+<DocCard title="Container Images" href="/reference/container-images/" icon="image">Other published node builds and the application images</DocCard>
+</CardGrid>
