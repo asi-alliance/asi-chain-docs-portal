@@ -2,11 +2,11 @@
 
 Interaction flows between the wallet and the nodes of ASI:Chain.
 
-← [Back to Architecture Overview](../)
+← [Back to Architecture Overview](/architecture/)
 
 ## Available Diagrams
 
-### [Transaction Flow](./transaction/)
+### [Transaction Flow](/architecture/sequence-diagrams/transaction/)
 
 From the moment the user sends tokens to the moment the transfer is finalized.
 
@@ -15,7 +15,7 @@ From the moment the user sends tokens to the moment the transfer is finalized.
 - Submit it to the validator
 - Watch the deploy until it is finalized
 
-### [Balance Query](./balance/)
+### [Balance Query](/architecture/sequence-diagrams/balance/)
 
 How the wallet reads and shows the balance of an account.
 
@@ -25,7 +25,7 @@ How the wallet reads and shows the balance of an account.
 
 ## Quick Reference
 
-The wallet takes the address of every node role from the network configuration. See [Wallet Architecture](../component-diagrams/wallet/#network-connections) for the roles.
+The wallet takes the address of every node role from the network configuration. See [Wallet Architecture](/architecture/component-diagrams/wallet/#network-connections) for the roles.
 
 | Operation | Calls | Addresses used |
 |-----------|-------|----------------|
@@ -54,6 +54,6 @@ graph LR
 
 ## Related Documentation
 
-- [Component Diagrams](../component-diagrams/) - Internal architecture
-- [State Diagrams](../state-diagrams/) - Node lifecycle
-- [Wallet Usage](/wallet/usage/) - User guide
+- [Component Diagrams](/architecture/component-diagrams/): internal architecture
+- [State Diagrams](/architecture/state-diagrams/): node lifecycle
+- [Wallet Usage](/wallet/usage/): user guide

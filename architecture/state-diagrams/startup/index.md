@@ -2,7 +2,7 @@
 
 How the Rust node gets from process start to the Running state.
 
-← [Back to State Diagrams](../)
+← [Back to State Diagrams](/architecture/state-diagrams/)
 
 ## Startup Sequence
 
@@ -53,7 +53,7 @@ stateDiagram-v2
 
 A node that joins an existing shard asks its peers for the approved block. If a peer has none yet and answers `NoApprovedBlockAvailable`, the node asks again after 10 seconds.
 
-Once it has the approved block, the node downloads the blocks and the state of the last finalized window from the bootstrap peer. Each request times out after 5 seconds, and the whole download has a 600 second deadline. Then it rebuilds the DAG, creates Casper and moves to Running. Against a healthy shard this takes one to two minutes, after fetching about a hundred blocks.
+Once it has the approved block, the node downloads the blocks and the state of the last finalized window from the bootstrap peer. Each request times out after 5 seconds, and the whole download has a 600-second deadline. Then it rebuilds the DAG, creates Casper and moves to Running. Against a healthy shard this takes one to two minutes and about a hundred fetched blocks.
 
 A restart on the same data directory takes the Reconnect path and does not download anything again.
 
@@ -73,7 +73,7 @@ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:40403/api/ready
 
 ## Common Issues
 
-### No peers
+### No Peers
 
 The node connects out but never receives anything, or the peer count stays at 0.
 
@@ -81,7 +81,7 @@ The node connects out but never receives anything, or the peer count stays at 0.
 - If the shard advertises private or Docker hostnames, start the joiner with `--allow-private-addresses`.
 - Check the transport port 40400 and the discovery port 40404 on both sides. Both use TCP.
 
-### Initializing does not finish
+### Initializing Does Not Finish
 
 Search the log for the line that starts the state download.
 
@@ -91,7 +91,7 @@ docker logs <container> 2>&1 | grep "request_approved_state"
 
 The line shows `min_height`, the lowest block of the imported window. If the node stays in Initializing, save the logs and ask the shard operator.
 
-### Data directory
+### Data Directory
 
 Do not delete the data directory of a node that its peers already know. The TLS certificate inside it is the node identity, so a wiped directory gives the node a new identity and a full join, while the peers still hold the old one in their routing tables.
 
@@ -99,6 +99,6 @@ Do not delete the data directory of a node that its peers already know. The TLS 
 
 ## Related Documentation
 
-- [Running Node](../operations/) - After startup
-- [Validator Setup](/quick-start/join-validator/) - Setup guide
-- [Troubleshooting](/quick-start/troubleshooting/) - Common issues
+- [Running Node](/architecture/state-diagrams/operations/): after startup
+- [Validator Setup](/quick-start/join-validator/): setup guide
+- [Troubleshooting](/quick-start/troubleshooting/): common issues

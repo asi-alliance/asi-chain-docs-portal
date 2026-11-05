@@ -2,7 +2,7 @@
 
 What the node does after it reaches the Running state.
 
-← [Back to State Diagrams](../)
+← [Back to State Diagrams](/architecture/state-diagrams/)
 
 ## Roles
 
@@ -21,7 +21,7 @@ A validator proposes through the heartbeat proposer, which is enabled by default
 
 ```mermaid
 flowchart TD
-    T[Heartbeat check every 5 seconds or deploy submitted] --> A{Bonded and active?}
+    T[Heartbeat check every 5 seconds or a deploy is submitted] --> A{Bonded and active?}
     A -->|No| W[Wait]
     A -->|Yes| C{Synchrony and height constraints met?}
     C -->|No| W
@@ -32,7 +32,7 @@ flowchart TD
     R --> W
 ```
 
-The proposer checks every `casper.heartbeat.check-interval`, which is 5 seconds by default, and a deploy submission wakes it immediately. It proposes when there are pending deploys. When the last finalized block is older than `max-lfb-age` (5 seconds by default), the shard counts as stalled, and every bonded validator proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval. A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals. A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
+The proposer checks every `casper.heartbeat.check-interval`, which is 5 seconds by default, and a deploy submission wakes it immediately. It proposes when there are pending deploys. When the last finalized block is older than `max-lfb-age` (the maximum age of the last finalized block, 5 seconds by default), the shard counts as stalled, and every bonded validator proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval. A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals. A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
 
 ## Block Validation
 
@@ -71,7 +71,7 @@ The node has no Disconnected or Reconnecting state. Two background loops keep th
 - The clear-connections loop checks peers every `cleanup-interval` (10 seconds) and drops a peer after `heartbeat-failure-threshold` (3) failed checks in a row. A single success resets the count.
 - The node discovery loop looks up new peers through Kademlia, so a dropped peer can return when it answers again.
 
-Check peers and the last finalized block from the status endpoint.
+Read the peer count and the last finalized block from the status endpoint.
 
 ```bash
 curl -s http://localhost:40403/api/status
@@ -81,6 +81,6 @@ curl -s http://localhost:40403/api/status
 
 ## Related Documentation
 
-- [Node Startup](../startup/) - Before Running
-- [Component Diagrams](../../component-diagrams/) - Node internals
-- [Troubleshooting](/quick-start/troubleshooting/) - Common issues
+- [Node Startup](/architecture/state-diagrams/startup/): before Running
+- [Component Diagrams](/architecture/component-diagrams/): node internals
+- [Troubleshooting](/quick-start/troubleshooting/): common issues

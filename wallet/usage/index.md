@@ -24,11 +24,11 @@ To create an HD wallet:
 
 To use an existing wallet, click **Import Wallet** and enter the recovery phrase, or click **Import Wallet from keyfile** and pick a keyfile exported earlier with **Export Keyfile**. A single private key is imported from the **Accounts** page with **Import Private Key**. It becomes its own wallet, with its own password.
 
-The password is asked every time you open the wallet in a browser that already holds one (**Unlock Wallet**, then **Unlock**). **Logout** in the header locks the wallet again.
+The wallet asks for the password every time you open it in a browser that already holds a wallet (**Unlock Wallet**, then **Unlock**). **Logout** in the header locks the wallet again.
 
 ## Get Test Tokens
 
-Copy your address from **Accounts** or **Receive**, then request tokens on the [ASI Chain Faucet](https://faucet.dev.asichain.io). The steps are in [Faucet Usage](/faucet/usage/) and [Get ASI](/quick-start/get-asi/). The balance shows up in the wallet after the transfer is finalized.
+Copy your address from **Accounts** or **Receive**, then request tokens from the ASI:Chain Faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io). The steps are in [Faucet Usage](/faucet/usage/) and [Get ASI](/quick-start/get-asi/). The balance shows up in the wallet after the transfer is finalized.
 
 ## Wallet
 
@@ -133,15 +133,15 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 
 ![Network Settings](/images/wallet/settings-network.png)
 
-Field by field, with examples for a local node, the form is described in [Custom Network](/wallet/custom-network/).
+[Custom Network](/wallet/custom-network/) describes the form field by field, with examples for a local node.
 
 ## Bridge
 
-**Bridge** is the form for transfers from ASI Chain to an EVM network. On DevNet it offers **ASI Chain** as the source and **Sepolia** as the destination. You pick the account and the **Amount** (up to 8 decimal places), connect an EVM wallet with **Connect EVM Wallet**, enter the **ETH recipient address** and start with **Lock on ASI Chain**.
+**Bridge** is the form for transfers from ASI:Chain to an EVM network. On DevNet it offers **ASI Chain** as the source and **Sepolia** as the destination. You pick the account and the **Amount** (up to 8 decimal places), connect an EVM wallet with **Connect EVM Wallet**, enter the **ETH recipient address** and start with **Lock on ASI Chain**.
 
 ## Support
 
 - Documentation: [docs.asichain.io](https://docs.asichain.io)
 - Block explorer: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
 - Faucet: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
-- Source code: [asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet)
+- Source code: [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet)

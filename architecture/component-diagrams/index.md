@@ -1,6 +1,6 @@
 # Component Diagrams
 
-The [architecture overview](/architecture/) describes the source-verified component boundaries.
+The [architecture overview](/architecture/) describes the component boundaries.
 
 | Component | Technology | Responsibility |
 |---|---|---|

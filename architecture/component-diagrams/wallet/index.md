@@ -2,7 +2,7 @@
 
 The ASI Wallet is a browser-based React application for managing accounts and sending transactions. It does not talk to the node on its own. Every call goes through the [Wallet SDK](/wallet-sdk/overview/), which signs deploys, keeps wallets in the browser and calls the node and the indexer.
 
-← [Back to Component Diagrams](../)
+← [Back to Component Diagrams](/architecture/component-diagrams/)
 
 ## Layers
 
@@ -103,7 +103,7 @@ The SDK reads three addresses and a node profile for every network from its conf
 | `ValidatorURL` | Node that accepts signed deploys |
 | `ReadOnlyURL` | Node that answers balance queries and deploy status. There is no fallback to `ValidatorURL` |
 | `IndexerURL` | GraphQL endpoint with transaction history |
-| `nodeApiProfile` | `scala` or `rust`. Selects the Rholang terms, the request body of balance queries and the finalization threshold |
+| `nodeApiProfile` | `scala` or `rust`. It selects the Rholang terms, the request body of balance queries and the finalization threshold |
 
 The preinstalled network of the hosted wallet uses addresses that are built into the application. For the endpoints of the public network, see [Network Endpoints](/general/endpoints/).
 
@@ -123,7 +123,7 @@ On a node that runs as a validator, balance queries work only if the node is rea
 
 ## Related Documentation
 
-- [Wallet Usage Guide](/wallet/usage/) - How to use the wallet
-- [Balance Query](../../sequence-diagrams/balance/) - How the balance is read
-- [Transaction Flow](../../sequence-diagrams/transaction/) - Transaction lifecycle
-- [Wallet SDK](/wallet-sdk/overview/) - The library under the wallet
+- [Wallet Usage Guide](/wallet/usage/): how to use the wallet
+- [Balance Query](/architecture/sequence-diagrams/balance/): how the balance is read
+- [Transaction Flow](/architecture/sequence-diagrams/transaction/): transaction lifecycle
+- [Wallet SDK](/wallet-sdk/overview/): the library under the wallet

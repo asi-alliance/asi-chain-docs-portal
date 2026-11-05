@@ -2,7 +2,7 @@
 
 The ASI Wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) comes with one built-in network, DevNet. To use the wallet with your own node, such as a local observer or a private shard, add a custom network on the Network Settings page. The public DevNet addresses are listed on the [Network Endpoints](/general/endpoints/) page.
 
-## Open The Form
+## Open the Form
 
 1. Open the wallet and unlock it.
 2. Choose **Network Settings** in the menu.
@@ -16,11 +16,11 @@ DevNet is built into the wallet. It is not listed on this page and cannot be edi
 
 `Network Name` is the label shown in the network selector. It cannot be empty and must differ, ignoring case, from the name of every other network, including DevNet.
 
-`Node API Profile` tells the wallet which node implementation answers on the URLs below. The list offers `Scala node` (stable) and `Rust node` (experimental), and the default is `Scala node`. Public DevNet currently runs a Scala node.
+`Node API Profile` tells the wallet which node implementation answers on the URLs below. The list offers `Scala node` (stable) and `Rust node` (experimental), and the default is `Scala node`. The public DevNet currently runs a Scala node.
 
 `Validator URL` is where the wallet sends deploys and transfers.
 
-`Read-only URL` is where it sends read queries, such as balances, deploy status and blocks. There is no fallback to the validator URL, so enter the same address again if one node serves both.
+`Read-only URL` is where the wallet sends read queries, such as balances, deploy status and blocks. There is no fallback to the validator URL, so enter the same address again if one node serves both.
 
 `Indexer URL` is the GraphQL endpoint the wallet reads transaction history from. The field cannot be left empty, and without a working indexer the Transactions page has no history to show.
 
@@ -28,11 +28,11 @@ Each URL must use `http` or `https` and contain a host. Do not add a path such a
 
 **Save Custom Network** checks every field and shows an error next to each one that fails, for example `Network name is required.` or `Validator URL: URL must use http or https protocol`. After a successful save the form is cleared. **Clear form** does the same at any time and restores the default profile.
 
-## Switch To The Network
+## Switch to the Network
 
 After saving, the network appears in the **Existing Custom Networks** card and in the selector in the header. Saving does not switch to it, so pick it in the selector. The card of each saved network has **Edit network** and **Delete network** buttons.
 
-The header then shows `Connected` or `Disconnected`. The wallet checks `GET <read-only-url>/api/status`, that is, the Read-only URL, when you switch and then every 60 seconds.
+The header then shows `Connected` or `Disconnected`. The wallet checks the Read-only URL with `GET <read-only-url>/api/status` when you switch and then every 60 seconds.
 
 The networks are stored in the browser together with your wallets. Clearing the browser data removes them, and the form has to be filled in again.
 
@@ -48,7 +48,7 @@ For a node on your own machine, the values depend on the ports the node publishe
 | Read-only URL | `http://localhost:40403` |
 | Indexer URL | `http://localhost:8080/v1/graphql` |
 
-The compose files in [asi-chain](https://github.com/asi-alliance/asi-chain) publish different ports. `chain/validator/validator.yml` maps the validator HTTP API to `40443`, and `chain/genesis/devnet-observer/observer.yml` maps the observer HTTP API to `40403`. Set the URLs to the port that your own compose file publishes. The compose files need their `.env` values and a bootstrap address, so start from the [observer guide](/quick-start/join-observer/) or the [validator guide](/quick-start/join-validator/) instead of running them as they are.
+The compose files in [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) publish different ports. `chain/validator/validator.yml` maps the validator HTTP API to `40443`, and `chain/genesis/devnet-observer/observer.yml` maps the observer HTTP API to `40403`. Set the URLs to the port that your own compose file publishes. The compose files need their `.env` values and a bootstrap address, so start from the [observer guide](/quick-start/join-observer/) or the [validator guide](/quick-start/join-validator/) instead of running them as they are.
 
 Check the node before you save the network.
 
@@ -58,9 +58,9 @@ curl -4 http://localhost:40403/api/status
 
 A running node answers with JSON that contains its `version`. If the command fails, the wallet will not connect either.
 
-The hosted wallet runs on HTTPS, and Chrome asks the page for permission before it lets a public site talk to `localhost`. Without that permission the requests fail with `Permission was denied for this request to access the loopback address space`, and the header shows `Disconnected`. Allow access to the local network for the wallet site in the browser, or run the wallet yourself (see the last section).
+The hosted wallet runs on HTTPS, and Chrome asks you for permission before it lets a public site reach `localhost`. Without that permission the requests fail with `Permission was denied for this request to access the loopback address space`, and the header shows `Disconnected`. Allow access to the local network for the wallet site in the browser, or run the wallet yourself (see Run the Wallet Yourself below).
 
-The node must also answer the browser's CORS preflight. The Rust node allows any origin by default. If you put something in front of the node, make sure it passes the node's CORS headers through.
+The node must also answer the browser's CORS preflight. The Rust node allows any origin by default. If you put a proxy in front of the node, make sure it passes the node's CORS headers through.
 
 ## Remote Node
 
@@ -103,9 +103,9 @@ When the header shows `Disconnected`, open the browser console on the wallet pag
 - `404` on `/api/deploy` or `/api/explore-deploy` behind a proxy, while the header shows `Connected`, usually means that `proxy_pass` cuts the `/api/` prefix.
 - A timeout means the host or port is unreachable from your machine. Test the Read-only URL, which the header checks, with `curl -4 <read-only-url>/api/status`, and the Validator URL the same way.
 
-## Run The Wallet Yourself
+## Run the Wallet Yourself
 
-A wallet served from `http://localhost:3000` talks to nodes on `localhost` without the mixed content and local network prompts. The wallet reads its built-in networks from the `NETWORKS` variable at build time, and the build fails without it. Follow the [Local Development](https://github.com/asi-alliance/asi-chain-wallet#local-development) steps in the wallet repository, and fill `NETWORKS` and the bridge variables in `.env` before `npm start`. The published Docker image always serves the networks it was built with, so your own configuration needs your own image.
+A wallet served from `http://localhost:3000` talks to nodes on `localhost` without the mixed content and local network prompts. The wallet reads its built-in networks from the `NETWORKS` variable at build time, and the build fails without it. Follow the Local Development steps in the wallet repository, [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet#local-development), and fill `NETWORKS` and the bridge variables in `.env` before `npm start`. The published Docker image always serves the networks it was built with, so your own configuration needs your own image.
 
 ## Support
 

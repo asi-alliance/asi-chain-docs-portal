@@ -1,17 +1,17 @@
 # Wallet CLI
 
-The ASI wallet CLI creates wallets, queries balances, sends tokens and reads/exports deploy history. It builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, and its image tag for enrollment is built from another commit than this submodule, so do not swap one for the other.
+The ASI wallet CLI creates wallets, queries balances, sends tokens and reads and exports deploy history. It builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, and its image tag for enrollment is built from a different commit than the one in this submodule, so do not swap one for the other.
 
-## Published image
+## Published Image
 
 ```text
 public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli:0.1.0-dev.20261103-8f6c20ea43eb
 public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
 ```
 
-This image was built from [wallet CLI `8f6c20ea43ebc6d333783f936372d4220e449681`](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681), with ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. Its compatibility tests target the node `5dafbc37` image listed in [container images](/general/container-images/). The tested source was merged into `dev`; later source changes do not modify this artifact.
+This image was built from the wallet CLI at commit `8f6c20ea43ebc6d333783f936372d4220e449681` ([github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681)), with ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. Its compatibility tests target the node image `5dafbc37` listed in [Container Images](/general/container-images/). Later changes to the source do not modify this image.
 
-Inspect help without accessing a network:
+Show the help text without connecting to a network:
 
 ```bash
 WALLET_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
@@ -30,7 +30,7 @@ The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet
 
 Use a Rust node, such as one started from the [validator image](/shard-nodes/validator-image/) or a [private shard](/shard-nodes/own-shard/), for `balance` and `send`.
 
-## Run the image
+## Run the Image
 
 The image reads its settings from the environment and keeps wallet files and exports in directories under `/app`. Pass the settings with `--env-file` and mount the directories as volumes:
 
@@ -45,9 +45,9 @@ docker run --rm --platform linux/amd64 \
 
 The working directory of the image is `/app`, so the default `OUTPUT_DIR=./credentials` puts the wallet file into `credentials/wallet_info.json` on the host. Replace `create --save` with `balance`, `send`, `history` or `export` for the other commands, and keep the same two volumes so they find the wallet file and write exports to `exports/`.
 
-The container runs as UID `10001`. On a Linux host, make both directories writable for that user (`sudo chown 10001:10001 credentials exports`), otherwise `create --save` cannot write the wallet file. Inside a container `127.0.0.1` is the container itself, so `.env` needs an address that the container can reach, not the host loopback.
+The container runs as UID `10001`. On a Linux host, make both directories writable for that user (`sudo chown 10001:10001 credentials exports`). Otherwise `create --save` cannot write the wallet file. Inside a container `127.0.0.1` is the container itself, so `.env` needs an address that the container can reach, not the host loopback.
 
-## Build from source
+## Build from Source
 
 The published image is the shorter path. To build the same source yourself, install the build tools first. On Debian or Ubuntu:
 
@@ -70,13 +70,13 @@ cargo build --release --locked
 
 The build downloads its dependencies from crates.io and GitHub. `cargo build` itself took 5 minutes 46 seconds on a 12-core machine.
 
-Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client. Pull request #3 (`dev` into `main`) is open, and the advice goes away once it is merged.
+Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client.
 
 Do not use `git submodule update --remote`: it replaces the pinned client with the newest commit of its branch.
 
 ## Configuration
 
-Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
+Copy the pinned `.env.example` ([github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example)) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
 
 - `VALIDATOR_GRPC_URL`, the gRPC endpoint of a validator, which `send` uses to submit the deploy.
 - `VALIDATOR_HTTP_URL`, the HTTP endpoint of the same validator.
@@ -99,7 +99,7 @@ NODE_TIMEOUT_SECONDS=30
 GRAPHQL_URL=
 ```
 
-The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports. `send` submits through the gRPC endpoint, and a node exposes it on an internal port that should not be open to the internet. HTTP ports are separate mappings. HTTPS URLs use TLS, and `NODE_CA_CERT` supplies a private CA.
+The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports. `send` submits through the gRPC endpoint, and a node exposes it on an internal port that should not be open to the internet. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
 
 `GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. On 5 November 2026 no public GraphQL endpoint was known to work with them, so ask the network operator for one. Acceptance of `history` and `export` on a deployment is tracked in [github.com/asi-alliance/asi-chain-wallet-cli/issues/5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
 
@@ -115,9 +115,9 @@ Run these from the source directory after a build. With the image, put the comma
 ./target/release/asi-chain-wallet-cli export --format json --limit 10
 ```
 
-`create --save` writes private wallet credentials under `OUTPUT_DIR`. Protect its output and generated file. Balance/history also require a complete matching wallet file at this revision; watch-only files are not supported.
+`create --save` writes private wallet credentials under `OUTPUT_DIR`. Protect its output and the generated file. `balance` and `history` also require a complete matching wallet file at this revision, and watch-only files are not supported.
 
-To send, explicitly choose the recipient and **raw dust** amount. The command shape is:
+To send tokens, pass the recipient address and the amount in raw dust, the smallest unit. The command is:
 
 ```text
 asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
@@ -129,6 +129,6 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 | 1 | `100000000` |
 | 10 | `1000000000` |
 
-Keep amounts as exact integers, including values above JavaScript's safe integer range. Success requires canonical finalization and a positive vault verdict. When the outcome is unknown, retain the deploy ID and investigate before sending again.
+Keep amounts as exact integers, including values above JavaScript's safe integer range. Success requires canonical finalization and a positive vault verdict. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 
-The node's native-token configuration and expected symbol must match the target shard. Cost-accounting APIs and later node API changes require their own compatible source/image pair; they are not enabled by substituting an image tag here.
+The node's native-token configuration and expected symbol must match the target shard. Cost-accounting APIs and later node API changes require a matching source and image of their own, and changing the image tag here does not enable them.

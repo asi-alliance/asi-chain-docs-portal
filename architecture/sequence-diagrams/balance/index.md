@@ -2,13 +2,13 @@
 
 How the wallet reads and shows the balance of an account.
 
-← [Back to Sequence Diagrams](../)
+← [Back to Sequence Diagrams](/architecture/sequence-diagrams/)
 
 ## Overview
 
 A balance query is an exploratory deploy. The node runs a short Rholang term against the state of the last finalized block and returns the result, so the query is neither signed nor written to a block and costs the user nothing. The node still limits it: a query that runs out of phlogiston is rejected with `out_of_phlogistons`, and one that runs too long times out.
 
-The query goes to the node behind `ReadOnlyURL`, see [Wallet Architecture](../../component-diagrams/wallet/#network-connections).
+The query goes to the node behind `ReadOnlyURL` (see [Wallet Architecture](/architecture/component-diagrams/wallet/#network-connections)).
 
 ## Query Flow
 
@@ -38,7 +38,7 @@ sequenceDiagram
 | Result | The first expression of the reply is the balance. If the vault reports an error, the reply holds the error text instead |
 | Reserved funds | The wallet shows the available balance: the balance minus the amounts reserved by pending transfers and deploys of this account, never below zero |
 
-Because the node reads the last finalized block, a transfer that was just sent changes the balance only after it is finalized. The reservation covers that gap, see [Transaction Flow](../transaction/).
+Because the node reads the last finalized block, a transfer that was just sent changes the balance only after it is finalized. The reservation covers that gap (see [Transaction Flow](/architecture/sequence-diagrams/transaction/)).
 
 ## Key Details
 
@@ -99,7 +99,7 @@ new return, rl(`rho:registry:lookup`), systemVaultCh, vaultCh, balanceCh in {
 ```
 
 ::: warning Balance expression on Rust nodes
-A Rust node returns the balance as `ExprBigInt`, while a Scala node returns `ExprInt`. Wallet SDK 2.1.0 reads only `ExprInt`, so with the `rust` profile `getBalance` fails with `BALANCE_UNAVAILABLE` (the node returned no balance expression), and so does any transfer, because it checks the balance first.
+A Rust node returns the balance as `ExprBigInt`, while a Scala node returns `ExprInt`. Wallet SDK 2.1.0 reads only `ExprInt`. With the `rust` profile, `getBalance` therefore fails with `BALANCE_UNAVAILABLE` (the node returned no balance expression). Any transfer fails the same way, because it checks the balance first.
 :::
 
 ### Auto-Refresh
@@ -110,6 +110,6 @@ While they are open, the Dashboard and Send pages refresh the balance every 30 s
 
 ## Related Documentation
 
-- [Transaction Flow](../transaction/) - Sending tokens
-- [Wallet Architecture](../../component-diagrams/wallet/) - Wallet internals
-- [Wallet Usage Guide](/wallet/usage/) - How to use the wallet
+- [Transaction Flow](/architecture/sequence-diagrams/transaction/): sending tokens
+- [Wallet Architecture](/architecture/component-diagrams/wallet/): wallet internals
+- [Wallet Usage Guide](/wallet/usage/): how to use the wallet

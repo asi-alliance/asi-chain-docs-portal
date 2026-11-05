@@ -10,8 +10,6 @@ New blocks appear without reloading the page. A green check icon in the header s
 
 The menu under the header has five sections: Blocks, Transactions, Validators, Statistics and Indexer. The search box in the header works on every page.
 
-Open the explorer from the start page and use the menu to move between sections.
-
 ## Blocks
 
 The Blocks page is the start page.
@@ -107,4 +105,4 @@ The explorer does not read the node directly. The indexer reads blocks from the 
 - Documentation: [docs.asichain.io](https://docs.asichain.io)
 - Wallet: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
 - Faucet: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
-- GitHub: [asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer)
+- GitHub: [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer)

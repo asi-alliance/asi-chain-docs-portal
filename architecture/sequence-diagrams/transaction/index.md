@@ -2,20 +2,20 @@
 
 Complete sequence from the moment the user sends tokens to the moment the transfer is finalized.
 
-← [Back to Sequence Diagrams](../)
+← [Back to Sequence Diagrams](/architecture/sequence-diagrams/)
 
 ## Overview
 
 A token transfer goes through four phases:
 
-1. **Check and reserve** - Validate the input and set the amount aside
-2. **Signing** - Build the Rholang term and sign the deploy
-3. **Submission** - Send the signed deploy to the validator
-4. **Confirmation** - Poll the node until the deploy is finalized
+1. Check and reserve: validate the input and set the amount aside
+2. Signing: build the Rholang term and sign the deploy
+3. Submission: send the signed deploy to the validator
+4. Confirmation: poll the node until the deploy is finalized
 
 A transfer is a deploy of a Rholang term that moves tokens between two vaults. Deploying a contract from the Deploy page uses the same phases with a different term.
 
-The wallet calls the SDK `Client`, and the SDK talks to the nodes behind `ValidatorURL` and `ReadOnlyURL`, see [Wallet Architecture](../../component-diagrams/wallet/#network-connections).
+The wallet calls the SDK `Client`, and the SDK talks to the nodes behind `ValidatorURL` and `ReadOnlyURL` (see [Wallet Architecture](/architecture/component-diagrams/wallet/#network-connections)).
 
 ## Phase 1: Check and Reserve
 
@@ -44,7 +44,7 @@ sequenceDiagram
 | User input | Recipient address and amount. The wallet does not send to `0x...` addresses |
 | Password | Needed only while the signing session is closed. By default a session stays open for 15 minutes after unlocking |
 | Reserve | The amount held for the transfer is `amount + GasFee.MAX`, where `GasFee.MAX` is 250000 atomic units (0.0025 ASI) |
-| Balance check | The SDK reads the balance as described in [Balance Query](../balance/). If it does not cover the reserve, the transfer stops with an error before anything is signed |
+| Balance check | The SDK reads the balance as described in [Balance Query](/architecture/sequence-diagrams/balance/). If it does not cover the reserve, the transfer stops with an error before anything is signed |
 
 The private key is not kept in the Redux store. The SDK decrypts it only while the signing session is open.
 
@@ -95,7 +95,7 @@ sequenceDiagram
 | Save reservation | The reservation is written to the browser storage before the request, so the amount stays held even if the page closes |
 | Submit | `POST /api/deploy` with the signed deploy |
 | Validate | The node checks the signature algorithm, the phlo price against its minimum price and the term |
-| Deploy ID | The node returns the signature of the deploy in hex. The wallet tracks the transfer by it |
+| Deploy ID | The node returns the signature of the deploy in hex. The wallet tracks the transfer by that signature |
 
 If the node refuses the deploy with a 4xx answer, the reservation is released. If the outcome is unknown, for example because of a network error, the reservation stays, because the deploy may still reach the network.
 
@@ -147,12 +147,10 @@ The answer of a Rust node to `GET /api/deploy/{id}` has no `faultTolerance` fiel
 
 The Deploy page follows the same four phases. It differs in two places. The term is the user's Rholang code, and the reserved amount is `phloLimit * phloPrice`. The page sets the phlo limit to 100000000 by default.
 
-The fee that is actually charged for a deploy is not described on this page.
-
 ---
 
 ## Related Documentation
 
-- [Wallet Architecture](../../component-diagrams/wallet/) - Wallet internals
-- [Balance Query](../balance/) - How balance checks work
-- [Send Tokens Guide](/wallet/usage/) - Step-by-step guide
+- [Wallet Architecture](/architecture/component-diagrams/wallet/): wallet internals
+- [Balance Query](/architecture/sequence-diagrams/balance/): how balance checks work
+- [Send Tokens Guide](/wallet/usage/): step-by-step guide

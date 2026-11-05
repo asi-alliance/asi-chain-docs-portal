@@ -2,16 +2,16 @@
 
 Node startup and runtime behavior of the Rust node from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). The log lines quoted on these pages come from the `node-rust` image `0.4.46-dev.20261104-e18defd44d43`.
 
-← [Back to Architecture Overview](../)
+← [Back to Architecture Overview](/architecture/)
 
 ## Pages
 
-- [Node Startup](./startup/) covers the steps from process start to the Running state and the four launch modes.
-- [Running Node](./operations/) covers what a validator and a read-only node do after startup.
+- [Node Startup](/architecture/state-diagrams/startup/) covers the steps from process start to the Running state and the four launch modes.
+- [Running Node](/architecture/state-diagrams/operations/) covers what a validator and a read-only node do after startup.
 
 ## Lifecycle
 
-The node has no single state machine for startup. It runs a fixed sequence of steps, and the launch mode chosen in step 2 decides how it reaches the Running state.
+The node has no single state machine for startup. It runs a fixed sequence of steps, and the launch mode it picks after loading storage decides how it reaches the Running state.
 
 ```mermaid
 flowchart LR
@@ -41,6 +41,6 @@ docker logs <container> 2>&1 | grep "transition to Running"
 
 ## Related Documentation
 
-- [Component Diagrams](../component-diagrams/) - Node internals
-- [Sequence Diagrams](../sequence-diagrams/) - Interaction flows
-- [Troubleshooting](/quick-start/troubleshooting/) - Common issues
+- [Component Diagrams](/architecture/component-diagrams/): node internals
+- [Sequence Diagrams](/architecture/sequence-diagrams/): interaction flows
+- [Troubleshooting](/quick-start/troubleshooting/): common issues

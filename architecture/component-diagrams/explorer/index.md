@@ -1,6 +1,6 @@
 # Explorer Components
 
-The [explorer](https://github.com/asi-alliance/asi-chain-explorer/tree/0ae1eea64234c86937b3adf39fc6a5551b228f1a) is a React frontend served by nginx in its published image. It reads chain data from Hasura over GraphQL and talks to a node directly for wallet balance lookups.
+The explorer at [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer/tree/0ae1eea64234c86937b3adf39fc6a5551b228f1a) is a React frontend served by nginx in its published image. It reads chain data from Hasura over GraphQL and talks to a node directly for wallet balance lookups.
 
 ```mermaid
 flowchart LR
@@ -17,7 +17,7 @@ The frontend uses three connections.
 
 - Queries and mutations go to `REACT_APP_GRAPHQL_URL`.
 - Live updates (new blocks, transfers, deployments, network statistics) arrive as GraphQL subscriptions over `REACT_APP_GRAPHQL_WS_URL`.
-- The wallet balance lookup sends a Rholang balance query to `REACT_APP_RCHAIN_NODE_URL` with `POST /api/explore-deploy` and checks the node with `GET /status`. When `NODE_ENV` is `development` the node URL is empty, so requests go to the same origin as the page.
+- The wallet balance lookup sends a Rholang balance query to `REACT_APP_RCHAIN_NODE_URL` with `POST /api/explore-deploy` and checks the node with `GET /status`. When `NODE_ENV` is `development`, the node URL is empty, so requests go to the same origin as the page.
 
 The Python indexer performs extraction and database writes. Hasura provides relationships, permissions and GraphQL. These services are separate from the frontend container.
 

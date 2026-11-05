@@ -1,6 +1,6 @@
 # Node Components
 
-The maintained [pure Rust source](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates. The public DevNet currently runs a Scala node; see the [architecture overview](/architecture/).
+The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates. The public DevNet currently runs a Scala node; see the [architecture overview](/architecture/).
 
 ```mermaid
 flowchart TB
@@ -29,7 +29,7 @@ flowchart TB
   Casper --> Common
 ```
 
-The runtime binary is `/opt/docker/bin/node`; no Scala/JVM runtime configuration is required. See [Validator Image](/shard-nodes/validator-image/) for entrypoint, defaults, ports and access boundaries. Native-token metadata is part of shard/genesis configuration; upstream defaults do not establish ASI metadata for a deployed chain.
+The runtime binary is `/opt/docker/bin/node`; no Scala/JVM runtime configuration is required. See [Validator Image](/shard-nodes/validator-image/) for entrypoint, defaults, ports and access boundaries. Native-token metadata is part of shard/genesis configuration; upstream defaults do not set ASI token metadata for a deployed chain.
 
 ## API
 
@@ -37,7 +37,7 @@ The HTTP API listens on port 40403. Most routes are under `/api`, while `/status
 
 | Endpoints | Purpose |
 |---|---|
-| `GET /api/status`, `GET /api/ready` | Node identity, sync state, `isReady`; readiness probe that returns 200 once the node is Running and 503 before |
+| `GET /api/status`, `GET /api/ready` | Node identity, sync state, `isReady`; readiness probe that returns 200 once the node is Running and 503 before that |
 | `GET`, `POST /api/prepare-deploy` | Data needed to build a deploy |
 | `POST /api/deploy` | Submit a signed deploy |
 | `POST /api/explore-deploy`, `/api/explore-deploy-by-block-hash`, `/api/data-at-name-by-block-hash` | Read-only Rholang execution and data reads |

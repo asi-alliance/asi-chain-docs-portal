@@ -14,7 +14,7 @@ For the short path from a new wallet to a balance, see [Get DevNet ASI](/quick-s
 - There is no waiting time between requests. You can ask again as soon as the previous request is finished.
 - A request is refused when the balance of the address is above 20,000 ASI. Below that limit the FAUCET button works for any address.
 
-Both amounts are the defaults of the faucet server and the limit is also built into the web page. If an operator changes them, the numbers on the page differ from the ones above.
+The request amount and the limit are the defaults of the faucet server, and the web page has the limit built in as well. If an operator changes them, the numbers above no longer match the real ones.
 
 ## Request Tokens
 
@@ -59,21 +59,21 @@ If the transfer is still not finalized after 15 minutes, the page stops checking
 
 The balance of the address is above 20,000 ASI. Send some of it to another address or use a different address.
 
-### The balance cannot be loaded
+### The Balance Cannot Be Loaded
 
 If the page shows `Unable to acquire address balance. Please try again…`, check the address for typos and try again. Copy the address from the wallet instead of typing it.
 
-### The status stays at Deploying
+### The Status Stays at Deploying
 
 The network may be busy. Wait for the next check. If the page has stopped checking, clear the field and paste the `deploy_id` back before you request tokens a second time, because every request sends another 10,000 ASI.
 
-### The balance does not change
+### The Balance Does Not Change
 
-The balance updates when the status becomes `Finalized`. If it still shows the old value, reload the page and enter the address again. You can also open your account in the [wallet](https://wallet.dev.asichain.io) or look up the transfer in the [explorer](https://explorer.dev.asichain.io).
+The balance updates when the status becomes `Finalized`. If it still shows the old value, reload the page and enter the address again. You can also open your account in the wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) or look up the transfer in the explorer at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
 
 ## Links
 
 - Documentation: [docs.asichain.io](https://docs.asichain.io)
 - Wallet: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
 - Explorer: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-- GitHub: [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet)
+- GitHub: [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet)
