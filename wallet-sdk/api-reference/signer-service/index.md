@@ -7,7 +7,7 @@ Serializes deploy data into the byte string that is signed. `SignerService` has 
 ## `deployDataProtobufSerialize`
 
 ```ts
-static readonly deployDataProtobufSerialize: (deployData: DeployData) => Uint8Array
+static deployDataProtobufSerialize(deployData: DeployData): Uint8Array
 ```
 
 Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId` is written as an empty string.
