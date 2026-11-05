@@ -84,6 +84,7 @@ docker run -d --name my-node --platform linux/amd64 \
   -p 40400:40400 -p 40403:40403 -p 40404:40404 \
   "$NODE_IMAGE" run \
   --network-id <network-id> \
+  --shard-name <shard-name> \
   --host <public-address> \
   --bootstrap '<bootstrap-uri>'
 ```

@@ -19,7 +19,7 @@ All four answer on HTTPS. Plain HTTP is redirected to HTTPS.
 
 ## Node
 
-DevNet has one public node address, Validator 1 at `34.196.119.4`. It serves both reads and writes. DevNet has no public observer, so read from Validator 1 as well.
+DevNet has one public node address, Validator 1 at `34.196.119.4`. It runs in developer mode, so it serves both reads and writes, including balance queries. DevNet does not publish an observer address, so read from Validator 1 as well.
 
 | Service | Address | Used for |
 |---|---|---|
@@ -51,19 +51,19 @@ The node address uses `http://`. A web page served over HTTPS cannot call it dir
 
 The other ports of a node (P2P, discovery, internal gRPC and admin HTTP) are not public entry points. They are described in the [port table](/shard-nodes/validator-image/) for the Rust image.
 
-## Wallet and SDK roles
+## Wallet and SDK Roles
 
 The wallet and the [Wallet SDK](/wallet-sdk/overview/) take three addresses per network and a node profile.
 
 | Setting | Role | DevNet value for scripts, SDK and CLI |
 |---|---|---|
 | `ValidatorURL` | Receives deploys (`POST /api/deploy`) and status requests | Validator 1 HTTP API from the table above |
-| `ReadOnlyURL` | Answers balance queries and deploy lookups | The same Validator 1 HTTP API, because DevNet has no public observer |
+| `ReadOnlyURL` | Answers balance queries and deploy lookups | The same Validator 1 HTTP API, because DevNet does not publish an observer address |
 | `IndexerURL` | GraphQL endpoint with transaction history | Not published |
 | `nodeApiProfile` | Request format of the node | `scala` |
 
 The wallet does not fall back from `ReadOnlyURL` to `ValidatorURL`, so both must be set even when they hold the same address. For a network of your own, see [Custom Network](/wallet/custom-network/).
 
-## Not published
+## Not Published
 
 The GraphQL address of the indexer and the address behind the faucet are not listed here. Request tokens through the faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io), as described in the [guide to getting DevNet ASI](/quick-start/get-asi/). If you need the indexer address for your own client, ask the network operator.

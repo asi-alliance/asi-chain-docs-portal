@@ -7,7 +7,7 @@ NODE=observer
 ```
 
 ::: warning DevNet runs the Scala node
-As of 5 November 2026 the public DevNet runs a Scala node, and the Rust image does not connect to it. A Rust node started with the DevNet bootstrap lists other nodes in `/api/status` but keeps `peers` at 0. This is not a configuration error on your side. See [Join as an Observer](/quick-start/join-observer/).
+As of 5 November 2026 the public DevNet runs a Scala node, and the Rust image does not connect to it. A Rust node started with the DevNet bootstrap lists other nodes in `/api/status` but keeps `peers` at 0. This was observed on two separate hosts with the settings from these guides. See [Join as an Observer](/quick-start/join-observer/).
 :::
 
 ## Image Pull or Startup Fails

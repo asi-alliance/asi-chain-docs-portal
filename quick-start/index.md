@@ -2,7 +2,7 @@
 
 Pick the path that matches what you want to do. The wallet, faucet and explorer work with the public ASI:Chain DevNet, and DevNet tokens have no real value.
 
-## Use the network
+## Use the Network
 
 You want an account, some test tokens and a way to see what happens on the chain.
 
@@ -10,7 +10,7 @@ You want an account, some test tokens and a way to see what happens on the chain
 2. Request test tokens for that address at the [faucet](/faucet/usage/). The step-by-step guide is in [how to get DevNet ASI](/quick-start/get-asi/).
 3. Follow your transfers and balances in the [explorer](/explorer/usage/).
 
-## Run a node
+## Run a Node
 
 You want to take part in the network as an observer or a validator.
 

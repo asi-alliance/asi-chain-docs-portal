@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 
-## Getting started
+## Getting Started
 
 ### What are DevNet tokens?
 
@@ -14,7 +14,7 @@ The [Get Started](/quick-start/) page has one path for using the network, one fo
 
 It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. Amounts have 8 decimal places, so one ASI is `100000000` in the smallest unit.
 
-## Wallet and keys
+## Wallet and Keys
 
 ### How do I create an account?
 
@@ -84,7 +84,7 @@ Peers connect over TCP on `40400` and `40404`. Clients need access to the extern
 
 ### Does an observer reject writes?
 
-Yes. A node started without a validator key runs in read-only mode. It rejects deploys with `Deploy was rejected because node is running in read-only mode.` and does not propose blocks, but it still answers queries, and only a read-only node accepts exploratory deploys.
+Yes. A node started without a validator key runs in read-only mode. It rejects deploys with `Deploy was rejected because node is running in read-only mode.` and does not propose blocks, but it still answers queries. Exploratory deploys, which balance queries use, run only on a read-only node or on a node started in developer mode, such as DevNet Validator 1.
 
 ## Tools
 
@@ -100,11 +100,11 @@ An integer in the smallest unit: `100000000` is one ASI. Keep the exact integer,
 
 No. Run `git submodule update --init --recursive` and keep the committed client revision. The [Wallet CLI](/cli/usage/) page names the revision of the published image.
 
-## More help
+## More Help
 
 ### Are all pages verified?
 
-See [documentation status](/general/documentation-status/). A VitePress build checks that pages render and links resolve, not that the described API is correct.
+See [documentation status](/general/documentation-status/). A VitePress build checks that internal links resolve, not that diagrams render or that the described API is correct.
 
 ### Where can I ask a question or report a problem?
 

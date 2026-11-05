@@ -32,6 +32,7 @@ A single node can create its own genesis with `--standalone`. It is enough to ch
 
 ```bash
 NODE_IMAGE=<image from the catalog>
+VALIDATOR_PRIVATE_KEY="$(tr -d '\n' < validator-keys/private_key.hex)"
 docker network create shard-net
 docker volume create shard-data
 docker run --rm --platform linux/amd64 -u root --entrypoint sh \

@@ -71,9 +71,32 @@ docker run --rm -u root --platform linux/amd64 --entrypoint install \
   "$NODE_IMAGE" -o daemon -g daemon -m 600 /tmp/f1r3fly.key /var/lib/rnode/f1r3fly.key
 ```
 
-With either file in place, start the node with `--validator-private-key-path /var/lib/rnode/f1r3fly.key`, the matching public key, and the password in `F1R3NODE_VALIDATOR_PASSWORD`.
-
 Never publish a key or a TLS file in logs, examples or Git.
+
+### Start the Node
+
+With either key file in place, start the node with the values from step 1 and the public key of the validator key. `read` asks for the key password without showing it, and `-e` passes the variable to the container.
+
+```bash
+NETWORK_ID=<networkId of the shard>
+SHARD_NAME=<shardId of the shard>
+PUBLIC_HOST=<public IP or DNS name of this machine>
+BOOTSTRAP_URI='<bootstrap URI from the shard operator>'
+VALIDATOR_PUBLIC_KEY=<public key of the validator key>
+read -rsp 'Key password: ' F1R3NODE_VALIDATOR_PASSWORD; echo
+export F1R3NODE_VALIDATOR_PASSWORD
+
+docker run -d --name validator --platform linux/amd64 \
+  -e F1R3NODE_VALIDATOR_PASSWORD \
+  -v validator-data:/var/lib/rnode \
+  -p 40400:40400 -p 40404:40404 -p 127.0.0.1:40403:40403 \
+  "$NODE_IMAGE" run --network-id "$NETWORK_ID" --shard-name "$SHARD_NAME" \
+  --host "$PUBLIC_HOST" --bootstrap "$BOOTSTRAP_URI" \
+  --validator-public-key "$VALIDATOR_PUBLIC_KEY" \
+  --validator-private-key-path /var/lib/rnode/f1r3fly.key
+```
+
+Add the token flags `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` when the shard does not use the defaults. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. The password stays in the container environment, so `docker inspect validator` shows it to anyone with access to Docker on the host.
 
 ## 4. Review Networking
 

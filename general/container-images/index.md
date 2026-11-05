@@ -4,7 +4,7 @@ Registry snapshot checked on 5 November 2026. Every tag and digest below was rea
 
 The catalog covers eight components and twelve listed artifacts, including five distinct node revisions. The registry can hold more tags than the table, and tags are removed over time: one tag that was in the registry on 4 November 2026 was gone on 5 November 2026. The floating `dev` tags of `node-rust` and `indexer` move with every build, so do not use them. Pin the digest. Publication is not proof of deployment or compatibility for every combination.
 
-## Published artifacts
+## Published Artifacts
 
 Repository paths in the table are relative to the namespace above. Each source link pins the application revision; release packaging can add runtime configuration and provenance without changing that application's source identity.
 
@@ -23,7 +23,7 @@ Repository paths in the table are relative to the namespace above. Each source l
 | Wallet CLI / `wallet-cli` | `0.1.0-dev.20261103-8f6c20ea43eb` | `sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d` | [8f6c20ea43eb](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681) |
 | ASI client / `client` | `0.2.9-dev.20261103-40f2a9408040` | `sha256:f26511e261ca9d21c568b2a523fee916630ed7ac2622e65cebd2099e72db4fe7` | [40f2a9408040](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) |
 
-## Pull and inspect
+## Pull and Inspect
 
 For example, pull the published indexer artifact:
 
@@ -35,7 +35,7 @@ docker image inspect "$IMAGE" --format '{{json .Config.Labels}}'
 
 Anonymous pulls do not require AWS credentials. The ECR Public gallery at [gallery.ecr.aws/l2u2v4a8](https://gallery.ecr.aws/l2u2v4a8) also exposes the public registry. Verify the source/revision labels and selected digest before writing a deployment manifest. Avoid mutable `latest` and `dev` tags.
 
-## Select compatible artifacts
+## Select Compatible Artifacts
 
 - Latest ASI dev node: the `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([github.com/F1R3FLY-io/f1r3node-rust/pull/941](https://github.com/F1R3FLY-io/f1r3node-rust/pull/941)), 12 commits after `e18defd4`. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `e18defd4`. Its manifest, `org.opencontainers.image.revision` label and a container start were checked on 5 November 2026. This catalog records no CI result for this exact revision and no client check against it. See [validator image](/shard-nodes/validator-image/) for how to run it.
 
@@ -48,7 +48,7 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 - Indexer: the `0bb60e8` image includes the merged PR #20 behavior, the PostgreSQL 18.6 and Hasura v2.51.4 upgrade (PR #25) and CI for pull requests (PR #26). Later API or cost-accounting candidates are separate work. PostgreSQL, migrations and Hasura metadata/permissions remain deployment inputs.
 - Faucet API: publication of the `aaa32cd2` artifact does not establish compatibility with the client 0.2.9 / node `5dafbc37` pair. Review its own repository-local client dependency and verify funding behavior before use.
 
-## Runtime configuration
+## Runtime Configuration
 
 | Artifact | Runtime contract |
 |---|---|
@@ -59,7 +59,7 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 | Faucet API | `/app/asi-faucet`, HTTP `8000` by default; explicit node/observer endpoints and protected funding key |
 | Wallet CLI / ASI client | Command-line tools, no resident listener; append commands to their image entrypoints |
 
-### Frontend URL variables
+### Frontend URL Variables
 
 | Image | Required public runtime values |
 |---|---|
@@ -67,7 +67,7 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 | Wallet | `WALLET_VALIDATOR_URL`, `WALLET_OBSERVER_URL`, `WALLET_INDEXER_URL` (the SDK's indexer endpoint contract) |
 | Faucet frontend | `VITE_BASE_URL` (faucet API base URL) |
 
-Wallet `REACT_APP_EXPLORER_URL` and `REACT_APP_FAUCET_URL` are optional public links. The explorer's optional `REACT_APP_RCHAIN_NODE_URL` is the node HTTP API that it calls for wallet balances and node status. Confirm the Wallet SDK's indexer route rather than assuming its URL is interchangeable with every raw GraphQL endpoint. The explorer image rejects non-empty `REACT_APP_HASURA_ADMIN_SECRET` and `REACT_APP_AUTH_TOKEN`; configure restricted public Hasura permissions or a server-side gateway instead.
+Wallet `REACT_APP_EXPLORER_URL` and `REACT_APP_FAUCET_URL` are optional public links. The explorer also accepts `REACT_APP_RCHAIN_NODE_URL`, but no page of this explorer image calls the node, so the variable can stay unset. Confirm the Wallet SDK's indexer route rather than assuming its URL is interchangeable with every raw GraphQL endpoint. The explorer image rejects non-empty `REACT_APP_HASURA_ADMIN_SECRET` and `REACT_APP_AUTH_TOKEN`; configure restricted public Hasura permissions or a server-side gateway instead.
 
 The frontend images substitute endpoint URLs at startup. Supply the image-specific public URL variables, permit their startup write paths, and recreate containers when changing endpoints. Source-repository Dockerfiles can differ from these published packages; inspect the artifact before assuming a runtime configuration contract.
 

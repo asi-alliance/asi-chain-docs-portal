@@ -45,7 +45,7 @@ features:
     link: /faq/
 ---
 
-## Before you start
+## Before You Start
 
 DevNet tokens are for testing and have no real value. The [Get Started](/quick-start/) page sends you to the right guide for using the network, running a node or building on it.
 

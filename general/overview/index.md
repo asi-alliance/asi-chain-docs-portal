@@ -26,6 +26,6 @@ A network is made of nodes with different roles. A bootstrap node is the entry p
 
 The native token is ASI. It has 8 decimal places, so 1 ASI is `100000000` in the smallest unit, and the Wallet CLI takes amounts in that unit. Account addresses are Base58 strings that start with `1111`.
 
-## Before you start
+## Before You Start
 
 If you only want to try the network, get tokens from the [faucet](/quick-start/get-asi/) and open the [wallet](/wallet/usage/). Known limits of these pages are listed on [Documentation Status](/general/documentation-status/).

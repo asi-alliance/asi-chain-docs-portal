@@ -38,7 +38,7 @@ The networks are stored in the browser together with your wallets. Clearing the 
 
 ## Local Node
 
-For a node on your own machine, the values depend on the ports the node publishes. A node on the default ports, with one HTTP API on `40403` serving both reads and writes, looks like this.
+For a node on your own machine, the values depend on the ports the node publishes and on the node type. A Scala node, or a node started in developer mode, answers reads and writes on one HTTP API. On the default port `40403` the form for such a node looks like this.
 
 | Field | Value |
 | --- | --- |
@@ -47,6 +47,12 @@ For a node on your own machine, the values depend on the ports the node publishe
 | Validator URL | `http://localhost:40403` |
 | Read-only URL | `http://localhost:40403` |
 | Indexer URL | `http://localhost:8080/v1/graphql` |
+
+A Rust validator started without developer mode refuses balance queries with `readonly_node_required`. For such a shard, set Read-only URL to a read-only node, for example the one from [Set Up a Private Shard](/shard-nodes/own-shard/#read-only-node) on port `40453`.
+
+::: warning Rust node profile
+This version of the wallet uses Wallet SDK 2.1.0, which cannot read balances from a Rust node or send transfers through it. See [Wallet SDK](/wallet-sdk/overview/).
+:::
 
 The compose files in [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) publish different ports. `chain/validator/validator.yml` maps the validator HTTP API to `40443`, and `chain/genesis/devnet-observer/observer.yml` maps the observer HTTP API to `40403`. Set the URLs to the port that your own compose file publishes. The compose files need their `.env` values and a bootstrap address, so start from the [observer guide](/quick-start/join-observer/) or the [validator guide](/quick-start/join-validator/) instead of running them as they are.
 

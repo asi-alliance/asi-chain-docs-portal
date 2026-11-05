@@ -36,6 +36,7 @@ The image reads its settings from the environment and keeps wallet files and exp
 
 ```bash
 mkdir -p credentials exports
+sudo chown 10001:10001 credentials exports
 docker run --rm --platform linux/amd64 \
   --env-file .env \
   -v "$PWD/credentials:/app/credentials" \
@@ -45,7 +46,7 @@ docker run --rm --platform linux/amd64 \
 
 The working directory of the image is `/app`, so the default `OUTPUT_DIR=./credentials` puts the wallet file into `credentials/wallet_info.json` on the host. Replace `create --save` with `balance`, `send`, `history` or `export` for the other commands, and keep the same two volumes so they find the wallet file and write exports to `exports/`.
 
-The container runs as UID `10001`. On a Linux host, make both directories writable for that user (`sudo chown 10001:10001 credentials exports`). Otherwise `create --save` cannot write the wallet file. Inside a container `127.0.0.1` is the container itself, so `.env` needs an address that the container can reach, not the host loopback.
+The container runs as UID `10001`, and the `chown` makes both directories writable for it. Without the `chown`, `create --save` cannot write the wallet file on a Linux host. Inside a container `127.0.0.1` is the container itself, so `.env` needs an address that the container can reach, not the host loopback.
 
 ## Build from Source
 
@@ -86,7 +87,7 @@ Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-walle
 
 Without them the CLI prints `Error loading configuration: VALIDATOR_HOST is not set`. Instead of a URL you can set `VALIDATOR_HOST` with `VALIDATOR_GRPC_PORT` and `VALIDATOR_HTTP_PORT`, and `OBSERVER_HOST` with `OBSERVER_HTTP_PORT`.
 
-```dotenv
+```env
 VALIDATOR_GRPC_URL=http://<validator-host>:<grpc-port>
 VALIDATOR_HTTP_URL=http://<validator-host>:<http-port>
 OBSERVER_HTTP_URL=http://<read-only-node-host>:<http-port>
@@ -100,7 +101,7 @@ NODE_TIMEOUT_SECONDS=30
 GRAPHQL_URL=
 ```
 
-The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports. `send` submits through the gRPC endpoint, and a node exposes it on an internal port that should not be open to the internet. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
+The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports. `send` submits through the external gRPC port of a validator (`40401` by default). Open it only to the clients that need it. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
 
 `GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. On 5 November 2026 no public GraphQL endpoint was known to work with them, so ask the network operator for one. Acceptance of `history` and `export` on a deployment is tracked in [github.com/asi-alliance/asi-chain-wallet-cli/issues/5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
 
@@ -108,7 +109,7 @@ The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappi
 
 To try `balance` and `send` on the shard from [Set Up a Private Shard](/shard-nodes/own-shard/), start its validator and its read-only node. Then add `--network shard-net` to the `docker run` command from [Run the Image](#run-the-image) and use the container names in `.env`:
 
-```dotenv
+```env
 VALIDATOR_GRPC_URL=http://my-shard:40401
 VALIDATOR_HTTP_URL=http://my-shard:40403
 OBSERVER_HTTP_URL=http://my-shard-obs:40403
