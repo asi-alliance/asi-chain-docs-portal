@@ -32,27 +32,51 @@ A single node can create its own genesis with `--standalone`. It is enough to ch
 
 ```bash
 NODE_IMAGE=<image from the catalog>
+docker network create shard-net
 docker volume create shard-data
 docker run --rm --platform linux/amd64 -u root --entrypoint sh \
   -v shard-data:/var/lib/rnode "$NODE_IMAGE" -c 'chown daemon:daemon /var/lib/rnode'
 
-docker run -d --name my-shard --platform linux/amd64 \
+docker run -d --name my-shard --network shard-net --platform linux/amd64 \
   -v shard-data:/var/lib/rnode \
   -v "$PWD/genesis:/var/lib/rnode/genesis:ro" \
   -p 40403:40403 \
   "$NODE_IMAGE" run --standalone \
   --network-id my-shard-net --shard-name my-shard \
-  --host localhost --no-upnp --allow-private-addresses \
+  --host my-shard --no-upnp --allow-private-addresses \
+  --native-token-name ASI --native-token-symbol ASI \
   --validator-private-key "$VALIDATOR_PRIVATE_KEY"
 ```
 
-The `chown` is required because a new Docker volume is owned by `root` and the node runs as `daemon`. `--host localhost` is accepted only together with `--allow-private-addresses`. A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
+The `chown` is required because a new Docker volume is owned by `root` and the node runs as `daemon`. `--host` is the name under which other containers on `shard-net` reach the node. It resolves to a private address, so the node also needs `--allow-private-addresses`. The token flags give the shard the ASI name and symbol that the [Wallet CLI](/cli/usage/) checks. Without them the node reports the upstream `F1R3CAP` and `F1R3`. A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
 
-About 15 seconds after the container starts, `curl -s http://localhost:40403/api/status` reports the values you chose:
+About 15 seconds after the container starts, `curl -s http://localhost:40403/api/status` reports the values you chose. The line below shows selected fields of the answer, and `lastFinalizedBlockNumber` keeps growing.
 
 ```text
-"networkId":"my-shard-net","shardId":"my-shard","nativeTokenDecimals":8,"isValidator":true,"isReady":true,"lastFinalizedBlockNumber":1
+"networkId":"my-shard-net","shardId":"my-shard","nativeTokenSymbol":"ASI","nativeTokenDecimals":8,"isValidator":true,"isReady":true,"lastFinalizedBlockNumber":1
 ```
+
+## Read-Only Node
+
+Balance queries run as exploratory deploys, and a validator refuses them with `HTTP 400 (readonly_node_required)`. Wallets, the SDK and the [Wallet CLI](/cli/usage/) read balances from a read-only node, so start one next to the validator. When the validator reports `"isReady":true`, copy the `address` field from its `/api/status`. It has the form `rnode://<node-id>@my-shard?protocol=40400&discovery=40404`.
+
+```bash
+BOOTSTRAP='rnode://<node-id>@my-shard?protocol=40400&discovery=40404'
+docker volume create shard-obs-data
+docker run --rm --platform linux/amd64 -u root --entrypoint sh \
+  -v shard-obs-data:/var/lib/rnode "$NODE_IMAGE" -c 'chown daemon:daemon /var/lib/rnode'
+
+docker run -d --name my-shard-obs --network shard-net --platform linux/amd64 \
+  -v shard-obs-data:/var/lib/rnode \
+  -p 40453:40403 \
+  "$NODE_IMAGE" run \
+  --network-id my-shard-net --shard-name my-shard \
+  --host my-shard-obs --no-upnp --allow-private-addresses \
+  --native-token-name ASI --native-token-symbol ASI \
+  --bootstrap "$BOOTSTRAP"
+```
+
+About 45 seconds after the container starts, `curl -s http://localhost:40453/api/status` reports `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. Each node reports its own token settings, so a node started without the flags reports `F1R3` even when the validator reports `ASI`.
 
 For several validators, follow the upstream shard topology above.
 

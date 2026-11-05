@@ -52,6 +52,7 @@ The container runs as UID `10001`. On a Linux host, make both directories writab
 The published image is the shorter path. To build the same source yourself, install the build tools first. On Debian or Ubuntu:
 
 ```bash
+sudo apt-get update
 sudo apt-get install -y git curl ca-certificates build-essential cmake libclang-dev \
   libprotobuf-dev libssl-dev perl pkg-config protobuf-compiler
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
@@ -68,7 +69,7 @@ git submodule update --init --recursive
 cargo build --release --locked
 ```
 
-The build downloads its dependencies from crates.io and GitHub. `cargo build` itself takes about 6 minutes on a 12-core machine.
+The build downloads its dependencies from crates.io and GitHub. `cargo build` itself takes 6 to 8 minutes on a 12-core machine.
 
 Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client.
 
@@ -80,7 +81,7 @@ Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-walle
 
 - `VALIDATOR_GRPC_URL`, the gRPC endpoint of a validator, which `send` uses to submit the deploy.
 - `VALIDATOR_HTTP_URL`, the HTTP endpoint of the same validator.
-- `OBSERVER_HTTP_URL`, the HTTP endpoint that `balance` queries and `send` uses to confirm finalization.
+- `OBSERVER_HTTP_URL`, the HTTP endpoint of a read-only node. `balance` queries it, and `send` uses it to confirm finalization. A Rust validator answers balance queries with `HTTP 400 (readonly_node_required)`.
 - `OUTPUT_DIR`, the directory with `wallet_info.json`.
 
 Without them the CLI prints `Error loading configuration: VALIDATOR_HOST is not set`. Instead of a URL you can set `VALIDATOR_HOST` with `VALIDATOR_GRPC_PORT` and `VALIDATOR_HTTP_PORT`, and `OBSERVER_HOST` with `OBSERVER_HTTP_PORT`.
@@ -88,7 +89,7 @@ Without them the CLI prints `Error loading configuration: VALIDATOR_HOST is not 
 ```dotenv
 VALIDATOR_GRPC_URL=http://<validator-host>:<grpc-port>
 VALIDATOR_HTTP_URL=http://<validator-host>:<http-port>
-OBSERVER_HTTP_URL=http://<validator-host>:<http-port>
+OBSERVER_HTTP_URL=http://<read-only-node-host>:<http-port>
 OUTPUT_DIR=./credentials
 EXPECTED_TOKEN_SYMBOL=ASI
 SHARD_ID=root
@@ -102,6 +103,21 @@ GRAPHQL_URL=
 The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports. `send` submits through the gRPC endpoint, and a node exposes it on an internal port that should not be open to the internet. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
 
 `GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. On 5 November 2026 no public GraphQL endpoint was known to work with them, so ask the network operator for one. Acceptance of `history` and `export` on a deployment is tracked in [github.com/asi-alliance/asi-chain-wallet-cli/issues/5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
+
+### Private Shard
+
+To try `balance` and `send` on the shard from [Set Up a Private Shard](/shard-nodes/own-shard/), start its validator and its read-only node. Then add `--network shard-net` to the `docker run` command from [Run the Image](#run-the-image) and use the container names in `.env`:
+
+```dotenv
+VALIDATOR_GRPC_URL=http://my-shard:40401
+VALIDATOR_HTTP_URL=http://my-shard:40403
+OBSERVER_HTTP_URL=http://my-shard-obs:40403
+OUTPUT_DIR=./credentials
+EXPECTED_TOKEN_SYMBOL=ASI
+SHARD_ID=my-shard
+```
+
+`SHARD_ID` must match `--shard-name`. Nodes started without the token flags report `F1R3`, and `balance` then stops with `Wrong native token: expected ASI, node reports F1R3` until `EXPECTED_TOKEN_SYMBOL` matches the reported symbol. On 5 November 2026 a transfer of 1 ASI between two wallets on this shard ended with `Transfer complete`, and the sender paid 0.00250669 ASI in fees.
 
 ## Commands
 

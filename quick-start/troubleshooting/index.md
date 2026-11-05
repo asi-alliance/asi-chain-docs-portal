@@ -25,7 +25,7 @@ docker logs --tail 100 "$NODE"
 The first lines of the log usually name the cause.
 
 - `The data dir must be a directory and have read and write permissions` means the volume belongs to `root`. Change its owner to `daemon` (uid 1) with the `chown` command from [Join as an Observer](/quick-start/join-observer/#start-the-observer).
-- `the argument '--profile <PROFILE>' cannot be used multiple times` means a `--profile` option was passed. The image entrypoint already adds `--profile=docker`, so remove yours.
+- `unexpected argument '--profile' found` means a `--profile` option was passed after `run`, and `the argument '--profile <PROFILE>' cannot be used multiple times` means one was passed before `run`. The image entrypoint already adds `--profile=docker`, so remove yours.
 - `Failed to parse bootstrap peer address: Parse error: missing node ID` means the bootstrap URI lacks the node ID. The form is `rnode://<node-id>@<host>?protocol=40400&discovery=40404`.
 - `No such device or address` with `--validator-private-key-path` means the node asked for the key password and found no terminal. Set the `F1R3NODE_VALIDATOR_PASSWORD` environment variable.
 - `Could not decrypt PEM file` means that the password does not match the key file.
@@ -45,8 +45,9 @@ A node that has not connected yet reports `"peers": 0` and `"isReady": false`, a
 
 1. The bootstrap URI is complete and the node ID in it belongs to the bootstrap node. The ID is the `address` field of `/api/status` on that node.
 2. `--network-id` equals the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from other networks.
-3. `--host` is an address that the other nodes can reach. A joining node must be reachable as well as able to connect out, because the bootstrap node answers the handshake on the advertised address. Add `--allow-private-addresses` if the shard uses private or container addresses, and `--no-upnp` if you forward the ports by hand.
-4. TCP `40400` and TCP `40404` are open for peers. Discovery on `40404` uses TCP. Do not open the API and admin ports to fix P2P connectivity.
+3. `--shard-name` equals the `shardId` that the bootstrap node reports. The default is `root`. With another name the node reports `"peers": 1` but stays at `Waiting for first connection...`.
+4. `--host` is an address that the other nodes can reach. A joining node must be reachable as well as able to connect out, because the bootstrap node answers the handshake on the advertised address. Add `--allow-private-addresses` if the shard uses private or container addresses, and `--no-upnp` if you forward the ports by hand.
+5. TCP `40400` and TCP `40404` are open for peers. Discovery on `40404` uses TCP. Do not open the API and admin ports to fix P2P connectivity.
 
 A restarted node reconnects only through its configured bootstrap node, because the image does not include the known-peers change from upstream PR #927. If the bootstrap node is down, the log stays on `Waiting for first connection...`.
 

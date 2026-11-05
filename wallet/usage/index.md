@@ -74,7 +74,7 @@ Send only ASI tokens to this address, and check that the wallet is on the right 
 
 **Transactions** lists the transactions of the selected account and refreshes itself every 30 seconds. The history comes from the indexer.
 
-Each row has a date, a type (**Send**, **Receive** or **Deploy**), a status (**Pending**, **Completed** or **Failed**), the sender, the recipient, the amount and a **Details** value.
+Each row has a date, a type (**Send**, **Receive** or **Deploy**), a status (**Pending**, **Completed** or **Failed**), the sender (**From**), the recipient (**To**), the amount and a **Details** value. The **Export** button under the list is inactive in this version of the wallet.
 
 ![Transactions page](/images/wallet/history.png)
 

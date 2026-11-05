@@ -23,8 +23,9 @@ Ask the operator of the shard for these values.
 - The image tag or digest that the shard accepts. See [Validator Node Image](/shard-nodes/validator-image/).
 - The bootstrap URI, which looks like `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. The node ID is the `address` field of `GET /api/status` on the bootstrap node.
 - The `--network-id` value, which must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from other networks.
+- The `--shard-name` value, which must equal the `shardId` that the bootstrap node reports. The default is `root`. With another value the node gets a peer but stays at `Waiting for first connection...`.
 - The `--host` value, which is the address other nodes use to reach this node. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks.
-- The genesis and shard settings, but only when they differ from the built-in defaults.
+- The native-token flags and other genesis settings, but only when they differ from the built-in defaults. Each node reports its own token settings, so a node started without the flags reports `F1R3` even on a shard with another symbol.
 
 ## Start the Observer
 
@@ -33,6 +34,7 @@ A new Docker volume is owned by `root`, but the image runs as `daemon` (uid 1). 
 ```bash
 NODE_IMAGE=<image from the catalog>
 NETWORK_ID=<networkId of the shard>
+SHARD_NAME=<shardId of the shard>
 PUBLIC_HOST=<public IP or DNS name of this machine>
 BOOTSTRAP_URI='<bootstrap URI from the shard operator>'
 docker volume create observer-data
@@ -42,11 +44,11 @@ docker run --rm -u root --platform linux/amd64 --entrypoint chown \
 docker run -d --name observer --platform linux/amd64 \
   -v observer-data:/var/lib/rnode \
   -p 40400:40400 -p 40404:40404 -p 127.0.0.1:40403:40403 \
-  "$NODE_IMAGE" run --network-id "$NETWORK_ID" --host "$PUBLIC_HOST" \
-  --bootstrap "$BOOTSTRAP_URI"
+  "$NODE_IMAGE" run --network-id "$NETWORK_ID" --shard-name "$SHARD_NAME" \
+  --host "$PUBLIC_HOST" --bootstrap "$BOOTSTRAP_URI"
 ```
 
-The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. The image entrypoint already passes `--profile=docker`, so do not pass `--profile` yourself, because the node rejects a repeated option. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/shard-nodes/validator-image/#default-container-ports).
+The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. The image entrypoint already passes `--profile=docker`, and the node exits with an error if you pass `--profile` as well, so do not add one. On a private network add `--allow-private-addresses`, and add `--no-upnp` when the ports are forwarded by hand. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/shard-nodes/validator-image/#default-container-ports).
 
 ## Check the Node
 

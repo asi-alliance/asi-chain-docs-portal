@@ -41,7 +41,7 @@ The pinned [Dockerfile](https://github.com/asi-alliance/asi-chain-rust-node/blob
 | Healthcheck | `curl -fsS 127.0.0.1:40403/api/ready`, every 30 s, the first 120 s are a grace period |
 | Configuration | Built-in HOCON defaults, then the override file, then command-line flags |
 
-The entrypoint always adds `--profile=docker`. Do not pass `--profile` yourself: the node rejects it with `the argument '--profile <PROFILE>' cannot be used multiple times`. This matters when you copy flags from a command written for another node.
+The entrypoint always adds `--profile=docker`. Do not pass `--profile` yourself. After `run` the node rejects it with `unexpected argument '--profile' found`, and before `run` with `the argument '--profile <PROFILE>' cannot be used multiple times`. This matters when you copy flags from a command written for another node.
 
 Read the [defaults.conf at the same revision](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/node/src/main/resources/defaults.conf). The node reads `/var/lib/rnode/f1r3fly.conf` when it exists, and falls back to the older name `rnode.conf` with a warning. `run --config-file /path/to/node.conf` selects a file explicitly and takes priority over both. Command-line flags override the file, and the file overrides the defaults. The upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/conf/default.conf) show the structure. Development keys and genesis files from that directory are not inputs for joining another network.
 

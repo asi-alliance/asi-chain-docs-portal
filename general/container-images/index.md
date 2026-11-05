@@ -67,7 +67,7 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 | Wallet | `WALLET_VALIDATOR_URL`, `WALLET_OBSERVER_URL`, `WALLET_INDEXER_URL` (the SDK's indexer endpoint contract) |
 | Faucet frontend | `VITE_BASE_URL` (faucet API base URL) |
 
-Wallet `REACT_APP_EXPLORER_URL` and `REACT_APP_FAUCET_URL` are optional public links. Confirm the Wallet SDK's indexer route rather than assuming its URL is interchangeable with every raw GraphQL endpoint. The explorer image rejects non-empty `REACT_APP_HASURA_ADMIN_SECRET` and `REACT_APP_AUTH_TOKEN`; configure restricted public Hasura permissions or a server-side gateway instead.
+Wallet `REACT_APP_EXPLORER_URL` and `REACT_APP_FAUCET_URL` are optional public links. The explorer's optional `REACT_APP_RCHAIN_NODE_URL` is the node HTTP API that it calls for wallet balances and node status. Confirm the Wallet SDK's indexer route rather than assuming its URL is interchangeable with every raw GraphQL endpoint. The explorer image rejects non-empty `REACT_APP_HASURA_ADMIN_SECRET` and `REACT_APP_AUTH_TOKEN`; configure restricted public Hasura permissions or a server-side gateway instead.
 
 The frontend images substitute endpoint URLs at startup. Supply the image-specific public URL variables, permit their startup write paths, and recreate containers when changing endpoints. Source-repository Dockerfiles can differ from these published packages; inspect the artifact before assuming a runtime configuration contract.
 

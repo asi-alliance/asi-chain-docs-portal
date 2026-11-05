@@ -12,6 +12,7 @@ Ask the shard operator for the bootstrap URI, the shard and genesis configuratio
 
 - The bootstrap URI looks like `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. The node ID is the `address` field of `GET /api/status` on the bootstrap node.
 - The `--network-id` value must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from any other network.
+- The `--shard-name` value must equal the `shardId` that the bootstrap node reports. The default is `root`.
 - The `--host` value is the address other nodes use to reach yours. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks.
 
 Check storage, CPU, memory and retention requirements with the operator. No sizing has been measured for these images.
@@ -34,7 +35,7 @@ docker run --rm -u root --platform linux/amd64 --entrypoint chown \
 The node keeps its state, its TLS certificate and its identity in `/var/lib/rnode/`. Options are applied in this order: command line, configuration file, built-in defaults ([defaults.conf at the pinned revision](https://github.com/asi-alliance/asi-chain-rust-node/blob/e18defd44d43fe460379efefb88223797709a0cf/node/src/main/resources/defaults.conf)).
 
 - The node reads `/var/lib/rnode/f1r3fly.conf` without any flag. It also accepts the older name `rnode.conf` and logs a warning. `run --config-file <path>` points to another file.
-- Do not pass `--profile`. The image entrypoint adds `--profile=docker`, and the node rejects the option twice.
+- Do not pass `--profile`. The image entrypoint adds `--profile=docker`, and the node exits with an error if you pass `--profile` as well.
 - Match the shard and native-token settings to the target genesis. The defaults are `shard-name = root`, token `F1R3CAP` with symbol `F1R3` and 8 decimals, and they cannot change after genesis.
 - Joining an existing shard does not use `--genesis-validator`, and a development `bonds.txt` is not an enrollment procedure. Genesis participation, joining and bonding are separate steps.
 
@@ -45,7 +46,7 @@ The validator key reaches the node in one of two ways, and both are used togethe
 - `--validator-private-key-path` takes an encrypted PEM file. The node asks for its password at start, or reads it from the `F1R3NODE_VALIDATOR_PASSWORD` environment variable. Without a terminal and without that variable the node exits with `No such device or address`, and with a wrong password it exits with `Could not decrypt PEM file`. The plain hex file saved by the ASI client is not accepted and fails with `malformedframing`.
 - `--validator-private-key` takes the hex key itself. The option is hidden from `run --help`, and the key then shows in `docker inspect` and in the process list, so use it only on a host that nobody else can read.
 
-To create a new key pair for the node, run `keygen` in a terminal. It asks twice for a password and writes `f1r3fly.key` (the encrypted private key), `f1r3fly.pub.pem` and `f1r3fly.pub.hex` into the volume. The second command prints the public key for `--validator-public-key`.
+To create a new key pair for the node, run `keygen` in a terminal. It asks twice for a password and writes `f1r3fly.key` (the encrypted private key), `f1r3fly.pub.pem` and `f1r3fly.pub.hex` into the volume. The second command prints the public key for `--validator-public-key`. `f1r3fly.pub.hex` holds the key in upper-case hex, while the ASI client and the `sender` field of blocks use lower case. The node and `/api/bond-status` accept both, so compare keys case-insensitively.
 
 ```bash
 docker run --rm -it --platform linux/amd64 \
