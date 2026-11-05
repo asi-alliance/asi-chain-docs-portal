@@ -1,21 +1,28 @@
-# Useful links
+# Useful Links
 
 ## Applications
 
 | Application | URL |
 |---|---|
+| Documentation | [docs.asichain.io](https://docs.asichain.io) |
 | Wallet | [wallet.dev.asichain.io](https://wallet.dev.asichain.io) |
 | Explorer | [explorer.dev.asichain.io](https://explorer.dev.asichain.io) |
 | Faucet | [faucet.dev.asichain.io](https://faucet.dev.asichain.io) |
 
-These are application links, not a live health report. Obtain current node HTTP/gRPC endpoints, GraphQL URLs and bootstrap identity from the target network operator. Historical raw IPs and observer status are not current connection instructions.
+Node addresses are on [Network Endpoints](/general/endpoints/).
 
-## Public sources
+## Packages
+
+| Package | Registry |
+|---|---|
+| Wallet SDK | [@asichain/asi-wallet-sdk](https://www.npmjs.com/package/@asichain/asi-wallet-sdk) on npm |
+
+## Source Code
 
 | Component | Repository |
 |---|---|
-| Maintained ASI Rust node | [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) |
-| Rust node upstream reference | [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust) |
+| Rust node | [asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) |
+| Rust node upstream | [F1R3FLY-io/f1r3node-rust](https://github.com/F1R3FLY-io/f1r3node-rust) |
 | ASI node client | [asi-alliance/asi-chain-client](https://github.com/asi-alliance/asi-chain-client) |
 | Wallet CLI | [asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) |
 | Indexer | [asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer) |
@@ -25,14 +32,16 @@ These are application links, not a live health report. Obtain current node HTTP/
 | Faucet | [asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
 | Documentation | [asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal) |
 
-Inspect the selected revision and consumer gitlinks; repository defaults do not always select the current ASI integration. The current ASI node fork follows the maintained pure-Rust parent. Older published images retain their upstream provenance. Legacy deployment repositories are not the source of current node setup instructions.
+The repository [asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) is the legacy deployment repository. Do not use it as the source for node setup.
 
-## Images and guides
+Check the branch or tag you build from, because the default branch of a repository does not always hold the current ASI integration.
 
-- [ECR image catalog](/general/container-images/): current namespace, versioned tags, digests and source revisions.
-- [Documentation status](/general/documentation-status/): verified scope and material awaiting review.
-- [Validator image](/shard-nodes/validator-image/) and [observer image](/shard-nodes/observer-image/): runtime and configuration inputs.
-- [Wallet CLI](/cli/usage/): pinned dependency, explicit endpoints and exact amounts.
-- [Architecture](/architecture/): node, indexer, database, Hasura and application responsibilities.
+## Guides
 
-For a problem, open an issue in the affected public repository with sanitized reproduction steps and exact source/image identity.
+- [Network Endpoints](/general/endpoints/): DevNet applications and node addresses.
+- [Container Images](/general/container-images/): published images, tags and digests.
+- [Wallet CLI](/cli/usage/): command-line wallet.
+- [Wallet SDK](/wallet-sdk/overview/): TypeScript SDK.
+- [Architecture](/architecture/): how node, indexer, GraphQL and applications connect.
+
+To report a problem, open an issue in the affected repository. Describe how to reproduce it, and leave out keys and `.env` values.
