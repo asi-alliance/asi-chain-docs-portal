@@ -7,10 +7,10 @@ Serializes deploy data into the byte string that is signed. `SignerService` has 
 ## `deployDataProtobufSerialize`
 
 ```ts
-deployDataProtobufSerialize(deployData: DeployData): Uint8Array
+static readonly deployDataProtobufSerialize: (deployData: DeployData) => Uint8Array
 ```
 
-Encodes a deploy as protobuf bytes. The `static` field writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId` is written as an empty string.
+Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId` is written as an empty string.
 
 **Parameters:**
 
@@ -49,4 +49,4 @@ interface SignedResult {
 
 ## Signing
 
-Earlier versions had `SignerService.sign` with a password callback. It is gone. A deploy is now signed by `Client.signDeploy` or `Wallet.signDeploy`, and the private key stays inside the wallet's `Signer` (see [Wallet](/wallet-sdk/api-reference/wallet/)). Both calls return a `SignedResult`. See [Client](/wallet-sdk/api-reference/client/) for the signing and submission flow.
+A deploy is signed by `Client.signDeploy` or `Wallet.signDeploy`, and the private key stays inside the wallet's `Signer` (see [Wallet](/wallet-sdk/api-reference/wallet/)). Both calls return a `SignedResult`. See [Client](/wallet-sdk/api-reference/client/) for the signing and submission flow.
