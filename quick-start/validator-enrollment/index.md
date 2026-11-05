@@ -85,7 +85,7 @@ Prepare storage, options and the key input as described in [Join as a Validator]
 - `--bootstrap` with the operator's URI.
 - `--network-id` equal to the shard's `networkId`.
 - `--host` with the address that other nodes use to reach this node.
-- `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY`, and a signing-key input accepted by the node. The node does not read the client's `private_key.hex` through `--validator-private-key-path`, which expects an encrypted PEM file.
+- `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY` and `--validator-private-key-path` with the key converted from `private_key.hex` as shown in [Validator Key](/quick-start/join-validator/#validator-key). The node does not read `private_key.hex` itself.
 
 The pinned [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/e18defd44d43fe460379efefb88223797709a0cf/node/src/rust/configuration/commandline/options.rs) list every flag. Keep management APIs and metrics private and confirm container-to-host port mappings.
 

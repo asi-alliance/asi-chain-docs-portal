@@ -38,10 +38,39 @@ The node keeps its state, its TLS certificate and its identity in `/var/lib/rnod
 - Match the shard and native-token settings to the target genesis. The defaults are `shard-name = root`, token `F1R3CAP` with symbol `F1R3` and 8 decimals, and they cannot change after genesis.
 - Joining an existing shard does not use `--genesis-validator`, and a development `bonds.txt` is not an enrollment procedure. Genesis participation, joining and bonding are separate steps.
 
-The validator key reaches the node in one of two ways, and both go with `--validator-public-key`.
+### Validator Key
 
-- `--validator-private-key-path` takes an encrypted PEM file made by the node's own `keygen` command. The node asks for the password at start, or reads it from the `F1R3NODE_VALIDATOR_PASSWORD` environment variable. Without a terminal and without that variable the node exits with `No such device or address`. The plain hex file saved by the ASI client is not accepted and fails with `malformedframing`.
+The validator key reaches the node in one of two ways, and both go with `--validator-public-key`. The node does not check at start that the public key belongs to the private key, so take both from the same key pair.
+
+- `--validator-private-key-path` takes an encrypted PEM file. The node asks for its password at start, or reads it from the `F1R3NODE_VALIDATOR_PASSWORD` environment variable. Without a terminal and without that variable the node exits with `No such device or address`, and with a wrong password it exits with `Could not decrypt PEM file`. The plain hex file saved by the ASI client is not accepted and fails with `malformedframing`.
 - `--validator-private-key` takes the hex key itself. The option is hidden from `run --help`, and the key then shows in `docker inspect` and in the process list, so use it only on a host that nobody else can read.
+
+To create a new key pair for the node, run `keygen` in a terminal. It asks twice for a password and writes `f1r3fly.key` (the encrypted private key), `f1r3fly.pub.pem` and `f1r3fly.pub.hex` into the volume. The second command prints the public key for `--validator-public-key`.
+
+```bash
+docker run --rm -it --platform linux/amd64 \
+  -v validator-data:/var/lib/rnode "$NODE_IMAGE" keygen /var/lib/rnode
+docker run --rm --platform linux/amd64 --entrypoint cat \
+  -v validator-data:/var/lib/rnode "$NODE_IMAGE" /var/lib/rnode/f1r3fly.pub.hex
+```
+
+To keep the key that the ASI client saved in `validator-keys/private_key.hex` during [enrollment](/quick-start/validator-enrollment/), convert it to an encrypted PEM file with OpenSSL 3 and copy the result into the volume. `openssl pkcs8` asks for the password of the new file. The temporary files that hold the plain key are removed at the end, and the public key stays the one in `validator-keys/public_key.hex`.
+
+```bash
+umask 077
+printf 'asn1=SEQUENCE:ec_key\n[ec_key]\nversion=INTEGER:1\nprivateKey=FORMAT:HEX,OCTETSTRING:%s\nparameters=EXPLICIT:0,OID:secp256k1\n' \
+  "$(tr -d '\n' < validator-keys/private_key.hex)" > ec.conf
+openssl asn1parse -genconf ec.conf -noout -out key.der
+openssl ec -inform DER -in key.der -out key.pem
+openssl pkcs8 -topk8 -v2 aes-256-cbc -in key.pem -out validator-keys/f1r3fly.key
+rm -f ec.conf key.der key.pem
+docker run --rm -u root --platform linux/amd64 --entrypoint install \
+  -v validator-data:/var/lib/rnode \
+  -v "$PWD/validator-keys/f1r3fly.key:/tmp/f1r3fly.key:ro" \
+  "$NODE_IMAGE" -o daemon -g daemon -m 600 /tmp/f1r3fly.key /var/lib/rnode/f1r3fly.key
+```
+
+With either file in place, start the node with `--validator-private-key-path /var/lib/rnode/f1r3fly.key`, the matching public key, and the password in `F1R3NODE_VALIDATOR_PASSWORD`.
 
 Never publish a key or a TLS file in logs, examples or Git.
 

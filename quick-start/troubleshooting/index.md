@@ -28,6 +28,7 @@ The first lines of the log usually name the cause.
 - `the argument '--profile <PROFILE>' cannot be used multiple times` means a `--profile` option was passed. The image entrypoint already adds `--profile=docker`, so remove yours.
 - `Failed to parse bootstrap peer address: Parse error: missing node ID` means the bootstrap URI lacks the node ID. The form is `rnode://<node-id>@<host>?protocol=40400&discovery=40404`.
 - `No such device or address` with `--validator-private-key-path` means the node asked for the key password and found no terminal. Set the `F1R3NODE_VALIDATOR_PASSWORD` environment variable.
+- `Could not decrypt PEM file` means that the password does not match the key file.
 - `malformedframing` with the same option means the file is not an encrypted PEM key. The hex file written by the ASI client is not accepted there.
 
 Keep keys and TLS private material out of shared diagnostics.
@@ -62,7 +63,7 @@ docker inspect "$NODE" --format '{{.State.Health.Status}}'
 
 The route returns `{"ready":true}` with HTTP 200 when the node is up, and `{"ready":false}` with HTTP 503 while it starts or has no peers. A `503` is not a transport failure, and a refused or timed-out connection is. Public gateways may omit this route.
 
-The image healthcheck calls `/api/ready` on container port `40403` every 30 seconds, with a 120-second start period. The container reports `unhealthy` while the node has no peers. It also reports `unhealthy` after you move the HTTP port with `--api-port-http`, even if the node works. Keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. Do not disable TLS or expose privileged listeners as a diagnostic shortcut.
+The image healthcheck calls `/api/ready` on container port `40403` every 30 seconds, with a 120-second start period. A joining node reports `unhealthy` until it has a peer and reaches the Running state. It also reports `unhealthy` after you move the HTTP port with `--api-port-http`, even if the node works. Keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. Do not disable TLS or expose privileged listeners as a diagnostic shortcut.
 
 ## CLI or Indexer Response Mismatch
 
@@ -72,7 +73,7 @@ Check the selected node's HTTP and Protobuf contract before you change a consume
 
 ## Slow Sync or Restart
 
-A joining node takes the last finalized state and the recent blocks from its peers and does not download the whole history. It is ready when the log shows `Making a transition to Running state` and `/api/status` reports `isReady: true` with a growing `lastFinalizedBlockNumber`. A restart on the same data directory takes about a second.
+A joining node takes the last finalized state and the recent blocks from its peers and does not download the whole history. It is ready when the log shows `Making a transition to Running state` and `/api/status` reports `isReady: true` with a growing `lastFinalizedBlockNumber`.
 
 Compare peer progress, readiness and canonical finalization separately.
 
