@@ -8,7 +8,7 @@ TypeScript SDK for wallet management and chain access on [ASI Chain](https://git
 
 - `Client` is the single entry point for wallets, networks, balances, transfers and events. See the [Client](/wallet-sdk/api-reference/client/) page.
 - Wallets are HD wallets (BIP-39 mnemonic, BIP-44 paths) or private-key wallets, and HD accounts are derived on demand.
-- A wallet that is open in memory is not necessarily unlocked. An unlocked wallet holds its decrypted secret for a fixed time, 15 minutes by default, and then locks itself. The SDK never hands out the private key.
+- A wallet that is open in memory is not necessarily unlocked. An unlocked wallet holds its decrypted secret for a fixed time, 15 minutes by default, and then locks itself. A wallet managed by `Client` never hands out its private key.
 - Secrets are encrypted with PBKDF2 and AES-GCM. Storage is IndexedDB in the browser and `node-persist` in Node.js, with a versioned schema and migrations.
 - Each network has a validator URL, a read-only URL, an indexer URL and a node API profile. Networks can be added, switched and removed while the client runs.
 - A transfer reserves its funds before the deploy is sent, so the available balance stays correct while the deploy is pending.
