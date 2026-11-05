@@ -6,7 +6,7 @@
   },
   "scripts": {
     "docs:dev": "vitepress dev .",
-    "docs:build": "vitepress build .",
+    "docs:build": "node .vitepress/diagrams/build.mjs && vitepress build .",
     "docs:preview": "vitepress preview .",
     "diagrams": "node .vitepress/diagrams/build.mjs",
     "diagrams:check": "node .vitepress/diagrams/check.mjs",
