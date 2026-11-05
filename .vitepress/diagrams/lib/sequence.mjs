@@ -10,7 +10,7 @@ const fail = (spec, msg) => { throw new Error(`${spec.id}: ${msg}`); };
 const WIDE = { gap: 150, wrapMsg: 34, wrapSelf: 36, headWrap: 20, pad: 44 };
 
 export function sequence(spec, variant = 'w') {
-  const o = { ...WIDE, ...(variant === 'n' ? spec.narrow || {} : {}) };
+  const o = { ...WIDE, ...(variant === 'n' ? spec.narrow || {} : spec.wide || {}) };
   const P = spec.participants;
   const idx = Object.fromEntries(P.map((p, i) => [p.id, i]));
   if (Object.keys(idx).length !== P.length) fail(spec, 'duplicate participant id');
@@ -83,8 +83,8 @@ export function sequence(spec, variant = 'w') {
       y += h + 8;
     } else {
       const a = idx[f.st.from], b = idx[f.st.to];
-      const h = a === b ? Math.max(f.lines.length * lineH, 24) + 12 : f.lines.length * lineH + 20;
-      const ay = a === b ? y + 6 : y + f.lines.length * lineH + 8;
+      const h = a === b ? Math.max(f.lines.length * lineH, 20) + 12 : f.lines.length * lineH + 20;
+      const ay = a === b ? y + h / 2 - 4 : y + f.lines.length * lineH + 8;
       rows.push({ m: f, a, b, y, ay, h });
       stack.forEach((g) => { g.minc = Math.min(g.minc, a, b); g.maxc = Math.max(g.maxc, a, b); });
       y += h + 8;

@@ -22,5 +22,6 @@ export default {
     { from: 'rn', to: 'sdk', label: 'Balance', reply: true },
     { from: 'sdk', to: 'sdk', label: 'Balance minus reserved funds covers pending?' },
   ],
-  narrow: { gap: 70, pad: 30, wrapMsg: 12, wrapSelf: 16, headWrap: 9 },
+  wide: { gap: 110, pad: 36, wrapMsg: 26, wrapSelf: 24 },
+  narrow: { gap: 50, pad: 16, wrapMsg: 9, wrapSelf: 12, headWrap: 8 },
 };

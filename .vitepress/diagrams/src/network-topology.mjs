@@ -35,21 +35,21 @@ export default {
   ],
   // Phone layout: two columns, the data services below, edges to the validator share the gap between them.
   narrow: {
-    opts: { colGaps: [130], rowGaps: [40, 36, 40, 64, 50], labelWrap: 12 },
-    groups: { p2p: { pad: { b: 18, r: 36 } } },
+    opts: { colGaps: [104], rowGaps: [40, 36, 40, 64, 50], labelWrap: 8 },
+    groups: { p2p: { label: 'Peer-to-peer network', sub: '(TCP 40400, 40404)', pad: { b: 18, r: 36 } } },
     nodes: {
       faucet: { col: 0, row: 0, wrap: 8 }, apps: { col: 0, row: 1, wrap: 8 }, explorer: { col: 0, row: 3 },
       validator: { col: 1, row: 0, w: 128 }, bootstrap: { col: 1, row: 1 }, observer: { col: 1, row: 2 },
       hasura: { col: 0, row: 4 }, indexer: { col: 1, row: 4 }, db: { col: 0.5, row: 5 },
     },
     edges: {
-      'apps>validator': { via: [[0.3, 1], [0.3, 0]], fromOff: -10, toOff: 0, labelAt: [0.3, 0.5] },
-      'faucet>validator': { fromOff: -16, toOff: -16 },
+      'apps>validator': { via: [[0.2, 1], [0.2, 0]], fromOff: -10, toOff: 0, labelAt: [0.2, 0.5], labelWrap: 12 },
+      'faucet>validator': { fromOff: -16, toOff: -16, labelWrap: 12 },
       'indexer>validator': { via: [[0.8, 4], [0.8, 0]], toOff: 16, labelAt: [0.8, 3], labelWrap: 8 },
       'explorer>hasura': { labelPos: 0.3 },
       'indexer>db': { route: 'vh' },
       'hasura>db': { route: 'vh' },
-      'apps>hasura': { via: [[0.55, 1], [0.55, 4]], fromOff: 10, toOff: 0, labelAt: [0.55, 2] },
+      'apps>hasura': { via: [[0.45, 1], [0.45, 4]], fromOff: 10, toOff: 0, labelAt: [0.45, 2] },
       'validator>observer': { via: [[1.5, 0], [1.5, 2]] },
     },
   },
