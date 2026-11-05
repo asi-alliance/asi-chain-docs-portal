@@ -124,7 +124,7 @@ A wallet served from `http://localhost:3000` talks to nodes on `localhost` witho
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Run an Observer" href="/nodes/observer/" icon="observer">Start a node to connect the wallet to</DocCard>
+<DocCard title="Run an Observer" href="/nodes/observer/" icon="observer">Start a node that the wallet can connect to</DocCard>
 <DocCard title="Run a Validator" href="/nodes/validator/" icon="validator">Prepare a Rust validator node</DocCard>
 <DocCard title="Block Explorer" href="https://explorer.dev.asichain.io" icon="explorer">Check the DevNet state on explorer.dev.asichain.io</DocCard>
 <DocCard title="FAQ" href="/help/faq/" icon="faq">Answers to general questions</DocCard>

@@ -6,7 +6,7 @@ DevNet ASI is a test token for trying out transfers and contract deployments on 
 They exist for testing only and cannot be exchanged for real currency.
 :::
 
-## Request Tokens
+## Get Your Tokens
 
 <Steps>
 
@@ -18,7 +18,7 @@ Open [wallet.dev.asichain.io](https://wallet.dev.asichain.io), create a wallet o
 
 Open [faucet.dev.asichain.io](https://faucet.dev.asichain.io), paste the address into the **Address** field and press **FAUCET**. The faucet sends 10,000 ASI to an address whose balance is not above 20,000 ASI.
 
-### Wait for Finalized
+### Wait for the Finalized Status
 
 The **TX status check** section shows the status of the transfer and refreshes it every 30 seconds. Wait for `Finalized`. [Faucet Usage](/faucet/usage/) lists all statuses and error messages.
 

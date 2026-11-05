@@ -12,13 +12,13 @@ The wallet shows the recovery phrase once, when the wallet is created. Anyone wh
 
 The first time you open the wallet it shows the **Welcome** screen with **Create your first wallet**. The **Account Type** switch chooses between an HD wallet and a private key wallet. An HD wallet is built from one 12- or 24-word recovery phrase and can hold any number of accounts. A private key wallet is built from a single key and holds exactly one account.
 
-![The Welcome screen with the Create your first wallet card and the Account Type switch.](/images/wallet/accounts-create.png)
+![The Welcome screen with the Create your first wallet card, the Account Type switch and a hint about wallet types.](/images/wallet/accounts-create.png)
 
 To create an HD wallet, follow these steps.
 
 <Steps>
 
-### Start the Wallet
+### Start Setup
 
 Click **Create Wallet**.
 
@@ -34,7 +34,7 @@ Click **Show**, write the phrase down and click **I've Saved My Phrase**.
 
 Set a wallet password and confirm it. The password needs at least 8 characters, with one uppercase letter, one lowercase letter, one number and one special character.
 
-### Open the Wallet
+### Finish Setup
 
 Click **Continue**. The wallet opens on the **Accounts** page with your first account.
 
@@ -82,7 +82,7 @@ Click **Send**.
 
 **Clear all** empties the form.
 
-![The Send page with the account, recipient address and amount fields.](/images/wallet/send-page.png)
+![The Send ASI page with the account selector, the balance and the Recipient Address field.](/images/wallet/send-page.png)
 
 Before anything is sent, the wallet shows **Confirm Transaction** with the sending account and address, the recipient, the amount, the estimated commission and the total cost. A transfer cannot be reversed. After **Confirm & Send** the wallet asks for the wallet password to sign the transaction.
 
@@ -97,7 +97,7 @@ The transfer then appears in **Transactions**.
 - **Copy ASI Address** puts the address on the clipboard.
 - **Show QR Code** displays the address as a QR code, and **Download QR** saves it as an image.
 
-![The Receive page with the account address, the Copy ASI Address button and the QR code options.](/images/wallet/receive.png)
+![The Receive Tokens page with the account and address format selectors, the ASI address with a copy icon and the Show QR Code control.](/images/wallet/receive.png)
 
 ::: tip Check the Network
 Send only ASI tokens to this address, and check that the wallet is on the right network (the page names it, for example DevNet) before you share the address.
@@ -135,7 +135,7 @@ new stdout(`rho:io:stdout`), deployerId(`rho:rchain:deployerId`) in {
 }
 ```
 
-![The Deploy page in Lite mode with the Rholang code field, phlo fields and action buttons.](/images/wallet/deploy-page.png)
+![The Deploy Rholang Contract page in Lite mode with the Phlo Limit and Phlo Price fields, the Load Example button and the Rholang code field.](/images/wallet/deploy-page.png)
 
 **Deploy** and **Explore** first open a confirmation dialog. For a deploy it shows the account, the length of the code, the phlo limit and price, the estimated cost and the code itself, with a warning that the deployment will consume gas (the dialog's word for phlo) and cannot be reversed. **Deploy Contract** then asks for the wallet password.
 
@@ -149,7 +149,7 @@ Pro mode replaces the single field with an editor. A file panel on the left hold
 
 **Accounts** shows the wallet and its accounts.
 
-![The Accounts page with the wallet, its accounts and the account management buttons.](/images/wallet/accounts-list.png)
+![The Your Wallet section with one account card showing its name, balance, address and the refresh and delete buttons.](/images/wallet/accounts-list.png)
 
 - **Refresh Balances** reloads the balances.
 - The **Edit** button next to an account name renames the account.

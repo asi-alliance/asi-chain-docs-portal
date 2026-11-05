@@ -32,8 +32,8 @@ As of 5 November 2026 the public DevNet runs a Scala node, and the Rust node fro
 
 - Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.
 - Start an [observer](/nodes/observer/) to follow the chain, or prepare a [validator](/nodes/validator/).
-- To bond a validator, follow [validator enrollment](/nodes/validator-enrollment/).
-- If a node does not connect or stays out of sync, see [troubleshooting](/help/troubleshooting/).
+- Follow [validator enrollment](/nodes/validator-enrollment/) to bond a validator.
+- See [troubleshooting](/help/troubleshooting/) if a node does not connect or stays out of sync.
 
 Public DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the bootstrap identity before you connect a node.
 

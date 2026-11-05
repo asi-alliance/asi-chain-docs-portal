@@ -34,7 +34,7 @@ The **Advanced Information** section holds the block signature and its algorithm
 
 ## Transactions
 
-The Transactions page lists deployments and token transfers on two tabs, **Deployments** and **Transfers**. Every row has a type badge (DEPLOY or TRANSFER), a short description, the block number and the age. The field above the list searches by ID, address or block hash.
+The **Transactions** page lists deployments and token transfers on two tabs, **Deployments** and **Transfers**. Every row has a type badge (DEPLOY or TRANSFER), a short description, the block number and the age. The field above the list searches by ID, address or block hash.
 
 Click a deployment to open the transaction details. The header of that page has a button that downloads the transaction as JSON.
 
@@ -70,11 +70,11 @@ Four cards show the latest block, the average block time, transactions per secon
 
 ## Indexer Status
 
-The indexer is the service that reads blocks from the node and stores them in the database that the explorer queries. The **Indexer** page shows how far it has got.
+The indexer is the service that reads blocks from the node and stores them in the database that the explorer queries. The **Indexer** page shows how far it has progressed.
 
 The label in the top right is **Synched** when the indexer is up to date, **Syncing** when it is slightly behind and **Behind** when it is far behind. The cards show the sync progress, the last indexed block with the number of blocks it is behind, the highest block, and the age of the last update. The table at the bottom repeats the last indexed block, the highest block and the sync status.
 
-The highest block on this page is the newest block in the explorer database, not a value read from the node. The **Last Update** age is therefore the more useful sign of a stalled indexer: if it keeps growing while the Blocks page shows no new blocks, the indexer has stopped.
+The highest block on this page is the newest block in the explorer database, not a value read from the node. The **Last Update** age is therefore the more useful sign of a stalled indexer: if it keeps growing while the **Blocks** page shows no new blocks, the indexer has stopped.
 
 ![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.png)
 
@@ -82,9 +82,9 @@ The highest block on this page is the newest block in the explorer database, not
 
 The search box in the header looks up blocks, transfers and deployments. Type a block number or hash, a transfer or deployment ID or an address and press Enter. The matches appear under the box, and a click opens the block or transaction details.
 
-![The search box in the header with a list of matching results under it.](/images/explorer/search-tab.png)
-
 The funnel icon opens **Filters**. **Search Type** narrows the search to **All Types**, **Blocks**, **Transfers** or **Deployments**, and two date fields limit the time range. The panel has one group of filters for each type.
+
+![The search box with the Filters panel open, showing Search Type and the block, transfer and deployment filter fields.](/images/explorer/search-tab.png)
 
 | Group | Filters |
 | --- | --- |
@@ -96,7 +96,7 @@ The funnel icon opens **Filters**. **Search Type** narrows the search to **All T
 
 ## Export
 
-The green icon next to the page title downloads a CSV file with up to 5,000 records. On the Blocks page it sits next to **Recent Blocks** and saves `recent_blocks.csv`. On the Transactions page it exports the open tab and saves `recent_deployments.csv` or `recent_transfers.csv`.
+The green icon next to the page title downloads a CSV file with up to 5,000 records. On the **Blocks** page it sits next to **Recent Blocks** and saves `recent_blocks.csv`. On the **Transactions** page it exports the open tab and saves `recent_deployments.csv` or `recent_transfers.csv`.
 
 ## Data Source
 
