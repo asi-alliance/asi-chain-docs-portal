@@ -11,8 +11,10 @@ import "./content.css";
 import "./chrome.css";
 import "./blocks.css";
 import "./diagrams.css";
+import "./motion.css";
 import { captchaPlugin } from "./captchaFetch";
 import { setupSidebarScroll } from "./sidebar";
+import { setupMotion } from "./motion";
 
 export default {
     extends: DefaultTheme,
@@ -32,7 +34,9 @@ export default {
             ],
         });
     },
-    enhanceApp({ app, router, siteData }) {
+    enhanceApp(ctx) {
+        const { app, router } = ctx;
+        setupMotion(ctx);
         app.use(captchaPlugin);
         setupSidebarScroll(router);
         app.component("Steps", Steps);
