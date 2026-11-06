@@ -304,7 +304,34 @@
   text-decoration: none;
 }
 
-.asi-directory .asi-directory-title a:hover,
+.asi-directory .asi-directory-top {
+  position: relative;
+}
+
+.asi-directory .asi-directory-title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.asi-directory .asi-directory-title a:focus-visible {
+  outline: none;
+}
+
+.asi-directory .asi-directory-title a:focus-visible::after {
+  outline: 2px solid var(--ds-ring);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* A panel answers the pointer like an app panel: the border takes the brand color. The title does the
+   same when the pointer is over the top of the panel, which opens the landing page. */
+.asi-directory .asi-directory-group:hover,
+.asi-directory .asi-directory-app:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
+.asi-directory .asi-directory-top:hover .asi-directory-title,
 .asi-directory .asi-directory-list a:hover {
   color: var(--vp-c-brand-1);
 }
@@ -338,10 +365,6 @@
   font-size: 13px;
   line-height: 20px;
   color: var(--vp-c-brand-1);
-}
-
-.asi-directory .asi-directory-app:hover {
-  border-color: var(--vp-c-brand-1);
 }
 
 /* The feedback button is fixed at the bottom right, so the page keeps room under its last block. */

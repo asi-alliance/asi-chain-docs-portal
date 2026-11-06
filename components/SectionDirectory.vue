@@ -5,16 +5,20 @@
         <nav aria-label="Documentation sections">
             <div class="asi-directory-grid">
                 <section v-for="group in groups" :key="group.text" class="asi-directory-group">
-                    <div class="asi-directory-head">
-                        <span v-if="icons[group.link ?? '']" class="asi-directory-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" v-html="icons[group.link ?? '']" />
-                        </span>
-                        <h2 class="asi-directory-title">
-                            <a v-if="group.link" :href="group.link">{{ group.text }}</a>
-                            <template v-else>{{ group.text }}</template>
-                        </h2>
+                    <!-- The title link stretches over the icon and the line about the section, so the top of the
+                         panel opens the landing page and the list below keeps its own links. -->
+                    <div class="asi-directory-top">
+                        <div class="asi-directory-head">
+                            <span v-if="icons[group.link ?? '']" class="asi-directory-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" v-html="icons[group.link ?? '']" />
+                            </span>
+                            <h2 class="asi-directory-title">
+                                <a v-if="group.link" :href="group.link">{{ group.text }}</a>
+                                <template v-else>{{ group.text }}</template>
+                            </h2>
+                        </div>
+                        <p v-if="about[group.link ?? '']" class="asi-directory-about">{{ about[group.link ?? ""] }}</p>
                     </div>
-                    <p v-if="about[group.link ?? '']" class="asi-directory-about">{{ about[group.link ?? ""] }}</p>
                     <ul class="asi-directory-list">
                         <li v-for="item in group.items" :key="item.link">
                             <a :href="item.link">{{ item.text }}</a>

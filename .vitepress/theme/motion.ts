@@ -5,7 +5,7 @@ import type { EnhanceAppContext } from "vitepress";
 /*
  * Client side of the motion layer. The rules that CSS can express live in motion.css, and this file adds
  * what needs a script: the replay of the page fade on route changes, the cross-fade of the theme switch,
- * the diagram reveal and the image fade-in. Everything here is skipped with prefers-reduced-motion.
+ * the diagram reveal, the image fade-in and the glide to an anchor on the same page. Everything here is skipped with prefers-reduced-motion.
  */
 
 const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)";
@@ -108,11 +108,42 @@ function fadeImages() {
 }
 
 function replayPageFade() {
-    const el = document.querySelector<HTMLElement>(".VPContent .vp-doc");
+    const el = document.querySelector<HTMLElement>(".VPContent .vp-doc, .VPContent .asi-home-page");
     el?.animate([{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], {
         duration: 240,
         easing: EASE_OUT,
     });
+}
+
+// The VitePress router jumps to an anchor on the same page and glides only for a heading anchor less than a
+// screen away. Its click handler is registered first and scrolls in the next animation frame, so smooth
+// scroll-behavior set during the same click applies to that scroll. It is dropped when the scroll ends, so
+// page changes and the browser's own jumps stay instant. The timer covers a click that does not scroll.
+function glideToAnchors() {
+    const root = document.documentElement;
+    let timer = 0;
+    const release = () => {
+        root.style.removeProperty("scroll-behavior");
+        clearTimeout(timer);
+    };
+    window.addEventListener(
+        "click",
+        (e) => {
+            if (reduced() || e.button !== 0 || e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) return;
+            const link = e.target instanceof Element ? e.target.closest("a") : null;
+            if (!link || link.hasAttribute("target") || link.hasAttribute("download") || link.closest(".vp-raw")) return;
+            const href = link.getAttribute("href");
+            if (!href) return;
+            const url = new URL(href, link.baseURI);
+            if (!url.hash || url.origin !== location.origin || url.pathname !== location.pathname) return;
+            if (url.search !== location.search) return;
+            root.style.scrollBehavior = "smooth";
+            clearTimeout(timer);
+            window.addEventListener("scrollend", release, { once: true });
+            timer = window.setTimeout(release, 1500);
+        },
+        { capture: true },
+    );
 }
 
 export function setupMotion({ app, router }: EnhanceAppContext) {
@@ -152,6 +183,8 @@ export function setupMotion({ app, router }: EnhanceAppContext) {
             );
         },
     });
+
+    glideToAnchors();
 
     const observeDiagrams = watchDiagrams();
     let lastPath = location.pathname;

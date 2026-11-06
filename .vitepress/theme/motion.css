@@ -20,6 +20,8 @@
 html:not(#a) .vp-doc a,
 html:not(#a) .asi-directory a,
 html:not(#a) .asi-directory .asi-directory-app,
+html:not(#a) .asi-directory .asi-directory-group,
+html:not(#a) .asi-directory .asi-directory-title,
 html:not(#a) .vp-doc a code,
 html:not(#a) .VPDocFooter .pager-link .title,
 html:not(#a) .VPFooter a {
@@ -196,7 +198,8 @@ html:not(#a) .VPBackdrop.fade-leave-active {
     transform: translateY(4px);
   }
 }
-html:not(#a) .VPContent .vp-doc {
+html:not(#a) .VPContent .vp-doc,
+html:not(#a) .VPContent .asi-home-page {
   animation: asi-page-in var(--asi-dur-3) var(--asi-ease-out) backwards;
 }
 
