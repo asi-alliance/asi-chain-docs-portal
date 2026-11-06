@@ -177,6 +177,23 @@
   }
 }
 
+/* Search results: a match is underlined in the link colour instead of being filled with a block of brand
+   colour, so a row with three matches stays readable. The selected result turns its whole title the link
+   colour, and there the underline is what still marks the match. The search box loads as its own chunk
+   after this file, so the mark rule needs one more class than the VitePress rule it overrides. */
+:root {
+  --vp-local-search-highlight-bg: transparent;
+  --vp-local-search-highlight-text: var(--vp-c-brand-1);
+}
+
+.VPLocalSearchBox .result .titles mark,
+.VPLocalSearchBox .result .excerpt mark {
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 .VPNavBar .VPSwitchAppearance,
 .VPNavBar .VPNavBarAppearance .VPSwitch {
   border-color: var(--ds-control-border);
@@ -311,14 +328,17 @@
   color: var(--vp-c-text-1);
 }
 
+/* A long heading wraps instead of being cut off at the edge of the column (a flex box drops the ellipsis of
+   VitePress). The first line keeps the 32 px row of a one-line entry, because VitePress places the outline
+   marker from the top of the link and the marker should stay level with that line. */
 .VPDocAsideOutline .outline-link {
-  display: flex;
-  align-items: center;
-  min-height: 32px;
-  padding: 0;
+  display: block;
+  padding: 6px 0;
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
+  white-space: normal;
+  overflow-wrap: anywhere;
   color: var(--vp-c-text-2);
 }
 
