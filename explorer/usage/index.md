@@ -16,9 +16,9 @@ The **Blocks** page is the start page.
 
 The four cards at the top show the latest block number, the number of active validators, the average block time and the network status. Next to them, **Live Activity** lists new blocks, deployments and transfers as they arrive.
 
-Under the cards, the **Recent Blocks** table lists the newest blocks with their number, abbreviated hash, abbreviated validator key and age. The number is a link to the block details. The **Status** column shows a check mark, because the explorer lists only blocks that the indexer has already stored. The search field above the table filters it by block number or hash.
+Under the cards, the **Recent Blocks** table lists the newest blocks with their number, abbreviated hash, abbreviated validator key and age. The number is a link to the block details. The **Status** column shows a check mark and **Confirmed**, because the explorer lists only blocks that the indexer has already stored. The search field above the table filters it by block number or hash.
 
-![The Blocks page with the summary cards, Live Activity and the Recent Blocks table.](/images/explorer/blocks-page.png)
+![The Blocks page with the summary cards, Live Activity and the Recent Blocks table.](/images/explorer/blocks-page.webp){width=976 height=974}
 
 ## Block Details
 
@@ -38,7 +38,7 @@ The **Transactions** page lists deployments and token transfers on two tabs, **D
 
 Click a deployment to open the transaction details. The header of that page has a button that downloads the transaction as JSON.
 
-![The Transactions page with the Deployments and Transfers tabs and a list of rows.](/images/explorer/transactions-page.png)
+![The Transactions page with the Deployments and Transfers tabs and a list of rows.](/images/explorer/transactions-page.webp){width=976 height=668}
 
 ## Transaction Details
 
@@ -52,13 +52,13 @@ The **Validators** page starts with three cards, **Total Validators**, **Total A
 
 The **View History** button opens the **Validator History** page.
 
-![The Validators page with summary cards and the table of validators and their stakes.](/images/explorer/validators-page.png)
+![The Validators page with summary cards and the table of validators and their stakes.](/images/explorer/validators-page.webp){width=976 height=692}
 
 ### Validator History
 
 **Validator History** shows the validator set at any block. Type a block number into the **Block** field. The page then shows the block time and proposer, the number of active validators, and a table with each validator's stake and share, where the block proposer is marked. Total, average, minimum and maximum stake for that block are listed under the table.
 
-![The Validator History page for one block with its proposer, validator count and stake table.](/images/explorer/validators-history.png)
+![The Validator History page for one block with its proposer, validator count and stake table.](/images/explorer/validators-history.webp){width=976 height=876}
 
 ## Statistics
 
@@ -66,7 +66,7 @@ The **Statistics** page is titled **Network Dashboard**. The buttons in the top 
 
 Four cards show the latest block, the average block time, transactions per second and the number of active validators. Below them, the **Performance Metrics** chart plots block time and transactions per second over the chosen range, and the **Network Activity** chart plots deployments and transfers.
 
-![The Network Dashboard with the time range buttons, summary cards and two charts.](/images/explorer/statistics-page.png)
+![The Network Dashboard with the time range buttons, summary cards and two charts.](/images/explorer/statistics-page.webp){width=976 height=890}
 
 ## Indexer Status
 
@@ -76,21 +76,21 @@ The label in the top right is **Synched** when the indexer is up to date, **Sync
 
 The highest block on this page is the newest block in the explorer database, not a value read from the node. The **Last Update** age is therefore the more useful sign of a stalled indexer: if it keeps growing while the **Blocks** page shows no new blocks, the indexer has stopped.
 
-![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.png)
+![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.webp){width=976 height=760}
 
 ## Search
 
 The search box in the header looks up blocks, transfers and deployments. Type a block number or hash, a transfer or deployment ID or an address and press Enter. The matches appear under the box, and a click opens the block or transaction details.
 
-The funnel icon opens **Filters**. **Search Type** narrows the search to **All Types**, **Blocks**, **Transfers** or **Deployments**, and two date fields limit the time range. The panel has one group of filters for each type.
+The funnel icon opens **Filters**. **Search Type** narrows the search to **All Types**, **Blocks**, **Transfers** or **Deployments**. The panel has one group of filters for each type.
 
-![The search box with the Filters panel open, showing Search Type and the block, transfer and deployment filter fields.](/images/explorer/search-tab.png)
+![The search box with the Filters panel open, showing Search Type and the block, transfer and deployment filter fields.](/images/explorer/search-tab.webp){width=976 height=912}
 
 | Group | Filters |
 | --- | --- |
 | Block Filters | Proposer address and minimum and maximum block number |
-| Transfer Filters | Sender and recipient address, minimum and maximum amount in ASI, and status |
-| Deployment Filters | Deployer address, deployment type, minimum and maximum phlo cost, and status |
+| Transfer Filters | Sender and recipient address, and minimum and maximum amount in ASI |
+| Deployment Filters | Deployer address, and minimum and maximum phlo cost |
 
 **Clear All** resets the form.
 
