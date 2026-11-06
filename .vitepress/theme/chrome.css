@@ -134,6 +134,114 @@
   background-color: transparent;
 }
 
+/* LinkMenu draws the DevNet Apps and GitHub menus. A row is the icon in a tinted square, as on the home
+   page, the name and, in mono, the host or repository it opens. The whole row is the link and takes a soft
+   fill under the pointer. The fill of the light theme matches the menu in the dark one, so the dark theme
+   takes the divider color. */
+
+.asi-link-menu {
+  --asi-link-menu-hover: var(--vp-c-default-soft);
+  display: grid;
+  gap: 12px;
+  min-width: 248px;
+}
+
+.dark .asi-link-menu {
+  --asi-link-menu-hover: var(--vp-c-divider);
+}
+
+@media (min-width: 768px) {
+  .asi-link-menu.is-wide {
+    grid-template-columns: repeat(2, 240px);
+    gap: 16px 8px;
+  }
+}
+
+.asi-link-menu .asi-link-menu-group {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+
+.asi-link-menu .asi-link-menu-label {
+  margin: 0;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--vp-c-text-2);
+}
+
+.asi-link-menu .asi-link-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+
+.asi-link-menu .asi-link-menu-item:hover {
+  background-color: var(--asi-link-menu-hover);
+}
+
+.asi-link-menu .asi-link-menu-item:hover .asi-link-menu-name {
+  color: var(--vp-c-brand-1);
+}
+
+.asi-link-menu .asi-link-menu-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+}
+
+.asi-link-menu .asi-link-menu-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.asi-link-menu .asi-link-menu-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.asi-link-menu .asi-link-menu-name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.asi-link-menu .asi-link-menu-note {
+  overflow: hidden;
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--vp-c-text-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* In the menu screen of a phone the groups stack under the menu button, and each row stays a 48 px tap
+   target. */
+.asi-link-menu.is-screen {
+  min-width: 0;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
 /* The search box is 40 px high, and its border reaches 3:1 against the bar, the contrast WCAG requires for
    the edge of a control, so the box stays visible without its fill. */
 
@@ -385,6 +493,19 @@
   }
 }
 
+/* From 960 to 1279 px the sidebar is on screen, so the outline button is the only control in the bar.
+   It sits at the right, where the outline column stands on wider screens, and its panel opens under it. */
+@media (min-width: 960px) and (max-width: 1279px) {
+  .VPLocalNav.has-sidebar .container {
+    justify-content: flex-end;
+  }
+
+  .VPLocalNav .VPLocalNavOutlineDropdown .items {
+    right: 32px;
+    left: auto;
+  }
+}
+
 /* The feedback button is fixed 30 px from the bottom-right corner and 55 px tall, so in windows up
    to about 1500 px wide it covers the end of a long outline. The extra room lets the last entries scroll above it. */
 .VPDoc .aside .aside-content {
@@ -403,14 +524,19 @@
   }
 }
 
-/* The previous and next links and the edit link are plain text without boxes, like the rest of the
-   navigation. */
+/* The previous and next links are panels like the Next Steps cards above them, and the border takes the
+   brand color under the pointer. The extra 2 px on top balances the space above the capitals of the small
+   label with the space under the baseline of the title. */
 
 .VPDocFooter .pager-link {
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
+  padding: 14px 16px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--ds-r-md);
+  background-color: var(--vp-c-bg-soft);
+}
+
+.VPDocFooter .pager-link:hover {
+  border-color: var(--vp-c-brand-1);
 }
 
 .VPDocFooter .pager-link .desc {
@@ -426,10 +552,6 @@
   font-weight: 500;
   line-height: 20px;
   color: var(--vp-c-brand-1);
-}
-
-.VPDocFooter .pager-link:hover .title {
-  color: var(--vp-c-brand-2);
 }
 
 .VPLastUpdated {
@@ -488,7 +610,7 @@
   top: 1px;
 }
 
-/* The pager title has no box around it, so the centring tool needs a 20 px block with the 2 px of space under the text. */
+/* The pager title is a 20 px block with 2 px of space under the text, which centres the letters on the line for the centring tool. */
 
 .VPDocFooter .pager-link .title {
   display: block;

@@ -39,7 +39,9 @@ html:not(#a) .VPFlyout .icon,
 html:not(#a) .DocSearch-Button,
 html:not(#a) .DocSearch-Button-Placeholder,
 html:not(#a) .VPMenuLink a,
-html:not(#a) .VPMenuLink .link {
+html:not(#a) .VPMenuLink .link,
+html:not(#a) .asi-link-menu-item,
+html:not(#a) .asi-link-menu-name {
   transition:
     color var(--asi-dur-1) var(--asi-ease-out),
     background-color var(--asi-dur-1) var(--asi-ease-out),
@@ -113,12 +115,9 @@ html:not(#a) .VPNavScreenMenuGroup .button-icon {
   transition: transform var(--asi-dur-2) var(--asi-ease-out);
 }
 
-/* A card title is underlined at all times, so it reads as a link without a hover, and only the color of
-   the line fades in on hover. */
+/* A card is a link inside .vp-doc, so section 1 already fades its border. */
 html:not(#a) .asi-card-title {
-  transition:
-    color var(--asi-dur-1) var(--asi-ease-out),
-    text-decoration-color var(--asi-dur-1) var(--asi-ease-out);
+  transition: color var(--asi-dur-1) var(--asi-ease-out);
 }
 
 /* 3. Sidebar */

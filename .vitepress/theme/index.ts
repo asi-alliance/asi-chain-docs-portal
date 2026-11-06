@@ -6,6 +6,7 @@ import DocCard from "../../components/DocCard.vue";
 import Diagram from "../../components/Diagram.vue";
 import NotFound from "../../components/NotFound.vue";
 import SectionDirectory from "../../components/SectionDirectory.vue";
+import LinkMenu from "../../components/LinkMenu.vue";
 import type { Theme } from "vitepress";
 import { h } from "vue";
 import "./style.css";
@@ -37,5 +38,6 @@ export default {
         app.component("DocCard", DocCard);
         app.component("Diagram", Diagram);
         app.component("SectionDirectory", SectionDirectory);
+        app.component("LinkMenu", LinkMenu);
     },
 } satisfies Theme;

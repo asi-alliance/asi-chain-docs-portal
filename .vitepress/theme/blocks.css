@@ -62,12 +62,13 @@
   margin-bottom: 0;
 }
 
-/* CardGrid and DocCard make a list of links with the title first and the description under it. There are no
-   boxes or icons, so a list of next pages reads like the rest of the text. */
+/* CardGrid and DocCard lay out the next pages as panels, the same surface as the panels of the home page:
+   a 1 px border, the soft background and the brand border under the pointer. The whole panel is the link,
+   with the title first and one line about the page under it. */
 
 .asi-card-grid {
   display: grid;
-  gap: 24px 32px;
+  gap: 16px;
   margin: 24px 0;
   grid-template-columns: minmax(0, 1fr);
 }
@@ -80,6 +81,10 @@
 
 .asi-card {
   display: block;
+  padding: 16px 20px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--ds-r-md);
+  background-color: var(--vp-c-bg-soft);
   color: var(--vp-c-text-2);
 }
 
@@ -88,10 +93,13 @@
   text-decoration: none;
 }
 
+.vp-doc a.asi-card:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
 .asi-card:focus-visible {
   outline: 2px solid var(--ds-ring);
-  outline-offset: 4px;
-  border-radius: 4px;
+  outline-offset: 2px;
 }
 
 .asi-card-title {
@@ -100,15 +108,6 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-}
-
-.asi-card:hover .asi-card-title {
-  color: var(--vp-c-brand-2);
-  text-decoration-color: currentColor;
 }
 
 .asi-card-body {

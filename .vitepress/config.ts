@@ -164,23 +164,40 @@ export default defineConfig({
       dark: '/logo-dark.svg'
     },
     
+    // Both menus are drawn by components/LinkMenu.vue, which shows each link with an icon from
+    // components/icons.ts, its name and the host or repository it opens. The home page reads the DevNet
+    // apps from here as well, so an app added to this menu also gets a panel there.
     nav: [
       { text: 'DevNet Apps', items: [
-          { text: 'Wallet', link: 'https://wallet.dev.asichain.io' },
-          { text: 'Explorer', link: 'https://explorer.dev.asichain.io' },
-          { text: 'Faucet', link: 'https://faucet.dev.asichain.io' },
+          { component: 'LinkMenu', props: { groups: [
+            { items: [
+              { text: 'Wallet', link: 'https://wallet.dev.asichain.io', icon: 'wallet' },
+              { text: 'Explorer', link: 'https://explorer.dev.asichain.io', icon: 'search' },
+              { text: 'Faucet', link: 'https://faucet.dev.asichain.io', icon: 'droplet' },
+            ] },
+          ] } },
         ]
       },
       { text: 'GitHub', items: [
-          { text: 'Rust Node', link: 'https://github.com/asi-alliance/asi-chain-rust-node' },
-          { text: 'ASI Client', link: 'https://github.com/asi-alliance/asi-chain-client' },
-          { text: 'Indexer', link: 'https://github.com/asi-alliance/asi-chain-indexer' },
-          { text: 'Wallet SDK', link: 'https://github.com/asi-alliance/asi-chain-wallet-sdk' },
-          { text: 'Wallet', link: 'https://github.com/asi-alliance/asi-chain-wallet' },
-          { text: 'Wallet CLI', link: 'https://github.com/asi-alliance/asi-chain-wallet-cli' },
-          { text: 'Explorer', link: 'https://github.com/asi-alliance/asi-chain-explorer' },
-          { text: 'Faucet', link: 'https://github.com/asi-alliance/asi-chain-faucet' },
-          { text: 'Docs Portal', link: 'https://github.com/asi-alliance/asi-chain-docs-portal' },
+          { component: 'LinkMenu', props: { groups: [
+            { text: 'Node', items: [
+              { text: 'Rust Node', link: 'https://github.com/asi-alliance/asi-chain-rust-node', icon: 'server' },
+              { text: 'ASI Client', link: 'https://github.com/asi-alliance/asi-chain-client', icon: 'terminal' },
+              { text: 'Indexer', link: 'https://github.com/asi-alliance/asi-chain-indexer', icon: 'database' },
+            ] },
+            { text: 'Wallet', items: [
+              { text: 'Wallet', link: 'https://github.com/asi-alliance/asi-chain-wallet', icon: 'wallet' },
+              { text: 'Wallet SDK', link: 'https://github.com/asi-alliance/asi-chain-wallet-sdk', icon: 'package' },
+              { text: 'Wallet CLI', link: 'https://github.com/asi-alliance/asi-chain-wallet-cli', icon: 'square-terminal' },
+            ] },
+            { text: 'Apps', items: [
+              { text: 'Explorer', link: 'https://github.com/asi-alliance/asi-chain-explorer', icon: 'search' },
+              { text: 'Faucet', link: 'https://github.com/asi-alliance/asi-chain-faucet', icon: 'droplet' },
+            ] },
+            { text: 'Docs', items: [
+              { text: 'Docs Portal', link: 'https://github.com/asi-alliance/asi-chain-docs-portal', icon: 'book-open' },
+            ] },
+          ] } },
         ]
       },
     ],
