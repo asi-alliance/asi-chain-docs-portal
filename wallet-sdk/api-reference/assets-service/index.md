@@ -1,56 +1,96 @@
 # AssetsService
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/AssetsService/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/AssetsService/index.ts)
 
-Balance queries and token transfers via `BlockchainGateway`.
+`AssetsService` reads the balance of an address through an exploratory deploy (see [Balance Query Flow](/architecture/sequence-diagrams/balance/)). The service has one method. Transfers are not part of it: they go through [`Client`](/wallet-sdk/api-reference/client/), which signs and submits them.
 
-## `transfer`
+The package exports the class as `AssetsService`. You rarely build it yourself, because `ApiServiceRegistry.getInstance().assets` holds an instance. `Client.getBalance(address)` calls it with `DEFAULT_ASSET` and returns the amount as a `bigint`.
 
-```ts
-transfer(
-  fromAddress: Address,
-  toAddress: Address,
-  amount: bigint,
-  wallet: Wallet,
-  passwordProvider: PasswordProvider,
-  phloLimit?: number
-): Promise<string | undefined>
-```
-
-Transfers ASI tokens from one address to another by constructing, signing, and submitting a deploy. Both addresses are validated before submission.
-
-**Parameters:**
-
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `fromAddress` | `Address` | Yes | Sender address. Must pass `validateAddress()`. |
-| `toAddress` | `Address` | Yes | Recipient address. Must pass `validateAddress()`. |
-| `amount` | `bigint` | Yes | Amount in atomic units. Must be greater than zero. |
-| `wallet` | `Wallet` | Yes | Wallet used to sign the transfer deploy. |
-| `passwordProvider` | `PasswordProvider` | Yes | Async callback returning the wallet password. |
-| `phloLimit` | `number` | No | Gas limit. Defaults to `DEFAULT_PHLO_LIMIT` from config. |
-
-**Returns:** `Promise<string | undefined>` — deploy ID on success.
-
-**Throws:**
-- `Error("AssetsService.transfer: Invalid 'fromAddress': ${errorCode}")` — sender address validation failed.
-- `Error("AssetsService.transfer: Invalid 'toAddress': ${errorCode}")` — recipient address validation failed.
-- `Error("AssetsService.transfer: Transfer amount must be greater than zero")` — if `amount ≤ 0`.
-- `Error("AssetsService.transfer: Invalid block number")` — if the blockchain returns an invalid block number.
-- `Error("AssetsService.transfer: ${message}")` — wraps signer or gateway errors.
-
-## `getASIBalance`
+## Import
 
 ```ts
-getASIBalance(address: Address): Promise<bigint>
+import { AssetsService } from "@asichain/asi-wallet-sdk";
 ```
 
-Retrieves the ASI balance for an address using an exploratory deploy.
+## Constructor
 
-**Parameters:**
+```ts
+new AssetsService(deployService: DeployService, nodeApiProvider?: NodeApiProvider)
+```
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `address` | `Address` | Yes | Address to query. Must pass `validateAddress()`. |
+`nodeApiProvider` is optional. It is used to pick the Rholang balance query that fits the profile of the active node (Scala or Rust). With a Rust node, SDK 2.1.0 cannot read balances, so `getBalance` throws `BalanceUnavailableError` (see [Configure Networks](/wallet-sdk/overview/#configure-networks)).
 
-**Returns:** `Promise<bigint>` — balance in atomic units. Returns `BigInt(0)` on any error or if the address has no balance.
+## Methods
+
+### getBalance()
+
+```ts
+getBalance(address: Address, asset: Asset): Promise<IBalanceData>
+```
+
+Reads the balance of `address` and returns it together with `asset`. The `asset` argument is not sent to the node. It is returned as it is, so you can keep the amount and its token in one object.
+
+| Name | Type | Description |
+|------|------|-------------|
+| `address` | `Address` | Address to query. |
+| `asset` | [`Asset`](/wallet-sdk/api-reference/asset/) | Token the amount is reported in. `DEFAULT_ASSET` is the native ASI. |
+
+Returns `Promise<IBalanceData>`.
+
+```ts
+interface IBalanceData {
+    amount: bigint; // atomic units
+    asset: Asset;
+}
+```
+
+It throws:
+
+- `Error("AssetsService.getBalance: Invalid address: <errorCode>")` when `address` fails [`validateAddress`](/wallet-sdk/api-reference/validators/). The code is one of the `AddressValidationErrorCode` values.
+- `BalanceUnavailableError` when the balance cannot be read: the node request fails, the node returns no balance or an unexpected value, or the vault replies with an error string.
+
+The method does not return `0n` on failure, so a zero in `amount` is a real zero balance.
+
+## Errors
+
+### BalanceUnavailableError
+
+`BalanceUnavailableError` extends `CustomError` and is exported from the package root.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `address` | `Address` | The address that was queried. |
+| `reason` | `string` | What went wrong, for example the message of the failed request or `the node returned no balance expression`. |
+| `code` | `CustomErrorCode` | `BALANCE_UNAVAILABLE`. |
+| `status` | `number` | `502`. |
+| `message` | `string` | `Balance of <address> could not be read: <reason>`. |
+
+## Example
+
+```ts
+import {
+    BalanceUnavailableError,
+    DEFAULT_ASSET,
+    fromAtomicAmount,
+    type Address,
+    type AssetsService,
+} from "@asichain/asi-wallet-sdk";
+
+export async function printBalance(
+    assets: AssetsService,
+    owner: Address,
+): Promise<void> {
+    try {
+        const { amount, asset } = await assets.getBalance(owner, DEFAULT_ASSET);
+
+        console.log(`${fromAtomicAmount(amount, asset.getDecimals())} ${asset.getName()}`);
+    } catch (error) {
+        if (error instanceof BalanceUnavailableError) {
+            console.error(`No balance for ${error.address}: ${error.reason}`);
+            return;
+        }
+
+        throw error;
+    }
+}
+```

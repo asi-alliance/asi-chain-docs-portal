@@ -1,103 +1,81 @@
 import { defineConfig } from 'vitepress'
-import { withMermaid } from 'vitepress-plugin-mermaid'
 import CustomLanguages from "../config/languages";
+import { writeRedirectStubs } from "./redirect-stubs";
+import { deepSpaceLight, deepSpaceDark } from "./theme/shiki";
+import { icons, sectionIcons } from "../components/icons";
 
-export default withMermaid(defineConfig({
-  title: "ASI:Chain Docs",
-  description: "Complete guide for ASI:Chain blockchain network",
-  css: ['custom.css'],
+// Each sidebar group title shows the icon of its section, as the home page does. chrome.css draws it as a
+// CSS mask, so it takes the colors of the theme, and this sets the mask and the room for it on each group
+// link. The paths come from components/icons.ts.
+const sectionIconCss = Object.entries(sectionIcons)
+  .map(([link, name]) => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[name]}</svg>`;
+    return `.VPSidebarItem.level-0>.item>.link[href="${link}"]{--asi-section-icon:url("data:image/svg+xml,${encodeURIComponent(svg)}");--asi-section-icon-display:block;--asi-section-icon-pad:34px}`;
+  })
+  .join('');
 
-  mermaid: {
-    theme: 'base',
-    themeVariables: {
-      fontFamily: '"Roboto Mono", monospace'
-    }
+const sidebar = [
+  {
+    text: 'Get Started',
+    link: '/quick-start/',
+    collapsed: false,
+    items: [
+      { text: 'What Is ASI:Chain', link: '/overview/' },
+      { text: 'Get DevNet ASI', link: '/quick-start/get-asi/' },
+    ]
   },
-
-  themeConfig: {
-    logo: {
-      light: '/logo-light.svg',
-      dark: '/logo-dark.svg'
-    },
-    
-    nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Quick Start', link: '/quick-start/join-validator/' },
-      { text: 'Wallet', link: 'https://wallet.dev.asichain.io' },
-      { text: 'Explorer', link: 'https://explorer.dev.asichain.io' },
-      { text: 'Faucet', link: 'https://faucet.dev.asichain.io' },
-      { text: 'Github', items: [
-        {
-          text: 'Explorer repository', link: "https://github.com/asi-alliance/asi-chain-explorer",
-        },
-        {
-          text: 'Wallet repository', link: "https://github.com/asi-alliance/asi-chain-wallet",
-        },
-        {
-          text: 'Wallet CLI repository', link: "https://github.com/asi-alliance/asi-chain-wallet-cli",
-        },
-        {
-          text: 'Faucet repository', link: "https://github.com/asi-alliance/asi-chain-faucet",
-        }
-      ]}
-    ],
-
-    sidebar: [
-      {
-        text: 'General',
-        collapsed: false,
-        items: [
-          { text: 'Overview', link: '/general/overview/' },
-          { text: 'Useful Links', link: '/general/useful-links/' },
-        ]
-      },
-      {
-        text: 'Quick Start',
-        collapsed: false,
-        items: [
-          { text: 'Join DevNet as Validator', link: '/quick-start/join-validator/' },
-          { text: 'Join DevNet as Observer', link: '/quick-start/join-observer/' },
-          { text: 'How to Get DevNet ASI', link: '/quick-start/get-asi/' },
-          { text: 'Troubleshooting', link: '/quick-start/troubleshooting/' },
-        ]
-      },
-      {
-        text: 'Shard & Nodes',
-        collapsed: false,
-        items: [
-          { text: 'DevNet Structure & Entities', link: '/shard-nodes/devnet-structure/' },
-          { text: 'Validator Node Image', link: '/shard-nodes/validator-image/' },
-          { text: 'Observer Node Image', link: '/shard-nodes/observer-image/' },
-          { text: 'Own Shard Setting Up', link: '/shard-nodes/own-shard/' },
-        ]
-      },
-      {
-        text: 'Wallet',
-        collapsed: false,
-        items: [
-          { text: 'Usage Guide', link: '/wallet/usage/' },
-          { text: 'Custom Network Connection', link: '/wallet/custom-network/' },
-        ]
-      },
+  {
+    text: 'Use',
+    link: '/use/',
+    collapsed: false,
+    items: [
+      { text: 'ASI Wallet', link: '/wallet/usage/' },
+      { text: 'Custom Network Connection', link: '/wallet/custom-network/' },
+      { text: 'Faucet', link: '/faucet/usage/' },
+      { text: 'ASI Block Explorer', link: '/explorer/usage/' },
+    ]
+  },
+  {
+    text: 'Run a Node',
+    link: '/nodes/',
+    collapsed: false,
+    items: [
+      { text: 'Shard and Node Roles', link: '/nodes/roles/' },
+      { text: 'Node Image', link: '/nodes/image/' },
+      { text: 'Run an Observer', link: '/nodes/observer/' },
+      { text: 'Run a Validator', link: '/nodes/validator/' },
+      { text: 'Enroll a Validator', link: '/nodes/validator-enrollment/' },
+      { text: 'Set Up a Private Shard', link: '/nodes/private-shard/' },
+    ]
+  },
+  {
+    text: 'Build',
+    link: '/build/',
+    collapsed: false,
+    items: [
+      { text: 'Wallet CLI', link: '/cli/usage/' },
       {
         text: 'Wallet SDK',
-        collapsed: false,
+        link: '/wallet-sdk/overview/',
+        collapsed: true,
         items: [
-          { text: 'Overview', link: '/wallet-sdk/overview/' },
-          { text: 'API Reference', link: '/wallet-sdk/api-reference/',
+          {
+            text: 'API Reference',
+            link: '/wallet-sdk/api-reference/',
+            collapsed: true,
             items: [
+              { text: 'Client', link: '/wallet-sdk/api-reference/client/' },
               {
                 text: 'Services',
                 collapsed: true,
                 items: [
-                  { text: 'WalletsService', link: '/wallet-sdk/api-reference/wallets-service/' },
-                  { text: 'CryptoService', link: '/wallet-sdk/api-reference/crypto-service/' },
-                  { text: 'MnemonicService', link: '/wallet-sdk/api-reference/mnemonic-service/' },
-                  { text: 'KeyDerivationService', link: '/wallet-sdk/api-reference/key-derivation/' },
+                  { text: 'Wallets', link: '/wallet-sdk/api-reference/wallets-service/' },
+                  { text: 'Crypto', link: '/wallet-sdk/api-reference/crypto-service/' },
+                  { text: 'Mnemonic', link: '/wallet-sdk/api-reference/mnemonic-service/' },
+                  { text: 'KeyDerivation', link: '/wallet-sdk/api-reference/key-derivation/' },
                   { text: 'KeysManager', link: '/wallet-sdk/api-reference/keys-manager/' },
                   { text: 'SignerService', link: '/wallet-sdk/api-reference/signer-service/' },
                   { text: 'AssetsService', link: '/wallet-sdk/api-reference/assets-service/' },
-                  { text: 'DeployResubmitter', link: '/wallet-sdk/api-reference/deploy-resubmitter/' },
                 ]
               },
               {
@@ -105,9 +83,6 @@ export default withMermaid(defineConfig({
                 collapsed: true,
                 items: [
                   { text: 'Wallet', link: '/wallet-sdk/api-reference/wallet/' },
-                  { text: 'Vault', link: '/wallet-sdk/api-reference/vault/' },
-                  { text: 'BlockchainGateway', link: '/wallet-sdk/api-reference/blockchain-gateway/' },
-                  { text: 'EncryptedRecord', link: '/wallet-sdk/api-reference/encrypted-record/' },
                   { text: 'Asset', link: '/wallet-sdk/api-reference/asset/' },
                   { text: 'BrowserStorage', link: '/wallet-sdk/api-reference/browser-storage/' },
                 ]
@@ -135,75 +110,120 @@ export default withMermaid(defineConfig({
         ]
       },
       {
-        text: 'Wallet CLI',
-        collapsed: false,
-        items: [
-          { text: 'Usage Guide', link: '/cli/usage/' },
-        ]
-      },
-      {
-        text: 'Explorer',
-        collapsed: false,
-        items: [
-          { text: 'Usage Guide', link: '/explorer/usage/' },
-        ]
-      },
-      {
-        text: 'Faucet',
-        collapsed: false,
-        items: [
-          { text: 'Usage Guide', link: '/faucet/usage/' },
-        ]
-      },
-      {
         text: 'Architecture',
+        link: '/architecture/',
         collapsed: true,
         items: [
-          { text: 'Overview', link: '/architecture/' },
           { text: 'Component Diagrams', link: '/architecture/component-diagrams/',
+            collapsed: true,
             items: [
-              { text: 'Wallet', link: '/architecture/component-diagrams/wallet/' },
-              { text: 'Explorer', link: '/architecture/component-diagrams/explorer/' },
-              { text: 'Node', link: '/architecture/component-diagrams/node/' },
+              { text: 'Wallet Components', link: '/architecture/component-diagrams/wallet/' },
+              { text: 'Explorer Components', link: '/architecture/component-diagrams/explorer/' },
+              { text: 'Node Components', link: '/architecture/component-diagrams/node/' },
             ]
           },
           { text: 'Sequence Diagrams', link: '/architecture/sequence-diagrams/',
+            collapsed: true,
             items: [
               { text: 'Transaction Flow', link: '/architecture/sequence-diagrams/transaction/' },
-              { text: 'Balance Query', link: '/architecture/sequence-diagrams/balance/' },
+              { text: 'Balance Query Flow', link: '/architecture/sequence-diagrams/balance/' },
             ]
           },
           { text: 'State Diagrams', link: '/architecture/state-diagrams/',
+            collapsed: true,
             items: [
-              { text: 'Startup States', link: '/architecture/state-diagrams/startup/' },
-              { text: 'Operational States', link: '/architecture/state-diagrams/operations/' },
+              { text: 'Node Startup', link: '/architecture/state-diagrams/startup/' },
+              { text: 'Running Node', link: '/architecture/state-diagrams/operations/' },
             ]
           },
           { text: 'Data Flow', link: '/architecture/data-flow/' },
           { text: 'Network Topology', link: '/architecture/network-topology/' },
         ]
       },
-      {
-        text: 'FAQ',
-        collapsed: false,
-        items: [
-          { text: 'Frequently Asked Questions', link: '/faq/' },
+    ]
+  },
+  {
+    text: 'Reference',
+    link: '/reference/',
+    collapsed: false,
+    items: [
+      { text: 'Network Endpoints', link: '/reference/endpoints/' },
+      { text: 'Container Images', link: '/reference/container-images/' },
+      { text: 'Useful Links', link: '/reference/links/' },
+    ]
+  },
+  {
+    text: 'Help',
+    link: '/help/',
+    collapsed: false,
+    items: [
+      { text: 'Frequently Asked Questions', link: '/help/faq/' },
+      { text: 'Troubleshooting', link: '/help/troubleshooting/' },
+    ]
+  },
+]
+
+export default defineConfig({
+  title: "ASI:Chain Docs",
+  description: "Use the wallet, get test tokens, run a node and build on ASI:Chain",
+  srcExclude: ['README.md', 'LICENSE.md'],
+  buildEnd: writeRedirectStubs,
+
+  themeConfig: {
+    logo: {
+      light: '/logo-light.svg',
+      dark: '/logo-dark.svg'
+    },
+    
+    // Both menus are drawn by components/LinkMenu.vue, which shows each link with an icon from
+    // components/icons.ts, its name and the host or repository it opens. The home page reads the DevNet
+    // apps from here as well, so an app added to this menu also gets a panel there.
+    nav: [
+      { text: 'DevNet Apps', items: [
+          { component: 'LinkMenu', props: { groups: [
+            { items: [
+              { text: 'Wallet', link: 'https://wallet.dev.asichain.io', icon: 'wallet' },
+              { text: 'Explorer', link: 'https://explorer.dev.asichain.io', icon: 'search' },
+              { text: 'Faucet', link: 'https://faucet.dev.asichain.io', icon: 'droplet' },
+            ] },
+          ] } },
+        ]
+      },
+      { text: 'GitHub', items: [
+          { component: 'LinkMenu', props: { groups: [
+            { text: 'Node', items: [
+              { text: 'Rust Node', link: 'https://github.com/asi-alliance/asi-chain-rust-node', icon: 'server' },
+              { text: 'ASI Client', link: 'https://github.com/asi-alliance/asi-chain-client', icon: 'terminal' },
+              { text: 'Indexer', link: 'https://github.com/asi-alliance/asi-chain-indexer', icon: 'database' },
+            ] },
+            { text: 'Wallet', items: [
+              { text: 'Wallet', link: 'https://github.com/asi-alliance/asi-chain-wallet', icon: 'wallet' },
+              { text: 'Wallet SDK', link: 'https://github.com/asi-alliance/asi-chain-wallet-sdk', icon: 'package' },
+              { text: 'Wallet CLI', link: 'https://github.com/asi-alliance/asi-chain-wallet-cli', icon: 'square-terminal' },
+            ] },
+            { text: 'Apps', items: [
+              { text: 'Explorer', link: 'https://github.com/asi-alliance/asi-chain-explorer', icon: 'search' },
+              { text: 'Faucet', link: 'https://github.com/asi-alliance/asi-chain-faucet', icon: 'droplet' },
+            ] },
+            { text: 'Docs', items: [
+              { text: 'Docs Portal', link: 'https://github.com/asi-alliance/asi-chain-docs-portal', icon: 'book-open' },
+            ] },
+          ] } },
         ]
       },
     ],
+
+    sidebar,
 
     footer: {
       message: 'ASI:Chain DevNet - Development Network',
       copyright: 'Test tokens have no real value. For testing purposes only.'
     },
 
+    outline: [2, 3],
+
     search: {
       provider: 'local'
-    },
-
-    editLink: {
-      pattern: 'https://github.com/asi-alliance/asi-chain-docs-portal/edit/dev/:path',
-      text: 'Edit this page on GitHub'
     },
 
     lastUpdated: {
@@ -215,9 +235,39 @@ export default withMermaid(defineConfig({
     }
   },
   markdown: {
-    languages: CustomLanguages
+    languages: CustomLanguages,
+    theme: { light: deepSpaceLight, dark: deepSpaceDark },
+    // Screenshots load when they come near the screen, and the hidden one of a light and dark pair never loads.
+    image: { lazyLoading: true },
+    // Tables get a scroll wrapper, so a wide table scrolls in its own box and not the page.
+    config(md) {
+      const open = md.renderer.rules.table_open
+      const close = md.renderer.rules.table_close
+      // The region name is the nearest heading above the table and the column headers, so a screen reader
+      // tells tables on one page apart. Two tables with the same columns under one heading would still share
+      // a name, so a repeated name gets a number.
+      const plain = (s: string) =>
+        s.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\s*\{#[^}]*\}\s*$/, '').replace(/[`*_]/g, '')
+      md.renderer.rules.table_open = (tokens, idx, options, env, self) => {
+        const cols: string[] = []
+        for (let i = idx + 1; i < tokens.length && tokens[i].type !== 'thead_close'; i++)
+          if (tokens[i].type === 'inline') cols.push(plain(tokens[i].content))
+        let heading = ''
+        for (let i = idx - 1; i >= 0 && !heading; i--)
+          if (tokens[i].type === 'heading_open') heading = plain(tokens[i + 1].content)
+        let label = (heading || 'Table') + (cols.length ? ', columns ' + cols.join(', ') : '')
+        const seen: Record<string, number> = (env.tableLabels ??= {})
+        seen[label] = (seen[label] || 0) + 1
+        if (seen[label] > 1) label += ` (${seen[label]})`
+        return `<div class="table-wrap" role="region" aria-label="${md.utils.escapeHtml(label)}" tabindex="0">` +
+          (open ? open(tokens, idx, options, env, self) : self.renderToken(tokens, idx, options))
+      }
+      md.renderer.rules.table_close = (tokens, idx, options, env, self) =>
+        (close ? close(tokens, idx, options, env, self) : self.renderToken(tokens, idx, options)) + '</div>'
+    }
   },
   head: [
+    ['style', {}, sectionIconCss],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' }],
@@ -227,21 +277,23 @@ export default withMermaid(defineConfig({
     ['link', { rel: 'manifest', href: '/site.webmanifest' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-    ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap', rel: 'stylesheet' }],
-    ['meta', { name: 'theme-color', content: '#5f67ee' }],
+    // Roboto for text and controls, Roboto Mono for headings, the wordmark and code, as in the products.
+    ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap', rel: 'stylesheet' }],
+    ['meta', { name: 'theme-color', content: '#FFFFFF', media: '(prefers-color-scheme: light)' }],
+    ['meta', { name: 'theme-color', content: '#1B1F21', media: '(prefers-color-scheme: dark)' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'en' }],
     ['meta', { property: 'og:title', content: 'ASI:Chain Documentation' }],
     ['meta', { property: 'og:site_name', content: 'ASI:Chain Docs' }],
     ['meta', { property: 'og:url', content: 'https://docs.asichain.io/' }],
-    ['meta', { property: 'og:description', content: 'Complete guide for ASI:Chain blockchain network - DevNet setup, wallet usage, explorer, faucet, and more' }],
+    ['meta', { property: 'og:description', content: 'Use the wallet, get test tokens, run a node and build on ASI:Chain' }],
     ['meta', { property: 'og:image', content: 'https://docs.asichain.io/logo-light.svg' }],
     ['meta', { property: 'og:image:width', content: '512' }],
     ['meta', { property: 'og:image:height', content: '512' }],
     ['meta', { property: 'og:image:type', content: 'image/svg+xml' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'ASI:Chain Documentation' }],
-    ['meta', { name: 'twitter:description', content: 'Complete guide for ASI:Chain blockchain network - DevNet setup, wallet usage, explorer, faucet, and more' }],
+    ['meta', { name: 'twitter:description', content: 'Use the wallet, get test tokens, run a node and build on ASI:Chain' }],
     ['meta', { name: 'twitter:image', content: 'https://docs.asichain.io/logo-light.svg' }],
   ]
-}))
+})

@@ -1,0 +1,453 @@
+/**
+ * Page content: inline code, code blocks and groups, tables, callouts, badges, images.
+ * Selectors start with .vp-doc so they win over the default theme without !important.
+ */
+
+/* Inline code is a tinted chip without a frame. A frame around every name in a sentence breaks up the line. */
+
+.vp-doc :not(pre, h1, h2, h3, h4, h5, h6) > code {
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 4px;
+  background-color: var(--ds-inline-bg);
+  color: var(--ds-inline-fg);
+  font-size: 0.875em;
+  overflow-wrap: anywhere;
+}
+
+.vp-doc td code,
+.vp-doc th code {
+  overflow-wrap: break-word;
+}
+
+.vp-doc a > code {
+  color: inherit;
+}
+
+.vp-doc a:hover > code {
+  color: inherit;
+}
+
+/* A code block is one surface with a 1 px frame. The language sits in the top-right corner and gives way to the copy
+   button on hover and focus, which VitePress does through the opacity rules of span.lang. */
+
+.vp-doc div[class*='language-'] {
+  margin: 16px 0;
+  border: 1px solid var(--ds-code-border);
+  border-radius: 8px;
+  background-color: var(--ds-code-bg);
+  overflow-x: auto;
+}
+
+.vp-doc [class*='language-'] > span.lang {
+  top: 0;
+  right: 12px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--vp-c-text-3);
+}
+
+.vp-doc [class*='language-'] > button.copy {
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-color: transparent;
+  border-radius: 4px;
+  background-color: var(--ds-code-bg);
+  background-size: 16px;
+}
+
+.vp-doc [class*='language-'] > button.copy:hover,
+.vp-doc [class*='language-'] > button.copy:focus-visible {
+  border-color: var(--ds-code-border);
+  background-color: var(--ds-code-hover);
+}
+
+.vp-doc [class*='language-'] > button.copy.copied,
+.vp-doc [class*='language-'] > button.copy:hover.copied {
+  right: 8px;
+  width: auto;
+  min-width: 32px;
+  padding: 0 8px;
+  border-color: var(--ds-code-border);
+  border-radius: 4px;
+  background-color: var(--ds-code-hover);
+}
+
+.vp-doc [class*='language-'] > button.copy.copied::before,
+.vp-doc [class*='language-'] > button.copy:hover.copied::before {
+  position: static;
+  width: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--vp-c-text-1);
+  font-size: 12px;
+  line-height: 30px;
+  transform: none;
+}
+
+.vp-doc [class*='language-'] pre {
+  margin: 0;
+  padding: 16px;
+}
+
+.vp-doc [class*='language-'] pre code {
+  padding: 0;
+  font-family: var(--vp-font-family-mono);
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--vp-code-block-color);
+}
+
+.vp-doc div[class*='language-']:focus-within {
+  outline: 2px solid var(--ds-ring);
+  outline-offset: 2px;
+}
+
+/* A block inside a list item sits 8 px under the text, inside a callout it keeps the same frame. */
+.vp-doc li div[class*='language-'] {
+  margin: 8px 0 0;
+  border-radius: 8px;
+}
+
+.vp-doc .custom-block div[class*='language-'] {
+  margin: 8px 0;
+  border-radius: 8px;
+}
+
+/* In a code group the tabs and the block under them share one frame, so the tabs read as part of the block. */
+
+.vp-doc .vp-code-group {
+  margin: 16px 0;
+  border: 1px solid var(--ds-code-border);
+  border-radius: 8px;
+  background: var(--ds-code-bg);
+  overflow: hidden;
+}
+
+.vp-doc .vp-code-group .tabs {
+  margin: 0;
+  padding: 0 8px;
+  background: var(--ds-code-bg);
+  box-shadow: none;
+}
+
+.vp-doc .vp-code-group .tabs label {
+  border-bottom: 0;
+  padding: 0 12px;
+  font-family: var(--vp-font-family-base);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 40px;
+  color: var(--ds-code-mute);
+}
+
+.vp-doc .vp-code-group .tabs label::after {
+  right: 12px;
+  bottom: 0;
+  left: 12px;
+  border-radius: 0;
+}
+
+.vp-doc .vp-code-group .tabs label:hover,
+.vp-doc .vp-code-group .tabs input:checked + label {
+  color: var(--vp-c-text-1);
+}
+
+.vp-doc .vp-code-group .tabs input:focus-visible + label {
+  outline: 2px solid var(--ds-ring);
+  outline-offset: -2px;
+}
+
+.vp-doc .vp-code-group div[class*='language-'] {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.vp-doc .vp-code-group div[class*='language-'] > span.lang {
+  display: none;
+}
+
+/* The copy button sits over the first line, so that line keeps clear of it. */
+.vp-doc .vp-code-group [class*='language-'] pre code {
+  padding-right: 40px;
+}
+
+/* Tables sit in a scroll wrapper added in config.ts (markdown.config). */
+
+/* A table wider than its box gets a soft edge shade on the side where columns are hidden, so a reader on a
+   phone sees that the table scrolls. The shades stay fixed to the box (scroll), and two strips in the page color
+   move with the table (local) and cover a shade once that side is fully in view. A strip stays opaque for 13 px,
+   which is wider than the 12 px shade, so a table that fits shows no shade at all. */
+.vp-doc .table-wrap {
+  margin: 16px 0;
+  overflow-x: auto;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(to right, var(--vp-c-bg) 40%, transparent) left center / 32px 100% no-repeat local,
+    linear-gradient(to left, var(--vp-c-bg) 40%, transparent) right center / 32px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--ds-scroll-edge), transparent) left center / 12px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--ds-scroll-edge), transparent) right center / 12px 100% no-repeat scroll,
+    var(--vp-c-bg);
+}
+
+/* For reduced motion the default theme sets background-attachment to initial on every element, which would pin
+   the covering strips and hide the shades for good. The shades do not animate, so the table keeps them. */
+@media (prefers-reduced-motion: reduce) {
+  .vp-doc .table-wrap {
+    background-attachment: local, local, scroll, scroll !important;
+  }
+}
+
+.vp-doc .table-wrap:focus-visible {
+  outline: 2px solid var(--ds-ring);
+  outline-offset: 2px;
+}
+
+.vp-doc .table-wrap table {
+  display: table;
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.vp-doc table {
+  font-variant-numeric: tabular-nums;
+}
+
+.vp-doc tr,
+.vp-doc tr:nth-child(2n) {
+  border-top: 0;
+  background-color: transparent;
+}
+
+.vp-doc th,
+.vp-doc td {
+  border: 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 12px 16px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.vp-doc th {
+  background-color: var(--vp-c-bg-alt);
+  color: var(--vp-c-text-1);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.vp-doc tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.vp-doc td[align='right'],
+.vp-doc th[align='right'] {
+  text-align: right;
+}
+
+@media (max-width: 639px) {
+  .vp-doc th,
+  .vp-doc td {
+    padding: 8px 12px;
+  }
+}
+
+/* A callout is a tinted fill with a bold title in the color of its type. The title and the tint name the type,
+   so there is no frame, bar or icon. */
+
+:root {
+  --ds-icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+}
+
+.vp-doc .custom-block {
+  --c-soft: var(--ds-info-soft);
+  margin: 16px 0;
+  padding: 16px;
+  border: 0;
+  border-radius: 8px;
+  background-color: var(--c-soft);
+  color: var(--vp-c-text-1);
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.vp-doc .custom-block.tip {
+  --c-soft: var(--vp-c-tip-soft);
+}
+
+.vp-doc .custom-block.warning {
+  --c-soft: var(--vp-c-warning-soft);
+}
+
+.vp-doc .custom-block.danger {
+  --c-soft: var(--vp-c-danger-soft);
+}
+
+.vp-doc .custom-block p {
+  margin: 0 0 8px;
+  line-height: 24px;
+}
+
+.vp-doc .custom-block > :last-child {
+  margin-bottom: 0;
+}
+
+.vp-doc .custom-block p + p {
+  margin: 8px 0;
+}
+
+.vp-doc .custom-block .custom-block-title {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.vp-doc .custom-block.tip .custom-block-title {
+  color: var(--vp-c-tip-1);
+}
+
+.vp-doc .custom-block.warning .custom-block-title {
+  color: var(--vp-c-warning-1);
+}
+
+.vp-doc .custom-block.danger .custom-block-title {
+  color: var(--vp-c-danger-1);
+}
+
+.vp-doc .custom-block a {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.vp-doc .custom-block code,
+.vp-doc .custom-block.tip code,
+.vp-doc .custom-block.info code,
+.vp-doc .custom-block.warning code,
+.vp-doc .custom-block.danger code,
+.vp-doc .custom-block.details code {
+  background-color: var(--ds-callout-code);
+  color: var(--vp-c-text-1);
+}
+
+/* details is a collapsible neutral callout. The chevron is kept because it is the only sign that it opens. */
+
+.vp-doc .custom-block.details {
+  --c-soft: var(--vp-c-bg-alt);
+  padding: 0;
+}
+
+.vp-doc .custom-block.details > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 16px;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.vp-doc .custom-block.details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.vp-doc .custom-block.details > summary::before {
+  content: '';
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background-color: var(--vp-c-text-2);
+  -webkit-mask: var(--ds-icon-chevron) center / contain no-repeat;
+  mask: var(--ds-icon-chevron) center / contain no-repeat;
+}
+
+.vp-doc .custom-block.details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.vp-doc .custom-block.details > summary:focus-visible {
+  outline-offset: -2px;
+}
+
+.vp-doc .custom-block.details > :not(summary) {
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
+.vp-doc .custom-block.details > :last-child {
+  margin-bottom: 16px;
+}
+
+/* No page uses a badge yet, and VitePress draws one as a capsule. These rules make it a tag with 4 px corners,
+   like the key hint in the search box, before the first author adds one. The type shows only in the color (tip is green, info
+   neutral, warning orange, danger red). */
+
+:root {
+  --vp-badge-info-border: var(--vp-c-border);
+  --vp-badge-info-text: var(--vp-c-text-2);
+  --vp-badge-info-bg: var(--vp-c-bg-alt);
+  --vp-badge-tip-border: transparent;
+  --vp-badge-tip-text: var(--ds-ok-fg);
+  --vp-badge-tip-bg: var(--ds-ok-soft);
+  --vp-badge-warning-border: transparent;
+  --vp-badge-warning-text: var(--vp-c-warning-1);
+  --vp-badge-warning-bg: var(--vp-c-warning-soft);
+  --vp-badge-danger-border: transparent;
+  --vp-badge-danger-text: var(--vp-c-danger-1);
+  --vp-badge-danger-bg: var(--vp-c-danger-soft);
+}
+
+.VPBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  margin-left: 2px;
+  padding: 0 8px;
+  border-radius: var(--ds-r-sm);
+  font-family: var(--vp-font-family-base);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* Images get a 1 px frame, so a screenshot with a white or dark edge does not merge with the page. */
+
+.vp-doc img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 8px;
+}
+
+/* A screenshot of an app with a light and a dark theme comes as a pair, and the page shows the image that
+   matches the portal theme. The hidden image has no box, so with loading="lazy" the browser does not fetch it. */
+html:not(.dark) .vp-doc img.dark-only,
+html.dark .vp-doc img.light-only {
+  display: none;
+}
+
+.vp-doc figure {
+  margin: 24px 0;
+}
+
+.vp-doc figcaption {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+  text-align: center;
+}

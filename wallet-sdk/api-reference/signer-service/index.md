@@ -1,48 +1,58 @@
 # SignerService
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Signer/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Signer/index.ts)
 
-Builds and signs deploy payloads without exposing raw key bytes to callers.
+`SignerService` serializes deploy data into the bytes that get signed. It has one member and does not sign anything itself.
 
-## `sign`
+## Import
 
 ```ts
-sign(request: SigningRequest, passwordProvider: PasswordProvider): Promise<SignedResult>
+import { SignerService } from "@asichain/asi-wallet-sdk";
 ```
 
-Signs a deploy using the wallet's password-protected private key. The signing flow: obtains password from `passwordProvider`, unlocks the wallet via `withSigningCapability`, serializes the deploy using `BinaryWriter`, hashes with blake2b-256, signs with secp256k1, and returns the result. The decrypted key is zeroed immediately after signing.
+## Methods
 
-**Parameters:**
+### deployDataProtobufSerialize()
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `request` | `SigningRequest` | Yes | Object with `wallet: Wallet` and `data: DeployData` to sign. |
-| `passwordProvider` | `PasswordProvider` | Yes | Async callback returning the wallet password: `() => Promise<string>`. |
+```ts
+static deployDataProtobufSerialize(deployData: DeployData): Uint8Array
+```
 
-**Returns:** `Promise<SignedResult>` — object with:
-- `data` — deploy fields (term, timestamp, phloPrice, phloLimit, validAfterBlockNumber, shardId)
-- `deployer: string` — hex-encoded public key
-- `signature: string` — hex-encoded secp256k1 signature
-- `sigAlgorithm: string` — `"secp256k1"`
+Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId` is written as an empty string.
 
-**Throws:** `Error("SignerService.sign: ${errorMessage}")` — wraps any internal error.
+| Name | Type | Description |
+|------|------|-------------|
+| `deployData` | `DeployData` | Deploy fields to encode. |
 
-> **Security note:** The normal signing path never returns decrypted private key bytes. The signing capability expires as soon as the callback returns.
+Returns `Uint8Array` with the protobuf-encoded deploy.
 
 ## Types
 
 ```ts
+interface DeployData {
+  term: string
+  phloLimit: number
+  phloPrice: number
+  validAfterBlockNumber: number
+  timestamp: number
+  shardId?: string
+}
+
 interface SigningRequest {
-  wallet: Wallet;
-  data: any;        // Deploy data to sign
+  wallet: Wallet
+  data: any
 }
 
 interface SignedResult {
-  data: any;            // Signed deploy fields
-  deployer: string;     // Hex-encoded public key
-  signature: string;    // Hex-encoded secp256k1 signature
-  sigAlgorithm: string; // "secp256k1"
+  data: any
+  deployer: string
+  signature: string
+  sigAlgorithm: string
 }
-
-type PasswordProvider = () => Promise<string>
 ```
+
+`SignedResult` is what a signing call returns: `deployer` is the hex-encoded public key, `signature` is the hex-encoded secp256k1 signature, and `sigAlgorithm` is `"secp256k1"`.
+
+## Signing
+
+A deploy is signed by `Client.signDeploy` or `Wallet.signDeploy`, and the private key stays inside the wallet's `Signer` (see [Wallet](/wallet-sdk/api-reference/wallet/)). Both calls return a `SignedResult`. See [Client](/wallet-sdk/api-reference/client/) for the signing and submission flow.

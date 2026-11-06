@@ -1,92 +1,105 @@
 # Transaction Flow
 
-Complete sequence from user initiating a transfer to confirmation.
+This page follows a token transfer in the ASI Wallet through four phases, from the amount check to the finalized deploy. Each phase has a sequence diagram and a table of its messages.
 
-← [Back to Sequence Diagrams](../)
+← [Back to Sequence Diagrams](/architecture/sequence-diagrams/)
 
-## Overview
+## How a Transfer Works
 
-A token transfer goes through three main phases:
+A token transfer goes through four phases:
 
-1. **Preparation** - User input and signing
-2. **Submission** - Send to validator
-3. **Confirmation** - Block inclusion and verification
+1. Check and reserve: validate the input and set the amount aside
+2. Signing: build the Rholang term and sign the deploy
+3. Submission: send the signed deploy to the validator
+4. Confirmation: poll the node until the deploy is finalized
 
-## Phase 1: Preparation
+A transfer is a deploy of a Rholang term that moves tokens between two vaults. Deploying a contract from the Deploy page uses the same phases with a different term.
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant W as Wallet
-    participant Store as Redux Store
-    
-    U->>W: Enter recipient & amount
-    W->>U: Request password
-    U->>W: Provide password
-    
-    W->>Store: Get account
-    Store-->>W: Account details
-    
-    W->>W: Decrypt private key
-    W->>W: Generate Rholang code
-    W->>W: Sign deploy
-```
+The wallet calls the SDK `Client`, and the SDK talks to the nodes behind `ValidatorURL` and `ReadOnlyURL` (see [Wallet Components](/architecture/component-diagrams/wallet/#network-connections)).
 
-| Step | Description |
-|------|-------------|
-| User input | Enter recipient address and amount |
-| Password | Unlock account |
-| Sign | Create signed deploy |
+## Phase 1: Check and Reserve
 
-## Phase 2: Submission
+<Diagram name="transfer-checks" caption="Messages between the user, the wallet, the SDK and the read-only node while a transfer is checked and funds are reserved." />
 
-```mermaid
-sequenceDiagram
-    participant W as Wallet
-    participant AS as ASI Service
-    participant VN as Validator Node
-    
-    W->>AS: Submit transaction
-    AS->>VN: POST /api/deploy
-    VN->>VN: Validate deploy
-    VN->>VN: Add to mempool
-    VN-->>AS: Deploy ID
-    AS-->>W: Transaction pending
-```
+| Messages | Step | Description |
+|----------|------|-------------|
+| 1-2 | User input | Recipient address and amount. The wallet does not send to `0x...` addresses |
+| 3-5 | Password | Needed only while the signing session is closed. By default a session stays open for 15 minutes after unlocking |
+| 6 | Reserve | The amount held for the transfer is `amount + GasFee.MAX`, where `GasFee.MAX` is 250000 atomic units (0.0025 ASI) |
+| 7-9 | Balance check | The SDK reads the balance as described in [Balance Query Flow](/architecture/sequence-diagrams/balance/). If the balance minus funds already reserved does not cover the new reserve, the transfer stops with an error before anything is signed |
 
-| Step | Description |
-|------|-------------|
-| Submit | Send to validator |
-| Validate | Check signature and syntax |
-| Mempool | Queue for block inclusion |
+The private key is not kept in the Redux store. The SDK decrypts it only while the signing session is open.
 
-## Phase 3: Confirmation
+## Phase 2: Signing
 
-```mermaid
-sequenceDiagram
-    participant W as Wallet
-    participant RN as Read-Only Node
-    participant BC as Blockchain
-    
-    Note over BC: Block creation
-    
-    W->>RN: Check deploy status
-    RN->>BC: Query deploy
-    BC-->>RN: Deploy result
-    RN-->>W: Transaction confirmed
-    
-    W->>W: Update UI
-```
+<Diagram name="deploy-signing" caption="Messages between the SDK and the read-only node while the SDK builds, serializes and signs the transfer deploy." />
 
-| Step | Description |
-|------|-------------|
-| Block creation | Wait for next block |
-| Confirmation | Verify result |
+| Field | Value |
+|-------|-------|
+| `term` | Rholang term that transfers `amount` from the account to the recipient. Scala nodes use `rho:rchain:asiVault`, Rust nodes use `rho:vault:system` |
+| `timestamp` | Current time in milliseconds |
+| `phloPrice` | 1 |
+| `phloLimit` | 500000 |
+| `validAfterBlockNumber` | Number of the latest block minus 1 |
+| `shardId` | `root` |
 
----
+The result is a signed deploy: the serialized data, the public key of the deployer, the signature in hex and the algorithm `secp256k1`. If the node cannot return the latest block number, signing fails with `Invalid block number`.
 
-## Related Documentation
+## Phase 3: Submission
 
-- [Wallet Architecture](../../component-diagrams/wallet/) - Wallet internals
-- [Balance Query](../balance/) - How balance checks work
-- [Send Tokens Guide](/wallet/usage/) - Step-by-step guide
+<Diagram name="deploy-submission" caption="Messages between the SDK, the local storage and the validator node when the signed deploy is submitted, with the three possible outcomes." />
+
+| Messages | Step | Description |
+|----------|------|-------------|
+| 1 | Save reservation | The reservation is written to the browser storage before the request, so the amount stays held even if the page closes |
+| 2 | Submit | `POST /api/deploy` with the signed deploy |
+| 3 | Validate | The node checks the signature algorithm, the phlo price against its minimum price and the term |
+| 4 | Deploy ID | The node returns the signature of the deploy in hex. The wallet tracks the transfer by that signature |
+
+If the node refuses the deploy with a 4xx answer, the reservation is released (messages 5 and 6). If the outcome is unknown, for example after a network error, the reservation stays: the deploy may still reach the network.
+
+The validator answers `400` for a malformed request or a bad term and `409` for a duplicate deploy. Other failures come back as `422`, `500` or `502`.
+
+## Phase 4: Confirmation
+
+<Diagram name="deploy-status-polling" caption="Messages between the wallet, the SDK and the read-only node while the SDK polls the deploy status until the watch ends." />
+
+The SDK maps every answer to a status.
+
+| Status | Meaning |
+|--------|---------|
+| `Deploying` | The node does not report a block for the deploy yet |
+| `IncludedInBlock` | The deploy is in a block that is not finalized |
+| `Finalized` | The block is finalized. The transfer is confirmed |
+| `CheckingError` | The request failed. Polling goes on |
+
+If the deploy is not finalized within 180 seconds, the watch ends with `DeployTimeoutError`. When it ends, the wallet invalidates the cached balance and history.
+
+For a Scala node the SDK reads the `faultTolerance` field of the answer and treats the deploy as finalized at 0.99 or above. For a Rust node the SDK looks for the same field with a threshold of 0.33, but a Rust node does not send it.
+
+::: warning Finalization on Rust Nodes
+A Rust node answers `GET /api/deploy/{id}` with `isFinalized` and `finalizationState` instead of `faultTolerance`. Wallet SDK 2.1.0 with the `rust` profile therefore keeps the status at `IncludedInBlock` for a deploy that the node already reports as `Finalized`, and the watch ends with `DeployTimeoutError`.
+
+The node returns the deploy as soon as a block it knows contains it, with `isFinalized: false` until that block is finalized. If no known block contains the deploy, the node answers `404 deploy_not_found`, and the SDK reports `CheckingError`.
+:::
+
+## Errors
+
+| Error | When |
+|-------|------|
+| `BalanceUnavailableError` | The balance could not be read in phase 1 |
+| `DeploySubmissionRejectedError` | The validator refused the deploy with a 4xx answer. The reservation is released |
+| `ApiRequestError` | A request to a node failed |
+| `DeployTimeoutError` | The deploy was not finalized within the watch time |
+
+## Deploying a Contract
+
+The Deploy page follows the same four phases. It differs in two places. The term is the user's Rholang code, and the reserved amount is `phloLimit * phloPrice`. The page sets the phlo limit to 100000000 by default.
+
+## Next Steps
+
+<CardGrid columns="2">
+<DocCard title="Wallet Components" href="/architecture/component-diagrams/wallet/">Layers, state and storage of the wallet app</DocCard>
+<DocCard title="Balance Query Flow" href="/architecture/sequence-diagrams/balance/">How balance checks work</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/#send">Send ASI from the wallet step by step</DocCard>
+</CardGrid>

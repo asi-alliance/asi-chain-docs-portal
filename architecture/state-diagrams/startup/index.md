@@ -1,80 +1,89 @@
-# Node Startup States
+# Node Startup
 
-States during node initialization and synchronization.
+The Rust node runs a fixed sequence of startup steps and then reaches the Running state through one of four launch modes. The page also covers how to check readiness and what to do when the node does not get there.
 
-← [Back to State Diagrams](../)
+← [Back to State Diagrams](/architecture/state-diagrams/)
 
 ## Startup Sequence
 
-Normal startup follows this path:
+<Diagram name="node-startup" caption="The steps from process start to the Running state, with the branch for a standalone node and the shutdown on an engine init error." />
 
-```mermaid
-stateDiagram-v2
-    [*] --> Initializing
-    
-    Initializing --> Connecting : Config loaded
-    Initializing --> Failed : Config error
-    
-    Connecting --> Bootstrapping : Network found
-    Connecting --> Failed : Timeout
-    
-    Bootstrapping --> Synchronizing : Bootstrap OK
-    Bootstrapping --> Failed : Bootstrap failed
-    
-    Synchronizing --> Ready : Sync complete
-    Synchronizing --> Syncing : Downloading
-    
-    Syncing --> Ready : Caught up
-    
-    Ready --> [*] : Node operational
+1. The node loads its configuration, the TLS key that defines its node ID, and its stores, and then picks one of four launch modes (next section). The log line `Launching Casper...` marks this step, and the chosen mode is logged as one `Approved block ...` line.
+2. The transport server and the Kademlia discovery server start, followed by the gRPC and HTTP API servers. The node discovery loop and the clear-connections loop start next, so that they can help to find the first peer.
+3. Unless the node runs with `--standalone`, it polls once per second until it has at least one peer connection.
+4. The engine selected in step 1 runs its `init`, which is where the modes differ.
+5. If engine init fails, the node logs `engine initialization failed` and shuts down. There is no separate Failed state to recover from.
+
+## Launch Modes
+
+<Diagram name="startup-modes" caption="The four launch modes, the condition that selects each one and how each reaches the Running state." />
+
+| Mode | Condition | Path to Running |
+|------|-----------|-----------------|
+| Reconnect | The block store holds an approved block, which is any restart on existing data. | Builds Casper from local storage and goes to Running directly, in about a second. |
+| Ceremony master | No approved block and `ceremony_master_mode` is set. A standalone node starts in this mode. | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
+| Genesis validator | No approved block and `genesis_validator_mode` is set. | Verifies and signs the candidate genesis block and then moves to Initializing, where it waits for the approved block like a joining node. |
+| Join | No approved block and neither ceremony mode is set. | Moves to Initializing (see below). |
+
+At launch the node logs one of these lines, in the order of the table:
+
+```text
+Approved block found, reconnecting to existing network
+Approved block not found, taking part in ceremony as ceremony master
+Approved block not found, taking part in ceremony as genesis validator
+Approved block not found, connecting to existing network
 ```
 
-## State Descriptions
+### Initializing
 
-| State | Description |
-|-------|-------------|
-| **Initializing** | Loading config and keys |
-| **Connecting** | Finding bootstrap node |
-| **Bootstrapping** | Getting network info |
-| **Synchronizing** | Starting block download |
-| **Syncing** | Downloading blocks |
-| **Ready** | Node operational |
+A node that joins an existing shard asks its peers for the approved block. If a peer has none yet and answers `NoApprovedBlockAvailable`, the node asks again after 10 seconds.
 
-::: warning Long Sync Time
-Initial synchronization can take **1-12 hours** depending on network state and block count. This is documented in the [Troubleshooting](/quick-start/troubleshooting/) guide.
-:::
+Once it has the approved block, the node downloads the blocks and the state of the last finalized window from the bootstrap peer. Each request times out after 5 seconds, and the whole download has a 600-second deadline. Then it rebuilds the DAG, creates Casper and moves to Running. Against a healthy shard this takes one to two minutes and about a hundred fetched blocks.
+
+A restart on the same data directory takes the Reconnect path and does not download anything again.
+
+## Check Readiness
+
+The transition to Running is logged as one line.
+
+```text
+Making a transition to Running state. Approved Block #<height> (<hash>...)
+```
+
+Until that line appears, `GET /api/ready` returns 503 and `GET /api/status` reports `"isReady": false` and `lastFinalizedBlockNumber: -1`. A node that waits for the genesis ceremony stays in this state for the whole ceremony.
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:40403/api/ready
+```
 
 ## Common Issues
 
-### Stuck in Connecting
+### No Peers
+
+The node connects out but never receives anything, or the peer count stays at 0.
+
+- `--host` must be an address that the other nodes can reach, because peers dial it back during the handshake.
+- If the shard advertises private or Docker hostnames, start the joiner with `--allow-private-addresses`.
+- Check the transport port 40400 and the discovery port 40404 on both sides. Both use TCP.
+
+### Initializing Does Not Finish
+
+Search the log for the line that starts the state download.
 
 ```bash
-# Check network connectivity
-ping 54.152.57.201
-
-# Verify port 40400 is reachable
-nc -zv 54.152.57.201 40400
+docker logs <container> 2>&1 | grep "request_approved_state"
 ```
 
-### Stuck in Syncing
+The line shows `min_height`, the lowest block of the imported window. If the node stays in Initializing, save the logs and ask the shard operator.
 
-```bash
-# Monitor sync progress
-docker logs -f rnode.validator 2>&1 | grep -i "sync\|finalized"
-```
+### Data Directory
 
-### Failed State
+Do not delete the data directory of a node that its peers already know. The TLS certificate inside it is the node identity. A wiped directory gives the node a new identity and a full join, while the peers still hold the old identity in their routing tables.
 
-If node enters Failed:
+## Next Steps
 
-1. Check logs: `docker logs rnode.validator`
-2. Verify configuration
-3. Restart: `docker compose restart`
-
----
-
-## Related Documentation
-
-- [Operational States](../operations/) - Runtime states
-- [Validator Setup](/quick-start/join-validator/) - Setup guide
-- [Troubleshooting](/quick-start/troubleshooting/) - Common issues
+<CardGrid columns="2">
+<DocCard title="Running Node" href="/architecture/state-diagrams/operations/">What the node does after startup</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node to become a validator</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/">Checks for common node and wallet problems</DocCard>
+</CardGrid>

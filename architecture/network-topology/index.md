@@ -1,130 +1,58 @@
 # Network Topology
 
-ASI:Chain network infrastructure and node connections.
+Learn which role each node and service plays, which ports a node listens on by default and which of them to open in a firewall. Current DevNet addresses are on [Network Endpoints](/reference/endpoints/).
 
-← [Back to Architecture Overview](../)
+## Roles
 
-## Network Overview
+| Role | Responsibility |
+|---|---|
+| Bootstrap peer | First contact for a joining node. Whether it takes part in the genesis ceremony depends on its configuration |
+| Validator | Proposes blocks according to its bonded stake and shard admission |
+| Observer | Follows chain state and serves queries without proposing blocks |
+| Indexer | Reads node APIs and stores derived chain data in PostgreSQL |
+| Hasura | Exposes approved database data through GraphQL |
+| Applications | Wallet, SDK, CLI and faucet send requests to a node API. The wallet and SDK read history through GraphQL, and the CLI uses GraphQL only for `history` and `export` |
 
-```mermaid
-graph TB
-    subgraph "ASI:Chain DevNet"
-        B[Bootstrap Node]
-        V1[Validator 1]
-        V2[Validator 2]
-        V3[Validator 3]
-        O[Observer]
-    end
-    
-    subgraph "Services"
-        W[Wallet]
-        E[Explorer]
-        F[Faucet]
-    end
-    
-    B --> V1
-    B --> V2
-    B --> V3
-    
-    V1 -.-> V2
-    V2 -.-> V3
-    
-    V1 --> O
-    V2 --> O
-    V3 --> O
-    
-    W --> V1
-    W --> O
-    E --> O
-    F --> V1
-```
+A bootstrap peer is not automatically a bonded validator. After the first connection every node talks to its peers through discovery, so the bootstrap peer is not a hub for traffic.
 
-## Network Components
+<Diagram name="network-topology" caption="Clients call the validator on ports 40403 and 40401, nodes reach each other on 40400 and 40404, and the indexer feeds Hasura through PostgreSQL." />
 
-### Bootstrap Node (`mettacycle-devnet-1`)
+Applications and the indexer can talk to any node that exposes the API ports, including an observer. The diagram shows a validator because that is the public entry point of DevNet.
 
-Entry point for new nodes joining the network.
-
-| Property | Value |
-|----------|-------|
-| IP | `54.152.57.201` |
-| Protocol port | `40400` |
-| HTTP API | `40403` |
-| Purpose | Network discovery + write-API host |
-
-### Validators (3 active)
-
-Three nodes participate in consensus.
-
-| VM | Public API exposure |
-|----|---------------------|
-| Validator 1 (`mettacycle-devnet-2`, `34.196.119.4`) | **Public** — `http://34.196.119.4:40403` (write + read) |
-| Validator 2 (`mettacycle-devnet-3`) | Internal — consensus only |
-| Validator 3 (`mettacycle-devnet-4`) | Internal — consensus only |
-
-| Function | Description |
-|----------|-------------|
-| Block production | Propose new blocks |
-| Consensus | Vote on block validity (CBC Casper) |
-| Public API (Validator 1 only) | Accept deploys + serve read queries |
-
-::: tip
-Validator 1 also handles all read traffic because the dedicated observer is currently unstable.
-:::
-
-### Observer (currently unstable)
-
-Read-only node for queries — `mettacycle-devnet-5` (`54.235.138.68`). Until it stabilizes, Validator 1 (`34.196.119.4:40403`) serves read requests.
-
-## Port Configuration
-
-All DevNet nodes share the same port range — each runs on its own VM.
-
-```mermaid
-graph LR
-    N[Node] --> P1[":40400 Protocol/P2P"]
-    N --> P2[":40401 gRPC ext"]
-    N --> P3[":40402 gRPC int"]
-    N --> P4[":40403 HTTP"]
-    N --> P5[":40404 Discovery"]
-    N --> P6[":40405 Admin"]
-```
+## Ports and Access
 
 | Port | Protocol | Purpose | Access |
-|------|----------|---------|--------|
-| 40400 | TCP | Protocol / P2P communication | Public |
-| 40401 | TCP | Public gRPC API | Public |
-| 40402 | TCP | Internal gRPC API | Localhost |
-| 40403 | HTTP | API (deploy, query) | Public |
-| 40404 | UDP | Kademlia peer discovery | Public |
-| 40405 | HTTP | Admin API | Localhost |
+|---|---|---|---|
+| 40400 | TCP | P2P transport between nodes | Open to peers |
+| 40401 | TCP, gRPC | External API, Deploy service | Public behind a network ACL |
+| 40402 | TCP, gRPC | Internal API: Repl, Deploy, Propose, Lsp | Private |
+| 40403 | TCP, HTTP | Public HTTP API: `/api/*` including deploy submission, `/status`, `/metrics` | Public behind a gateway or ACL |
+| 40404 | TCP, gRPC | Peer discovery (Kademlia) | Open to peers |
+| 40405 | TCP, HTTP | Admin HTTP API, for example `/api/propose` | Private |
 
-## External Services
+These are the Rust node defaults. Container ports and host mappings differ between setups, and [Node Image](/nodes/image/#default-container-ports) lists the container side.
 
-| Service | URL | Backend |
-|---------|-----|---------|
-| Wallet | wallet.dev.asichain.io | Validator 1 (write + read) |
-| Explorer | explorer.dev.asichain.io | Indexer GraphQL |
-| Indexer | indexer.dev.asichain.io/v1/graphql | PostgreSQL via Hasura, indexes from Validator 1 |
-| Faucet | faucet.dev.asichain.io | Faucet API → Validator 1 |
+::: warning API Listeners Are Not Local
+All API listeners bind to `0.0.0.0` by default (`api-server.host`), so the node does not keep 40402 or 40405 local by itself. Restrict them with a firewall or by setting `api-server.host`. The `/metrics` route is registered on the public HTTP router, so it is reachable on 40403. A public gateway in front of the node should pass only the routes you intend to publish.
+:::
 
-## Firewall Configuration
+## Firewall
 
-Required ports for external validators:
+A node that other nodes must reach needs inbound P2P and discovery:
 
 ```bash
-# Required for P2P
-ufw allow 40400/tcp
-ufw allow 40404/udp
-
-# Optional for HTTP API access
-ufw allow 40403/tcp
+sudo ufw allow 40400/tcp
+sudo ufw allow 40404/tcp
 ```
 
----
+::: warning Discovery Uses TCP
+The node's discovery client opens a gRPC channel to `http://<host>:<discovery port>`, even though the field in the peer record is called `udp_port`. Allowing `40404/udp` does nothing for discovery.
+:::
 
-## Related Documentation
+Open the API ports only when the node serves public clients, and prefer a gateway or an ACL over a bare rule:
 
-- [DevNet Structure](/shard-nodes/devnet-structure/) - Network details
-- [Validator Setup](/quick-start/join-validator/) - Join as validator
-- [Observer Setup](/quick-start/join-observer/) - Join as observer
+```bash
+sudo ufw allow 40403/tcp
+```
+
+Leave 40402 and 40405 closed to the outside.

@@ -1,0 +1,703 @@
+/**
+ * Navigation, sidebar, outline, search and footer.
+ * The default theme styles most of these with scoped CSS, so selectors here
+ * start from a parent class to be one step more specific.
+ * Sizes sit on a 4 px grid. The bar is one solid surface, so there is no blur
+ * and no shadow here, except for the dropdown panel that floats over content.
+ */
+
+:root {
+  --vp-sidebar-bg-color: var(--vp-c-bg);
+  --vp-nav-bg-color: var(--vp-c-bg-elv);
+  --vp-nav-screen-bg-color: var(--vp-c-bg-elv);
+  --vp-local-nav-bg-color: var(--vp-c-bg-elv);
+}
+
+/* The top bar is one solid surface over the full width with a 1 px line under it. Every layer of the bar
+   gets the same color and no blur, so the page never shows through and the parts of the bar never differ
+   in shade. */
+
+.VPNav .VPNavBar,
+.VPNav .VPNavBar .wrapper,
+.VPNav .VPNavBar .container,
+.VPNav .VPNavBar .content,
+.VPNav .VPNavBar .content-body {
+  background-color: var(--vp-c-bg-elv);
+  backdrop-filter: none;
+}
+
+.VPNav .VPNavBar.has-sidebar .title {
+  border-bottom-color: transparent;
+}
+
+.VPNav .VPNavBar .divider,
+.VPNav .VPNavBar.has-sidebar .divider {
+  padding-left: 0;
+}
+
+.VPNav .VPNavBar .divider-line {
+  background-color: var(--vp-c-divider);
+}
+
+/* VitePress 1.6.4 adds has-sidebar to the bar in watchPostEffect, so the server HTML lays the bar
+   out without the sidebar and the search and menus jump once the page hydrates (CLS 0.011 to 0.014).
+   VPContent has the class in the server HTML, so until then the bar takes its layout from there.
+   The values copy the has-sidebar rules of VPNavBar.vue; check them after a VitePress update. Those rules
+   are scoped to the bar's own elements, so these use child combinators. The logo link inside VPNavBarTitle
+   is a .title too, and a descendant selector moved it out of place from 1440 px until hydration. */
+@media (min-width: 960px) {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper {
+    padding: 0;
+  }
+
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container {
+    max-width: 100%;
+  }
+
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container > .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    padding: 0 32px;
+    width: var(--vp-sidebar-width);
+    height: var(--vp-nav-height);
+    background-color: transparent;
+  }
+
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container > .content {
+    position: relative;
+    z-index: 1;
+    padding-right: 32px;
+    padding-left: var(--vp-sidebar-width);
+  }
+}
+
+@media (min-width: 1440px) {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container > .title {
+    padding-left: max(32px, calc((100% - (var(--vp-layout-max-width) - 64px)) / 2));
+    width: calc((100% - (var(--vp-layout-max-width) - 64px)) / 2 + var(--vp-sidebar-width) - 32px);
+  }
+
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container > .content {
+    padding-right: calc((100vw - var(--vp-layout-max-width)) / 2 + 32px);
+    padding-left: calc((100vw - var(--vp-layout-max-width)) / 2 + var(--vp-sidebar-width));
+  }
+}
+
+.VPNavBar .VPNavBarTitle .title {
+  gap: 8px;
+  font-family: var(--asi-font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--vp-c-text-1);
+}
+
+.VPNavBar .VPNavBarMenuLink,
+.VPNavBar .VPNavBarMenuGroup .button {
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--vp-c-text-2);
+}
+
+.VPNavBar .VPNavBarMenuLink:hover,
+.VPNavBar .VPNavBarMenuGroup .button:hover,
+.VPNavBar .VPNavBarMenuGroup:hover .button,
+.VPNavBar .VPNavBarMenuLink.active,
+.VPNavBar .VPNavBarMenuGroup.active .button {
+  color: var(--vp-c-text-1);
+}
+
+/* A dropdown panel floats over the page, so it is the one part of the bar with a shadow. The 1 px border
+   keeps its edge visible in the dark theme, where a shadow barely shows. */
+
+.VPNavBar .VPFlyout .VPMenu {
+  border: 1px solid var(--vp-c-border);
+  border-radius: var(--ds-r-md);
+  background-color: var(--vp-c-bg-elv);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.VPNavBar .VPMenuLink a,
+.VPNavBar .VPMenuGroup .title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.VPNavBar .VPMenuLink a:hover,
+.VPNavBar .VPMenuLink a.active {
+  color: var(--vp-c-brand-1);
+  background-color: transparent;
+}
+
+/* LinkMenu draws the DevNet Apps and GitHub menus. A row is the icon in a tinted square, as on the home
+   page, the name and, in mono, the host or repository it opens. The whole row is the link and takes a soft
+   fill under the pointer. */
+
+.asi-link-menu {
+  display: grid;
+  gap: 12px;
+  min-width: 248px;
+}
+
+@media (min-width: 768px) {
+  .asi-link-menu.is-wide {
+    grid-template-columns: repeat(2, 240px);
+    gap: 16px 8px;
+  }
+}
+
+.asi-link-menu .asi-link-menu-group {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+
+.asi-link-menu .asi-link-menu-label {
+  margin: 0;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--vp-c-text-2);
+}
+
+.asi-link-menu .asi-link-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+
+.asi-link-menu .asi-link-menu-item:hover {
+  background-color: var(--asi-hover-fill);
+}
+
+.asi-link-menu .asi-link-menu-item:hover .asi-link-menu-name {
+  color: var(--vp-c-brand-1);
+}
+
+.asi-link-menu .asi-link-menu-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+}
+
+.asi-link-menu .asi-link-menu-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.asi-link-menu .asi-link-menu-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.asi-link-menu .asi-link-menu-name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.asi-link-menu .asi-link-menu-note {
+  overflow: hidden;
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--vp-c-text-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* In the menu screen of a phone the groups stack under the menu button, and each row stays a 48 px tap
+   target. */
+.asi-link-menu.is-screen {
+  min-width: 0;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+/* The search box is 40 px high, and its border reaches 3:1 against the bar, the contrast WCAG requires for
+   the edge of a control, so the box stays visible without its fill. */
+
+@media (min-width: 768px) {
+  .VPNavBarSearch .DocSearch-Button {
+    box-sizing: border-box;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--ds-control-border);
+    border-radius: var(--ds-r-md);
+    background: var(--vp-c-bg-elv);
+  }
+
+  .VPNavBarSearch .DocSearch-Button:hover {
+    border-color: var(--vp-c-text-2);
+    background: var(--vp-c-bg-elv);
+  }
+
+  .VPNavBarSearch .DocSearch-Button .DocSearch-Search-Icon {
+    top: 0;
+  }
+
+  .VPNavBarSearch .DocSearch-Button .DocSearch-Button-Placeholder {
+    margin-top: 0;
+    padding: 0 16px 0 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--vp-c-text-2);
+  }
+
+  .VPNavBarSearch .DocSearch-Button .DocSearch-Button-Key {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 20px;
+    margin: 0;
+    padding: 0 4px;
+    border: 1px solid var(--vp-c-border);
+    border-radius: var(--ds-r-sm);
+    background: transparent;
+    color: var(--vp-c-text-2);
+    font-family: var(--vp-font-family-base);
+    font-size: 12px;
+    line-height: 16px;
+    box-shadow: none;
+  }
+}
+
+/* Search results: a match is underlined in the link color instead of being filled with a block of brand
+   color, so a row with three matches stays readable. The selected result turns its whole title the link
+   color, and there the underline is what still marks the match. The search box loads as its own chunk
+   after this file, so the mark rule needs one more class than the VitePress rule it overrides. */
+:root {
+  --vp-local-search-highlight-bg: transparent;
+  --vp-local-search-highlight-text: var(--vp-c-brand-1);
+}
+
+.VPLocalSearchBox .result .titles mark,
+.VPLocalSearchBox .result .excerpt mark {
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.VPNavBar .VPSwitchAppearance,
+.VPNavBar .VPNavBarAppearance .VPSwitch {
+  border-color: var(--ds-control-border);
+}
+
+/* Sidebar */
+
+.VPSidebar {
+  border-right: 1px solid var(--vp-c-divider);
+  box-shadow: none;
+}
+
+.VPSidebar .nav .group {
+  padding-top: 12px;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0,
+.VPSidebar .nav .VPSidebarItem.collapsed.level-0 {
+  padding-bottom: 12px;
+}
+
+.VPSidebar .nav .VPSidebarItem .item {
+  min-height: 32px;
+  align-items: center;
+}
+
+.VPSidebar .nav .VPSidebarItem .item .link {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-1 > .item .link {
+  padding-left: 16px;
+}
+
+.VPSidebar .nav .VPSidebarItem .item .text {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--vp-c-text-2);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0 > .item > .text,
+.VPSidebar .nav .VPSidebarItem.level-0 > .item > .link > .text {
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0 > .item > .link {
+  padding-left: 0;
+}
+
+.VPSidebar .nav .VPSidebarItem .caret {
+  align-self: center;
+  width: 32px;
+  height: 32px;
+  margin-right: -8px;
+}
+
+.VPSidebar .VPSidebarItem.level-1 .items,
+.VPSidebar .VPSidebarItem.level-2 .items,
+.VPSidebar .VPSidebarItem.level-3 .items {
+  border-left-color: var(--vp-c-divider);
+}
+
+/* Each level of the sidebar starts 16 px to the right of the one above it: the text of levels 1, 2 and 3
+   sits at 16, 32 and 48 px. A level 1 title is 16 px in from its row, where its bar sits, so the guide
+   line of its children starts under that title. Deeper titles start at the row edge, so the guide line of
+   their children starts there. The 1 px line plus 15 px of padding keeps the 16 px step, and the bar of an
+   open page sits on the guide line of its group. */
+.VPSidebar .nav .VPSidebarItem.level-1 > .items {
+  margin-left: 16px;
+  padding-left: 15px;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-2 > .items,
+.VPSidebar .nav .VPSidebarItem.level-3 > .items {
+  margin-left: 0;
+  padding-left: 15px;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-2 > .item > .indicator,
+.VPSidebar .nav .VPSidebarItem.level-3 > .item > .indicator,
+.VPSidebar .nav .VPSidebarItem.level-4 > .item > .indicator {
+  left: -16px;
+}
+
+.VPSidebar .nav .VPSidebarItem.is-link > .item > .link:hover > .text {
+  color: var(--vp-c-text-1);
+}
+
+.VPSidebar .nav .VPSidebarItem.is-active > .item > .link > .text {
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+}
+
+/* The bar sits on the guide line from level 2 down, and at the row edge on level 1. */
+.VPSidebar .nav .VPSidebarItem > .item > .indicator {
+  top: 4px;
+  bottom: 4px;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-1 > .item > .indicator {
+  left: 0;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-1.is-active > .item > .indicator,
+.VPSidebar .nav .VPSidebarItem.level-2.is-active > .item > .indicator,
+.VPSidebar .nav .VPSidebarItem.level-3.is-active > .item > .indicator {
+  background-color: var(--ds-accent);
+}
+
+.VPSidebar .nav .VPSidebarItem .caret:focus-visible {
+  outline: 2px solid var(--ds-ring);
+}
+
+/* A group title opens the landing page of its section, so it reads as a navigation entry. It shows the icon
+   of the section from the home page in a tinted square, it turns green under the pointer like any link,
+   and while its landing page is open the title stays green and the square fills. config.ts sets
+   --asi-section-icon, --asi-section-icon-display and --asi-section-icon-pad on each group link from
+   components/icons.ts, so a group without an icon keeps a plain title. */
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link {
+  position: relative;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link > .text {
+  padding-left: var(--asi-section-icon-pad, 0px);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link::before,
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link::after {
+  content: '';
+  display: var(--asi-section-icon-display, none);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link::before {
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background-color: var(--vp-c-brand-soft);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link::after {
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--vp-c-brand-1);
+  -webkit-mask: var(--asi-section-icon) center / contain no-repeat;
+  mask: var(--asi-section-icon) center / contain no-repeat;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link:hover > .text,
+.VPSidebar .nav .VPSidebarItem.level-0.is-active > .item > .link > .text {
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-active > .item > .link::before {
+  background-color: var(--vp-c-brand-1);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-active > .item > .link::after {
+  background-color: var(--vp-c-bg);
+}
+
+/* The chevron only folds its group. Its own fill under the pointer shows that it is a second button next
+   to the title. The fill is the content box, 24 px inside the 32 px button. */
+.VPSidebar .nav .VPSidebarItem .caret {
+  padding: 4px;
+  border-radius: 8px;
+  background-clip: content-box;
+}
+
+.VPSidebar .nav .VPSidebarItem .caret:hover {
+  background-color: var(--asi-hover-fill);
+}
+
+@media (max-width: 959px) {
+  .VPSidebar .nav .VPSidebarItem .item {
+    min-height: 44px;
+  }
+
+  .VPSidebar .nav .VPSidebarItem .item .text {
+    min-height: 44px;
+  }
+
+  .VPSidebar .nav .VPSidebarItem .caret {
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+  }
+
+  .VPSidebar .nav .VPSidebarItem > .item > .indicator {
+    top: 8px;
+    bottom: 8px;
+  }
+}
+
+/* The outline in the right column uses 32 px rows like the sidebar, so both lists have the same spacing. */
+
+.VPDocAsideOutline .content {
+  font-size: 14px;
+}
+
+.VPDocAsideOutline .outline-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--vp-c-text-1);
+}
+
+/* A long heading wraps instead of being cut off at the edge of the column (a flex box drops the ellipsis of
+   VitePress). The first line keeps the 32 px row of a one-line entry, because VitePress places the outline
+   marker from the top of the link and the marker should stay level with that line. */
+.VPDocAsideOutline .outline-link {
+  display: block;
+  padding: 6px 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--vp-c-text-2);
+}
+
+.VPDocAsideOutline .outline-link:hover {
+  color: var(--vp-c-text-1);
+}
+
+.VPDocAsideOutline .outline-link.active {
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+}
+
+.VPDocAsideOutline .outline-marker {
+  height: 20px;
+  margin-top: -1px;
+  background-color: var(--ds-accent);
+}
+
+/* Mobile menu bar */
+
+.VPLocalNav {
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+/* From 960 to 1279 px the outline sits in a bar under the top bar. VitePress reads the headings in the
+   browser, so the server HTML marks the bar empty and hides it. Without this rule the bar appears after
+   hydration and the page drops by 48 px on every load (a layout shift of 0.21 to 0.25). A page with
+   headings shows the bar from the start, and the Return to top button that VitePress renders while the bar is empty stays
+   invisible until the outline button replaces it. The home page turns its outline off, so the rule
+   skips it by the class that index.md sets. */
+@media (min-width: 960px) and (max-width: 1279px) {
+  .Layout:not(.asi-home):has(.vp-doc :is(h2, h3)[id]) .VPLocalNav.has-sidebar.empty {
+    display: block;
+  }
+
+  .Layout:not(.asi-home):has(.vp-doc :is(h2, h3)[id]) .VPLocalNav.empty .VPLocalNavOutlineDropdown > button {
+    visibility: hidden;
+  }
+}
+
+/* From 960 to 1279 px the sidebar is on screen, so the outline button is the only control in the bar.
+   It sits at the right, where the outline column stands on wider screens, and its panel opens under it. */
+@media (min-width: 960px) and (max-width: 1279px) {
+  .VPLocalNav.has-sidebar .container {
+    justify-content: flex-end;
+  }
+
+  .VPLocalNav .VPLocalNavOutlineDropdown .items {
+    right: 32px;
+    left: auto;
+  }
+}
+
+/* The feedback button is fixed 30 px from the bottom-right corner and 55 px tall, so in windows up
+   to about 1500 px wide it covers the end of a long outline. The extra room lets the last entries scroll above it. */
+.VPDoc .aside .aside-content {
+  padding-bottom: 96px;
+}
+
+.VPLocalNav .menu {
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--vp-c-text-2);
+}
+
+@media (max-width: 767px) {
+  .VPNavBarSearch .DocSearch-Button {
+    height: 48px;
+  }
+}
+
+/* The previous and next links are panels like the Next Steps cards above them, and the border takes the
+   brand color under the pointer. The extra 2 px on top balances the space above the capitals of the small
+   label with the space under the baseline of the title. */
+
+.VPDocFooter .pager-link {
+  padding: 14px 16px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--ds-r-md);
+  background-color: var(--vp-c-bg-soft);
+}
+
+.VPDocFooter .pager-link:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
+.VPDocFooter .pager-link .desc {
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--vp-c-text-2);
+}
+
+.VPDocFooter .pager-link .title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--vp-c-brand-1);
+}
+
+.VPLastUpdated {
+  color: var(--vp-c-text-2);
+}
+
+/* Footer */
+
+.VPFooter {
+  border-top: 1px solid var(--vp-c-divider);
+  background-color: var(--vp-c-bg);
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+
+/* On a phone the top bar is 56 px, the menu row 40 px and the gap above the page 12 px, so the content
+   starts near the top of the screen. */
+
+@media (max-width: 767px) {
+  :root {
+    --vp-nav-height: 56px;
+  }
+
+  .VPLocalNav .container .menu,
+  .VPLocalNav .container .VPLocalNavOutlineDropdown {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .VPLocalNav .VPLocalNavOutlineDropdown button {
+    line-height: 24px;
+  }
+
+  .VPContent .VPDoc {
+    padding-top: 12px;
+  }
+}
+
+/*
+ * Roboto sets its ascent above the descent, so a 14 px line of it sits about 1.5 px high
+ * inside a box centred by flex or by line-height. This lowers the text by 1 px, which brings
+ * the ink within 0.5 px of the centre. Without it the rows look top-heavy next to the icons.
+ */
+
+.VPSidebar .nav .VPSidebarItem .item .text,
+.VPNavBar .VPNavBarMenuGroup .button .text,
+.VPNavBarSearch .DocSearch-Button .DocSearch-Button-Placeholder,
+.VPLocalNav .menu .menu-text,
+.VPLocalNavOutlineDropdown button,
+.VPDocAsideOutline .outline-link {
+  position: relative;
+  top: 1px;
+}
+
+/* The pager title is a 20 px block with 2 px of space under the text, which centres the letters on the line for the centring tool. */
+
+.VPDocFooter .pager-link .title {
+  display: block;
+  box-sizing: border-box;
+  height: 20px;
+  padding-bottom: 2px;
+}

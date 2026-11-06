@@ -1,67 +1,20 @@
 # Technical Architecture
 
-Technical diagrams for the ASI:Chain ecosystem.
+The wallet, the Wallet SDK, the CLI and the faucet send requests to the node, and the explorer and the wallet read indexed chain data through GraphQL. The maintained node is implemented in Rust and combines CBC Casper consensus, Rholang execution and RSpace++ storage with P2P, gRPC and HTTP services.
 
-## Documentation Structure
+<Diagram name="architecture-overview" caption="Clients call the node, the indexer copies chain data into PostgreSQL, and Hasura serves it to the explorer and the wallet." />
 
-### [Component Diagrams](./component-diagrams/)
+The indexer calls node APIs directly through its Python gRPC/HTTP client and writes the results to PostgreSQL. Hasura exposes PostgreSQL as a GraphQL API. The explorer is only a frontend and does not index or store data.
 
-Internal architecture of each major component:
+Sources: the [pinned node source](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf), the [node image](/nodes/image/) page, the [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py), [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer/tree/0ae1eea64234c86937b3adf39fc6a5551b228f1a) and [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet/tree/b2e3a45f70d17c05979de38290d7a4fb7e8c42dd).
 
-- [Wallet Architecture](./component-diagrams/wallet/) - UI, state, services
-- [Explorer Architecture](./component-diagrams/explorer/) - Parsing, storage, API
-- [Node Architecture](./component-diagrams/node/) - Core, ports, P2P
+## Next Steps
 
-### [Sequence Diagrams](./sequence-diagrams/)
+<CardGrid columns="2">
+<DocCard title="Network Topology" href="/architecture/network-topology/">Node roles, ports, access and firewall rules</DocCard>
+<DocCard title="Data Flow" href="/architecture/data-flow/">Deploy lifecycle and which data comes from the node or from GraphQL</DocCard>
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/">Node, explorer and wallet components</DocCard>
+<DocCard title="Sequence Diagrams" href="/architecture/sequence-diagrams/">Interaction flows between the wallet and the nodes</DocCard>
+</CardGrid>
 
-Interaction flows between components:
-
-- [Transaction Flow](./sequence-diagrams/transaction/) - Send tokens lifecycle
-- [Balance Query](./sequence-diagrams/balance/) - Check balance flow
-
-### [State Diagrams](./state-diagrams/)
-
-Node lifecycle and state transitions:
-
-- [Startup States](./state-diagrams/startup/) - Initialization process
-- [Operational States](./state-diagrams/operations/) - Runtime states
-
-### [Data Flow](./data-flow/)
-
-Data movement through the system:
-
-- Wallet data flow
-- Explorer indexing pipeline
-
-### [Network Topology](./network-topology/)
-
-Network infrastructure:
-
-- Bootstrap and validator nodes
-- Port configuration
-- External services
-
-## Quick Navigation
-
-| Need to understand... | See |
-|----------------------|-----|
-| How wallet works | [Wallet Architecture](./component-diagrams/wallet/) |
-| Transaction lifecycle | [Transaction Flow](./sequence-diagrams/transaction/) |
-| Node states | [State Diagrams](./state-diagrams/) |
-| Network setup | [Network Topology](./network-topology/) |
-
-## Diagram Technology
-
-All diagrams use **Mermaid** syntax for easy maintenance and version control.
-
-::: tip
-If diagrams don't render, ensure JavaScript is enabled in your browser.
-:::
-
----
-
-## Related Documentation
-
-- [General Overview](/general/overview/) - High-level ecosystem
-- [DevNet Structure](/shard-nodes/devnet-structure/) - Network entities
-- [Validator Setup](/quick-start/join-validator/) - Deployment guide
+See also the [state diagrams](/architecture/state-diagrams/) and the [container images](/reference/container-images/) with the exact image and source pairs.

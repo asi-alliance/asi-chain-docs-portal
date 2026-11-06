@@ -1,45 +1,41 @@
-# Wallet SDK — API Reference
+# Wallet SDK API Reference
 
-Complete API reference for ASI Chain Wallet SDK services, domains, and utilities.
+Each page below describes one module of `@asichain/asi-wallet-sdk` 2.1.0. Start with `Client`. The services are low-level primitives that `Client` builds on, and you rarely call them directly. The source code is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
-**Source code**: [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk)
+## Client
+
+[Client](/wallet-sdk/api-reference/client/) manages wallets, signing sessions, networks, balances, transfers, reservations, keyfiles and events.
 
 ## Services
 
 | Module | Description |
 |--------|-------------|
-| [WalletsService](./wallets-service/) | Wallet creation and address derivation |
-| [CryptoService](./crypto-service/) | Password-based AES-GCM encryption/decryption |
-| [MnemonicService](./mnemonic-service/) | BIP-39 mnemonic generation and validation |
-| [KeyDerivationService](./key-derivation/) | BIP-32/BIP-44 hierarchical key derivation |
-| [KeysManager](./keys-manager/) | secp256k1 key generation and management |
-| [SignerService](./signer-service/) | Deploy signing without exposing raw key bytes |
-| [AssetsService](./assets-service/) | Token transfers and balance queries |
-| [DeployResubmitter](./deploy-resubmitter/) | Deploy retry and resubmission logic |
+| [Wallets](/wallet-sdk/api-reference/wallets-service/) | Key pair creation and address derivation |
+| [Crypto](/wallet-sdk/api-reference/crypto-service/) | Password-based AES-GCM encryption and decryption |
+| [Mnemonic](/wallet-sdk/api-reference/mnemonic-service/) | BIP-39 mnemonic generation and validation |
+| [KeyDerivation](/wallet-sdk/api-reference/key-derivation/) | BIP-32 and BIP-44 hierarchical key derivation |
+| [KeysManager](/wallet-sdk/api-reference/keys-manager/) | secp256k1 key generation and management |
+| [SignerService](/wallet-sdk/api-reference/signer-service/) | Serialization of deploy data for signing |
+| [AssetsService](/wallet-sdk/api-reference/assets-service/) | Balance queries for an address |
 
 ## Domains
 
 | Module | Description |
 |--------|-------------|
-| [Wallet](./wallet/) | Encrypted wallet with scoped signing capability |
-| [Vault](./vault/) | Multi-wallet encrypted browser storage |
-| [BlockchainGateway](./blockchain-gateway/) | Singleton gateway for node communication |
-| [EncryptedRecord](./encrypted-record/) | Encrypted data wrapper for seed storage |
-| [Asset](./asset/) | Token model |
-| [BrowserStorage](./browser-storage/) | `localStorage` adapter with key isolation |
+| [Wallet](/wallet-sdk/api-reference/wallet/) | A wallet with its accounts and its signing session |
+| [Asset](/wallet-sdk/api-reference/asset/) | Token model with an identifier, a name and decimal precision |
+| [BrowserStorage](/wallet-sdk/api-reference/browser-storage/) | IndexedDB storage behind a table interface |
 
 ## Error Handling
 
-| Module | Description |
-|--------|-------------|
-| [Error Types](./error-types/) | Deploy error classification, recoverable/fatal error enums, and `DeploymentErrorHandler` |
+[Error Types](/wallet-sdk/api-reference/error-types/) describes `CustomError`, its error codes and the typed errors that the SDK throws.
 
 ## Utilities
 
 | Module | Description |
 |--------|-------------|
-| [Codec](./codec/) | Base16, Base58, and Base64 encoding helpers |
-| [Functions](./functions/) | Atomic amount conversion utilities |
-| [Validators](./validators/) | Address checksum and account name validation |
-| [Constants](./constants/) | Library-wide constants (`ASI_DECIMALS`, `ASI_BASE_UNIT`, `GasFee`, etc.) |
-| [Polyfills](./polyfills/) | Browser `Buffer` polyfill setup |
+| [Codec](/wallet-sdk/api-reference/codec/) | Base16, Base58 and Base64 encoding helpers |
+| [Functions](/wallet-sdk/api-reference/functions/) | Atomic amount conversion |
+| [Validators](/wallet-sdk/api-reference/validators/) | Address checksum and account name validation |
+| [Constants](/wallet-sdk/api-reference/constants/) | Library-wide constants such as `ASI_DECIMALS`, `ASI_BASE_UNIT` and `GasFee` |
+| [Polyfills](/wallet-sdk/api-reference/polyfills/) | Browser `Buffer` polyfill setup |

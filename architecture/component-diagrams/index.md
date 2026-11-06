@@ -1,56 +1,19 @@
 # Component Diagrams
 
-Internal architecture diagrams for ASI:Chain ecosystem components.
+The table lists the five main components of ASI:Chain with the technology and the job of each. The pages below break the wallet, the explorer and the node into their parts, and the [architecture overview](/architecture/) shows how the components connect.
 
-← [Back to Architecture Overview](../)
+| Component | Technology | Responsibility |
+|---|---|---|
+| Wallet | React, Redux and Wallet SDK | Signs and submits deploys to the node HTTP API and reads history through GraphQL |
+| Explorer | React frontend | Reads chain data from Hasura over GraphQL |
+| Indexer | Python | Reads the node over gRPC and HTTP and writes PostgreSQL |
+| Hasura | GraphQL service | Exposes approved database data |
+| Node | Rust | CBC Casper, Rholang execution, RSpace++ and node APIs |
 
-## Available Components
+## Next Steps
 
-### [Wallet Architecture](./wallet/)
-
-The ASI Wallet v2 browser-based React application.
-
-- UI Layer structure
-- Redux state management
-- Services and node connections
-
-### [Block Explorer Architecture](./explorer/)
-
-Flask-based blockchain data indexer and viewer.
-
-- Data processing pipeline
-- Database schema
-- API endpoints
-
-### [ASI Node Architecture](./node/)
-
-ASI Scala blockchain node.
-
-- Core services
-- Port configuration  
-- P2P networking
-
-## Quick Reference
-
-| Component | Technology | Main Function |
-|-----------|------------|---------------|
-| Wallet | React + Redux | Account management, transactions |
-| Explorer | Flask + SQLite | Block and transaction viewing |
-| Node | Scala + JVM | Blockchain consensus and execution |
-
-## Node Connections
-
-```mermaid
-graph LR
-    W[Wallet] --> |writes + reads| V1[Validator 1 34.196.119.4:40403]
-    E[Explorer] --> |reads via Indexer| V1
-    F[Faucet] --> |writes| V1
-```
-
----
-
-## Related Documentation
-
-- [Sequence Diagrams](../sequence-diagrams/) - Interaction flows
-- [State Diagrams](../state-diagrams/) - Node lifecycle
-- [Network Topology](../network-topology/) - Infrastructure
+<CardGrid columns="2">
+<DocCard title="Wallet Components" href="/architecture/component-diagrams/wallet/">React app, Redux state and the Wallet SDK</DocCard>
+<DocCard title="Explorer Components" href="/architecture/component-diagrams/explorer/">React frontend and the indexer tables behind Hasura</DocCard>
+<DocCard title="Node Components" href="/architecture/component-diagrams/node/">Rust crates for services, consensus, execution and storage</DocCard>
+</CardGrid>

@@ -1,0 +1,378 @@
+/**
+ * Components: Steps, CardGrid, DocCard.
+ * Class names start with asi- . Inside .vp-doc the selectors repeat .vp-doc,
+ * because .vp-doc p, .vp-doc h3 and .vp-doc a would otherwise win.
+ */
+
+/* Step numbers come from a CSS counter on every ### inside the wrapper, so a step can be added or removed
+   without renumbering the others. The circle has the page color so the
+   line that links the steps does not run through it. */
+
+.asi-steps {
+  position: relative;
+  margin: 24px 0;
+  padding-left: 44px;
+  counter-reset: asi-step;
+}
+
+.asi-steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  bottom: 0;
+  left: 14px;
+  height: var(--asi-steps-line, auto);
+  width: 1px;
+  background: var(--vp-c-divider);
+}
+
+.vp-doc .asi-steps > h3 {
+  position: relative;
+  margin: 32px 0 8px;
+  padding-top: 0;
+  border-top: 0;
+  counter-increment: asi-step;
+}
+
+.vp-doc .asi-steps > h3:first-child {
+  margin-top: 0;
+}
+
+.vp-doc .asi-steps > h3::before {
+  content: counter(asi-step);
+  position: absolute;
+  top: 0;
+  left: -44px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  box-sizing: border-box;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 50%;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-family: var(--asi-font-heading, "Roboto Mono", ui-monospace, monospace);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.vp-doc .asi-steps > :last-child {
+  margin-bottom: 0;
+}
+
+/* CardGrid and DocCard lay out the next pages as panels, the same surface as the panels of the home page:
+   a 1 px border, the soft background and the brand border under the pointer. The whole panel is the link,
+   with the title first and one line about the page under it. */
+
+.asi-card-grid {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 640px) {
+  .asi-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.asi-card {
+  display: block;
+  padding: 16px 20px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--ds-r-md);
+  background-color: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+
+.vp-doc a.asi-card,
+.vp-doc a.asi-card:hover {
+  text-decoration: none;
+}
+
+.vp-doc a.asi-card:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
+.asi-card:focus-visible {
+  outline: 2px solid var(--ds-ring);
+  outline-offset: 2px;
+}
+
+.asi-card-title {
+  display: block;
+  color: var(--vp-c-brand-1);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.asi-card-body {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--vp-c-text-2);
+}
+
+/* The 404 page has no sidebar, so its content is a column in the middle of the screen. */
+
+.asi-not-found {
+  box-sizing: border-box;
+  max-width: 752px;
+  margin: 0 auto;
+  padding: calc(var(--vp-nav-height) + 24px) 24px 96px;
+}
+
+.asi-not-found .asi-directory {
+  margin: 40px 0;
+}
+
+/* The home page has no sidebar. Its left edge follows the logo in the top bar, whose container is at most
+   1440 px wide with 24 px of side padding, and 32 px from 768 px. */
+
+.asi-home-page {
+  box-sizing: border-box;
+  max-width: var(--vp-layout-max-width);
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+
+.asi-home-page h1 {
+  margin: 0;
+  font-family: var(--asi-font-heading);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--vp-c-text-1);
+}
+
+.asi-home-page h1 .header-anchor {
+  display: none;
+}
+
+.asi-home-page h1 + p {
+  max-width: 640px;
+  margin: 16px 0 0;
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--vp-c-text-2);
+}
+
+.asi-home-page .asi-directory {
+  margin-top: 56px;
+}
+
+@media (min-width: 768px) {
+  .asi-home-page {
+    padding: 80px 32px 128px;
+  }
+
+  .asi-home-page h1 {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  .asi-home-page .asi-directory {
+    margin-top: 72px;
+  }
+}
+
+/* The section directory is the sidebar laid out as panels, like the panels of the explorer: an icon, the
+   section title that opens its landing, one line about the section and its pages. The DevNet apps follow
+   as a row of linked panels. The column count follows the width of the directory, not of the window,
+   because the 404 page puts it in a narrower column than the home page. Selectors carry two classes so
+   .vp-doc h2, p, a and ul on the 404 page do not win. */
+
+.asi-directory {
+  container-type: inline-size;
+}
+
+.asi-directory .asi-directory-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+@container (min-width: 560px) {
+  .asi-directory .asi-directory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (min-width: 900px) {
+  .asi-directory .asi-directory-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+.asi-directory .asi-directory-group,
+.asi-directory .asi-directory-app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--ds-r-md);
+  background-color: var(--vp-c-bg-soft);
+}
+
+.asi-directory .asi-directory-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* The icon sits in a 36 px tinted square, the same 8 px radius as the panel scaled down to 6 px. */
+.asi-directory .asi-directory-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background-color: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+}
+
+.asi-directory .asi-directory-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.asi-directory .asi-directory-title {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--asi-font-heading);
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--vp-c-text-1);
+}
+
+.asi-directory .asi-directory-title a {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+.asi-directory .asi-directory-about {
+  display: block;
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--vp-c-text-2);
+}
+
+.asi-directory .asi-directory-list {
+  margin: 16px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--vp-c-divider);
+  list-style: none;
+}
+
+.asi-directory .asi-directory-list li {
+  margin: 0;
+}
+
+/* Each link fills a 32 px row, the same rhythm as the sidebar, which also makes it a 32 px tap target. */
+.asi-directory .asi-directory-list a {
+  display: inline-block;
+  padding: 4px 0;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+
+/* .vp-doc h2 on the 404 page is positioned for its anchor, which would hold the stretched link to the
+   title line, so the title stays static and the link stretches to the panel. */
+.asi-directory .asi-directory-title {
+  position: static;
+}
+
+.asi-directory .asi-directory-title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.asi-directory .asi-directory-title a:focus-visible {
+  outline: none;
+}
+
+.asi-directory .asi-directory-title a:focus-visible::after {
+  outline: 2px solid var(--ds-ring);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* The links of the list sit above the stretched title link, so each opens its own page. */
+.asi-directory .asi-directory-list a {
+  position: relative;
+  z-index: 1;
+}
+
+/* A panel answers the pointer like an app panel: the border takes the brand color, and so does the title
+   while a click would open the landing page, that is everywhere except over a link of the list. */
+.asi-directory .asi-directory-group:hover,
+.asi-directory .asi-directory-app:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
+.asi-directory .asi-directory-group:hover:not(:has(.asi-directory-list a:hover)) .asi-directory-title,
+.asi-directory .asi-directory-list a:hover {
+  color: var(--vp-c-brand-1);
+}
+
+.asi-directory .asi-directory-apps {
+  margin-top: 56px;
+}
+
+.asi-directory .asi-directory-apps-title {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  font-family: var(--asi-font-heading);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--vp-c-text-1);
+}
+
+/* The whole app panel is the link. The address sits at the bottom, so panels of one row line up. */
+.asi-directory .asi-directory-app {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+
+.asi-directory .asi-directory-app .asi-directory-host {
+  margin-top: auto;
+  padding-top: 16px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--vp-c-brand-1);
+}
+
+/* The feedback button is fixed at the bottom right, so the page keeps room under its last block. */
+
+.VPDoc {
+  padding-bottom: 96px;
+}
