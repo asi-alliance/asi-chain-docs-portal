@@ -36,10 +36,7 @@ html.dark { --d-group-bg: var(--vp-c-bg-soft); }
 .vp-doc { counter-reset: diagram; }
 figure.diagram {
   margin: 24px 0;
-  padding: 16px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
-  background: var(--d-surface);
+  padding: 0;
 }
 /* The query container is the inner .diagram-body and not the figure. container-type also turns on style
    containment, which scopes counters to the element, so on the figure every caption would read Figure 1. */
@@ -69,7 +66,7 @@ figure.diagram figcaption::before {
 
 /* Nodes */
 .dgm .d-group rect { fill: var(--d-group-bg); stroke: var(--d-group-line); stroke-width: 1; }
-.dgm .d-gtitle { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; fill: var(--d-muted); font-weight: 500; }
+.dgm .d-gtitle { font-size: 12px; fill: var(--d-muted); font-weight: 500; }
 .dgm .d-node rect, .dgm .d-node path, .dgm .d-node polygon { fill: var(--d-service-bg); stroke: var(--d-service-line); stroke-width: 1.25; stroke-linejoin: round; }
 .dgm .d-chain rect, .dgm .d-chain path { fill: var(--d-chain-bg); stroke: var(--d-chain-line); }
 .dgm .d-store rect, .dgm .d-store path { fill: var(--d-store-bg); stroke: var(--d-store-line); }
@@ -99,8 +96,7 @@ figure.diagram figcaption::before {
 .dgm .d-notetext { fill: var(--d-text); }
 
 /* Phone. The figure gives the SVG nearly the full screen width, because the narrow layouts are drawn at about 330 to
-   400 px and any scaling below 0.9 would push the 11 px labels under 10 px. The figure runs to the screen edges, so
-   it drops the side border and the radius. */
+   400 px and any scaling below 0.9 would push the 11 px labels under 10 px. The figure runs to the screen edges. */
 @media (max-width: 639px) {
-  figure.diagram { margin-inline: -24px; padding: 12px 8px; border-inline: 0; border-radius: 0; }
+  figure.diagram { margin-inline: -24px; padding: 0 8px; }
 }

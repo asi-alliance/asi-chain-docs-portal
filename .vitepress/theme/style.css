@@ -218,50 +218,61 @@ body {
   background: var(--vp-c-brand-soft);
 }
 
-/* Typography */
+/* Typography. Every size, line height and margin is a multiple of 4 px. */
 
 .vp-doc {
   font-size: 16px;
-  line-height: 1.7;
+  line-height: 28px;
 }
 
 .vp-doc h1 {
-  font-size: clamp(30px, 5vw, 40px);
-  line-height: 1.15;
+  margin: 0 0 16px;
+  font-family: var(--asi-font-heading, "Roboto Mono", ui-monospace, monospace);
+  font-size: 32px;
+  line-height: 40px;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 12px;
+  letter-spacing: 0;
 }
 
 .vp-doc h2 {
-  margin: 56px 0 16px;
-  padding-top: 28px;
+  margin: 48px 0 16px;
+  padding-top: 16px;
   border-top: 1px solid var(--vp-c-divider);
-  font-size: 28px;
-  line-height: 1.25;
+  font-family: var(--asi-font-heading, "Roboto Mono", ui-monospace, monospace);
+  font-size: 24px;
+  line-height: 32px;
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: 0;
 }
 
 .vp-doc h3 {
   margin: 32px 0 8px;
-  font-size: 20px;
-  line-height: 1.35;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-family: var(--asi-font-heading, "Roboto Mono", ui-monospace, monospace);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 .vp-doc h4 {
   margin: 24px 0 8px;
   font-size: 16px;
+  line-height: 24px;
   font-weight: 600;
+  letter-spacing: 0;
 }
 
 /* The paragraph right under the H1 is the lead. */
 .vp-doc h1 + p {
+  margin: 0 0 24px;
   font-size: 18px;
-  line-height: 1.6;
+  line-height: 28px;
   color: var(--vp-c-text-2);
+}
+
+.vp-doc p {
+  margin: 16px 0;
+  line-height: 28px;
 }
 
 .vp-doc p,
@@ -282,13 +293,24 @@ body {
 .vp-doc ul,
 .vp-doc ol {
   margin: 16px 0;
+  padding-left: 24px;
+}
+
+.vp-doc li > ul,
+.vp-doc li > ol {
+  margin: 8px 0;
 }
 
 .vp-doc li + li {
-  margin-top: 6px;
+  margin-top: 8px;
+}
+
+.vp-doc li > p {
+  margin: 8px 0;
 }
 
 .vp-doc blockquote {
+  margin: 16px 0;
   border-left: 3px solid var(--vp-c-border);
   padding-left: 16px;
   color: var(--vp-c-text-2);
@@ -303,8 +325,9 @@ body {
 }
 
 @media (max-width: 639px) {
-  .vp-doc h2 {
-    margin-top: 44px;
+  .vp-doc h1 {
+    font-size: 28px;
+    line-height: 36px;
   }
 }
 

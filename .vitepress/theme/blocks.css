@@ -4,43 +4,40 @@
  * because .vp-doc p, .vp-doc h3 and .vp-doc a would otherwise win.
  */
 
-/* Review note: one slim neutral line */
+/* Review note: one quiet line above the H1 */
 
 .docs-review-note {
-  margin: 0 0 20px;
-  padding: 8px 12px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: var(--ds-r-sm);
-  background: var(--vp-c-bg-alt);
+  margin: 0 0 24px;
   color: var(--vp-c-text-2);
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .docs-review-note a {
-  color: var(--vp-c-brand-1);
-  font-weight: 500;
+  color: var(--vp-c-text-1);
   text-decoration: underline;
   text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
-/* Steps: numbers come from a CSS counter on every ### inside the wrapper. */
+/* Steps: numbers come from a CSS counter on every ### inside the wrapper. The circle has the page colour so the
+   line that links the steps does not run through it. */
 
 .asi-steps {
   position: relative;
   margin: 24px 0;
-  padding-left: 52px;
+  padding-left: 44px;
   counter-reset: asi-step;
 }
 
 .asi-steps::before {
   content: '';
   position: absolute;
-  top: 16px;
+  top: 28px;
   bottom: 0;
-  left: 15px;
+  left: 14px;
   width: 1px;
-  background: linear-gradient(to bottom, var(--vp-c-border) calc(100% - 40px), transparent);
+  background: var(--vp-c-divider);
 }
 
 .vp-doc .asi-steps > h3 {
@@ -48,8 +45,6 @@
   margin: 32px 0 8px;
   padding-top: 0;
   border-top: 0;
-  font-size: 17px;
-  line-height: 32px;
   counter-increment: asi-step;
 }
 
@@ -61,17 +56,19 @@
   content: counter(asi-step);
   position: absolute;
   top: 0;
-  left: -52px;
+  left: -44px;
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--ds-step-line);
+  width: 28px;
+  height: 28px;
+  box-sizing: border-box;
+  border: 1px solid var(--vp-c-divider);
   border-radius: 50%;
-  background: var(--ds-step-bg);
-  color: var(--ds-step-fg);
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-family: var(--asi-font-heading, "Roboto Mono", ui-monospace, monospace);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
 }
 
@@ -79,100 +76,59 @@
   margin-bottom: 0;
 }
 
-@media (max-width: 639px) {
-  .asi-steps {
-    padding-left: 44px;
-  }
-
-  .asi-steps::before {
-    left: 13px;
-  }
-
-  .vp-doc .asi-steps > h3::before {
-    left: -44px;
-    width: 28px;
-    height: 28px;
-    font-size: 13px;
-  }
-
-  .vp-doc .asi-steps > h3 {
-    line-height: 28px;
-  }
-}
-
-/* CardGrid and DocCard */
+/* CardGrid and DocCard: a list of links, title first and the description under it. */
 
 .asi-card-grid {
   display: grid;
-  gap: 16px;
+  gap: 24px 32px;
   margin: 24px 0;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
 }
 
-.asi-card-grid[data-columns='3'] {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-@media (max-width: 959px) {
-  .asi-card-grid[data-columns='3'] {
+@media (min-width: 640px) {
+  .asi-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 639px) {
-  .asi-card-grid,
-  .asi-card-grid[data-columns='3'] {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
 .asi-card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 20px;
-  border: 1px solid var(--vp-c-border);
-  border-radius: var(--ds-r-lg);
-  background: var(--vp-c-bg-elv);
-  color: var(--vp-c-text-1);
-  font-weight: 400;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  display: block;
+  color: var(--vp-c-text-2);
 }
 
 .vp-doc a.asi-card,
 .vp-doc a.asi-card:hover {
-  color: var(--vp-c-text-1);
-  font-weight: 400;
   text-decoration: none;
-}
-
-.vp-doc a.asi-card:hover {
-  border-color: var(--ds-accent);
-  box-shadow: var(--ds-shadow-md);
 }
 
 .asi-card:focus-visible {
   outline: 2px solid var(--ds-ring);
-  outline-offset: 2px;
-  border-radius: var(--ds-r-lg);
-}
-
-.asi-card-icon {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 8px;
-  color: var(--vp-c-brand-1);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .asi-card-title {
+  display: block;
+  color: var(--vp-c-brand-1);
   font-size: 16px;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 24px;
+  transition: color var(--asi-dur-1, 120ms) var(--asi-ease-out, ease-out);
+}
+
+.asi-card:hover .asi-card-title {
+  color: var(--vp-c-brand-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 .asi-card-body {
+  display: block;
+  margin-top: 4px;
   font-size: 14px;
-  line-height: 1.55;
+  font-weight: 400;
+  line-height: 20px;
   color: var(--vp-c-text-2);
 }
 
