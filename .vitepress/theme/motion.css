@@ -19,6 +19,7 @@
 /* 1. Content links */
 html:not(#a) .vp-doc a,
 html:not(#a) .asi-directory a,
+html:not(#a) .asi-directory .asi-directory-app,
 html:not(#a) .vp-doc a code,
 html:not(#a) .VPDocFooter .pager-link .title,
 html:not(#a) .VPFooter a {

@@ -188,10 +188,11 @@
   }
 }
 
-/* The section directory is the sidebar laid out in columns: a group title that opens the section landing
-   and the pages of the group under it. The column count follows the width of the directory, not of the
-   window, because the 404 page puts it in a narrower column than the home page. Selectors carry two
-   classes so .vp-doc h2, a and ul on the 404 page do not win. */
+/* The section directory is the sidebar laid out as panels, like the panels of the explorer: an icon, the
+   section title that opens its landing, one line about the section and its pages. The DevNet apps follow
+   as a row of linked panels. The column count follows the width of the directory, not of the window,
+   because the 404 page puts it in a narrower column than the home page. Selectors carry two classes so
+   .vp-doc h2, p, a and ul on the 404 page do not win. */
 
 .asi-directory {
   container-type: inline-size;
@@ -200,34 +201,67 @@
 .asi-directory .asi-directory-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 32px;
+  gap: 16px;
 }
 
-@container (min-width: 520px) {
+@container (min-width: 560px) {
   .asi-directory .asi-directory-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 40px 32px;
   }
 }
 
-@container (min-width: 960px) {
+@container (min-width: 900px) {
   .asi-directory .asi-directory-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 56px 40px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
   }
 }
 
-.asi-directory .asi-directory-group {
-  padding-top: 16px;
-  border-top: 1px solid var(--vp-c-divider);
+.asi-directory .asi-directory-group,
+.asi-directory .asi-directory-app {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--ds-r-md);
+  background-color: var(--vp-c-bg-soft);
+}
+
+.asi-directory .asi-directory-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* The icon sits in a 36 px tinted square, the same 8 px radius as the panel scaled down to 6 px. */
+.asi-directory .asi-directory-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background-color: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+}
+
+.asi-directory .asi-directory-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .asi-directory .asi-directory-title {
-  margin: 0 0 8px;
+  margin: 0;
   padding: 0;
   border: 0;
   font-family: var(--asi-font-heading);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 24px;
   font-weight: 700;
   letter-spacing: 0;
@@ -240,9 +274,18 @@
   text-decoration: none;
 }
 
+.asi-directory .asi-directory-about {
+  display: block;
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--vp-c-text-2);
+}
+
 .asi-directory .asi-directory-list {
-  margin: 0;
-  padding: 0;
+  margin: 16px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--vp-c-divider);
   list-style: none;
 }
 
@@ -257,13 +300,48 @@
   font-size: 15px;
   line-height: 24px;
   font-weight: 400;
-  color: var(--vp-c-text-2);
+  color: var(--vp-c-text-1);
   text-decoration: none;
 }
 
 .asi-directory .asi-directory-title a:hover,
 .asi-directory .asi-directory-list a:hover {
   color: var(--vp-c-brand-1);
+}
+
+.asi-directory .asi-directory-apps {
+  margin-top: 56px;
+}
+
+.asi-directory .asi-directory-apps-title {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  font-family: var(--asi-font-heading);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--vp-c-text-1);
+}
+
+/* The whole app panel is the link. The address sits at the bottom, so panels of one row line up. */
+.asi-directory .asi-directory-app {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+
+.asi-directory .asi-directory-app .asi-directory-host {
+  margin-top: auto;
+  padding-top: 16px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--vp-c-brand-1);
+}
+
+.asi-directory .asi-directory-app:hover {
+  border-color: var(--vp-c-brand-1);
 }
 
 /* The feedback button is fixed at the bottom right, so the page keeps room under its last block. */
