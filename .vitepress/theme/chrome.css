@@ -379,3 +379,28 @@
     padding-top: 12px;
   }
 }
+
+/*
+ * Roboto sets its ascent above the descent, so a 14 px line of it sits about 1.5 px high
+ * inside a box centred by flex or by line-height. This lowers the text by 1 px, which brings
+ * the ink within 0.5 px of the centre. Without it the rows look top-heavy next to the icons.
+ */
+
+.VPSidebar .nav .VPSidebarItem .item .text,
+.VPNavBar .VPNavBarMenuGroup .button .text,
+.VPNavBarSearch .DocSearch-Button .DocSearch-Button-Placeholder,
+.VPLocalNav .menu .menu-text,
+.VPLocalNavOutlineDropdown button,
+.VPDocAsideOutline .outline-link {
+  position: relative;
+  top: 1px;
+}
+
+/* The pager title has no box around it, so the centring tool needs a 20 px block with the 2 px of space under the text. */
+
+.VPDocFooter .pager-link .title {
+  display: block;
+  box-sizing: border-box;
+  height: 20px;
+  padding-bottom: 2px;
+}
