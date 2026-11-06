@@ -10,7 +10,7 @@ pageClass: asi-home
 
 # ASI:Chain Documentation
 
-Use the wallet, get test tokens, run a node and build on ASI:Chain. This is the documentation for the DevNet.
+Use the wallet, get test tokens, run a node and build apps on the ASI:Chain DevNet.
 
 <SectionDirectory />
 

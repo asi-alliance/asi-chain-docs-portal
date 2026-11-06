@@ -64,7 +64,7 @@ const about: Record<string, string> = {
 
 const appAbout: Record<string, string> = {
     Wallet: "Create accounts, send ASI and deploy contracts",
-    Explorer: "Blocks, transfers, deployments and validators",
+    Explorer: "Browse blocks, transfers, deployments and validators",
     Faucet: "Get test ASI for your address",
 };
 

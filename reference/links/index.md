@@ -1,6 +1,6 @@
 # Useful Links
 
-This page collects the public applications, packages and source repositories of ASI:Chain.
+Open the public ASI:Chain applications, the npm package and the source repositories.
 
 ## Applications
 
@@ -15,9 +15,7 @@ Node addresses are on [Network Endpoints](/reference/endpoints/).
 
 ## Packages
 
-| Package | Registry |
-|---|---|
-| Wallet SDK | [@asichain/asi-wallet-sdk](https://www.npmjs.com/package/@asichain/asi-wallet-sdk) on npm |
+The Wallet SDK is published on npm as [@asichain/asi-wallet-sdk](https://www.npmjs.com/package/@asichain/asi-wallet-sdk).
 
 ## Source Code
 
@@ -40,7 +38,7 @@ Check the branch or tag you build from, because the default branch of a reposito
 
 ## Report a Problem
 
-To report a problem, open an issue in the affected repository. Describe how to reproduce it, and leave out keys and `.env` values.
+Open an issue in the affected repository from the Source Code table. Describe how to reproduce the problem, and leave out keys and `.env` values.
 
 ## Next Steps
 

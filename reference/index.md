@@ -1,6 +1,6 @@
 # Reference
 
-This section lists public addresses, image versions and links for ASI:Chain.
+Look up the public DevNet addresses, the container image versions and the links to ASI:Chain apps, packages and repositories.
 
 <CardGrid columns="2">
 <DocCard title="Network Endpoints" href="/reference/endpoints/">Public DevNet addresses</DocCard>

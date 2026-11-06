@@ -1,15 +1,15 @@
 # Shard and Node Roles
 
-A shard combines peer connectivity, consensus, execution and persistent state. The exact genesis, native token, active bonded validator set and admission policy belong to the selected network.
+A shard is one network of nodes that handles peer connectivity, consensus, execution and persistent state. Its genesis, native token, active bonded validator set and admission policy are specific to each network. Each node in a shard plays one of the roles below.
 
 | Role | Meaning |
 |---|---|
-| Bootstrap | Peer entry point; ceremony behavior depends on its configuration |
+| Bootstrap | Entry point for joining peers; its part in the [genesis ceremony](/architecture/state-diagrams/startup/#launch-modes) depends on its configuration |
 | Validator | Participates in consensus according to active bonded stake |
 | Observer | Follows chain state without proposing validator blocks |
-| External joining node | Needs accepted configuration and a network-specific admission and bonding process |
+| External joining node | Joins an existing shard once the network accepts its configuration and it passes the network's admission and bonding process |
 
-The same [Rust node image](/nodes/image/) serves the different roles. A role label, configured signing key or running container alone does not establish synchronization, active stake or canonical finalization. A bootstrap is not automatically a bonded validator.
+The same [Rust node image](/nodes/image/) serves the different roles. A role label, a signing key or a running container does not by itself mean that the node is synchronized, has active stake or takes part in canonical finalization. A bootstrap is not automatically a bonded validator either.
 
 ## Applications and Indexing
 
@@ -22,7 +22,7 @@ DevNet addresses for wallets, tools and the explorer are on [network endpoints](
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node that is meant to become a validator</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node that you later bond as a validator</DocCard>
 <DocCard title="Run an Observer" href="/nodes/observer/">Start a read-only Rust node that follows the chain</DocCard>
 <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Plan genesis, identities, bonds and token metadata for your own shard</DocCard>
 </CardGrid>

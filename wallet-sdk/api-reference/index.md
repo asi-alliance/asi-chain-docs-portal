@@ -1,12 +1,10 @@
 # Wallet SDK API Reference
 
-API reference for `@asichain/asi-wallet-sdk` 2.1.0. Applications start with `Client`. The services below it are low-level primitives that `Client` builds on, and you rarely call them directly. The source code is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
+Each page below describes one module of `@asichain/asi-wallet-sdk` 2.1.0. Start with `Client`. The services are low-level primitives that `Client` builds on, and you rarely call them directly. The source code is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
 ## Client
 
-| Module | Description |
-|--------|-------------|
-| [Client](/wallet-sdk/api-reference/client/) | Wallets, signing sessions, networks, balances, transfers, reservations, keyfiles and events |
+[Client](/wallet-sdk/api-reference/client/) manages wallets, signing sessions, networks, balances, transfers, reservations, keyfiles and events.
 
 ## Services
 
@@ -25,14 +23,12 @@ API reference for `@asichain/asi-wallet-sdk` 2.1.0. Applications start with `Cli
 | Module | Description |
 |--------|-------------|
 | [Wallet](/wallet-sdk/api-reference/wallet/) | A wallet with its accounts and its signing session |
-| [Asset](/wallet-sdk/api-reference/asset/) | Token model |
+| [Asset](/wallet-sdk/api-reference/asset/) | Token model with an identifier, a name and decimal precision |
 | [BrowserStorage](/wallet-sdk/api-reference/browser-storage/) | IndexedDB storage behind a table interface |
 
 ## Error Handling
 
-| Module | Description |
-|--------|-------------|
-| [Error Types](/wallet-sdk/api-reference/error-types/) | `CustomError`, its error codes and the typed errors that the SDK throws |
+[Error Types](/wallet-sdk/api-reference/error-types/) describes `CustomError`, its error codes and the typed errors that the SDK throws.
 
 ## Utilities
 

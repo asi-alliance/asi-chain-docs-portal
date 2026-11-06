@@ -179,12 +179,29 @@
 
 /* Tables sit in a scroll wrapper added in config.ts (markdown.config). */
 
+/* A table wider than its box gets a soft edge shade on the side where columns are hidden, so a reader on a
+   phone sees that the table scrolls. The shades stay fixed to the box (scroll), and two strips in the page color
+   move with the table (local) and cover a shade once that side is fully in view. A strip stays opaque for 13 px,
+   which is wider than the 12 px shade, so a table that fits shows no shade at all. */
 .vp-doc .table-wrap {
   margin: 16px 0;
   overflow-x: auto;
   border: 1px solid var(--vp-c-border);
   border-radius: 8px;
-  background: var(--vp-c-bg);
+  background:
+    linear-gradient(to right, var(--vp-c-bg) 40%, transparent) left center / 32px 100% no-repeat local,
+    linear-gradient(to left, var(--vp-c-bg) 40%, transparent) right center / 32px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--ds-scroll-edge), transparent) left center / 12px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--ds-scroll-edge), transparent) right center / 12px 100% no-repeat scroll,
+    var(--vp-c-bg);
+}
+
+/* For reduced motion the default theme sets background-attachment to initial on every element, which would pin
+   the covering strips and hide the shades for good. The shades do not animate, so the table keeps them. */
+@media (prefers-reduced-motion: reduce) {
+  .vp-doc .table-wrap {
+    background-attachment: local, local, scroll, scroll !important;
+  }
 }
 
 .vp-doc .table-wrap:focus-visible {

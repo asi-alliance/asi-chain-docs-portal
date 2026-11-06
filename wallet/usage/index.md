@@ -2,7 +2,7 @@
 
 ASI Wallet is a browser wallet for ASI:Chain. It has no backend of its own: it keeps your keys in the browser, signs transactions locally and talks directly to the network nodes and the indexer. A Rholang editor for deploying contracts is built in.
 
-The DevNet wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It connects to DevNet out of the box, so there is nothing to configure. Node and service addresses are listed on [Network Endpoints](/reference/endpoints/), and a wallet for your own node is described in [Custom Network](/wallet/custom-network/).
+The DevNet wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It connects to DevNet out of the box, so there is nothing to configure. Node and service addresses are listed on [Network Endpoints](/reference/endpoints/), and connecting the wallet to your own node is described in [Custom Network Connection](/wallet/custom-network/).
 
 ::: warning Back Up Your Recovery Phrase
 The wallet shows the recovery phrase once, when the wallet is created. Anyone who has it can control your accounts, and if you lose both the phrase and the browser data you lose access for good. Write the phrase down, keep it offline, and never put it in a screenshot or a text file.
@@ -47,7 +47,7 @@ The wallet asks for the password every time you open it in a browser that alread
 
 ## Get Test Tokens
 
-Copy your address from **Accounts** or **Receive**, then request tokens from the ASI:Chain Faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io). The steps are in [Faucet Usage](/faucet/usage/) and [Get ASI](/quick-start/get-asi/). The balance shows up in the wallet after the transfer is finalized.
+Copy your address from **Accounts** or **Receive**, then request tokens from the ASI:Chain Faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io). [Get DevNet ASI](/quick-start/get-asi/) walks through it, and the [Faucet](/faucet/usage/) page explains the statuses and errors. The balance shows up in the wallet after the transfer is finalized.
 
 ## Wallet
 
@@ -87,7 +87,7 @@ Click **Send**.
 ![The Send ASI page with the account selector, the balance and the Recipient Address field.](/images/wallet/send-page.light.webp){.light-only width=648 height=631}
 ![The Send ASI page with the account selector, the balance and the Recipient Address field.](/images/wallet/send-page.dark.webp){.dark-only width=648 height=631}
 
-Before anything is sent, the wallet shows **Confirm Transaction** with the sending account and address, the recipient, the amount, the estimated commission and the total cost. A transfer cannot be reversed. After **Confirm & Send** the wallet signs the transfer with the unlocked wallet, without asking for the password again, and shows **Transaction pending** with the deploy ID until the transfer is finalized.
+Before anything is sent, the wallet shows **Confirm Transaction** with the sending account and address, the recipient, the amount, the estimated commission and the total cost. A transfer cannot be reversed. After **Confirm & Send** the unlocked wallet signs the transfer without asking for the password again. It then shows **Transaction pending** with the deploy ID until the transfer is finalized.
 
 ![The Confirm Transaction dialog with the sender, recipient, amount, commission and total cost.](/images/wallet/send-confirmation.light.webp){.light-only width=548 height=721}
 ![The Confirm Transaction dialog with the sender, recipient, amount, commission and total cost.](/images/wallet/send-confirmation.dark.webp){.dark-only width=548 height=721}
@@ -176,7 +176,7 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 ![The Network Settings page with the Custom Network Configuration form.](/images/wallet/settings-network.light.webp){.light-only width=648 height=1011}
 ![The Network Settings page with the Custom Network Configuration form.](/images/wallet/settings-network.dark.webp){.dark-only width=648 height=1011}
 
-[Custom Network](/wallet/custom-network/) describes the form field by field, with examples for a local node.
+[Custom Network Connection](/wallet/custom-network/) describes the form field by field, with examples for a local node.
 
 ## Bridge
 
@@ -191,4 +191,4 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 <DocCard title="Wallet Source" href="https://github.com/asi-alliance/asi-chain-wallet">github.com/asi-alliance/asi-chain-wallet</DocCard>
 </CardGrid>
 
-The documentation is at [docs.asichain.io](https://docs.asichain.io), and the block explorer is at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
+The block explorer is at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).

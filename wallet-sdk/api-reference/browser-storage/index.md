@@ -2,9 +2,9 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/BrowserStorage/index.ts) · [Table interface](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/TableService/index.ts)
 
-A wrapper over the browser's IndexedDB. It keeps records in named tables and implements `ITableService<ITableRecord>`. The SDK's storage repositories use it to persist wallets, accounts and reservations in a browser, and in Node.js they use `NodeStorage`, which has the same interface and keeps files in a directory (`DEFAULT_NODE_STORAGE_DIR`). You only need `BrowserStorage` directly when you want your own tables next to the SDK's.
+`BrowserStorage` wraps the browser's IndexedDB. It keeps records in named tables and implements `ITableService<ITableRecord>`. You only need it directly when you want your own tables next to the SDK's.
 
-All methods are asynchronous except `getVersion`, `getDatabaseName`, `getTableNamesList` and `isInitialized`. The class needs `indexedDB`, so it works only in a browser, not in Node.js.
+The class needs `indexedDB`, so it works only in a browser. The SDK's storage repositories use it to persist wallets, accounts and reservations in a browser. In Node.js they use `NodeStorage`, which has the same interface and keeps files in a directory (`DEFAULT_NODE_STORAGE_DIR`). All methods are asynchronous except `getVersion`, `getDatabaseName`, `getTableNamesList` and `isInitialized`.
 
 ## Import
 
@@ -52,11 +52,15 @@ createTable(tableName: string, keyPath?: string): Promise<void>
 dropTable(tableName: string): Promise<void>
 ```
 
+`dropTable` deletes the table and its records.
+
 ### tableExists()
 
 ```ts
 tableExists(tableName: string): Promise<boolean>
 ```
+
+`tableExists` returns `true` when the table exists.
 
 ### getTableNames()
 
@@ -64,11 +68,15 @@ tableExists(tableName: string): Promise<boolean>
 getTableNames(): Promise<string[]>
 ```
 
+`getTableNames` opens the database if needed and returns the names of its tables.
+
 ### close()
 
 ```ts
 close(): Promise<void>
 ```
+
+`close` closes the database. On a closed database it does nothing.
 
 ### insert()
 
@@ -136,6 +144,8 @@ clearTable(tableName: string): Promise<void>
 isInitialized(): boolean
 ```
 
+`isInitialized` returns `true` while the database is open.
+
 ### getVersion()
 
 ```ts
@@ -149,6 +159,8 @@ getVersion(): number
 ```ts
 getDatabaseName(): string
 ```
+
+`getDatabaseName` returns the database name.
 
 ### getTableNamesList()
 

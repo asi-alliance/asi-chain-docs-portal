@@ -18,8 +18,6 @@ import { Asset, DEFAULT_ASSET } from "@asichain/asi-wallet-sdk";
 new Asset({ id, name, decimals, contractAddress }: IAssetOptions)
 ```
 
-The constructor takes one options object.
-
 ```ts
 interface IAssetOptions {
     id: string;
@@ -29,12 +27,12 @@ interface IAssetOptions {
 }
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | `string` | Yes | Unique asset identifier. |
-| `name` | `string` | Yes | Human-readable asset name. |
-| `decimals` | `number` | No | Number of decimal places. Defaults to `NATIVE_TOKEN_DECIMALS_AMOUNT` (`8`). |
-| `contractAddress` | `string` | No | Address of the token contract. `getContractAddress()` returns `null` when it is not set. |
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Unique asset identifier. |
+| `name` | `string` | Human-readable asset name. |
+| `decimals` | `number` | Optional. Number of decimal places. Defaults to `NATIVE_TOKEN_DECIMALS_AMOUNT` (`8`). |
+| `contractAddress` | `string` | Optional. Address of the token contract. `getContractAddress()` returns `null` when it is not set. |
 
 ## Methods
 

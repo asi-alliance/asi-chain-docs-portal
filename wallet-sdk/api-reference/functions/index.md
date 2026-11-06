@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/functions/index.ts)
 
-Amount conversion between human-readable values and atomic integers, plus a few small helpers. All of them are plain functions exported from the package root.
+These functions convert amounts between human-readable values and atomic integers. A few small helpers come with them. All of them are plain functions exported from the package root.
 
 An atomic amount is a `bigint` count of the smallest token unit. A token with `decimals` decimal places has `10^decimals` atomic units in one whole token, so for ASI (`ASI_DECIMALS` = `8`) one ASI is `100_000_000` atomic units.
 
@@ -38,10 +38,10 @@ Converts a human-readable amount to atomic units. It strips thousands separators
 In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`.
 :::
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `amount` | `number \| string` | Yes | Decimal amount, for example `"1,234.56"` or `1234.56`. |
-| `decimals` | `number` | Yes | Number of decimal places of the token. |
+| Name | Type | Description |
+|------|------|-------------|
+| `amount` | `number \| string` | Decimal amount, for example `"1,234.56"` or `1234.56`. |
+| `decimals` | `number` | Number of decimal places of the token. |
 
 Returns `bigint`.
 
@@ -59,10 +59,10 @@ fromAtomicAmount(atomicAmount: bigint, decimals: number): string
 
 Converts atomic units to a decimal string with trailing zeros trimmed, for example `150000000n` with 8 decimals gives `"1.5"`. Negative amounts keep their sign.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `atomicAmount` | `bigint` | Yes | Atomic amount. |
-| `decimals` | `number` | Yes | Number of decimal places of the token. |
+| Name | Type | Description |
+|------|------|-------------|
+| `atomicAmount` | `bigint` | Atomic amount. |
+| `decimals` | `number` | Number of decimal places of the token. |
 
 Returns `string`.
 
@@ -74,10 +74,10 @@ fromAtomicAmountToNumber(atomicAmount: bigint, decimals: number): number
 
 Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Use `fromAtomicAmount` when exact digits matter.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `atomicAmount` | `bigint` | Yes | Atomic amount. |
-| `decimals` | `number` | Yes | Number of decimal places of the token. |
+| Name | Type | Description |
+|------|------|-------------|
+| `atomicAmount` | `bigint` | Atomic amount. |
+| `decimals` | `number` | Number of decimal places of the token. |
 
 Returns `number`.
 
@@ -87,7 +87,7 @@ Returns `number`.
 parseAtomicAmount(value: unknown): bigint | null
 ```
 
-Reads an atomic amount from a value that came from outside, such as a node response. It returns a `bigint` for a non-negative safe integer or a string of digits only, and `null` for everything else, including negative numbers, fractions and strings like `"1.5"`.
+Reads an atomic amount from a value that came from outside, such as a node response. It returns a `bigint` for a non-negative safe integer or a string of digits only. Everything else gives `null`, including negative numbers, fractions and strings like `"1.5"`.
 
 ### genRandomHex()
 
@@ -119,7 +119,7 @@ normalizeAddress(address: string | undefined): string
 isSameAddress(address: string | undefined, other: string | undefined): boolean
 ```
 
-`isSameAddress` compares two addresses after that normalization and returns `false` when the first one is empty.
+`isSameAddress` normalizes both addresses with `normalizeAddress` and compares them. It returns `false` when the first one is empty.
 
 ### buildUrl()
 

@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/KeysManager/index.ts)
 
-secp256k1 key generation and HD key derivation helpers. All methods are `static`.
+`KeysManager` generates secp256k1 keys, converts them to hex and derives private keys for HD wallets. All methods are `static`.
 
 ## Import
 
@@ -20,9 +20,9 @@ generateRandomKey(length?: number): Uint8Array
 
 Generates cryptographically secure random bytes.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `length` | `number` | No | Number of bytes. Defaults to `32`. Must be a positive integer. |
+| Name | Type | Description |
+|------|------|-------------|
+| `length` | `number` | Optional. Number of bytes. Defaults to `32`. Must be a positive integer. |
 
 Returns `Uint8Array` with the random bytes.
 
@@ -36,13 +36,13 @@ generateKeyPair(keyLength?: number): KeyPair
 
 Generates a random secp256k1 key pair.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `keyLength` | `number` | No | Private key length in bytes. Defaults to `32`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `keyLength` | `number` | Optional. Private key length in bytes. Defaults to `32`. |
 
 Returns `KeyPair` as `{ privateKey, publicKey }`.
 
-Throws `Error("PrivateKeyLength must be a positive integer")` if `keyLength` is invalid.
+Throws `Error("PrivateKeyLength must be a positive integer")` if `keyLength` is not a positive integer.
 
 ### getKeyPairFromPrivateKey()
 
@@ -52,9 +52,9 @@ getKeyPairFromPrivateKey(privateKey: Uint8Array): KeyPair
 
 Derives a `KeyPair` from an existing private key.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `privateKey` | `Uint8Array` | Yes | secp256k1 private key (32 bytes). |
+| Name | Type | Description |
+|------|------|-------------|
+| `privateKey` | `Uint8Array` | secp256k1 private key (32 bytes). |
 
 Returns `KeyPair` as `{ privateKey, publicKey }`.
 
@@ -66,9 +66,9 @@ getPublicKeyFromPrivateKey(privateKey: Uint8Array): Uint8Array
 
 Derives the public key from a private key.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `privateKey` | `Uint8Array` | Yes | secp256k1 private key (32 bytes). |
+| Name | Type | Description |
+|------|------|-------------|
+| `privateKey` | `Uint8Array` | secp256k1 private key (32 bytes). |
 
 Returns `Uint8Array` with the uncompressed public key (65 bytes, starting with `0x04`).
 
@@ -80,9 +80,9 @@ convertKeyToHex(key: Uint8Array): string
 
 Converts a binary key to a lowercase hex string.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `key` | `Uint8Array` | Yes | Key bytes to encode. |
+| Name | Type | Description |
+|------|------|-------------|
+| `key` | `Uint8Array` | Key bytes to encode. |
 
 Returns `string` with the hex-encoded key.
 
@@ -94,9 +94,9 @@ getInitialHDPathFromOptions(hdWalletOptions: TCreateHDPathWalletOptions): Promis
 
 Returns the BIP-44 path for a new HD wallet. With `{ index }` it builds a path from `ASI_COIN_TYPE`, account 0, change 0 and that index, and with `{ customHDPath }` it returns that path unchanged.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `hdWalletOptions` | `TCreateHDPathWalletOptions` | Yes | `{ index: number }` or `{ customHDPath: Bip44Path }`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `hdWalletOptions` | `TCreateHDPathWalletOptions` | `{ index: number }` or `{ customHDPath: Bip44Path }`. |
 
 Returns `Promise<Bip44Path>`.
 
@@ -108,10 +108,10 @@ getPrivateDataFromSeed(seed: Uint8Array, path: Bip44Path): Promise<IHDWalletPriv
 
 Derives the private key at `path` from a BIP-39 seed.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `seed` | `Uint8Array` | Yes | Seed bytes, for example from `KeyDerivation.mnemonicToSeed`. |
-| `path` | `Bip44Path` | Yes | Derivation path. |
+| Name | Type | Description |
+|------|------|-------------|
+| `seed` | `Uint8Array` | Seed bytes, for example from `KeyDerivation.mnemonicToSeed`. |
+| `path` | `Bip44Path` | Derivation path. |
 
 Returns `Promise<IHDWalletPrivateKeyDataFromSeed>` with `{ privateKey, path, index }`.
 

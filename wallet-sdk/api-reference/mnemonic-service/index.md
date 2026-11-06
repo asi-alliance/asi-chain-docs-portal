@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Mnemonic/index.ts)
 
-BIP-39 mnemonic generation, validation and conversion. The package exports the class as `Mnemonic` and the enum as `MnemonicStrength`, and all methods are static. Importing the module also calls [`setupBufferPolyfill`](/wallet-sdk/api-reference/polyfills/).
+`Mnemonic` generates, validates and converts BIP-39 mnemonics. All its methods are static. The `MnemonicStrength` enum sets the length of a new mnemonic in words. Importing the module also calls [`setupBufferPolyfill`](/wallet-sdk/api-reference/polyfills/).
 
 ## Import
 
@@ -20,9 +20,9 @@ static generateMnemonic(strength?: MnemonicStrength): string
 
 Generates a BIP-39 mnemonic.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `strength` | `MnemonicStrength` | No | Entropy in bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `strength` | `MnemonicStrength` | Optional. Entropy in bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
 
 Returns `string` with the space-separated mnemonic.
 
@@ -34,9 +34,9 @@ static generateMnemonicArray(strength?: MnemonicStrength): string[]
 
 Generates a mnemonic and returns it as an array of words.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `strength` | `MnemonicStrength` | No | Entropy in bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `strength` | `MnemonicStrength` | Optional. Entropy in bits. Defaults to `MnemonicStrength.TWELVE_WORDS`. |
 
 Returns `string[]` with the mnemonic words.
 
@@ -48,9 +48,9 @@ static isMnemonicValid(mnemonic: string): boolean
 
 Checks the words against the BIP-39 English wordlist and verifies the checksum. The check is strict about spacing and case, so run user input through `normalizeMnemonic` first.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `mnemonic` | `string` | Yes | Mnemonic to validate. |
+| Name | Type | Description |
+|------|------|-------------|
+| `mnemonic` | `string` | Mnemonic to validate. |
 
 Returns `boolean`. It is `true` when the mnemonic is valid.
 
@@ -62,9 +62,9 @@ static normalizeMnemonic(mnemonic: string): string
 
 Trims the string, lowercases it and collapses any run of whitespace into a single space.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `mnemonic` | `string` | Yes | Raw mnemonic text, for example pasted by a user. |
+| Name | Type | Description |
+|------|------|-------------|
+| `mnemonic` | `string` | Raw mnemonic text, for example pasted by a user. |
 
 Returns `string` with the normalized mnemonic.
 
@@ -76,9 +76,9 @@ static mnemonicToWordArray(mnemonic: string): string[]
 
 Trims the string and splits it on a single space. Several spaces in a row produce empty strings in the result, so normalize the text first if it comes from user input.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `mnemonic` | `string` | Yes | Mnemonic string. |
+| Name | Type | Description |
+|------|------|-------------|
+| `mnemonic` | `string` | Mnemonic string. |
 
 Returns `string[]` with the words.
 
@@ -90,9 +90,9 @@ static wordArrayToMnemonic(words: string[]): string
 
 Joins the words with single spaces.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `words` | `string[]` | Yes | Mnemonic words. |
+| Name | Type | Description |
+|------|------|-------------|
+| `words` | `string[]` | Mnemonic words. |
 
 Returns `string` with the mnemonic.
 
@@ -104,10 +104,10 @@ static mnemonicToSeed(mnemonic: string | string[], passphrase?: string): Promise
 
 Converts a mnemonic to a 64-byte BIP-39 seed. [`KeyDerivation.mnemonicToSeed`](/wallet-sdk/api-reference/key-derivation/#mnemonictoseed) gives the same result.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `mnemonic` | `string \| string[]` | Yes | Mnemonic as a string or an array of words. |
-| `passphrase` | `string` | No | BIP-39 passphrase. Defaults to `""`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `mnemonic` | `string \| string[]` | Mnemonic as a string or an array of words. |
+| `passphrase` | `string` | Optional. BIP-39 passphrase. Defaults to `""`. |
 
 Returns `Promise<Uint8Array>` with the seed (64 bytes).
 

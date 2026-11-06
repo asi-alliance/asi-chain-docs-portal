@@ -14,7 +14,7 @@ For the short path from a new wallet to a balance, see [Get DevNet ASI](/quick-s
 - There is no waiting time between requests. You can ask again as soon as the previous request is finished.
 - A request is refused when the balance of the address is above 20,000 ASI. Below that limit the FAUCET button works for any address.
 
-The request amount and the limit are the defaults of the faucet server, and the web page has the limit built in as well. If an operator changes them, the actual values differ from the numbers above.
+These numbers are the defaults of the faucet server, and the web page has the limit built in as well. An operator can change them.
 
 ## Request Tokens
 
@@ -30,7 +30,7 @@ As soon as the address is valid, the page loads its balance and shows it under *
 
 ### Request the Tokens
 
-Press **FAUCET**. The page shows `Tokens requested successfully.` once the faucet has accepted the request, and the **TX status check** field on the right fills in the `deploy_id` of the transfer. You can also paste a `deploy_id` into that field yourself to follow an older request.
+Press **FAUCET**. When the faucet accepts the request, the page shows `Tokens requested successfully.`, and the **TX status check** field on the right shows the `deploy_id` of the transfer. To follow an older request, paste its `deploy_id` into that field yourself.
 
 If the balance is above the limit, the button stays disabled and the page shows `Your address is not eligible`.
 
@@ -83,5 +83,3 @@ The balance updates when the status becomes `Finalized`. If it still shows the o
 <DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">The short path from a new wallet to a balance</DocCard>
 <DocCard title="Faucet Source" href="https://github.com/asi-alliance/asi-chain-faucet">github.com/asi-alliance/asi-chain-faucet</DocCard>
 </CardGrid>
-
-The documentation is at [docs.asichain.io](https://docs.asichain.io).

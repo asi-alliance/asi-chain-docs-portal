@@ -1,12 +1,12 @@
 # Balance Query Flow
 
-How the wallet reads and shows the balance of an account.
+The wallet reads a balance with a free read-only query to the node and then subtracts funds held by pending transfers. This page shows the messages, the Rholang term of the query and how often the balance refreshes.
 
 ← [Back to Sequence Diagrams](/architecture/sequence-diagrams/)
 
 ## How a Balance Query Works
 
-A balance query is an exploratory deploy. The node runs a short Rholang term against the state of the last finalized block and returns the result, so the query is neither signed nor written to a block and costs the user nothing. The node still limits it: a query that runs out of phlogiston is rejected with `out_of_phlogistons`, and one that runs too long times out.
+A balance query is an exploratory deploy. The node runs a short Rholang term against the state of the last finalized block and returns the result. The query is not signed, is not written to a block and costs nothing. The node still limits it: a query that runs out of phlogiston is rejected with `out_of_phlogistons`, and one that runs too long times out.
 
 The query goes to the node behind `ReadOnlyURL` (see [Wallet Components](/architecture/component-diagrams/wallet/#network-connections)).
 
@@ -93,7 +93,7 @@ While they are open, the Dashboard and Send pages refresh the balance every 30 s
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Transaction Flow" href="/architecture/sequence-diagrams/transaction/">Sending tokens</DocCard>
+<DocCard title="Transaction Flow" href="/architecture/sequence-diagrams/transaction/">How the wallet sends tokens and waits for finalization</DocCard>
 <DocCard title="Wallet Components" href="/architecture/component-diagrams/wallet/">Layers, state and storage of the wallet app</DocCard>
 <DocCard title="ASI Wallet" href="/wallet/usage/">How to use the wallet</DocCard>
 </CardGrid>

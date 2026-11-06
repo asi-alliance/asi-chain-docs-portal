@@ -1,6 +1,6 @@
 # What Is ASI:Chain
 
-ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecosystem. The node described in this portal is written in Rust and lives in [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). It uses CBC Casper consensus and keeps state in RSpace++. The public DevNet still runs a Scala node, as described under [Networks](#networks).
+ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecosystem. You use it through a web wallet, a block explorer and a faucet, and you can run your own node.
 
 ## Components
 
@@ -18,7 +18,7 @@ ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecos
 
 ## Networks
 
-DevNet is the public development network at `dev.asichain.io`. Its tokens have no real value. The DevNet addresses are on [Network Endpoints](/reference/endpoints/). The public DevNet currently runs a Scala node, while the node guides in this portal describe the Rust node.
+DevNet is the public development network at `dev.asichain.io`. Its tokens have no real value. The DevNet addresses are on [Network Endpoints](/reference/endpoints/). The public DevNet currently runs a Scala node. The node guides in this portal describe the Rust node from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). It uses CBC Casper consensus and keeps state in RSpace++.
 
 A network is made of nodes with different roles. A bootstrap node is the entry point for new peers. A validator proposes and validates blocks. An observer follows the chain and answers read requests without taking part in consensus. [Shard and Node Roles](/nodes/roles/) describes them in more detail.
 
@@ -29,7 +29,7 @@ The native token is ASI. It has 8 decimal places, so 1 ASI is `100000000` in the
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">Get tokens from the faucet and open the wallet</DocCard>
+<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">Open the wallet and get tokens from the faucet</DocCard>
 <DocCard title="ASI Wallet" href="/wallet/usage/">Create accounts, send tokens and deploy contracts</DocCard>
 <DocCard title="Technical Architecture" href="/architecture/">See how the parts exchange data</DocCard>
 <DocCard title="Run a Node" href="/nodes/">Take part in the network as an observer or a validator</DocCard>

@@ -2,9 +2,9 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Client/index.ts)
 
-`Client` is the entry point of the SDK. It owns the wallets that are open in memory, the list of networks, the signing sessions, the transaction reservations and the event bus. Create it with `Client.create`, because the constructor is private. The [Wallet](/wallet-sdk/api-reference/wallet/) page covers the objects that `Client` returns.
+`Client` is the entry point of the SDK. It owns the open wallets, the networks, the signing sessions, the transaction reservations and the event bus. Create it with `Client.create`, because the constructor is private. The [Wallet](/wallet-sdk/api-reference/wallet/) page covers the objects that `Client` returns.
 
-The SDK keeps no active account. Every call that touches an account names its wallet and its account, and a wallet id that is not open or an account id that does not belong to the wallet throws.
+The SDK keeps no active account. Every call that touches an account takes both a wallet id and an account id. It throws if the wallet is not open or the account does not belong to that wallet.
 
 ## Import
 
@@ -34,7 +34,7 @@ interface ICreateClientOptions {
 |--------|---------|
 | `networksConfig` | Network name mapped to `{ ValidatorURL, ReadOnlyURL, IndexerURL, nodeApiProfile }`. See [Configure Networks](/wallet-sdk/overview/#configure-networks). |
 | `defaultNetwork` | Name of the network to select at start. |
-| `storageOptions` | `{ nodeStorageDir }` sets the directory of the Node.js storage. The default is `./storage`. The browser build uses IndexedDB and ignores it. |
+| `storageOptions` | `{ nodeStorageDir }` sets the Node.js storage directory (default `./storage`). The browser build uses IndexedDB and ignores it. |
 | `eventDispatcher` | Callbacks fixed at creation time. Prefer `getEventBus()`, which can subscribe at any time. |
 | `onListenerError` | Receives the error of an event listener that threw or rejected. |
 | `flags` | `{ withInsensitiveCacheStorage }` keeps a cache of public account data, which `getInsensitiveAccountsData()` reads. |
@@ -118,9 +118,9 @@ interface ICreatePrivateKeyWalletPayload {
 
 A wallet is open when it is in memory and unlocked when a session holds its secret. `closeWallet` and `closeAllWallets` drop wallets from memory without touching storage and lock them first. Only `removeWallet` deletes stored data.
 
-Creation is protected against duplicates. A secret that is already stored throws `DuplicateWalletError`, and a key that already belongs to a stored account throws `DuplicateAccountError`. Both carry the ids of the existing owner and both work while every wallet is locked. An HD wallet is identified by its mnemonic together with its root HD path, so the same mnemonic on another root path is a different wallet.
+Creation is protected against duplicates. A secret that is already stored throws `DuplicateWalletError`, and a key that already belongs to a stored account throws `DuplicateAccountError`. Both errors carry the ids of the existing owner, and the check works even while every wallet is locked. An HD wallet is identified by its mnemonic together with its root HD path, so the same mnemonic on another root path is a different wallet.
 
-If the setup that follows loading fails, for example because the reservations cannot be restored, the client takes the wallet out again. A failed `openWallet` can be repeated as it is. A failed `createHDWallet`, `createPrivateKeyWallet` or `importWalletKeyfile` has already stored the wallet, so repeating it throws `DuplicateWalletError`. Call `openWallet` instead.
+If setup fails after the wallet loads, for example because the reservations cannot be restored, the client drops the wallet from memory again. A failed `openWallet` can be repeated as it is. A failed `createHDWallet`, `createPrivateKeyWallet` or `importWalletKeyfile` has already stored the wallet, so repeating it throws `DuplicateWalletError`. Call `openWallet` instead.
 
 `removeWallet` and `clearPersistence` run exclusively. While one of them runs, new operations are refused with `OperationsSuspendedError`, and operations in flight are waited for first.
 
@@ -132,7 +132,7 @@ unlockWallet(walletId: string, password: string): Promise<void>
 lockWallet(walletId: string): void
 ```
 
-`unlockWallet` addresses a wallet that is already open by its wallet id, not a stored signer by its signer id. `lockWallet` ends the session and clears the secret from memory, and the `walletLocked` event fires. Signing without a password after the session has expired throws `WalletLockedError` with status `403`, so a UI can handle it like an expired token and ask for the password again.
+`unlockWallet` takes the wallet id of a wallet that is already open, not the signer id of a stored one. `lockWallet` ends the session and clears the secret from memory, and the `walletLocked` event fires. Signing without a password after the session has expired throws `WalletLockedError` with status `403`, so a UI can handle it like an expired token and ask for the password again.
 
 ## Accounts
 
@@ -258,7 +258,7 @@ interface IDeployWatchCallbacks {
 
 `password` is optional. When a session is active, leave it out. When you pass it and the policy holds sessions, the call starts the session before it signs.
 
-`transfer` and `deploy` reserve funds before they send the deploy. The reservation is stored first, and `deployId` is the deploy signature, known before the node answers, so a crash while the request is in flight cannot lose the lock. A deploy reserves `phloLimit * phloPrice`. What happens to the funds depends on how the submission ends.
+`transfer` and `deploy` reserve funds before they send the deploy. The reservation is stored first. Its `deployId` is the deploy signature, which is known before the node answers, so a crash while the request is in flight cannot lose the lock. A deploy reserves `phloLimit * phloPrice`. What happens to the funds depends on how the submission ends.
 
 | Submission outcome | Reservation | Error |
 |--------------------|-------------|-------|
@@ -267,7 +267,7 @@ interface IDeployWatchCallbacks {
 | The outcome is unknown (dropped connection, timeout, HTTP 5xx) | Kept, because the deploy may still land | `ApiRequestError`, status `502` |
 | The wallet was closed before the deploy left | Removed, nothing is sent | `DomainClosedError`, status `410` |
 
-`DeploySubmissionRejectedError` extends `ApiRequestError`, so existing handlers for `ApiRequestError` keep working.
+`DeploySubmissionRejectedError` extends `ApiRequestError`, so a handler for `ApiRequestError` also catches it.
 
 `signDeploy` builds the deploy, signs it and returns `{ data, deployer, signature, sigAlgorithm }` without sending anything and without creating a reservation. Use it when you submit the deploy yourself, and pair it with `addTransactionReservation`. Unlike `deploy`, its request carries `phloPrice` and `shardId`. The defaults are `DEFAULT_PHLO_LIMIT` (500000), `DEFAULT_PHLO_PRICE` (1) and the shard `"root"`. The call reads the current block number from the network. A blank `term` or a non-positive phlo value is rejected before anything is signed.
 
@@ -294,7 +294,7 @@ updateTransactionReservation(reservationId: ITransactionReservation["id"], reque
 removeTransactionReservation(walletId: string, reservationId: ITransactionReservation["id"]): Promise<ITransactionReservation>
 ```
 
-`transfer` and `deploy` create reservations on their own. The three write methods are for deploys that you submit outside the SDK, for example through a hardware signer or a relayer, and that still have to lock funds so the available balance and the pending history stay correct.
+`transfer` and `deploy` create reservations on their own. Use the three write methods for deploys that you submit outside the SDK, for example through a hardware signer or a relayer. The reservation locks the funds, so the available balance and the pending history stay correct.
 
 A request is `{ walletId, accountId }` plus either a transfer or a deploy description.
 
@@ -320,7 +320,7 @@ Both also carry `deployId`, `pendingAmount` and `gasCost`. `pendingAmount` is th
 - `gasCost` is not negative and does not exceed `pendingAmount`.
 - For a transfer, `to` is a valid checksummed address, `amount` is positive, and `amount + gasCost` fits inside `pendingAmount`.
 
-`updateTransactionReservation` keeps the reservation id and checks the balance against the change of `pendingAmount`, so shrinking a reservation never fails on funds. It cannot move a reservation to another account or network, which takes a remove and an add. While an action on an account, deploy or reservation is running, a second action on the same one throws `ReservationActionInProgressError`.
+`updateTransactionReservation` keeps the reservation id and checks the balance against the change of `pendingAmount`, so shrinking a reservation never fails on funds. It cannot move a reservation to another account or network. To do that, remove the reservation and add a new one. While an action on an account, deploy or reservation is running, a second action on the same one throws `ReservationActionInProgressError`.
 
 A reservation expires after `RESERVATION_EXPIRATION_TIME` and is released when the deploy is confirmed.
 
@@ -341,7 +341,7 @@ interface ITransactionsHistoryOptions {
 
 The two sides come from different backends, because a reservation is released when the node confirms the deploy and the indexer ingests the block later. For a short time a transaction can therefore be in both lists or in neither.
 
-A known limitation is tracked in [github.com/asi-alliance/asi-chain-wallet-sdk/issues/178](https://github.com/asi-alliance/asi-chain-wallet-sdk/issues/178). Only the first page of the executed history is reliable, because the indexer query applies `offset` and `limit` to transfers and deployments separately.
+Only the first page of the executed history is reliable, because the indexer query applies `offset` and `limit` to transfers and deployments separately. The issue is tracked in [github.com/asi-alliance/asi-chain-wallet-sdk/issues/178](https://github.com/asi-alliance/asi-chain-wallet-sdk/issues/178).
 
 ## Keyfiles
 
@@ -389,7 +389,7 @@ export async function restoreKeyfile(client: Client, keyfile: unknown, password:
 getEventBus(): IClientEventSource
 ```
 
-`getEventBus()` returns a typed source with `on(name, listener)`, which returns its own unsubscribe function, and `off(name, listener)`. Subscriptions can be added and removed at any time. A listener that throws or rejects does not break the other listeners or the operation that emitted the event. Its error goes to `onListenerError`.
+`getEventBus()` returns a typed source with `on(name, listener)` and `off(name, listener)`. `on` returns an unsubscribe function. You can subscribe and unsubscribe at any time. A listener that throws or rejects does not break the other listeners or the operation that emitted the event. Its error goes to `onListenerError`.
 
 | Event | Payload | Emitted when |
 |-------|---------|--------------|

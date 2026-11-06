@@ -1,6 +1,6 @@
 # Wallet SDK
 
-TypeScript SDK for wallet management and chain access on ASI:Chain. The pages in this section describe `@asichain/asi-wallet-sdk` 2.1.0, a beta release. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
+Use the TypeScript SDK `@asichain/asi-wallet-sdk` to manage wallets, read balances and send transfers on ASI:Chain. The pages in this section describe version 2.1.0, a beta release. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
 ## What the SDK Does
 
@@ -13,7 +13,6 @@ TypeScript SDK for wallet management and chain access on ASI:Chain. The pages in
 - A whole wallet can be exported to a password-protected keyfile and imported back, with a preview before anything is written.
 - Typed listeners report changes to wallets, accounts, networks, reservations and session locks.
 - Failures carry a machine-readable code. See [Error Types](/wallet-sdk/api-reference/error-types/).
-- Addresses come from secp256k1 keys through keccak256 and a blake2b checksum.
 
 ## Install the SDK
 
@@ -34,10 +33,6 @@ The package ships ES module and CommonJS builds with type declarations.
 
 `nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. The public DevNet runs a Scala node, so use `NodeApiProfile.SCALA` for it. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). The indexer address is not published there, so ask the network operator for it if you need transaction history.
 
-::: warning Rust Nodes and SDK 2.1.0
-With `NodeApiProfile.RUST`, Wallet SDK 2.1.0 cannot read balances, because a Rust node returns them as `ExprBigInt` and the SDK reads only `ExprInt`. `getBalance` then fails with `BALANCE_UNAVAILABLE`, and so does every transfer. `watchDeploy` also never reports a deploy as finalized on a Rust node. See [Balance Query Flow](/architecture/sequence-diagrams/balance/) and [Transaction Flow](/architecture/sequence-diagrams/transaction/).
-:::
-
 ```ts
 import { NodeApiProfile, type TNetworksConfig } from "@asichain/asi-wallet-sdk";
 
@@ -55,11 +50,15 @@ console.log(Object.keys(networksConfig));
 
 `Client.create` rejects an invalid URL, so replace the placeholders above before you create a client.
 
+::: warning Rust Nodes and SDK 2.1.0
+With `NodeApiProfile.RUST`, Wallet SDK 2.1.0 cannot read balances, because a Rust node returns them as `ExprBigInt` and the SDK reads only `ExprInt`. `getBalance` then fails with `BALANCE_UNAVAILABLE`, and so does every transfer. `watchDeploy` also never reports a deploy as finalized on a Rust node. See [Balance Query Flow](/architecture/sequence-diagrams/balance/) and [Transaction Flow](/architecture/sequence-diagrams/transaction/).
+:::
+
 ## Try the SDK
 
 ### Create a Wallet
 
-The example below points at a local node address and never sends a request. It creates an HD wallet, reopens it from storage, locks it and removes it. The wallet that `createHDWallet` returns is open but locked. `openWallet` loads a stored wallet by its signer id and, with the default session policy, unlocks it.
+The example below points at a local node address and never sends a request. It creates an HD wallet, reopens it from storage by its signer id, locks it and removes it. The comments in the code explain when the wallet is locked.
 
 ```ts
 import { mkdtemp } from "node:fs/promises";

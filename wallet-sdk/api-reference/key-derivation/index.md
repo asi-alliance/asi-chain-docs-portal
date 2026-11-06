@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/KeyDerivation/index.ts)
 
-BIP-32 and BIP-44 key derivation from a mnemonic. The package exports the class as `KeyDerivation`, and all of its methods are static. The BIP-44 path is described by the [`Bip44Path`](#bip44path) class, which the package exports as well.
+`KeyDerivation` derives BIP-32 and BIP-44 private keys from a mnemonic. All of its methods are static. The BIP-44 path is a [`Bip44Path`](#bip44path) object, and the package exports that class as well.
 
 ## Import
 
@@ -18,12 +18,12 @@ import { Bip44Path, DEFAULT_BIP_44_PATH_OPTIONS, KeyDerivation } from "@asichain
 static deriveKeyFromMnemonic(mnemonic: string | string[], bip44path: string | Bip44Path): Promise<Uint8Array>
 ```
 
-Runs the whole pipeline from the mnemonic through the seed and the master node to the private key at the given path. The seed is zeroed after use.
+Derives the private key at the given path from a mnemonic, going through the seed and the master node. The seed is zeroed after use.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `mnemonic` | `string \| string[]` | Yes | Mnemonic as a space-separated string or an array of words. |
-| `bip44path` | `string \| Bip44Path` | Yes | Derivation path. There is no default, so the call fails to compile without it. A string is passed to BIP-32 as is. |
+| Name | Type | Description |
+|------|------|-------------|
+| `mnemonic` | `string \| string[]` | Mnemonic as a space-separated string or an array of words. |
+| `bip44path` | `string \| Bip44Path` | Derivation path. A string is passed to BIP-32 as is. |
 
 Returns `Promise<Uint8Array>` with the private key (32 bytes).
 
@@ -37,10 +37,10 @@ static derivePrivateKey(masterNode: BIP32Interface, path: Bip44Path): Uint8Array
 
 Derives a private key from a BIP-32 master node along `path.toString()`.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `masterNode` | `BIP32Interface` | Yes | Master node, for example from `seedToMasterNode`. |
-| `path` | `Bip44Path` | Yes | Derivation path. Unlike `deriveKeyFromMnemonic`, a string is not accepted. |
+| Name | Type | Description |
+|------|------|-------------|
+| `masterNode` | `BIP32Interface` | Master node, for example from `seedToMasterNode`. |
+| `path` | `Bip44Path` | Derivation path. Unlike `deriveKeyFromMnemonic`, a string is not accepted. |
 
 Returns `Uint8Array` with the private key (32 bytes).
 
@@ -54,10 +54,10 @@ static mnemonicToSeed(mnemonicWords: string[] | string, passphrase?: string): Pr
 
 Converts a mnemonic to a 64-byte BIP-39 seed (PBKDF2-HMAC-SHA512, as defined by BIP-39). An array of words is joined with spaces first. [`Mnemonic.mnemonicToSeed`](/wallet-sdk/api-reference/mnemonic-service/#mnemonictoseed) does the same.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `mnemonicWords` | `string[] \| string` | Yes | Mnemonic as an array or a space-separated string. |
-| `passphrase` | `string` | No | BIP-39 passphrase. Defaults to `""`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `mnemonicWords` | `string[] \| string` | Mnemonic as an array or a space-separated string. |
+| `passphrase` | `string` | Optional. BIP-39 passphrase. Defaults to `""`. |
 
 Returns `Promise<Uint8Array>` with the seed (64 bytes).
 
@@ -69,9 +69,9 @@ static seedToMasterNode(seed: any): BIP32Interface
 
 Creates a BIP-32 master node from a seed with the `bip32` factory. The secp256k1 adapter is `eccAdapter.ts` in the SDK, built on `@noble/secp256k1`. The seed is copied through `Buffer.from(seed)`, so a `Uint8Array` or an array of bytes works.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `seed` | `any` | Yes | Seed bytes, typically the 64 bytes from `mnemonicToSeed`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `seed` | `any` | Seed bytes, typically the 64 bytes from `mnemonicToSeed`. |
 
 Returns `BIP32Interface` with the master node.
 
@@ -87,11 +87,11 @@ static deriveNextKeyFromMnemonic(
 
 Derives the key at `currentIndex + 1`.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `mnemonicWords` | `string[]` | Yes | Mnemonic word array. A string is not accepted here. |
-| `currentIndex` | `number` | Yes | Current address index. The key is derived at `currentIndex + 1`. |
-| `options` | `Omit<IBip44PathOptions, 'index'>` | No | Coin type, account and change. Defaults to `DEFAULT_BIP_44_PATH_OPTIONS`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `mnemonicWords` | `string[]` | Mnemonic word array. A string is not accepted here. |
+| `currentIndex` | `number` | Current address index. The key is derived at `currentIndex + 1`. |
+| `options` | `Omit<IBip44PathOptions, 'index'>` | Optional. Coin type, account and change. Defaults to `DEFAULT_BIP_44_PATH_OPTIONS`. |
 
 Returns `Promise<Uint8Array>` with the private key at the next index.
 
@@ -103,10 +103,10 @@ static compareIndexes(firstIndex: number | null, secondIndex: number | null): nu
 
 Comparator for address indexes, usable with `Array.prototype.sort`. A `null` index sorts after any number, and two `null` values are equal.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `firstIndex` | `number \| null` | Yes | First index. |
-| `secondIndex` | `number \| null` | Yes | Second index. |
+| Name | Type | Description |
+|------|------|-------------|
+| `firstIndex` | `number \| null` | First index. |
+| `secondIndex` | `number \| null` | Second index. |
 
 Returns `number`. It is `0` if both are `null`, `1` if only the first is `null`, `-1` if only the second is `null`, otherwise `firstIndex - secondIndex`.
 
@@ -120,12 +120,12 @@ A validated BIP-44 path of the form `m/44'/coinType'/account'/change/index`.
 
 #### IBip44PathOptions
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `coinType` | `number` | Yes | Coin type, an integer from `0` to `2^31 - 1`. |
-| `account` | `number` | No | Account index, `0` to `2^31 - 1`. Defaults to `0`. |
-| `change` | `number` | No | `0` for the external chain, `1` for the internal one. Defaults to `0`. |
-| `index` | `number` | No | Address index, `0` to `2^31 - 1`. Defaults to `0`. |
+| Field | Type | Description |
+|-------|------|-------------|
+| `coinType` | `number` | Coin type, an integer from `0` to `2^31 - 1`. |
+| `account` | `number` | Optional. Account index, `0` to `2^31 - 1`. Defaults to `0`. |
+| `change` | `number` | Optional. `0` for the external chain, `1` for the internal one. Defaults to `0`. |
+| `index` | `number` | Optional. Address index, `0` to `2^31 - 1`. Defaults to `0`. |
 
 The constructor is `new Bip44Path(options: IBip44PathOptions)` and throws an `Error` when a field is out of range. `DEFAULT_BIP_44_PATH_OPTIONS` holds the SDK defaults for all four fields and is the value to spread into the constructor.
 
@@ -150,7 +150,13 @@ declare class Bip44Path {
 }
 ```
 
-The static property `Bip44Path.MAX_COMPONENT_VALUE` equals `2^31 - 1`. `parse` accepts only a path of six components that starts with `m`. The purpose must be `44'`, the coin type and the account must be hardened, and every number must be canonical, without leading zeros. Anything else throws. `isValid` returns `false` instead of throwing. `toString` gives the full path, `toRootPathString` the path without the last `index` component, and `nextIndex` returns a new path with `index + 1`. The setters validate their argument like the constructor.
+The static property `Bip44Path.MAX_COMPONENT_VALUE` equals `2^31 - 1`. The setters validate their argument like the constructor.
+
+- `parse` accepts only a path of six components that starts with `m`. The purpose must be `44'`, the coin type and the account must be hardened, and every number must be canonical, without leading zeros. Anything else throws.
+- `isValid` returns `false` instead of throwing.
+- `toString` gives the full path.
+- `toRootPathString` gives the path without the last `index` component.
+- `nextIndex` returns a new path with `index + 1`.
 
 ## Example
 

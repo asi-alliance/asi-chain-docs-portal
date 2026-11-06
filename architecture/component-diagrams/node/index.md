@@ -1,16 +1,20 @@
 # Node Components
 
-The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates. The public DevNet currently runs a Scala node; see the [architecture overview](/architecture/).
+The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates. The public DevNet currently runs a Scala node, and [Network Endpoints](/reference/endpoints/) shows the version it reports.
 
 ## Components
 
-<Diagram name="node-components" caption="The Rust crates of the node and the interfaces that reach them." />
+<Diagram name="node-components" caption="API calls enter the node crate, peer traffic goes through comm, and casper drives the Rholang interpreter and block storage." />
 
-The runtime binary is `/opt/docker/bin/node`; no Scala/JVM runtime configuration is required. See [Node Image](/nodes/image/) for entrypoint, defaults, ports and access boundaries. Native-token metadata is part of shard/genesis configuration; upstream defaults do not set ASI token metadata for a deployed chain.
+The runtime binary is `/opt/docker/bin/node`, and it needs no Scala or JVM runtime configuration. [Node Image](/nodes/image/) covers the entrypoint, defaults, ports and access boundaries.
+
+Native-token metadata is part of the shard and genesis configuration. The upstream defaults do not set ASI token metadata for a deployed chain.
 
 ## API
 
-The HTTP API listens on port 40403. Most routes are under `/api`, while `/status`, `/version`, `/metrics` and the `/ws/events` WebSocket sit at the root. Swagger UI is at `/swagger-ui`. The block routes (`/api/block/{hash}`, `/api/last-finalized-block` and the `/api/blocks` routes) and `/api/deploy/{deploy_id}` take `?view=full|summary`, and the default differs by route.
+The HTTP API listens on port 40403. Most routes are under `/api`, while `/status`, `/version`, `/metrics` and the `/ws/events` WebSocket sit at the root. Swagger UI is at `/swagger-ui`.
+
+The block routes (`/api/block/{hash}`, `/api/last-finalized-block` and the `/api/blocks` routes) and `/api/deploy/{deploy_id}` take `?view=full|summary`. The default view differs by route.
 
 | Endpoints | Purpose |
 |---|---|

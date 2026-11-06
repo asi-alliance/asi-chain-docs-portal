@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Wallet/index.ts)
 
-A `Wallet` owns one `Signer` and a set of `Account`s. It is either a private-key wallet with a single account or an HD (hierarchical deterministic) wallet with accounts derived from a mnemonic. This page also covers `Account`, `Signer` and `SigningSession`, which a wallet is built from.
+A `Wallet` owns one `Signer` and a set of `Account` objects. It is either a private-key wallet with a single account or an HD (hierarchical deterministic) wallet with accounts derived from a mnemonic. This page also covers `Account`, `Signer` and `SigningSession`, which a wallet is built from.
 
 ::: tip Use Client in Applications
 `Client` creates, stores, opens and removes wallets for you. Use these classes directly only when you need the low-level pieces, for example to build a wallet in memory without storage. See [Client](/wallet-sdk/api-reference/client/).
@@ -81,7 +81,7 @@ enum WalletTypes {
 }
 ```
 
-A wallet has no active account. `getAccount` resolves the id on every call and throws `UnknownAccountError` when the id belongs to another wallet. `runAccountOperation` resolves the account and marks it busy for the duration of the callback, which is what lets `removeAccount` refuse an account that is signing.
+A wallet has no active account. `getAccount` resolves the id on every call and throws `UnknownAccountError` when the id belongs to another wallet. `runAccountOperation` resolves the account and marks it busy while the callback runs, so `removeAccount` refuses an account that is signing.
 
 ### Session
 

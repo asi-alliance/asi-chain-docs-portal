@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/codec/index.ts)
 
-Encoding and decoding helpers for Base16, Base58 and Base64, plus a few byte conversions. All of them are plain functions exported from the package root.
+These plain functions encode and decode Base16, Base58 and Base64 and do a few byte conversions. All of them are exported from the package root.
 
 ## Import
 
@@ -30,9 +30,9 @@ encodeBase58(hex: string): string
 
 Converts a hex string to a Base58-encoded string.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `hex` | `string` | Yes | Hex string to encode. |
+| Name | Type | Description |
+|------|------|-------------|
+| `hex` | `string` | Hex string to encode. |
 
 Returns `string` with the Base58-encoded result.
 
@@ -44,9 +44,9 @@ decodeBase58(value: string): Uint8Array
 
 Decodes a Base58 string into a `Uint8Array`. Throws if the string contains characters outside the Base58 alphabet.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `value` | `string` | Yes | Base58-encoded string. |
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | `string` | Base58-encoded string. |
 
 Returns `Uint8Array` with the decoded bytes.
 
@@ -58,9 +58,9 @@ decodeBase16(hex: string): Uint8Array
 
 Parses a hex string into a `Uint8Array`.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `hex` | `string` | Yes | Hex string of even length. |
+| Name | Type | Description |
+|------|------|-------------|
+| `hex` | `string` | Hex string of even length. |
 
 Returns `Uint8Array` with the decoded bytes.
 
@@ -72,11 +72,11 @@ The function does not validate its input. With an odd length the last digit is s
 encodeBase16(bytes: Uint8Array): string
 ```
 
-Encodes bytes to a lowercase hex string (zero-padded).
+Encodes bytes to a lowercase hex string with two digits per byte.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `bytes` | `Uint8Array` | Yes | Bytes to encode. |
+| Name | Type | Description |
+|------|------|-------------|
+| `bytes` | `Uint8Array` | Bytes to encode. |
 
 Returns `string` with the lowercase hex digits.
 
@@ -88,9 +88,9 @@ arrayBufferToBase64(buffer: ArrayBuffer): string
 
 Converts an `ArrayBuffer` to a Base64 string.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `buffer` | `ArrayBuffer` | Yes | Buffer to encode. |
+| Name | Type | Description |
+|------|------|-------------|
+| `buffer` | `ArrayBuffer` | Buffer to encode. |
 
 Returns `string` with the Base64 encoding.
 
@@ -102,9 +102,9 @@ base64ToArrayBuffer(base64: string): ArrayBuffer
 
 Converts a Base64 string to an `ArrayBuffer`.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `base64` | `string` | Yes | Base64 string to decode. |
+| Name | Type | Description |
+|------|------|-------------|
+| `base64` | `string` | Base64 string to decode. |
 
 Returns `ArrayBuffer`.
 
@@ -116,9 +116,9 @@ toUint8Array(value: unknown): Uint8Array
 
 Converts the byte containers that appear after JSON round trips into a `Uint8Array`. It accepts a `Uint8Array` (returned as is), a Node.js `Buffer` serialized as `{ type: 'Buffer', data: number[] }`, an array of bytes, and an object with consecutive numeric keys `"0"`, `"1"`, and so on.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `value` | `unknown` | Yes | Value to convert. |
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | `unknown` | Value to convert. |
 
 Returns `Uint8Array`.
 
@@ -132,11 +132,13 @@ bufferToBigInt(buffer: Uint8Array): bigint
 
 Reads the bytes as one big-endian unsigned integer.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `buffer` | `Uint8Array` | Yes | Bytes to convert. An empty array throws a `SyntaxError`. |
+| Name | Type | Description |
+|------|------|-------------|
+| `buffer` | `Uint8Array` | Bytes to convert. |
 
 Returns `bigint`.
+
+Throws `SyntaxError` when `buffer` is empty.
 
 ### bigIntToBuffer()
 
@@ -146,9 +148,9 @@ bigIntToBuffer(num: bigint): Uint8Array
 
 Writes a non-negative integer as big-endian bytes, left-padded with zeros to at least 32 bytes. It is the inverse of `bufferToBigInt` for 32-byte values such as private keys.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `num` | `bigint` | Yes | Non-negative integer. |
+| Name | Type | Description |
+|------|------|-------------|
+| `num` | `bigint` | Non-negative integer. |
 
 Returns `Uint8Array`.
 

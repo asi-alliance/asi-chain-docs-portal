@@ -1,6 +1,6 @@
 # Network Endpoints
 
-This page lists the public DevNet addresses. Other pages link here instead of repeating them. The addresses were checked with direct requests on 5 November 2026.
+Find the public DevNet addresses of the apps and the node, and the values to enter in the wallet, the Wallet SDK and the CLI. The addresses were checked with direct requests on 5 November 2026.
 
 ::: warning DevNet Runs the Scala Node
 On 5 November 2026 the public DevNet node reports `RChain Node 1.0.0-SNAPSHOT (2994310d2edd)` and network ID `devnet1`. It is not the Rust node described in the [node image](/nodes/image/) guide. Clients that need to know which node dialect they talk to must be set to the Scala profile for DevNet.
@@ -21,10 +21,8 @@ All four answer on HTTPS. Plain HTTP is redirected to HTTPS.
 
 DevNet has one public node address, Validator 1 at `34.196.119.4`. It runs in developer mode, so it serves both reads and writes, including balance queries. DevNet does not publish an observer address, so read from Validator 1 as well.
 
-| Service | Address | Used For |
-|---|---|---|
-| HTTP API | `http://34.196.119.4:40403` | Status, balance queries, deploy submission, deploy and block lookup |
-| Public gRPC API | `34.196.119.4:40401` | gRPC clients |
+- HTTP API at `http://34.196.119.4:40403` for status, balance queries, deploy submission, deploy and block lookup.
+- Public gRPC API at `34.196.119.4:40401` for gRPC clients.
 
 Check that the node is reachable:
 
@@ -45,24 +43,24 @@ The reply is JSON. These fields identify the network:
 
 The node also returns its own `address`, the `peers` count and the `nodes` count. The last two change over time.
 
-::: warning Plain HTTP only
+::: warning Plain HTTP Only
 The node address uses `http://`. A web page served over HTTPS cannot call it directly, because browsers block mixed content. Use it from scripts, the SDK in Node.js or the [Wallet CLI](/cli/usage/). The hosted wallet at wallet.dev.asichain.io already contains its DevNet settings, so you enter nothing there.
 :::
 
-The other ports of a node (P2P, discovery, internal gRPC and admin HTTP) are not public entry points. They are described in the [port table](/nodes/image/) for the Rust image.
+The other ports of a node (P2P, discovery, internal gRPC and admin HTTP) are not public entry points. They are described in [Default Container Ports](/nodes/image/#default-container-ports) for the Rust image.
 
 ## Wallet and SDK Roles
 
-The wallet and the [Wallet SDK](/wallet-sdk/overview/) take three addresses per network and a node profile.
+The wallet and the [Wallet SDK](/wallet-sdk/overview/) take three addresses per network and a node profile. The last column gives the DevNet values for scripts, the SDK and the CLI.
 
-| Setting | Role | DevNet Value for Scripts, SDK and CLI |
+| Setting | Role | DevNet Value |
 |---|---|---|
-| `ValidatorURL` | Receives deploys (`POST /api/deploy`) and status requests | Validator 1 HTTP API from the table above |
-| `ReadOnlyURL` | Answers balance queries and deploy lookups | The same Validator 1 HTTP API, because DevNet does not publish an observer address |
+| `ValidatorURL` | Receives deploys and status requests | Validator 1 HTTP API |
+| `ReadOnlyURL` | Answers balance queries and deploy lookups | Validator 1 HTTP API |
 | `IndexerURL` | GraphQL endpoint with transaction history | Not published |
 | `nodeApiProfile` | Request format of the node | `scala` |
 
-The wallet does not fall back from `ReadOnlyURL` to `ValidatorURL`, so both must be set even when they hold the same address. For a network of your own, see [Custom Network](/wallet/custom-network/).
+Deploys go to `POST /api/deploy` on `ValidatorURL`. The wallet does not fall back from `ReadOnlyURL` to `ValidatorURL`, so both must be set even when they hold the same address. For a network of your own, see [Custom Network Connection](/wallet/custom-network/).
 
 ## Not Published
 

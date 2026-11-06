@@ -14,7 +14,7 @@ Open the [wallet](/wallet/usage/) and create an account. The wallet gives you an
 
 ### Request Test Tokens
 
-Request test tokens for that address at the [faucet](/faucet/usage/). The step-by-step guide is in [how to get DevNet ASI](/quick-start/get-asi/).
+Request test tokens for that address at the [faucet](/faucet/usage/). [Get DevNet ASI](/quick-start/get-asi/) walks through it step by step.
 
 ### Follow Your Transfers
 
@@ -26,8 +26,8 @@ Follow your transfers and balances in the [explorer](/explorer/usage/).
 
 You want to take part in the network as an observer or a validator.
 
-- Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.
 - Start an [observer](/nodes/observer/) to follow the chain, or prepare a [validator](/nodes/validator/).
+- Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.
 - Follow [validator enrollment](/nodes/validator-enrollment/) to bond a validator.
 - See [troubleshooting](/help/troubleshooting/) if a node does not connect or stays out of sync.
 
@@ -38,7 +38,7 @@ Public DevNet services are listed on [Network Endpoints](/reference/endpoints/).
 You want to write an application, a script or a contract.
 
 - Read the [Wallet SDK overview](/wallet-sdk/overview/) and the [API reference](/wallet-sdk/api-reference/) to sign and send transactions from TypeScript.
-- Use the [Wallet CLI](/cli/usage/) to create wallets and send tokens from a terminal. The CLI is built for the Rust node API, so as of 5 November 2026 only `create` works against the Scala node of the public DevNet.
+- Use the [Wallet CLI](/cli/usage/) to create wallets and send tokens from a terminal. The CLI is built for the Rust node API. Against the Scala node of the public DevNet, only `create` works as of 5 November 2026.
 - Look at the [architecture](/architecture/) pages to see how the node, indexer, GraphQL API and applications fit together.
 
 ## Next Steps

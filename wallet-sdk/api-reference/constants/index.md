@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/constants/index.ts) · [Config](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/config/index.ts)
 
-Constants that the SDK exports from the package root. They live in two files: `utils/constants` holds the chain and encoding constants, and `config` holds the defaults for gas, timeouts and storage.
+The SDK exports these constants from the package root. They live in two files: `utils/constants` holds the chain and encoding constants, and `config` holds the defaults for gas, timeouts and storage.
 
 ## Import
 
@@ -51,7 +51,7 @@ The SDK picks the threshold from the node API profile of the active network (`SC
 | `RESERVATION_EXPIRATION_TIME` | `number` | `300000` | Lifetime of a transaction reservation, in milliseconds. |
 | `DEFAULT_AUTO_LOCK_MS` | `number` | `900000` | Time after which a signing session locks itself, in milliseconds. |
 | `DEFAULT_DRAIN_TIMEOUT_MS` | `number` | `10000` | Default time a closing domain waits for its running operations to finish, in milliseconds. |
-| `SUBMISSION_SETTLE_TIMEOUT_MS` | `number` | `40000` | `DEFAULT_REQUEST_TIMEOUT` plus `DEFAULT_DRAIN_TIMEOUT_MS`. |
+| `SUBMISSION_SETTLE_TIMEOUT_MS` | `number` | `40000` | How long the SDK waits for the deploy submissions of a wallet to settle, in milliseconds. Equals `DEFAULT_REQUEST_TIMEOUT` plus `DEFAULT_DRAIN_TIMEOUT_MS`. |
 
 ### Enums and Limits
 
@@ -61,8 +61,8 @@ The SDK picks the threshold from the node API profile of the active network (`SC
 | `ExportFormat` | `{ JSON: "json", CSV: "csv" }` | Output format of `ExportKeyfileService` exports. |
 | `KeyfileTypes` | `{ WALLET: "asi-wallet-keyfile", ACCOUNT: "asi-account-keyfile" }` | Type field of an exported keyfile. |
 | `ASI_WALLET_KEYFILE_VERSION` | `1` | Version of the keyfile format. |
-| `MAX_KEYFILE_ACCOUNTS` | `1000` | Most accounts in one keyfile. |
-| `MAX_KEYFILE_ACCOUNT_NAME_LENGTH` | `128` | Longest account name in a keyfile. |
+| `MAX_KEYFILE_ACCOUNTS` | `1000` | Maximum number of accounts in one keyfile. |
+| `MAX_KEYFILE_ACCOUNT_NAME_LENGTH` | `128` | Maximum length of an account name in a keyfile, in characters. |
 | `DEFAULT_NODE_STORAGE_DIR` | `"./storage"` | Directory of the Node.js storage when none is given. |
 
 The package also exports regular expressions, storage version numbers and other constants that the SDK uses internally. Their types are in the package typings.

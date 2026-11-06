@@ -10,7 +10,7 @@ DevNet ASI is a test token for trying out transfers, contracts and nodes. It has
 
 ### Where Do I Begin?
 
-The [Get Started](/quick-start/) page has one path for using the network, one for running a node and one for building on it.
+Start at [Get Started](/quick-start/). It has one path for using the network, one for running a node and one for building on it.
 
 ### What Does an ASI Address Look Like?
 
@@ -32,7 +32,7 @@ In the storage of your browser (IndexedDB), together with your custom networks. 
 
 ### Can the Wallet Connect to My Own Network?
 
-Yes. The wallet has a network settings page where you add a custom network with its node and indexer URLs. See [custom networks](/wallet/custom-network/).
+Yes. The wallet has a network settings page where you add a custom network with its node and indexer URLs. See [Custom Network Connection](/wallet/custom-network/).
 
 ### How Often Does the Wallet Update Balances?
 
@@ -42,11 +42,11 @@ The wallet refreshes account data every 30 seconds.
 
 ### How Do I Get Test Tokens?
 
-Create a wallet account, copy its address and paste it into the faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io). The guide is in [how to get DevNet ASI](/quick-start/get-asi/). On 5 November 2026 one request credited 10,000 ASI.
+Create a wallet account, copy its address and paste it into the faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io). The steps are in [Get DevNet ASI](/quick-start/get-asi/). On 5 November 2026 one request credited 10,000 ASI.
 
 ### Is There a Waiting Period Between Requests?
 
-Not in the faucet API, which sets no time limit between requests, although a proxy in front of the public faucet can still limit the request rate. The faucet refuses an address only when the balance of that address is above the faucet's limit, and then the page shows `Your address is not eligible`.
+No. The faucet API sets no time limit between requests, but a proxy in front of the public faucet can still limit the request rate. The faucet refuses an address only when its balance is above the faucet's limit. The page then shows `Your address is not eligible`.
 
 ### The Tokens Have Not Arrived. What Should I Do?
 
@@ -56,7 +56,7 @@ The faucet page checks the transfer status every 30 seconds and, with the defaul
 
 ### What Does the Explorer Show?
 
-Blocks, transactions, validators and network statistics. See [explorer usage](/explorer/usage/).
+Blocks, transactions, validators and network statistics. See [ASI Block Explorer](/explorer/usage/).
 
 ### Does the Explorer Run the Indexer?
 
@@ -78,7 +78,7 @@ Not by itself. Pick the image that matches the network's accepted configuration 
 
 ### Can I Use a Node IP Address from an Older Page?
 
-Ask the network operator for the current URLs and the bootstrap identity. Old IP addresses and the availability of a particular observer are not a current inventory, and host port mappings can differ from the container defaults.
+No. Take the current DevNet addresses from [Network Endpoints](/reference/endpoints/). For any other network, ask its operator for the current URLs and the bootstrap identity. Old IP addresses and the availability of a particular observer are not a current inventory, and host port mappings can differ from the container defaults.
 
 ### Which Ports Must Be Reachable?
 
@@ -106,11 +106,17 @@ No. Run `git submodule update --init --recursive` and keep the committed client 
 
 ### Where Can I Ask a Question or Report a Problem?
 
-For node problems start with [troubleshooting](/help/troubleshooting/). Otherwise open an issue in the repository of the component: [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet), [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer), [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet), [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) or [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal).
+For node problems, start with [Troubleshooting](/help/troubleshooting/). For anything else, open an issue in the repository of the component:
+
+- [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet) for the wallet
+- [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer) for the explorer
+- [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) for the faucet
+- [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) for the Wallet CLI
+- [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal) for this documentation
 
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Get Started" href="/quick-start/">One path for using the network, one for running a node and one for building on it</DocCard>
+  <DocCard title="Get Started" href="/quick-start/">Paths for using the network, running a node and building on it</DocCard>
   <DocCard title="Troubleshooting" href="/help/troubleshooting/">Checks for common node and wallet problems</DocCard>
 </CardGrid>

@@ -1,12 +1,12 @@
 # Build on ASI:Chain
 
-Build applications and scripts on ASI:Chain. The Wallet SDK signs and sends transactions from TypeScript, and the Wallet CLI creates wallets, checks balances and sends tokens from a terminal.
+Use the Wallet SDK to sign and send transactions from TypeScript code. Use the Wallet CLI to create wallets, check balances and send tokens from a terminal.
 
 ## Tools
 
 <CardGrid columns="2">
 <DocCard title="Wallet SDK" href="/wallet-sdk/overview/">Build wallets and integrations with the TypeScript SDK</DocCard>
-<DocCard title="Wallet SDK API Reference" href="/wallet-sdk/api-reference/">The client, services, domains and utilities of the SDK</DocCard>
+<DocCard title="Wallet SDK API Reference" href="/wallet-sdk/api-reference/">Look up the client, services, domains and utilities of the SDK</DocCard>
 <DocCard title="Wallet CLI" href="/cli/usage/">Create wallets, check balances and send tokens from a terminal</DocCard>
 <DocCard title="Technical Architecture" href="/architecture/">Components, data flow and network topology</DocCard>
 </CardGrid>

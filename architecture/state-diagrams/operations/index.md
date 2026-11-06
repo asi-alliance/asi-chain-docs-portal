@@ -1,6 +1,6 @@
 # Running Node
 
-What the node does after it reaches the Running state.
+Once the Rust node is Running, it works as a validator or as a read-only node. This page shows when a validator proposes a block, which checks a block from a peer passes and how the node handles lost peers.
 
 ← [Back to State Diagrams](/architecture/state-diagrams/)
 
@@ -21,11 +21,18 @@ A validator proposes through the heartbeat proposer, which is enabled by default
 
 <Diagram name="block-proposal" caption="The checks a validator passes before it creates, signs and relays a block." />
 
-The proposer checks every `casper.heartbeat.check-interval`, which is 5 seconds by default, and a deploy submission wakes it immediately. It proposes when there are pending deploys. When the last finalized block is older than `max-lfb-age` (the maximum age of the last finalized block, 5 seconds by default), the shard counts as stalled, and every bonded validator proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval. A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals. A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
+The proposer checks every `casper.heartbeat.check-interval` (5 seconds by default), and a deploy submission wakes it immediately. It proposes in two cases:
+
+- There are pending deploys.
+- The shard is stalled, which means the last finalized block is older than `max-lfb-age` (the maximum age of the last finalized block, 5 seconds by default). Every bonded validator then proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval.
+
+A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals.
+
+A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
 
 ## Block Validation
 
-A block from a peer passes these checks in order. A block that fails one of them is rejected and handled as invalid.
+A block from a peer passes these checks in order. A block that fails a check is rejected. A block whose parents are not in the DAG yet waits in a buffer until they arrive.
 
 <Diagram name="block-validation" caption="The checks a block from a peer passes in order, and the points where it is rejected or buffered." />
 

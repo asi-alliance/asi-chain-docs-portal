@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/validators/domain.ts) · [Primitives](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/validators/primitives.ts)
 
-Validation helpers for names, addresses, URLs, keys and request payloads. They are plain functions exported from the package root, and none of them touches the network. Most helpers return `{ isValid: boolean; error?: string }`. The address validator returns an error code instead of a message.
+These plain functions validate names, addresses, URLs, keys and request payloads without touching the network. Most of them return `{ isValid: boolean; error?: string }`, and the address validator returns an error code instead of a message.
 
 ## Import
 
@@ -55,7 +55,7 @@ validateAddress(address: string): AddressValidationResult
 
 `AddressValidationResult` is `{ isValid: boolean; errorCode?: AddressValidationErrorCode }`. `AddressValidationErrorCode` is an enum exported from the package root, and its member values equal their names.
 
-| Step | `errorCode` | Check |
+| Step | `errorCode` | Passes When |
 |------|-------------|-------|
 | 1 | `INVALID_PREFIX` | The address starts with `1111`. |
 | 2 | `INVALID_LENGTH` | The length is from 50 to 54 characters. |
@@ -72,7 +72,7 @@ validateAddress(address: string): AddressValidationResult
 isAddress(address: string): address is Address
 ```
 
-`isAddress` is the same check as `validateAddress`, as a type guard, so after `if (isAddress(value))` the value has the `Address` type.
+Runs the same check as `validateAddress` and works as a type guard: after `if (isAddress(value))`, the value has the `Address` type.
 
 ### validateUrl()
 
@@ -87,6 +87,8 @@ validateUrl(url: string): { isValid: boolean; error?: string }
 ```ts
 isValidUrl(url: string): boolean
 ```
+
+Returns `validateUrl(url).isValid`.
 
 ### validateNodeApiProfile()
 
@@ -126,6 +128,8 @@ validatePrivateKey(privateKey: Uint8Array): { isValid: boolean; error?: string }
 isPrivateKeyValid(privateKey: Uint8Array): boolean
 ```
 
+Returns `validatePrivateKey(privateKey).isValid`.
+
 ### isIntegerInRange()
 
 ```ts
@@ -156,7 +160,7 @@ validateDeployPayload({ term, phloLimit, phloPrice, shardId }: TDeployDetails): 
 validateReservationPayload(payload: TCreateTransactionReservationPayload): { isValid: boolean; error?: string }
 ```
 
-`validateReservationPayload` and `validateReservationUpdateTarget` check the payloads of the transaction reservations that [`Client`](/wallet-sdk/api-reference/client/) creates when you send a transfer or a deploy.
+`validateReservationPayload` checks the payload of a transaction reservation that [`Client`](/wallet-sdk/api-reference/client/) creates when you send a transfer or a deploy.
 
 ### validateReservationUpdateTarget()
 
@@ -164,19 +168,23 @@ validateReservationPayload(payload: TCreateTransactionReservationPayload): { isV
 validateReservationUpdateTarget(currentReservation: ITransactionReservation, payload: TCreateTransactionReservationPayload): { isValid: boolean; error?: string }
 ```
 
+`validateReservationUpdateTarget` checks that an updated reservation keeps the account and the network of `currentReservation`. The errors are `Reservation cannot be moved to another account` and `Reservation cannot be moved to another network`.
+
 ### validateWalletKeyfile()
 
 ```ts
 validateWalletKeyfile(source: unknown): { isValid: boolean; error?: string }
 ```
 
-`validateWalletKeyfile` and `validateWalletKeyfileAccounts` check the structure of an exported keyfile and of its account list.
+`validateWalletKeyfile` checks the structure of an exported keyfile.
 
 ### validateWalletKeyfileAccounts()
 
 ```ts
 validateWalletKeyfileAccounts(source: unknown, walletType: WalletTypes): { isValid: boolean; error?: string }
 ```
+
+`validateWalletKeyfileAccounts` checks the account list of a keyfile for its `walletType`. The list holds from 1 to `MAX_KEYFILE_ACCOUNTS` (1000) accounts, and each name is non-empty and at most `MAX_KEYFILE_ACCOUNT_NAME_LENGTH` (128) characters long. A private key keyfile holds a single account without an index. In an HD keyfile every account has an integer index from 0 to `Bip44Path.MAX_COMPONENT_VALUE`, and no index repeats.
 
 ### ensureValid()
 

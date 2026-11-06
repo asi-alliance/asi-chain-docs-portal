@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Signer/index.ts)
 
-Serializes deploy data into the byte string that is signed. `SignerService` has one member and does not sign anything itself.
+`SignerService` serializes deploy data into the bytes that get signed. It has one member and does not sign anything itself.
 
 ## Import
 
@@ -20,9 +20,9 @@ static deployDataProtobufSerialize(deployData: DeployData): Uint8Array
 
 Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId` is written as an empty string.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `deployData` | `DeployData` | Yes | Deploy fields to encode. |
+| Name | Type | Description |
+|------|------|-------------|
+| `deployData` | `DeployData` | Deploy fields to encode. |
 
 Returns `Uint8Array` with the protobuf-encoded deploy.
 

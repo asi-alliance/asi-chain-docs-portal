@@ -128,10 +128,6 @@
   padding: calc(var(--vp-nav-height) + 24px) 24px 96px;
 }
 
-.asi-not-found-search {
-  color: var(--vp-c-text-2);
-}
-
 .asi-not-found .asi-directory {
   margin: 40px 0;
 }

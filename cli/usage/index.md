@@ -1,6 +1,6 @@
 # Wallet CLI
 
-The ASI wallet CLI creates wallets, queries balances, sends tokens and reads and exports deploy history. It builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, and its image tag for enrollment is built from a different commit than the one in this submodule, so do not swap one for the other.
+The ASI wallet CLI creates wallets, queries balances, sends tokens and reads and exports deploy history from a terminal. Run it from the published image or build it from source.
 
 ::: warning DevNet Runs the Scala Node
 As of 5 November 2026 only `create` works against the public DevNet, because DevNet runs the Scala node and the CLI is written for the Rust node. See [Compatibility](#compatibility).
@@ -15,6 +15,8 @@ public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d90671
 
 This image was built from the wallet CLI at commit `8f6c20ea43ebc6d333783f936372d4220e449681` ([github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681)), with ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. Its compatibility tests target the node image `5dafbc37` listed in [Container Images](/reference/container-images/). Later changes to the source do not modify this image.
 
+The CLI builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, and its image tag for enrollment is built from a different commit than the one in this submodule, so do not swap one for the other.
+
 To show the help text without connecting to a network, pull the image and run it with `--network none`:
 
 ```bash
@@ -26,13 +28,63 @@ docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --hel
 
 ## Compatibility
 
-The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet still runs the Scala node, and on 5 November 2026 only `create` works against it. `balance` and `send` stop with `Wrong native token: expected ASI, node reports `, because the DevNet node status has no token symbol. With `EXPECTED_TOKEN_SYMBOL` set to an empty value they stop with `HTTP 404` on `/api/balance/<address>`. `history` and `export` could not connect to the DevNet GraphQL endpoint either (see [Configuration](#configuration)).
+The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet still runs the Scala node, and on 5 November 2026 only `create` works against it:
+
+- `balance` and `send` stop with `Wrong native token: expected ASI, node reports `, because the DevNet node status has no token symbol.
+- With `EXPECTED_TOKEN_SYMBOL` set to an empty value, `balance` and `send` stop with `HTTP 404` on `/api/balance/<address>`.
+- `history` and `export` could not connect to the DevNet GraphQL endpoint either (see [Configuration](#configuration)).
 
 Use a Rust node, such as one started from the [node image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
 
+## Configuration
+
+Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
+
+- `VALIDATOR_GRPC_URL`, the gRPC endpoint of a validator, which `send` uses to submit the deploy.
+- `VALIDATOR_HTTP_URL`, the HTTP endpoint of the same validator.
+- `OBSERVER_HTTP_URL`, the HTTP endpoint of a read-only node. `balance` queries it, and `send` uses it to confirm finalization. A Rust validator answers balance queries with `HTTP 400 (readonly_node_required)`.
+- `OUTPUT_DIR`, the directory with `wallet_info.json`.
+
+Without them the CLI prints `Error loading configuration: VALIDATOR_HOST is not set`. Instead of a URL you can set `VALIDATOR_HOST` with `VALIDATOR_GRPC_PORT` and `VALIDATOR_HTTP_PORT`, and `OBSERVER_HOST` with `OBSERVER_HTTP_PORT`.
+
+```env [.env]
+VALIDATOR_GRPC_URL=http://<validator-host>:<grpc-port>
+VALIDATOR_HTTP_URL=http://<validator-host>:<http-port>
+OBSERVER_HTTP_URL=http://<read-only-node-host>:<http-port>
+OUTPUT_DIR=./credentials
+EXPECTED_TOKEN_SYMBOL=ASI
+SHARD_ID=root
+DEPLOY_MAX_WAIT_SECONDS=480
+DEPLOY_CHECK_INTERVAL_SECONDS=5
+NODE_CONNECT_TIMEOUT_SECONDS=10
+NODE_TIMEOUT_SECONDS=30
+GRAPHQL_URL=
+```
+
+The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports.
+
+`send` submits through the external gRPC port of a validator (`40401` by default). Open it only to the clients that need it. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
+
+`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. On 5 November 2026 no public GraphQL endpoint was known to work with them, so ask the network operator for one. Acceptance of `history` and `export` on a deployment is tracked in [github.com/asi-alliance/asi-chain-wallet-cli/issues/5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
+
+### Private Shard
+
+To try `balance` and `send` on the shard from [Set Up a Private Shard](/nodes/private-shard/), start its validator and its read-only node. Then add `--network shard-net` to the `docker run` command from [Run the Image](#run-the-image) and use the container names in `.env`:
+
+```env [.env]
+VALIDATOR_GRPC_URL=http://my-shard:40401
+VALIDATOR_HTTP_URL=http://my-shard:40403
+OBSERVER_HTTP_URL=http://my-shard-obs:40403
+OUTPUT_DIR=./credentials
+EXPECTED_TOKEN_SYMBOL=ASI
+SHARD_ID=my-shard
+```
+
+`SHARD_ID` must match `--shard-name`. Nodes started without the token flags report `F1R3`, and `balance` then stops with `Wrong native token: expected ASI, node reports F1R3` until `EXPECTED_TOKEN_SYMBOL` matches the reported symbol. On 5 November 2026 a transfer of 1 ASI between two wallets on this shard ended with `Transfer complete`, and the sender paid 0.00250669 ASI in fees.
+
 ## Run the Image
 
-The image reads its settings from the environment and keeps wallet files and exports in directories under `/app`. Pass the settings with `--env-file` and mount the directories as volumes:
+The image reads its settings from the environment and keeps wallet files and exports in directories under `/app`. Pass the `.env` file from [Configuration](#configuration) with `--env-file` and mount the directories as volumes:
 
 ```bash
 mkdir -p credentials exports
@@ -50,7 +102,7 @@ The container runs as UID `10001`, and the `chown` makes both directories writab
 
 ## Build from Source
 
-The published image is the shorter path. To build the same source yourself, follow the steps below.
+Skip this section if you use the published image. The steps below build the same commit from source.
 
 <Steps>
 
@@ -80,57 +132,13 @@ cargo build --release --locked
 
 The build downloads its dependencies from crates.io and GitHub. `cargo build` itself takes 6 to 8 minutes on a 12-core machine.
 
-</Steps>
-
 ::: warning Select the dev Branch
 Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client.
 
 Do not use `git submodule update --remote`: it replaces the pinned client with the newest commit of its branch.
 :::
 
-## Configuration
-
-Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
-
-- `VALIDATOR_GRPC_URL`, the gRPC endpoint of a validator, which `send` uses to submit the deploy.
-- `VALIDATOR_HTTP_URL`, the HTTP endpoint of the same validator.
-- `OBSERVER_HTTP_URL`, the HTTP endpoint of a read-only node. `balance` queries it, and `send` uses it to confirm finalization. A Rust validator answers balance queries with `HTTP 400 (readonly_node_required)`.
-- `OUTPUT_DIR`, the directory with `wallet_info.json`.
-
-Without them the CLI prints `Error loading configuration: VALIDATOR_HOST is not set`. Instead of a URL you can set `VALIDATOR_HOST` with `VALIDATOR_GRPC_PORT` and `VALIDATOR_HTTP_PORT`, and `OBSERVER_HOST` with `OBSERVER_HTTP_PORT`.
-
-```env [.env]
-VALIDATOR_GRPC_URL=http://<validator-host>:<grpc-port>
-VALIDATOR_HTTP_URL=http://<validator-host>:<http-port>
-OBSERVER_HTTP_URL=http://<read-only-node-host>:<http-port>
-OUTPUT_DIR=./credentials
-EXPECTED_TOKEN_SYMBOL=ASI
-SHARD_ID=root
-DEPLOY_MAX_WAIT_SECONDS=480
-DEPLOY_CHECK_INTERVAL_SECONDS=5
-NODE_CONNECT_TIMEOUT_SECONDS=10
-NODE_TIMEOUT_SECONDS=30
-GRAPHQL_URL=
-```
-
-The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports. `send` submits through the external gRPC port of a validator (`40401` by default). Open it only to the clients that need it. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
-
-`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. On 5 November 2026 no public GraphQL endpoint was known to work with them, so ask the network operator for one. Acceptance of `history` and `export` on a deployment is tracked in [github.com/asi-alliance/asi-chain-wallet-cli/issues/5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
-
-### Private Shard
-
-To try `balance` and `send` on the shard from [Set Up a Private Shard](/nodes/private-shard/), start its validator and its read-only node. Then add `--network shard-net` to the `docker run` command from [Run the Image](#run-the-image) and use the container names in `.env`:
-
-```env [.env]
-VALIDATOR_GRPC_URL=http://my-shard:40401
-VALIDATOR_HTTP_URL=http://my-shard:40403
-OBSERVER_HTTP_URL=http://my-shard-obs:40403
-OUTPUT_DIR=./credentials
-EXPECTED_TOKEN_SYMBOL=ASI
-SHARD_ID=my-shard
-```
-
-`SHARD_ID` must match `--shard-name`. Nodes started without the token flags report `F1R3`, and `balance` then stops with `Wrong native token: expected ASI, node reports F1R3` until `EXPECTED_TOKEN_SYMBOL` matches the reported symbol. On 5 November 2026 a transfer of 1 ASI between two wallets on this shard ended with `Transfer complete`, and the sender paid 0.00250669 ASI in fees.
+</Steps>
 
 ## Commands
 
@@ -146,7 +154,7 @@ Run these from the source directory after a build. With the image, put the comma
 
 `create --save` writes private wallet credentials under `OUTPUT_DIR`. Protect its output and the generated file. `balance` and `history` also require a complete matching wallet file at this revision, and watch-only files are not supported.
 
-To send tokens, pass the recipient address and the amount in raw dust, the smallest unit. The command is:
+To send tokens, pass the recipient address and the amount in raw dust, the smallest unit:
 
 ```bash
 asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>

@@ -1,6 +1,6 @@
 # Sequence Diagrams
 
-Interaction flows between the wallet and the nodes of ASI:Chain.
+These diagrams show the calls the ASI Wallet makes to ASI:Chain nodes when it sends tokens and when it reads a balance.
 
 ← [Back to Architecture Overview](/architecture/)
 
@@ -8,7 +8,7 @@ Interaction flows between the wallet and the nodes of ASI:Chain.
 
 ### [Transaction Flow](/architecture/sequence-diagrams/transaction/)
 
-From the moment the user sends tokens to the moment the transfer is finalized.
+What happens between sending tokens and the finalized transfer.
 
 - Check and reserve the amount
 - Sign the deploy

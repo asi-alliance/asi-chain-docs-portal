@@ -1,6 +1,6 @@
 # Enroll a Validator
 
-The ASI Rust client provides the key-generation and bonding operations needed to enroll a validator. A separate configurator or connector image is optional packaging around these operations. Older helper containers target a previous workflow, so do not assume they work with current Rust nodes. The public DevNet runs a Scala node, and these Rust client commands do not work against it, so run the procedure on a Rust shard.
+Create the validator key, fund the validator and submit the bond with the ASI Rust client. Between the key and the funding you start the node on [Run a Validator](/nodes/validator/) and come back here. The public DevNet runs a Scala node, and these Rust client commands do not work against it, so run the procedure on a Rust shard.
 
 ## Before You Start
 
@@ -12,7 +12,7 @@ Ask the network operator for the following.
 - The shard's minimum stake. The node option `--bond-minimum` sets it at genesis, and a stake below it is refused.
 - The active-set capacity, network access and storage requirements.
 
-Validators included in the initial genesis bonds use the network's genesis ceremony. They do not need a second dynamic bonding transaction. The steps below concern a new validator joining an existing shard.
+The steps below are for a new validator that joins an existing shard. A validator listed in the initial genesis bonds joins through the network's genesis ceremony and does not need a second dynamic bonding transaction.
 
 The commands below read their inputs from these variables. Set them to the values you received.
 
@@ -25,11 +25,7 @@ SHARD_ID=<shard ID>
 STAKE_BASE_UNITS=<stake in base units>
 ```
 
-## Enroll the Validator
-
-<Steps>
-
-### Create and Protect the Identity
+### Get the Client
 
 The standalone ASI client is published as this image:
 
@@ -38,7 +34,15 @@ CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:f26511e261ca9d21c5
 docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 ```
 
-This image contains client 0.2.9 built from commit [`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) on the `dev` branch of asi-chain-client. The image exists for `linux/amd64` only. Confirm compatibility with the operator's selected node digest, because the same version label on another image does not establish compatibility.
+This image contains client 0.2.9 built from commit [`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) on the `dev` branch of asi-chain-client. The image exists for `linux/amd64` only. Confirm with the operator that this client works with their node digest. The same version label on another image does not prove that it does.
+
+A separate configurator or connector image is only optional packaging around the same operations. Older helper containers target a previous workflow and may not work with current Rust nodes.
+
+## Enroll the Validator
+
+<Steps>
+
+### Create the Validator Key
 
 On Linux or a WSL Linux filesystem, create a new protected directory and save keys without printing the private key:
 
@@ -80,24 +84,24 @@ The default Docker bridge must reach the operator's URLs. For local container ne
 
 ### Start and Synchronize the Joining Node
 
-Prepare storage and the key, and start the node as described in [Run a Validator](/nodes/validator/#start-the-node). Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
+Go to [Run a Validator](/nodes/validator/#prepare-storage-configuration-and-keys), follow its steps from Prepare Storage, Configuration and Keys to Start the Node with the key from the previous step, and then come back here. Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
 
 - `--bootstrap` with the operator's URI.
 - `--network-id` equal to the shard's `networkId`.
 - `--shard-name` equal to the shard's `shardId`.
 - `--host` with the address that other nodes use to reach this node.
-- `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY` and `--validator-private-key-path` with the key converted from `private_key.hex` as shown in [Validator Key](/nodes/validator/#validator-key). The node does not read `private_key.hex` itself.
+- `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY` and `--validator-private-key-path` with the key converted from `private_key.hex` as shown in [Set Up the Validator Key](/nodes/validator/#set-up-the-validator-key). The node does not read `private_key.hex` itself.
 - The token flags `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` when the shard does not use the defaults.
 
 The pinned [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/e18defd44d43fe460379efefb88223797709a0cf/node/src/rust/configuration/commandline/options.rs) list every flag. Keep management APIs and metrics private and confirm container-to-host port mappings.
 
-Check peers, synchronization and advancing canonical finalization before bonding. A ready HTTP endpoint or `isValidator` flag alone does not establish active consensus participation.
+Before bonding, check peers, synchronization and advancing canonical finalization with the commands in [Validate the Node](/nodes/validator/#validate-the-node). A ready HTTP endpoint or the `isValidator` flag alone does not mean that the node takes part in consensus.
 
 ### Fund the Validator
 
 The new validator's vault must cover the stake and the bond transaction's execution budget: `stake + phlo_limit * phlo_price`. Amounts are integer base units. In this client, `bond-validator` defaults to a phlo limit of 5,000,000,000 and price 1. Confirm the native token's decimals and the shard's required prices instead of assuming a whole-token amount.
 
-Use an approved transfer or faucet process to fund the derived address. A normal transfer does not require changing genesis wallets or restarting the network. Check the resulting balance on the read-only observer:
+Fund the vault address in `$VALIDATOR_ADDRESS` through a transfer or faucet process that the operator approves. A normal transfer does not require changing genesis wallets or restarting the network. Check the resulting balance on the read-only observer:
 
 ```bash
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
@@ -113,7 +117,7 @@ client epoch-info --grpc "$OBSERVER_GRPC"
 
 The output shows the current block and epoch, the epoch length and the quarantine length in blocks, and the progress through the epoch. In a shard with default settings the epoch is 10,000 blocks long. A withdrawal also takes effect at a boundary, and the stake is paid out after the quarantine period.
 
-### Submit the Bond Once and Verify Participation
+### Submit the Bond and Verify Participation
 
 Send the deploy to an already bonded validator, because a node that cannot propose accepts a deploy and never includes it. Do not send it to the joining node itself or to the bootstrap or ceremony-master node. Use the read-only observer for status and result queries. The stake must be at least the shard's `bond-minimum`, and bonding the same key twice fails with `already bonded`.
 
@@ -135,9 +139,18 @@ Record the deploy ID and outcome.
 A timeout can leave the transaction's outcome unknown, and the verdict for a deploy appears only after its block finalizes, so do not repeat the bond.
 :::
 
-Check the deploy first, either with `client deploy-status --sig <deploy signature> --http "$OBSERVER_HTTP"` or with `GET <observer HTTP URL>/api/deploy/<deploy ID>`. An underfunded vault does not reject the deploy. The deploy lands in a block and fails there with `Deploy payment failed: Insufficient funds`, and the client may not show that message. Do not treat a read error as proof that the validator is unbonded.
+Check the deploy with the client or over HTTP:
 
-Bonded membership and active membership are separate. Activation follows the shard's epoch and active-set rules, so `validator-status` reports `BONDED` first and `ACTIVE` after the boundary, and a full active set can prevent activation. Confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The client's `blocks` command prints recent blocks from the observer as JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`.
+```bash
+client deploy-status --sig <deploy signature> --http "$OBSERVER_HTTP"
+curl -s "$OBSERVER_HTTP/api/deploy/<deploy ID>"
+```
+
+An underfunded vault does not reject the deploy. The deploy lands in a block and fails there with `Deploy payment failed: Insufficient funds`, and the client may not show that message. Do not treat a read error as proof that the validator is unbonded.
+
+Bonded membership and active membership are separate. Activation follows the shard's epoch and active-set rules, so `validator-status` reports `BONDED` first and `ACTIVE` after the boundary, and a full active set can prevent activation.
+
+Confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The client's `blocks` command prints recent blocks from the observer as JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`.
 
 The client's pinned [validator lifecycle guide](https://github.com/asi-alliance/asi-chain-client/blob/40f2a9408040252dd23761cd06adb9f1407ef228/docs/guides/bonding-a-validator.md) explains bonding, activation, withdrawal and troubleshooting. Its example topology and ports are test fixtures, not the target network's connection data.
 
@@ -146,7 +159,7 @@ The client's pinned [validator lifecycle guide](https://github.com/asi-alliance/
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Run a Validator" href="/nodes/validator/">Prepare storage, keys and the node itself</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Check the synchronization and the bond status of the node</DocCard>
 <DocCard title="Node Image" href="/nodes/image/">Image selection, ports and configuration flags</DocCard>
 <DocCard title="Troubleshooting" href="/help/troubleshooting/">What to check when the node does not start or does not find peers</DocCard>
 </CardGrid>

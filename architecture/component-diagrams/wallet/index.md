@@ -1,6 +1,6 @@
 # Wallet Components
 
-The ASI Wallet is a browser-based React application for managing accounts and sending transactions. It does not talk to the node on its own. Every call goes through the [Wallet SDK](/wallet-sdk/overview/), which signs deploys, keeps wallets in the browser and calls the node and the indexer.
+The ASI Wallet is a browser-based React application for managing accounts and sending transactions. Every call to the network goes through the [Wallet SDK](/wallet-sdk/overview/), which signs deploys, keeps wallets in the browser and calls the node and the indexer.
 
 ← [Back to Component Diagrams](/architecture/component-diagrams/)
 
@@ -16,7 +16,7 @@ The ASI Wallet is a browser-based React application for managing accounts and se
 | `Client` | Creates and unlocks wallets, signs and submits deploys, reads balances, watches deploy status |
 | `ApiClientManager` | Holds one HTTP client per node role |
 
-Components do not call the SDK directly. A page dispatches a Redux thunk or uses an RTK Query hook, and the thunk calls `SdkWalletService`.
+React components do not call the SDK directly. A page dispatches a Redux thunk or uses an RTK Query hook, and the thunk calls `SdkWalletService`.
 
 ## Pages
 
@@ -40,7 +40,7 @@ Components do not call the SDK directly. A page dispatches a Redux thunk or uses
 | `auth` | Whether the wallet is unlocked |
 | `theme` | Light or dark theme |
 
-Balances and history are kept only in the RTK Query cache and are fetched again after a reload. Some builds carry more slices, but the ones above are in every build.
+Some builds carry more slices, but the ones above are in every build.
 
 ## Storage
 
@@ -48,7 +48,7 @@ Balances and history are kept only in the RTK Query cache and are fetched again 
 |------|----------------|
 | Wallets, accounts, custom networks, signer material | IndexedDB, managed by the SDK. Keys are encrypted with the wallet password |
 | Selected network and account, theme, Deploy page files | `localStorage` |
-| Balances and transaction history | Not stored, cached in memory only |
+| Balances and transaction history | Not stored. Kept only in the RTK Query cache in memory and fetched again after a reload |
 
 A private key never reaches Redux. It is decrypted inside the SDK only for the moment of signing.
 

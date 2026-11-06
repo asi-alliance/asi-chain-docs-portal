@@ -2,7 +2,7 @@
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Crypto/index.ts)
 
-Password-based encryption and decryption on top of WebCrypto. The package exports the class as `Crypto`, and all methods are static. They use the global `crypto.subtle` and `crypto.getRandomValues`, which browsers provide and Node.js provides globally from version 19.
+`Crypto` encrypts and decrypts data with a password through WebCrypto. All its methods are static. They need the global `crypto.subtle` and `crypto.getRandomValues`, which browsers provide and Node.js provides globally from version 19.
 
 ## Import
 
@@ -20,10 +20,10 @@ static encryptWithPassword(data: string, password: string): Promise<EncryptedDat
 
 Encrypts text with AES-GCM using a key derived from the password. Salt and IV are new for every call.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `data` | `string` | Yes | Plaintext. |
-| `password` | `string` | Yes | Password for key derivation. |
+| Name | Type | Description |
+|------|------|-------------|
+| `data` | `string` | Plaintext. |
+| `password` | `string` | Password for key derivation. |
 
 Returns `Promise<EncryptedData>`.
 
@@ -37,10 +37,10 @@ static decryptWithPassword(payload: EncryptedData, passphrase: string): Promise<
 
 Decrypts an `EncryptedData` object.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `payload` | `EncryptedData` | Yes | Object produced by `encryptWithPassword`. |
-| `passphrase` | `string` | Yes | Password used for encryption. |
+| Name | Type | Description |
+|------|------|-------------|
+| `payload` | `EncryptedData` | Object produced by `encryptWithPassword`. |
+| `passphrase` | `string` | Password used for encryption. |
 
 Returns `Promise<string>` with the plaintext.
 
@@ -48,10 +48,12 @@ It throws one of these errors.
 
 | Error | When |
 |-------|------|
-| `UnsupportedEncryptionVersionError` | `payload.version` is not `2`. The message is `Unsupported version <v> of the encrypted payload, this SDK build supports version 2`. |
+| `UnsupportedEncryptionVersionError` | `payload.version` is not `2`. |
 | `CorruptedDataError` | `salt` is not 16 bytes, `iv` is not 12 bytes, `data` is shorter than the 16-byte tag, or a field is not valid Base64. |
-| `InvalidPasswordError` | AES-GCM rejects the data, which happens with a wrong password and also with a modified ciphertext. |
+| `InvalidPasswordError` | AES-GCM rejects the data. This happens with a wrong password and with a modified ciphertext. |
 | `KeyDerivationError` | The key cannot be derived. |
+
+The message of `UnsupportedEncryptionVersionError` is `Unsupported version <v> of the encrypted payload, this SDK build supports version 2`.
 
 ### deriveKey()
 
@@ -61,10 +63,10 @@ static deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
 
 Derives a non-extractable AES-GCM-256 `CryptoKey` from a password with PBKDF2 (SHA-256, 100,000 iterations). The key is usable for `encrypt` and `decrypt`.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `password` | `string` | Yes | Source password. |
-| `salt` | `Uint8Array` | Yes | Salt bytes. `decryptWithPassword` expects 16. |
+| Name | Type | Description |
+|------|------|-------------|
+| `password` | `string` | Source password. |
+| `salt` | `Uint8Array` | Salt bytes. `decryptWithPassword` expects 16. |
 
 Returns `Promise<CryptoKey>`.
 
@@ -89,12 +91,17 @@ static decryptSignerData(
 ): Promise<IHDSecret | IPrivateKeyCredentials>
 ```
 
-Decrypts the secret stored for a signer with the password from `passwordProvider.getSecret().password` and parses it. The result is `{ privateKey }` for a private-key wallet and `{ seed, rootHDPath }` for an HD wallet, where `rootHDPath` is a [`Bip44Path`](/wallet-sdk/api-reference/key-derivation/#bip44path). This is an internal step of the signing flow, and application code normally goes through [`Client`](/wallet-sdk/api-reference/client/).
+Decrypts the secret stored for a signer and parses it. The password comes from `passwordProvider.getSecret().password`. This is an internal step of the signing flow, and application code normally goes through [`Client`](/wallet-sdk/api-reference/client/).
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `signerData` | `EncryptedData` | Yes | Encrypted signer secret. |
-| `passwordProvider` | `SecretsProvider` | Yes | Supplies the password. |
+The result depends on the wallet type:
+
+- `{ privateKey }` for a private-key wallet.
+- `{ seed, rootHDPath }` for an HD wallet, where `rootHDPath` is a [`Bip44Path`](/wallet-sdk/api-reference/key-derivation/#bip44path).
+
+| Name | Type | Description |
+|------|------|-------------|
+| `signerData` | `EncryptedData` | Encrypted signer secret. |
+| `passwordProvider` | `SecretsProvider` | Supplies the password. |
 
 Returns `Promise<IHDSecret | IPrivateKeyCredentials>`.
 

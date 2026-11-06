@@ -10,8 +10,8 @@ As of 5 November 2026 the public DevNet runs a Scala node, and the Rust node fro
 
 <CardGrid columns="2">
 <DocCard title="Run an Observer" href="/nodes/observer/">Follow the chain and answer read requests</DocCard>
-<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node that is meant to become a validator</DocCard>
-<DocCard title="Enroll a Validator" href="/nodes/validator-enrollment/">Create the identity, fund the validator and submit the bond</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node that you later bond as a validator</DocCard>
+<DocCard title="Enroll a Validator" href="/nodes/validator-enrollment/">Create the validator key, fund the validator and submit the bond</DocCard>
 <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Start a shard with its own genesis, validators and network configuration</DocCard>
 </CardGrid>
 

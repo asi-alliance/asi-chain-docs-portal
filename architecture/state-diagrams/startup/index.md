@@ -1,6 +1,6 @@
 # Node Startup
 
-How the Rust node gets from process start to the Running state.
+The Rust node runs a fixed sequence of startup steps and then reaches the Running state through one of four launch modes. The page also covers how to check readiness and what to do when the node does not get there.
 
 ← [Back to State Diagrams](/architecture/state-diagrams/)
 
@@ -18,12 +18,21 @@ How the Rust node gets from process start to the Running state.
 
 <Diagram name="startup-modes" caption="The four launch modes, the condition that selects each one and how each reaches the Running state." />
 
-| Mode | Condition | Log line at launch | Path to Running |
-|------|-----------|--------------------|-----------------|
-| Reconnect | The block store holds an approved block, which is any restart on existing data. | `Approved block found, reconnecting to existing network` | Builds Casper from local storage and goes to Running directly, in about a second. |
-| Genesis validator | No approved block and `genesis_validator_mode` is set. | `Approved block not found, taking part in ceremony as genesis validator` | Verifies and signs the candidate genesis block and then moves to Initializing, where it waits for the approved block like a joining node. |
-| Ceremony master | No approved block and `ceremony_master_mode` is set. A standalone node starts in this mode. | `Approved block not found, taking part in ceremony as ceremony master` | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
-| Join | No approved block and neither ceremony mode is set. | `Approved block not found, connecting to existing network` | Initializing. |
+| Mode | Condition | Path to Running |
+|------|-----------|-----------------|
+| Reconnect | The block store holds an approved block, which is any restart on existing data. | Builds Casper from local storage and goes to Running directly, in about a second. |
+| Ceremony master | No approved block and `ceremony_master_mode` is set. A standalone node starts in this mode. | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
+| Genesis validator | No approved block and `genesis_validator_mode` is set. | Verifies and signs the candidate genesis block and then moves to Initializing, where it waits for the approved block like a joining node. |
+| Join | No approved block and neither ceremony mode is set. | Moves to Initializing (see below). |
+
+At launch the node logs one of these lines, in the order of the table:
+
+```text
+Approved block found, reconnecting to existing network
+Approved block not found, taking part in ceremony as ceremony master
+Approved block not found, taking part in ceremony as genesis validator
+Approved block not found, connecting to existing network
+```
 
 ### Initializing
 
@@ -69,7 +78,7 @@ The line shows `min_height`, the lowest block of the imported window. If the nod
 
 ### Data Directory
 
-Do not delete the data directory of a node that its peers already know. The TLS certificate inside it is the node identity, so a wiped directory gives the node a new identity and a full join, while the peers still hold the old one in their routing tables.
+Do not delete the data directory of a node that its peers already know. The TLS certificate inside it is the node identity. A wiped directory gives the node a new identity and a full join, while the peers still hold the old identity in their routing tables.
 
 ## Next Steps
 

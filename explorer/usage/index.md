@@ -10,11 +10,25 @@ New blocks appear without reloading the page. A green check icon in the header s
 
 The menu under the header has five sections: **Blocks**, **Transactions**, **Validators**, **Statistics** and **Indexer**. The search box in the header works on every page.
 
+## Search
+
+The search box in the header looks up blocks, transfers and deployments. Type a block number or hash, a transfer or deployment ID or an address and press Enter. The matches appear under the box, and a click opens the block or transaction details.
+
+The funnel icon opens **Filters**. **Search Type** narrows the search to **All Types**, **Blocks**, **Transfers** or **Deployments**. The panel has one group of filters for each type.
+
+![The search box with the Filters panel open, showing Search Type and the block, transfer and deployment filter fields.](/images/explorer/search-tab.webp){width=976 height=912}
+
+| Group | Filters |
+| --- | --- |
+| Block Filters | Proposer address and minimum and maximum block number |
+| Transfer Filters | Sender and recipient address, and minimum and maximum amount in ASI |
+| Deployment Filters | Deployer address, and minimum and maximum phlo cost |
+
+**Clear All** resets the form.
+
 ## Blocks
 
-The **Blocks** page is the start page.
-
-The four cards at the top show the latest block number, the number of active validators, the average block time and the network status. Next to them, **Live Activity** lists new blocks, deployments and transfers as they arrive.
+The **Blocks** page is the start page. The four cards at its top show the latest block number, the number of active validators, the average block time and the network status. Next to them, **Live Activity** lists new blocks, deployments and transfers as they arrive.
 
 Under the cards, the **Recent Blocks** table lists the newest blocks with their number, abbreviated hash, abbreviated validator key and age. The number is a link to the block details. The **Status** column shows a check mark and **Confirmed**, because the explorer lists only blocks that the indexer has already stored. The search field above the table filters it by block number or hash.
 
@@ -48,7 +62,16 @@ The **Overview** tab shows the transaction ID, deployer, type and timestamp. Und
 
 ## Validators
 
-The **Validators** page starts with three cards, **Total Validators**, **Total ASI Staked** and **Avg. Stake**. The table below lists every validator with its abbreviated public key, stake in ASI, share of the total stake, the number of blocks it proposed, the block where it first appeared, the last block where it appeared, the block of its latest bond (the **Last Active** column) and its status. Large stakes are shortened, so 100000 ASI appears as 100.00K.
+The **Validators** page starts with three cards, **Total Validators**, **Total ASI Staked** and **Avg. Stake**. The table below lists every validator with these columns:
+
+- abbreviated public key
+- stake in ASI and share of the total stake
+- number of blocks it proposed
+- block where it first appeared and last block where it appeared
+- block of its latest bond (the **Last Active** column)
+- status
+
+Large stakes are shortened, so 100000 ASI appears as 100.00K.
 
 The **View History** button opens the **Validator History** page.
 
@@ -78,22 +101,6 @@ The highest block on this page is the newest block in the explorer database, not
 
 ![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.webp){width=976 height=760}
 
-## Search
-
-The search box in the header looks up blocks, transfers and deployments. Type a block number or hash, a transfer or deployment ID or an address and press Enter. The matches appear under the box, and a click opens the block or transaction details.
-
-The funnel icon opens **Filters**. **Search Type** narrows the search to **All Types**, **Blocks**, **Transfers** or **Deployments**. The panel has one group of filters for each type.
-
-![The search box with the Filters panel open, showing Search Type and the block, transfer and deployment filter fields.](/images/explorer/search-tab.webp){width=976 height=912}
-
-| Group | Filters |
-| --- | --- |
-| Block Filters | Proposer address and minimum and maximum block number |
-| Transfer Filters | Sender and recipient address, and minimum and maximum amount in ASI |
-| Deployment Filters | Deployer address, and minimum and maximum phlo cost |
-
-**Clear All** resets the form.
-
 ## Export
 
 The green icon next to the page title downloads a CSV file with up to 5,000 records. On the **Blocks** page it sits next to **Recent Blocks** and saves `recent_blocks.csv`. On the **Transactions** page it exports the open tab and saves `recent_deployments.csv` or `recent_transfers.csv`.
@@ -111,4 +118,4 @@ The explorer does not read the node directly. The indexer reads blocks from the 
 <DocCard title="Faucet" href="/faucet/usage/">Request tokens at faucet.dev.asichain.io</DocCard>
 </CardGrid>
 
-The wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io), the faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io) and the documentation at [docs.asichain.io](https://docs.asichain.io). The explorer source is at [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer).
+The explorer source is at [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer).
