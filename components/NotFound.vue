@@ -1,5 +1,6 @@
 <template>
-    <div class="vp-doc asi-not-found">
+    <!-- VitePress renders the 404 slot outside any landmark, so the page brings its own main. -->
+    <main class="vp-doc asi-not-found">
         <h1>Page Not Found</h1>
         <p>This page does not exist or has moved.</p>
         <CardGrid>
@@ -11,7 +12,7 @@
             <DocCard title="Help" href="/help/">FAQ, troubleshooting and the documentation status</DocCard>
         </CardGrid>
         <p class="asi-not-found-search">Search (Ctrl K) finds any page.</p>
-    </div>
+    </main>
 </template>
 
 <script setup lang="ts">

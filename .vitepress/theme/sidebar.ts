@@ -15,9 +15,34 @@ function reveal() {
     else if (i.bottom > b.bottom - margin) bar.scrollTop += i.bottom - b.bottom + margin;
 }
 
+// A group without a link is a row with role=button that toggles on click and Enter, and VitePress puts
+// a second focusable toggle, the caret, inside it. axe reports that as nested-interactive, and the
+// keyboard stops twice on one control. The row does the job (VitePress toggles such a group from the
+// row, not from the caret), so the caret becomes a plain icon: no role, no tabindex, hidden from
+// assistive technology. tabindex=-1 is not enough, axe still counts it as focusable. Groups with a
+// link keep their caret, because there the row is the link. Vue does not restore static attributes
+// on hydration, so running this before hydration is safe.
+function unnestCarets() {
+    document
+        .querySelectorAll<HTMLElement>('.VPSidebar .item[role="button"] > .caret[role="button"]')
+        .forEach((caret) => {
+            caret.removeAttribute("role");
+            caret.removeAttribute("tabindex");
+            caret.setAttribute("aria-hidden", "true");
+        });
+}
+
 export function setupSidebarScroll(router: Router) {
     if (typeof window === "undefined") return;
-    const run = () => requestAnimationFrame(() => requestAnimationFrame(reveal));
+    // The theme loads as a module script, so the server HTML of the sidebar is already parsed here.
+    unnestCarets();
+    const run = () =>
+        requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+                unnestCarets();
+                reveal();
+            }),
+        );
     router.onAfterRouteChanged = (() => {
         const prev = router.onAfterRouteChanged;
         return (to: string) => {
