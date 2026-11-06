@@ -26,7 +26,7 @@ Paste your wallet address into the **Address** field. A DevNet address is 50 to 
 
 As soon as the address is valid, the page loads its balance and shows it under **Address Balance**, next to the **FAUCET** button.
 
-![The faucet page with the empty Address and TX status check fields.](/images/faucet/faucet-form.png)
+![The faucet page with the empty Address and TX status check fields.](/images/faucet/faucet-form.webp){width=1000 height=300}
 
 ### Request the Tokens
 
@@ -38,7 +38,7 @@ If the balance is above the limit, the button stays disabled and the page shows 
 
 The **TX status check** section shows the current status and `Next check in`, the seconds left until the next automatic check. The page checks the status every 30 seconds. When the status is `Finalized`, the page reloads the balance, which now includes the new tokens.
 
-![The faucet with a filled address, the balance of 10000 ASI, the FAUCET button and the TX status check field showing Finalized.](/images/faucet/faucet-status.png)
+![The faucet with a filled address, the balance of 10000 ASI, the FAUCET button and the TX status check field showing Finalized.](/images/faucet/faucet-status.webp){width=1000 height=300}
 
 If the transfer is still not finalized after 15 minutes, the page stops checking and shows `Polling stopped after 15 minutes.`. To start checking again, clear the field and paste the `deploy_id` back. The page also stops when the node returns an error status or when the status request fails.
 
