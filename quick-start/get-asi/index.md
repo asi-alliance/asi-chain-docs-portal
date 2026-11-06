@@ -34,5 +34,5 @@ With a balance, you can send tokens on the wallet's **Send** page, deploy a cont
 
 <CardGrid columns="2">
 <DocCard title="ASI Wallet" href="/wallet/usage/" icon="wallet">Send tokens and deploy a contract</DocCard>
-<DocCard title="Block Explorer" href="/explorer/usage/" icon="explorer">Look up your transactions</DocCard>
+<DocCard title="ASI Block Explorer" href="/explorer/usage/" icon="explorer">Look up your transactions</DocCard>
 </CardGrid>

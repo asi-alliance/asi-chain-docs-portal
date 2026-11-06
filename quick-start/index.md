@@ -10,7 +10,7 @@ You want an account, some test tokens and a way to see what happens on the chain
 
 ### Create an Account
 
-Open the [wallet](/wallet/usage/) and create an account. It gives you an ASI address that starts with `1111`.
+Open the [wallet](/wallet/usage/) and create an account. The wallet gives you an ASI address that starts with `1111`.
 
 ### Request Test Tokens
 
@@ -42,7 +42,7 @@ Public DevNet services are listed on [Network Endpoints](/reference/endpoints/).
 You want to write an application, a script or a contract.
 
 - Read the [Wallet SDK overview](/wallet-sdk/overview/) and the [API reference](/wallet-sdk/api-reference/) to sign and send transactions from TypeScript.
-- Use the [Wallet CLI](/cli/usage/) to create wallets and send tokens from a terminal. The CLI is built for the Rust node API, and against the Scala node of the public DevNet only `create` works as of 5 November 2026.
+- Use the [Wallet CLI](/cli/usage/) to create wallets and send tokens from a terminal. The CLI is built for the Rust node API, so as of 5 November 2026 only `create` works against the Scala node of the public DevNet.
 - Look at the [architecture](/architecture/) pages to see how the node, indexer, GraphQL API and applications fit together.
 
 ## Next Steps

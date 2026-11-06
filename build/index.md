@@ -6,12 +6,12 @@ Build applications and scripts on ASI:Chain. The Wallet SDK signs and sends tran
 
 <CardGrid columns="2">
 <DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">Build wallets and integrations with the TypeScript SDK</DocCard>
-<DocCard title="SDK API Reference" href="/wallet-sdk/api-reference/" icon="book">The client, services, domains and utilities of the SDK</DocCard>
+<DocCard title="Wallet SDK API Reference" href="/wallet-sdk/api-reference/" icon="book">The client, services, domains and utilities of the SDK</DocCard>
 <DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">Create wallets, check balances and send tokens from a terminal</DocCard>
-<DocCard title="Architecture" href="/architecture/" icon="architecture">Components, data flow and network topology</DocCard>
+<DocCard title="Technical Architecture" href="/architecture/" icon="architecture">Components, data flow and network topology</DocCard>
 </CardGrid>
 
-## Addresses and Source
+## Addresses, Images and Links
 
 <CardGrid columns="2">
 <DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">Public DevNet addresses</DocCard>

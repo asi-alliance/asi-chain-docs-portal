@@ -15,10 +15,10 @@ Public implementation references: [indexer node client](https://github.com/asi-a
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Network Topology" href="/architecture/network-topology/" icon="architecture">Node roles, ports, access and firewall rules.</DocCard>
-<DocCard title="Data Flow" href="/architecture/data-flow/" icon="diagram">Deploy lifecycle, and which data comes from the node and which from GraphQL.</DocCard>
-<DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="node">Node, explorer and wallet components.</DocCard>
-<DocCard title="Sequence Diagrams" href="/architecture/sequence-diagrams/" icon="diagram">Interaction flows.</DocCard>
+<DocCard title="Network Topology" href="/architecture/network-topology/" icon="architecture">Node roles, ports, access and firewall rules</DocCard>
+<DocCard title="Data Flow" href="/architecture/data-flow/" icon="diagram">Deploy lifecycle, and which data comes from the node and which from GraphQL</DocCard>
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="node">Node, explorer and wallet components</DocCard>
+<DocCard title="Sequence Diagrams" href="/architecture/sequence-diagrams/" icon="diagram">Interaction flows between the wallet and the nodes</DocCard>
 </CardGrid>
 
 See also the [state diagrams](/architecture/state-diagrams/), the [container images](/reference/container-images/) with the exact image and source pairs, and [documentation status](/help/documentation-status/) for what was checked and when.

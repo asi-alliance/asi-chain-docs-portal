@@ -30,7 +30,7 @@ hero:
 
 <CardGrid columns="2">
 <DocCard title="What Is ASI:Chain" href="/overview/" icon="book">The node, the indexer and the applications, and how they fit together</DocCard>
-<DocCard title="Architecture" href="/architecture/" icon="architecture">Components, data flow and network topology</DocCard>
+<DocCard title="Technical Architecture" href="/architecture/" icon="architecture">Components, data flow and network topology</DocCard>
 <DocCard title="Reference" href="/reference/" icon="links">Network endpoints, container images and useful links</DocCard>
 <DocCard title="Help" href="/help/" icon="help">FAQ, troubleshooting and the documentation status</DocCard>
 <DocCard title="DevNet Wallet" href="https://wallet.dev.asichain.io" icon="wallet">wallet.dev.asichain.io</DocCard>
@@ -43,4 +43,4 @@ hero:
 
 DevNet tokens are for testing and have no real value. The [Get Started](/quick-start/) page sends you to the right guide for using the network, running a node or building on it.
 
-Node setup uses the [published container images](/reference/container-images/) and their source revisions. Public DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the bootstrap identity of the network you join, because published images do not identify the live deployment. The [documentation status](/help/documentation-status/) page lists which pages are verified and which still wait for review.
+Node setup uses the [published container images](/reference/container-images/) and their source revisions. Public DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the bootstrap identity of the network you join, because the published images do not say which deployment is live. The [documentation status](/help/documentation-status/) page lists which pages are verified and which still wait for review.

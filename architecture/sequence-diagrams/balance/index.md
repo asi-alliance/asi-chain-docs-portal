@@ -94,6 +94,6 @@ While they are open, the Dashboard and Send pages refresh the balance every 30 s
 
 <CardGrid columns="2">
 <DocCard title="Transaction Flow" href="/architecture/sequence-diagrams/transaction/" icon="diagram">Sending tokens</DocCard>
-<DocCard title="Wallet Components" href="/architecture/component-diagrams/wallet/" icon="wallet">Wallet internals</DocCard>
-<DocCard title="Wallet Usage Guide" href="/wallet/usage/" icon="book">How to use the wallet</DocCard>
+<DocCard title="Wallet Components" href="/architecture/component-diagrams/wallet/" icon="wallet">Layers, state and storage of the wallet app</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/" icon="book">How to use the wallet</DocCard>
 </CardGrid>

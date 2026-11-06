@@ -115,7 +115,7 @@ For node problems start with [troubleshooting](/help/troubleshooting/). Otherwis
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Get Started" href="/quick-start/" icon="rocket">One path for using the network, one for running a node and one for building on it.</DocCard>
-  <DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Checks for common node and wallet problems.</DocCard>
-  <DocCard title="Documentation Status" href="/help/documentation-status/" icon="status">What was checked and what was not.</DocCard>
+  <DocCard title="Get Started" href="/quick-start/" icon="rocket">One path for using the network, one for running a node and one for building on it</DocCard>
+  <DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Checks for common node and wallet problems</DocCard>
+  <DocCard title="Documentation Status" href="/help/documentation-status/" icon="status">What was checked and what was not</DocCard>
 </CardGrid>

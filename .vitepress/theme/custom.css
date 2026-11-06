@@ -1,11 +1,14 @@
 /* ASI:Chain Docs Custom Styles */
 
+/* Import Roboto Mono font for logo text */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
 /* Logo styling */
 .VPNavBarTitle .title {
   font-family: 'Roboto Mono', monospace;
   font-weight: 700;
   font-size: 14px !important;
-  color: var(--vp-c-text-1);
+  color: var(--Primary-Black, #000);
 }
 
 /* Custom logo component styles */
@@ -20,7 +23,7 @@
 }
 
 .logo-text {
-  color: var(--vp-c-text-1);
+  color: var(--Primary-Black, #000);
   font-family: "Roboto Mono", monospace;
   font-style: normal;
   font-weight: 700;
@@ -56,6 +59,11 @@
   font-size: 20px;
 }
 
+/* Dark mode adjustments */
+.dark .logo-text {
+  color: var(--vp-c-text-1);
+}
+
 /* Header logo styling */
 .VPNavBarTitle {
   display: flex;
@@ -68,9 +76,26 @@
   margin-right: 8px;
 }
 
-/* Code font */
+/* Typography consistency */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Button consistency */
+.VPButton {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+/* Code blocks */
 code, pre {
-  font-family: var(--vp-font-family-mono);
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Custom hero section */
+.VPHero .name {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
 }
 
 /* Responsive design */

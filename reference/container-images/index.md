@@ -74,7 +74,7 @@ The frontend images substitute endpoint URLs at startup. Supply the image-specif
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Node Image" href="/nodes/image/" icon="node">How to run the node image.</DocCard>
-  <DocCard title="Documentation Status" href="/help/documentation-status/" icon="status">Review scope of these pages.</DocCard>
-  <DocCard title="Useful Links" href="/reference/links/" icon="links">Public component repositories.</DocCard>
+  <DocCard title="Node Image" href="/nodes/image/" icon="node">How to run the node image</DocCard>
+  <DocCard title="Documentation Status" href="/help/documentation-status/" icon="status">Review scope of these pages</DocCard>
+  <DocCard title="Useful Links" href="/reference/links/" icon="links">Public applications, packages and source repositories</DocCard>
 </CardGrid>

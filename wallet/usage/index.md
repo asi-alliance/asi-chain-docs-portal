@@ -176,8 +176,8 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 
 <CardGrid columns="2">
 <DocCard title="Get DevNet ASI" href="/quick-start/get-asi/" icon="faucet">Request test tokens for your address</DocCard>
-<DocCard title="Custom Network" href="/wallet/custom-network/" icon="endpoints">Connect the wallet to your own node</DocCard>
-<DocCard title="Block Explorer" href="/explorer/usage/" icon="explorer">Look up blocks and transactions</DocCard>
+<DocCard title="Custom Network Connection" href="/wallet/custom-network/" icon="endpoints">Connect the wallet to your own node</DocCard>
+<DocCard title="ASI Block Explorer" href="/explorer/usage/" icon="explorer">Look up blocks and transactions</DocCard>
 <DocCard title="Wallet Source" href="https://github.com/asi-alliance/asi-chain-wallet" icon="github">github.com/asi-alliance/asi-chain-wallet</DocCard>
 </CardGrid>
 

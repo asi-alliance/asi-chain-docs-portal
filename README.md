@@ -68,20 +68,20 @@ asi-chain-docs-portal/
 ├── .vitepress/           # VitePress configuration and theme
 ├── architecture/         # Architecture diagrams
 ├── assets/               # Syntax highlighting grammars
+├── build/                # Landing for developers
 ├── cli/                  # Wallet CLI guide
 ├── components/           # Vue components of the theme
 ├── config/               # Language registration for code blocks
-├── build/                # Landing for developers
 ├── explorer/             # Block explorer guide
 ├── faucet/               # Faucet guide
 ├── help/                 # FAQ, troubleshooting, documentation status
 ├── nodes/                # Node roles, images and setup guides
 ├── overview/             # What is ASI:Chain
-├── reference/            # Endpoints, container images, links
 ├── public/               # Static assets
 ├── quick-start/          # Getting started guides
-├── utils/                # Constants of the feedback form
+├── reference/            # Endpoints, container images, links
 ├── use/                  # Landing for users
+├── utils/                # Constants of the feedback form
 ├── wallet/               # Wallet guide
 ├── wallet-sdk/           # Wallet SDK reference
 ├── .gitignore
@@ -93,6 +93,10 @@ asi-chain-docs-portal/
 ```
 
 Every directory with an `index.md` is a page, and its address is the directory path with a trailing slash. The sidebar and the top menu are written by hand in `.vitepress/config.ts`, so a new page appears in the menu only after it is added there.
+
+When a page moves to a new address, add the old and the new address to `.vitepress/redirects.ts`. The build then writes a small page at the old address that sends readers to the new one.
+
+Each diagram is a spec in `.vitepress/diagrams/src/`. `npm run diagrams` renders the specs into SVG files in `.vitepress/diagrams/out/`, and the SVG files are committed. `npm run diagrams:check` fails when a committed SVG differs from its spec. The spec format is described in `.vitepress/diagrams/README.md`.
 
 ---
 

@@ -1,6 +1,6 @@
 # Reference
 
-This section lists public addresses, image versions and links for ASI:Chain. Other pages link here instead of repeating these values.
+This section lists public addresses, image versions and links for ASI:Chain.
 
 <CardGrid columns="2">
 <DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">Public DevNet addresses</DocCard>
