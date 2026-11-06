@@ -148,7 +148,6 @@ const sidebar = [
     items: [
       { text: 'Frequently Asked Questions', link: '/help/faq/' },
       { text: 'Troubleshooting', link: '/help/troubleshooting/' },
-      { text: 'Documentation Status', link: '/help/documentation-status/' },
     ]
   },
 ]

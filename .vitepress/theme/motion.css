@@ -18,8 +18,8 @@
 
 /* 1. Content links */
 html:not(#a) .vp-doc a,
+html:not(#a) .asi-directory a,
 html:not(#a) .vp-doc a code,
-html:not(#a) .docs-review-note a,
 html:not(#a) .VPDocFooter .pager-link .title,
 html:not(#a) .VPFooter a {
   transition:

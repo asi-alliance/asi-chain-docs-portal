@@ -5,6 +5,7 @@ import CardGrid from "../../components/CardGrid.vue";
 import DocCard from "../../components/DocCard.vue";
 import Diagram from "../../components/Diagram.vue";
 import NotFound from "../../components/NotFound.vue";
+import SectionDirectory from "../../components/SectionDirectory.vue";
 import type { Theme } from "vitepress";
 import { h } from "vue";
 import "./style.css";
@@ -24,17 +25,6 @@ export default {
             "layout-top": () => h(FeedbackForm),
             // The default 404 has a quote and a button, and no sidebar to find a section in.
             "not-found": () => h(NotFound),
-            // doc-before sits outside <main>, so the note is its own complementary landmark
-            // and a screen reader can reach it from the landmark list.
-            "doc-before": () => [
-                h("aside", { class: "docs-review-note", "aria-label": "Documentation status" }, [
-                    "Documentation review in progress. ",
-                    h("a", { href: "/help/documentation-status/" }, "Check the verified scope"),
-                    " and ",
-                    h("a", { href: "/reference/container-images/" }, "published container images"),
-                    " before using setup or API examples.",
-                ]),
-            ],
         });
     },
     enhanceApp(ctx) {
@@ -46,5 +36,6 @@ export default {
         app.component("CardGrid", CardGrid);
         app.component("DocCard", DocCard);
         app.component("Diagram", Diagram);
+        app.component("SectionDirectory", SectionDirectory);
     },
 } satisfies Theme;

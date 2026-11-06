@@ -27,7 +27,7 @@ Follow your transfers and balances in the [explorer](/explorer/usage/).
 You want to take part in the network as an observer or a validator.
 
 ::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node, and the Rust node from these guides does not connect to it. Use the guides with a Rust shard that you or your operator run. [Documentation Status](/help/documentation-status/) has the details.
+As of 5 November 2026 the public DevNet runs a Scala node, and the Rust node from these guides does not connect to it. Use the guides with a Rust shard that you or your operator run.
 :::
 
 - Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.
@@ -51,5 +51,5 @@ You want to write an application, a script or a contract.
 <DocCard title="What Is ASI:Chain" href="/overview/">Components, networks and the token</DocCard>
 <DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">Get an address and request tokens from the faucet</DocCard>
 <DocCard title="Network Endpoints" href="/reference/endpoints/">Public DevNet services</DocCard>
-<DocCard title="Documentation Status" href="/help/documentation-status/">Known limits of these pages</DocCard>
+<DocCard title="Frequently Asked Questions" href="/help/faq/">Answers to common questions about accounts, tokens and nodes</DocCard>
 </CardGrid>

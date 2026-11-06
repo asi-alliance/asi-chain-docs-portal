@@ -104,10 +104,6 @@ No. Run `git submodule update --init --recursive` and keep the committed client 
 
 ## More Help
 
-### Are All Pages Verified?
-
-See [documentation status](/help/documentation-status/). A VitePress build checks that internal links resolve, not that diagrams render or that the described API is correct.
-
 ### Where Can I Ask a Question or Report a Problem?
 
 For node problems start with [troubleshooting](/help/troubleshooting/). Otherwise open an issue in the repository of the component: [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet), [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer), [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet), [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli) or [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal).
@@ -117,5 +113,4 @@ For node problems start with [troubleshooting](/help/troubleshooting/). Otherwis
 <CardGrid columns="2">
   <DocCard title="Get Started" href="/quick-start/">One path for using the network, one for running a node and one for building on it</DocCard>
   <DocCard title="Troubleshooting" href="/help/troubleshooting/">Checks for common node and wallet problems</DocCard>
-  <DocCard title="Documentation Status" href="/help/documentation-status/">What was checked and what was not</DocCard>
 </CardGrid>

@@ -1,28 +1,8 @@
 /**
- * Components: Steps, CardGrid, DocCard, review note.
+ * Components: Steps, CardGrid, DocCard.
  * Class names start with asi- . Inside .vp-doc the selectors repeat .vp-doc,
  * because .vp-doc p, .vp-doc h3 and .vp-doc a would otherwise win.
  */
-
-/* The review note is one line of secondary text above the H1, so it does not compete with the page title. */
-
-.docs-review-note {
-  margin: 0 0 24px;
-  color: var(--vp-c-text-2);
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.docs-review-note a {
-  color: var(--vp-c-text-1);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-}
-
-.docs-review-note a:hover {
-  color: var(--vp-c-brand-1);
-}
 
 /* Step numbers come from a CSS counter on every ### inside the wrapper, so a step can be added or removed
    without renumbering the others. The circle has the page color so the
@@ -151,6 +131,139 @@
 
 .asi-not-found-search {
   color: var(--vp-c-text-2);
+}
+
+.asi-not-found .asi-directory {
+  margin: 40px 0;
+}
+
+/* The home page has no sidebar. Its left edge follows the logo in the top bar, whose container is at most
+   1440 px wide with 24 px of side padding, and 32 px from 768 px. */
+
+.asi-home-page {
+  box-sizing: border-box;
+  max-width: var(--vp-layout-max-width);
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+
+.asi-home-page h1 {
+  margin: 0;
+  font-family: var(--asi-font-heading);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--vp-c-text-1);
+}
+
+.asi-home-page h1 .header-anchor {
+  display: none;
+}
+
+.asi-home-page h1 + p {
+  max-width: 640px;
+  margin: 16px 0 0;
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--vp-c-text-2);
+}
+
+.asi-home-page .asi-directory {
+  margin-top: 56px;
+}
+
+@media (min-width: 768px) {
+  .asi-home-page {
+    padding: 80px 32px 128px;
+  }
+
+  .asi-home-page h1 {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  .asi-home-page .asi-directory {
+    margin-top: 72px;
+  }
+}
+
+/* The section directory is the sidebar laid out in columns: a group title that opens the section landing
+   and the pages of the group under it. The column count follows the width of the directory, not of the
+   window, because the 404 page puts it in a narrower column than the home page. Selectors carry two
+   classes so .vp-doc h2, a and ul on the 404 page do not win. */
+
+.asi-directory {
+  container-type: inline-size;
+}
+
+.asi-directory .asi-directory-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+}
+
+@container (min-width: 520px) {
+  .asi-directory .asi-directory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 32px;
+  }
+}
+
+@container (min-width: 960px) {
+  .asi-directory .asi-directory-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 56px 40px;
+  }
+}
+
+.asi-directory .asi-directory-group {
+  padding-top: 16px;
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+.asi-directory .asi-directory-title {
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+  font-family: var(--asi-font-heading);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--vp-c-text-1);
+}
+
+.asi-directory .asi-directory-title a {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+.asi-directory .asi-directory-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.asi-directory .asi-directory-list li {
+  margin: 0;
+}
+
+/* Each link fills a 32 px row, the same rhythm as the sidebar, which also makes it a 32 px tap target. */
+.asi-directory .asi-directory-list a {
+  display: inline-block;
+  padding: 4px 0;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--vp-c-text-2);
+  text-decoration: none;
+}
+
+.asi-directory .asi-directory-title a:hover,
+.asi-directory .asi-directory-list a:hover {
+  color: var(--vp-c-brand-1);
 }
 
 /* The feedback button is fixed at the bottom right, so the page keeps room under its last block. */

@@ -6,7 +6,7 @@ export default {
   '/general/endpoints/': '/reference/endpoints/',
   '/general/container-images/': '/reference/container-images/',
   '/general/useful-links/': '/reference/links/',
-  '/general/documentation-status/': '/help/documentation-status/',
+  '/general/documentation-status/': '/help/',
   '/quick-start/join-observer/': '/nodes/observer/',
   '/quick-start/join-validator/': '/nodes/validator/',
   '/quick-start/validator-enrollment/': '/nodes/validator-enrollment/',

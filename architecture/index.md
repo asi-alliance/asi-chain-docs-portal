@@ -21,4 +21,4 @@ Public implementation references: [indexer node client](https://github.com/asi-a
 <DocCard title="Sequence Diagrams" href="/architecture/sequence-diagrams/">Interaction flows between the wallet and the nodes</DocCard>
 </CardGrid>
 
-See also the [state diagrams](/architecture/state-diagrams/), the [container images](/reference/container-images/) with the exact image and source pairs, and [documentation status](/help/documentation-status/) for what was checked and when.
+See also the [state diagrams](/architecture/state-diagrams/) and the [container images](/reference/container-images/) with the exact image and source pairs.
