@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 defineProps({
-    /** Cards per row on a wide screen: 2 or 3. Three become two under 960 px and one under 640 px. */
+    /** Accepted and ignored. The list is always two columns from 640 px and one column below. */
     columns: {
         type: [String, Number],
         default: 2,

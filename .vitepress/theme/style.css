@@ -333,14 +333,3 @@ body {
     line-height: 36px;
   }
 }
-
-/* Motion is limited to colour, border and shadow up to 150 ms, and it is off on request. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition: none !important;
-    animation: none !important;
-    scroll-behavior: auto !important;
-  }
-}

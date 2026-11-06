@@ -4,6 +4,7 @@ import Steps from "../../components/Steps.vue";
 import CardGrid from "../../components/CardGrid.vue";
 import DocCard from "../../components/DocCard.vue";
 import Diagram from "../../components/Diagram.vue";
+import NotFound from "../../components/NotFound.vue";
 import type { Theme } from "vitepress";
 import { h } from "vue";
 import "./style.css";
@@ -21,6 +22,8 @@ export default {
     Layout: () => {
         return h(DefaultTheme.Layout, null, {
             "layout-top": () => h(FeedbackForm),
+            // The default 404 has a quote and a button, and no sidebar to find a section in.
+            "not-found": () => h(NotFound),
             // doc-before sits outside <main>, so the note is its own complementary landmark
             // and a screen reader can reach it from the landmark list.
             "doc-before": () => [

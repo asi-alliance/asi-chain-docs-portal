@@ -143,7 +143,6 @@
   font-weight: 500;
   line-height: 40px;
   color: var(--ds-code-mute);
-  transition: color var(--asi-dur-1, 120ms) var(--asi-ease-out, ease-out);
 }
 
 .vp-doc .vp-code-group .tabs label::after {
@@ -151,7 +150,6 @@
   bottom: 0;
   left: 12px;
   border-radius: 0;
-  transition: none;
 }
 
 .vp-doc .vp-code-group .tabs label:hover,
@@ -167,7 +165,7 @@
 .vp-doc .vp-code-group div[class*='language-'] {
   margin: 0;
   border: 0;
-  border-radius: 0 !important;
+  border-radius: 0;
 }
 
 .vp-doc .vp-code-group div[class*='language-'] > span.lang {

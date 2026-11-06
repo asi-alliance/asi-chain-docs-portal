@@ -3,7 +3,8 @@
  * over the other theme files. Selectors carry :not(#a), one id of weight, to win over the scoped styles of the
  * VitePress components, which are stronger than a plain class.
  * Only transform, opacity and colours move, plus stroke-dashoffset for diagram edges. Layout properties are
- * never animated, because that reflows the page on every frame.
+ * never animated, because that reflows the page on every frame. The one exception is the top of the outline
+ * marker, see section 6.
  * A documentation site is read daily, so hover and press answer in 120-180 ms, panels take 240 ms at most,
  * and exits are shorter than entries.
  */
@@ -15,10 +16,11 @@
   --asi-dur-3: 240ms;
 }
 
-/* 1. Content links and buttons */
+/* 1. Content links */
 html:not(#a) .vp-doc a,
 html:not(#a) .vp-doc a code,
-html:not(#a) .VPDocFooter .pager-link,
+html:not(#a) .docs-review-note a,
+html:not(#a) .VPDocFooter .pager-link .title,
 html:not(#a) .VPFooter a {
   transition:
     color var(--asi-dur-1) var(--asi-ease-out),
@@ -27,31 +29,13 @@ html:not(#a) .VPFooter a {
     text-decoration-color var(--asi-dur-1) var(--asi-ease-out);
 }
 
-/* A press answers at once and the release takes a little longer, so the button never feels stuck. */
-html:not(#a) .VPButton {
-  transition:
-    color var(--asi-dur-1) var(--asi-ease-out),
-    background-color var(--asi-dur-1) var(--asi-ease-out),
-    border-color var(--asi-dur-1) var(--asi-ease-out),
-    transform var(--asi-dur-2) var(--asi-ease-out);
-}
-html:not(#a) .VPButton:active {
-  transform: scale(0.97);
-  transition:
-    color var(--asi-dur-1) var(--asi-ease-out),
-    background-color var(--asi-dur-1) var(--asi-ease-out),
-    border-color var(--asi-dur-1) var(--asi-ease-out),
-    transform var(--asi-dur-1) var(--asi-ease-out);
-}
-
 /* 2. Top bar */
-html:not(#a) .VPNavBarMenuLink,
 html:not(#a) .VPFlyout .button,
 html:not(#a) .VPFlyout .text,
 html:not(#a) .VPFlyout .icon,
 html:not(#a) .VPNavBarTitle .title,
-html:not(#a) .VPNavBarSearchButton,
-html:not(#a) .VPSocialLink,
+html:not(#a) .DocSearch-Button,
+html:not(#a) .DocSearch-Button-Placeholder,
 html:not(#a) .VPMenuLink a,
 html:not(#a) .VPMenuLink .link {
   transition:
@@ -61,15 +45,12 @@ html:not(#a) .VPMenuLink .link {
     fill var(--asi-dur-1) var(--asi-ease-out);
 }
 
-/* The bar background and the divider that VitePress adds once the page scrolls fade in. */
-html:not(#a) .VPNav,
+/* The bar is one solid surface that does not change on scroll, so its layers never fade. Without this the
+   0.5 s of the default theme runs when the page hydrates and the layers repaint against each other. */
 html:not(#a) .VPNavBar,
 html:not(#a) .VPNavBar .content-body,
 html:not(#a) .VPNavBar .title,
 html:not(#a) .VPNavBar .divider-line {
-  transition: background-color var(--asi-dur-2) var(--asi-ease-out);
-}
-html:not(#a) .VPNavBar.screen-open {
   transition: none;
 }
 
@@ -123,6 +104,13 @@ html:not(#a) .VPNavScreenMenuGroup .button-icon {
   transition: transform var(--asi-dur-2) var(--asi-ease-out);
 }
 
+/* Card titles: the underline is always there and only its colour fades in. */
+html:not(#a) .asi-card-title {
+  transition:
+    color var(--asi-dur-1) var(--asi-ease-out),
+    text-decoration-color var(--asi-dur-1) var(--asi-ease-out);
+}
+
 /* 3. Sidebar */
 html:not(#a) .VPSidebarItem .text,
 html:not(#a) .VPSidebarItem .caret {
@@ -137,10 +125,11 @@ html:not(#a) .VPSidebarItem .caret-icon {
 
 /*
  * A group that opens shows its items with a short rise. VitePress hides a collapsed group with display: none,
- * so the start values come from @starting-style, which only applies when the items appear. On page load there
- * is no earlier style, so the groups that are open from the start stay still. Closing is instant.
+ * so the start values come from @starting-style, which applies whenever an element first gets its style.
+ * That includes the first render of a page, so the rule waits for the asi-ready class that motion.ts sets
+ * after the first paint following hydration. Closing is instant.
  */
-html:not(#a) .VPSidebarItem:not(.collapsed) > .items {
+html.asi-ready:not(#a) .VPSidebarItem:not(.collapsed) > .items {
   opacity: 1;
   transform: translateY(0);
   transition:
@@ -148,7 +137,7 @@ html:not(#a) .VPSidebarItem:not(.collapsed) > .items {
     transform var(--asi-dur-2) var(--asi-ease-out);
 }
 @starting-style {
-  html:not(#a) .VPSidebarItem:not(.collapsed) > .items {
+  html.asi-ready:not(#a) .VPSidebarItem:not(.collapsed) > .items {
     opacity: 0;
     transform: translateY(-4px);
   }
@@ -165,6 +154,24 @@ html:not(#a) .VPSidebar.open {
     opacity var(--asi-dur-3) var(--asi-ease-out),
     transform var(--asi-dur-3) var(--asi-ease-out);
 }
+/* The closed drawer holds the whole site menu, so it leaves the tab order and the accessibility tree. It
+   hides after the slide ends on close and shows at once on open. */
+@media (max-width: 959px) {
+  html:not(#a) .VPSidebar {
+    visibility: hidden;
+    transition:
+      opacity var(--asi-dur-2) var(--asi-ease-in-out),
+      transform var(--asi-dur-2) var(--asi-ease-in-out),
+      visibility 0s linear var(--asi-dur-2);
+  }
+  html:not(#a) .VPSidebar.open {
+    visibility: visible;
+    transition:
+      opacity var(--asi-dur-3) var(--asi-ease-out),
+      transform var(--asi-dur-3) var(--asi-ease-out),
+      visibility 0s linear 0s;
+  }
+}
 html:not(#a) .VPBackdrop {
   transition: opacity var(--asi-dur-3) var(--asi-ease-out);
 }
@@ -179,8 +186,7 @@ html:not(#a) .VPBackdrop.fade-leave-active {
     transform: translateY(4px);
   }
 }
-html:not(#a) .VPContent .vp-doc,
-html:not(#a) .VPContent .VPHome {
+html:not(#a) .VPContent .vp-doc {
   animation: asi-page-in var(--asi-dur-3) var(--asi-ease-out) backwards;
 }
 
@@ -212,12 +218,13 @@ html:not(#a) .VPLocalSearchBox .search-actions button {
 }
 
 /*
- * 6. Outline marker, code copy button, code group tabs.
- * VitePress moves the outline marker by writing its top, and a layout property is not animated here, so the
- * marker jumps to the new heading and only fades.
+ * 6. Outline marker, code copy button and language label, code group tabs.
+ * VitePress moves the outline marker by writing its top. This is the one place where a layout property is
+ * animated: the marker is an absolutely placed 2 px bar, so nothing around it reflows.
  */
 html:not(#a) .VPDocAsideOutline .outline-marker {
   transition:
+    top var(--asi-dur-2) var(--asi-ease-out),
     opacity var(--asi-dur-2) var(--asi-ease-out),
     background-color var(--asi-dur-1) var(--asi-ease-out);
 }
@@ -231,6 +238,11 @@ html:not(#a) .vp-doc [class*='language-'] > button.copy {
     border-color var(--asi-dur-1) var(--asi-ease-out),
     opacity var(--asi-dur-1) var(--asi-ease-out),
     transform var(--asi-dur-2) var(--asi-ease-out);
+}
+html:not(#a) .vp-doc [class*='language-'] > span.lang {
+  transition:
+    color var(--asi-dur-1) var(--asi-ease-out),
+    opacity var(--asi-dur-1) var(--asi-ease-out);
 }
 html:not(#a) .vp-doc [class*='language-'] > button.copy:active {
   transform: scale(0.94);
@@ -266,6 +278,9 @@ html:not(#a) .vp-doc img.asi-img-wait {
 
 /* Reduced motion: every rule above becomes an instant change. */
 @media (prefers-reduced-motion: reduce) {
+  html:not(#a) {
+    scroll-behavior: auto !important;
+  }
   html:not(#a) *,
   html:not(#a) *::before,
   html:not(#a) *::after {

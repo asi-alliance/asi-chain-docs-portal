@@ -108,7 +108,7 @@ function fadeImages() {
 }
 
 function replayPageFade() {
-    const el = document.querySelector<HTMLElement>(".VPContent .vp-doc, .VPContent .VPHome");
+    const el = document.querySelector<HTMLElement>(".VPContent .vp-doc");
     el?.animate([{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], {
         duration: 240,
         easing: EASE_OUT,
@@ -140,6 +140,17 @@ export function setupMotion({ app, router }: EnhanceAppContext) {
         } finally {
             root.classList.remove("asi-theme-switch");
         }
+    });
+
+    // The sidebar groups rise with @starting-style, which would also play on the first render of the page.
+    // The class that enables it waits for two frames after the root component has mounted.
+    app.mixin({
+        mounted() {
+            if (this.$parent) return;
+            requestAnimationFrame(() =>
+                requestAnimationFrame(() => document.documentElement.classList.add("asi-ready")),
+            );
+        },
     });
 
     const observeDiagrams = watchDiagrams();

@@ -254,7 +254,8 @@ export default defineConfig({
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     // Roboto for text and controls, Roboto Mono for headings, the wordmark and code, as in the products.
     ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap', rel: 'stylesheet' }],
-    ['meta', { name: 'theme-color', content: '#0D1012' }],
+    ['meta', { name: 'theme-color', content: '#FFFFFF', media: '(prefers-color-scheme: light)' }],
+    ['meta', { name: 'theme-color', content: '#1B1F21', media: '(prefers-color-scheme: dark)' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'en' }],
     ['meta', { property: 'og:title', content: 'ASI:Chain Documentation' }],

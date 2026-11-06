@@ -20,6 +20,10 @@
   text-decoration-thickness: 1px;
 }
 
+.docs-review-note a:hover {
+  color: var(--vp-c-brand-1);
+}
+
 /* Steps: numbers come from a CSS counter on every ### inside the wrapper. The circle has the page colour so the
    line that links the steps does not run through it. */
 
@@ -113,14 +117,15 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
-  transition: color var(--asi-dur-1, 120ms) var(--asi-ease-out, ease-out);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 .asi-card:hover .asi-card-title {
   color: var(--vp-c-brand-2);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
+  text-decoration-color: currentColor;
 }
 
 .asi-card-body {
@@ -129,6 +134,19 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
+  color: var(--vp-c-text-2);
+}
+
+/* 404: a column in the middle, since there is no sidebar on this page. */
+
+.asi-not-found {
+  box-sizing: border-box;
+  max-width: 752px;
+  margin: 0 auto;
+  padding: calc(var(--vp-nav-height) + 24px) 24px 96px;
+}
+
+.asi-not-found-search {
   color: var(--vp-c-text-2);
 }
 
