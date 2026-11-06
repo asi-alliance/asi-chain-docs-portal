@@ -306,7 +306,6 @@ html:not(#a) .vp-doc img.asi-img-wait {
   html:not(#a) .VPNav,
   html:not(#a) .VPNavBarExtra .label,
   html:not(#a) .VPDocFooter .pager-link,
-  html:not(#a) .VPDocFooter .edit-link-button,
   html:not(#a) .vp-doc :not(pre) > code,
   html:not(#a) .vp-doc div[class*='language-'] {
     transition-duration: var(--asi-dur-1);

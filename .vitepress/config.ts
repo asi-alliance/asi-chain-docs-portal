@@ -198,11 +198,6 @@ export default defineConfig({
       provider: 'local'
     },
 
-    editLink: {
-      pattern: 'https://github.com/asi-alliance/asi-chain-docs-portal/edit/dev/:path',
-      text: 'Edit this page on GitHub'
-    },
-
     lastUpdated: {
       text: 'Updated at',
       formatOptions: {

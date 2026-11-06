@@ -219,6 +219,7 @@
 
 .asi-directory .asi-directory-group,
 .asi-directory .asi-directory-app {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -304,8 +305,10 @@
   text-decoration: none;
 }
 
-.asi-directory .asi-directory-top {
-  position: relative;
+/* .vp-doc h2 on the 404 page is positioned for its anchor, which would hold the stretched link to the
+   title line, so the title stays static and the link stretches to the panel. */
+.asi-directory .asi-directory-title {
+  position: static;
 }
 
 .asi-directory .asi-directory-title a::after {
@@ -324,14 +327,20 @@
   border-radius: 4px;
 }
 
-/* A panel answers the pointer like an app panel: the border takes the brand color. The title does the
-   same when the pointer is over the top of the panel, which opens the landing page. */
+/* The links of the list sit above the stretched title link, so each opens its own page. */
+.asi-directory .asi-directory-list a {
+  position: relative;
+  z-index: 1;
+}
+
+/* A panel answers the pointer like an app panel: the border takes the brand color, and so does the title
+   while a click would open the landing page, that is everywhere except over a link of the list. */
 .asi-directory .asi-directory-group:hover,
 .asi-directory .asi-directory-app:hover {
   border-color: var(--vp-c-brand-1);
 }
 
-.asi-directory .asi-directory-top:hover .asi-directory-title,
+.asi-directory .asi-directory-group:hover:not(:has(.asi-directory-list a:hover)) .asi-directory-title,
 .asi-directory .asi-directory-list a:hover {
   color: var(--vp-c-brand-1);
 }

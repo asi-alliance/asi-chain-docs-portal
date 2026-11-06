@@ -432,8 +432,7 @@
   color: var(--vp-c-brand-2);
 }
 
-.VPLastUpdated,
-.VPDocFooter .edit-link-button {
+.VPLastUpdated {
   color: var(--vp-c-text-2);
 }
 
