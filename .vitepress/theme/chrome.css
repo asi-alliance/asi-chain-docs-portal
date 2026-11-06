@@ -136,18 +136,12 @@
 
 /* LinkMenu draws the DevNet Apps and GitHub menus. A row is the icon in a tinted square, as on the home
    page, the name and, in mono, the host or repository it opens. The whole row is the link and takes a soft
-   fill under the pointer. The fill of the light theme matches the menu in the dark one, so the dark theme
-   takes the divider color. */
+   fill under the pointer. */
 
 .asi-link-menu {
-  --asi-link-menu-hover: var(--vp-c-default-soft);
   display: grid;
   gap: 12px;
   min-width: 248px;
-}
-
-.dark .asi-link-menu {
-  --asi-link-menu-hover: var(--vp-c-divider);
 }
 
 @media (min-width: 768px) {
@@ -183,7 +177,7 @@
 }
 
 .asi-link-menu .asi-link-menu-item:hover {
-  background-color: var(--asi-link-menu-hover);
+  background-color: var(--asi-hover-fill);
 }
 
 .asi-link-menu .asi-link-menu-item:hover .asi-link-menu-name {
@@ -407,6 +401,72 @@
   outline: 2px solid var(--ds-ring);
 }
 
+/* A group title opens the landing page of its section, so it reads as a navigation entry. It shows the icon
+   of the section from the home page in a tinted square, it turns green under the pointer like any link,
+   and while its landing page is open the title stays green and the square fills. config.ts sets
+   --asi-section-icon, --asi-section-icon-display and --asi-section-icon-pad on each group link from
+   components/icons.ts, so a group without an icon keeps a plain title. */
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link {
+  position: relative;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link > .text {
+  padding-left: var(--asi-section-icon-pad, 0px);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link::before,
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link::after {
+  content: '';
+  display: var(--asi-section-icon-display, none);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link::before {
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background-color: var(--vp-c-brand-soft);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link::after {
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--vp-c-brand-1);
+  -webkit-mask: var(--asi-section-icon) center / contain no-repeat;
+  mask: var(--asi-section-icon) center / contain no-repeat;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-link > .item > .link:hover > .text,
+.VPSidebar .nav .VPSidebarItem.level-0.is-active > .item > .link > .text {
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-active > .item > .link::before {
+  background-color: var(--vp-c-brand-1);
+}
+
+.VPSidebar .nav .VPSidebarItem.level-0.is-active > .item > .link::after {
+  background-color: var(--vp-c-bg);
+}
+
+/* The chevron only folds its group. Its own fill under the pointer shows that it is a second button next
+   to the title. The fill is the content box, 24 px inside the 32 px button. */
+.VPSidebar .nav .VPSidebarItem .caret {
+  padding: 4px;
+  border-radius: 8px;
+  background-clip: content-box;
+}
+
+.VPSidebar .nav .VPSidebarItem .caret:hover {
+  background-color: var(--asi-hover-fill);
+}
+
 @media (max-width: 959px) {
   .VPSidebar .nav .VPSidebarItem .item {
     min-height: 44px;
@@ -419,6 +479,7 @@
   .VPSidebar .nav .VPSidebarItem .caret {
     width: 44px;
     height: 44px;
+    padding: 8px;
   }
 
   .VPSidebar .nav .VPSidebarItem > .item > .indicator {

@@ -122,8 +122,12 @@ html:not(#a) .asi-card-title {
 
 /* 3. Sidebar */
 html:not(#a) .VPSidebarItem .text,
-html:not(#a) .VPSidebarItem .caret {
-  transition: color var(--asi-dur-1) var(--asi-ease-out);
+html:not(#a) .VPSidebarItem .caret,
+html:not(#a) .VPSidebarItem.level-0 > .item > .link::before,
+html:not(#a) .VPSidebarItem.level-0 > .item > .link::after {
+  transition:
+    color var(--asi-dur-1) var(--asi-ease-out),
+    background-color var(--asi-dur-1) var(--asi-ease-out);
 }
 html:not(#a) .VPSidebarItem .indicator {
   transition: background-color var(--asi-dur-1) var(--asi-ease-out);

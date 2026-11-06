@@ -46,22 +46,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useData } from "vitepress";
-import { icons } from "./icons";
+import { icons, sectionIcons } from "./icons";
 
 type Entry = { text?: string; link?: string; icon?: string; items?: Entry[]; props?: { groups?: { items: Entry[] }[] } };
 type Group = { text: string; link?: string; items: { text: string; link: string }[] };
 
 const { theme } = useData();
-
-// Icons come from components/icons.ts by name.
-const sectionIcons: Record<string, string> = {
-    "/quick-start/": "rocket",
-    "/use/": "wallet",
-    "/nodes/": "server",
-    "/build/": "code-xml",
-    "/reference/": "book-open",
-    "/help/": "life-buoy",
-};
 
 const about: Record<string, string> = {
     "/quick-start/": "What ASI:Chain is and how to get your first test tokens",

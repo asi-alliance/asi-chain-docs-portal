@@ -2,6 +2,17 @@ import { defineConfig } from 'vitepress'
 import CustomLanguages from "../config/languages";
 import { writeRedirectStubs } from "./redirect-stubs";
 import { deepSpaceLight, deepSpaceDark } from "./theme/shiki";
+import { icons, sectionIcons } from "../components/icons";
+
+// Each sidebar group title shows the icon of its section, as the home page does. chrome.css draws it as a
+// CSS mask, so it takes the colors of the theme, and this sets the mask and the room for it on each group
+// link. The paths come from components/icons.ts.
+const sectionIconCss = Object.entries(sectionIcons)
+  .map(([link, name]) => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[name]}</svg>`;
+    return `.VPSidebarItem.level-0>.item>.link[href="${link}"]{--asi-section-icon:url("data:image/svg+xml,${encodeURIComponent(svg)}");--asi-section-icon-display:block;--asi-section-icon-pad:34px}`;
+  })
+  .join('');
 
 const sidebar = [
   {
@@ -256,6 +267,7 @@ export default defineConfig({
     }
   },
   head: [
+    ['style', {}, sectionIconCss],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' }],

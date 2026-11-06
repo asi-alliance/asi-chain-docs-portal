@@ -14,3 +14,14 @@ export const icons: Record<string, string> = {
     database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>',
     package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>',
 };
+
+// The icon of each section, by the link of its landing page. The home page panels and the sidebar group
+// titles show them.
+export const sectionIcons: Record<string, string> = {
+    "/quick-start/": "rocket",
+    "/use/": "wallet",
+    "/nodes/": "server",
+    "/build/": "code-xml",
+    "/reference/": "book-open",
+    "/help/": "life-buoy",
+};

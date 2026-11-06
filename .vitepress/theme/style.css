@@ -31,6 +31,8 @@
   --vp-c-default-2: #e0e4e6;
   --vp-c-default-3: #c9cfd2;
   --vp-c-default-soft: #eef1f2;
+  /* Fill of a row or button under the pointer in menus and the sidebar. */
+  --asi-hover-fill: #eef1f2;
 
   --vp-c-brand-1: #37702d;
   --vp-c-brand-2: #2b5a23;
@@ -106,6 +108,8 @@
   --vp-c-default-2: #272b2e;
   --vp-c-default-3: #353a3d;
   --vp-c-default-soft: #1b1f21;
+  /* The soft gray of the dark theme is the color of the menus themselves, so the fill is one step lighter. */
+  --asi-hover-fill: #272b2e;
 
   --vp-c-brand-1: #93e27c;
   --vp-c-brand-2: #b3eda1;
