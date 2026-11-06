@@ -131,7 +131,9 @@ html:not(#a) .VPSidebarItem .caret-icon {
  */
 html.asi-ready:not(#a) .VPSidebarItem:not(.collapsed) > .items {
   opacity: 1;
-  transform: translateY(0);
+  /* none and not translateY(0): the class arrives after hydration, and a changed value would start a
+     transition on every open group at that moment. */
+  transform: none;
   transition:
     opacity var(--asi-dur-2) var(--asi-ease-out),
     transform var(--asi-dur-2) var(--asi-ease-out);
