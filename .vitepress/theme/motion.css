@@ -33,7 +33,6 @@ html:not(#a) .VPFooter a {
 html:not(#a) .VPFlyout .button,
 html:not(#a) .VPFlyout .text,
 html:not(#a) .VPFlyout .icon,
-html:not(#a) .VPNavBarTitle .title,
 html:not(#a) .DocSearch-Button,
 html:not(#a) .DocSearch-Button-Placeholder,
 html:not(#a) .VPMenuLink a,
@@ -43,6 +42,12 @@ html:not(#a) .VPMenuLink .link {
     background-color var(--asi-dur-1) var(--asi-ease-out),
     border-color var(--asi-dur-1) var(--asi-ease-out),
     fill var(--asi-dur-1) var(--asi-ease-out);
+}
+
+/* The logo link only changes colour. Its border is set to transparent when the page hydrates, and that
+   must not fade. */
+html:not(#a) .VPNavBarTitle .title {
+  transition: color var(--asi-dur-1) var(--asi-ease-out);
 }
 
 /* The bar is one solid surface that does not change on scroll, so its layers never fade. Without this the
