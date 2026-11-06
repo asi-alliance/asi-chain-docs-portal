@@ -259,7 +259,7 @@
   border-radius: 8px;
   background-color: var(--c-soft);
   color: var(--vp-c-text-1);
-  font-size: 15px;
+  font-size: 14px;
   line-height: 24px;
 }
 
@@ -290,10 +290,22 @@
 
 .vp-doc .custom-block .custom-block-title {
   margin: 0 0 8px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 24px;
   font-weight: 600;
   color: var(--vp-c-text-1);
+}
+
+.vp-doc .custom-block.tip .custom-block-title {
+  color: var(--vp-c-tip-1);
+}
+
+.vp-doc .custom-block.warning .custom-block-title {
+  color: var(--vp-c-warning-1);
+}
+
+.vp-doc .custom-block.danger .custom-block-title {
+  color: var(--vp-c-danger-1);
 }
 
 .vp-doc .custom-block a {
@@ -324,7 +336,7 @@
   gap: 8px;
   margin: 0;
   padding: 16px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 24px;
   font-weight: 600;
   list-style: none;

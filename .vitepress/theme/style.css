@@ -55,15 +55,8 @@
   --ds-control-border: #868f94;
   --ds-ring: #5a9c4f;
   --ds-accent: #5a9c4f;
-  --ds-on-brand: #0d1012;
-  --ds-brand-hover: #4a8240;
 
-  --ds-info-fg: #5a5a5a;
   --ds-info-soft: #eef1f2;
-  --ds-info-line: #e0e4e6;
-  --ds-tip-line: rgba(0, 163, 204, 0.3);
-  --ds-warning-line: rgba(255, 184, 77, 0.55);
-  --ds-danger-line: rgba(255, 77, 79, 0.3);
   --ds-callout-code: rgba(13, 16, 18, 0.07);
 
   --ds-code-bg: #eef1f2;
@@ -71,22 +64,13 @@
   --ds-code-mute: #5a5a5a;
   --ds-code-hover: #e0e4e6;
   --ds-inline-bg: #eef1f2;
-  --ds-inline-border: #e0e4e6;
   --ds-inline-fg: #1b2326;
-
-  --ds-step-bg: rgba(90, 156, 79, 0.14);
-  --ds-step-fg: #2b5a23;
-  --ds-step-line: rgba(90, 156, 79, 0.4);
 
   --ds-ok-fg: #37702d;
   --ds-ok-soft: rgba(90, 156, 79, 0.12);
 
-  --ds-shadow-md: 0 4px 16px rgba(13, 16, 18, 0.08);
-  --ds-shadow-lg: 0 12px 32px rgba(13, 16, 18, 0.1);
-
   --ds-r-sm: 4px;
   --ds-r-md: 8px;
-  --ds-r-lg: 12px;
 
   --vp-code-font-size: 14px;
   --vp-code-line-height: 1.7;
@@ -103,30 +87,6 @@
   --vp-code-tab-hover-text-color: var(--vp-c-text-1);
   --vp-code-tab-active-text-color: var(--vp-c-text-1);
   --vp-code-tab-active-bar-color: var(--ds-accent);
-
-  --vp-button-brand-border: transparent;
-  --vp-button-brand-text: var(--ds-on-brand);
-  --vp-button-brand-bg: var(--vp-c-brand-3);
-  --vp-button-brand-hover-border: transparent;
-  --vp-button-brand-hover-text: var(--ds-on-brand);
-  --vp-button-brand-hover-bg: var(--ds-brand-hover);
-  --vp-button-brand-active-border: transparent;
-  --vp-button-brand-active-text: var(--ds-on-brand);
-  --vp-button-brand-active-bg: var(--ds-brand-hover);
-  --vp-button-alt-border: var(--vp-c-border);
-  --vp-button-alt-text: var(--vp-c-text-1);
-  --vp-button-alt-bg: var(--vp-c-bg-elv);
-  --vp-button-alt-hover-border: var(--vp-c-text-3);
-  --vp-button-alt-hover-text: var(--vp-c-text-1);
-  --vp-button-alt-hover-bg: var(--vp-c-bg-elv);
-  --vp-button-alt-active-border: var(--vp-c-text-3);
-  --vp-button-alt-active-text: var(--vp-c-text-1);
-  --vp-button-alt-active-bg: var(--vp-c-bg-alt);
-
-  --vp-home-hero-name-color: var(--vp-c-text-1);
-  --vp-home-hero-name-background: none;
-  --vp-home-hero-image-background-image: none;
-  --vp-home-hero-image-filter: none;
 }
 
 .dark {
@@ -170,14 +130,8 @@
   --ds-control-border: #6a767c;
   --ds-ring: #33e4ff;
   --ds-accent: #93e27c;
-  --ds-brand-hover: #b3eda1;
 
-  --ds-info-fg: #b8b8b8;
   --ds-info-soft: #14181a;
-  --ds-info-line: #272b2e;
-  --ds-tip-line: rgba(51, 228, 255, 0.25);
-  --ds-warning-line: rgba(255, 184, 77, 0.28);
-  --ds-danger-line: rgba(255, 77, 79, 0.3);
   --ds-callout-code: rgba(255, 255, 255, 0.08);
 
   --ds-code-bg: #14181a;
@@ -185,18 +139,10 @@
   --ds-code-mute: #868686;
   --ds-code-hover: #272b2e;
   --ds-inline-bg: #1b1f21;
-  --ds-inline-border: #272b2e;
   --ds-inline-fg: #e6ecee;
-
-  --ds-step-bg: rgba(147, 226, 124, 0.12);
-  --ds-step-fg: #93e27c;
-  --ds-step-line: rgba(147, 226, 124, 0.35);
 
   --ds-ok-fg: #93e27c;
   --ds-ok-soft: rgba(147, 226, 124, 0.12);
-
-  --ds-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --ds-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
 
   --vp-code-block-color: #e6ecee;
 }
@@ -221,7 +167,7 @@ body {
   background: var(--vp-c-brand-soft);
 }
 
-/* Typography. Every size, line height and margin is a multiple of 4 px. */
+/* Typography. Spacing and line heights are multiples of 4 px. Font sizes follow the type scale 14, 16, 18, 24, 32. */
 
 .vp-doc {
   font-size: 16px;
