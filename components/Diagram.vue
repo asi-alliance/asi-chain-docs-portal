@@ -22,8 +22,10 @@ const narrow = computed(() => pick(`${props.name}.narrow.svg`));
 
 <template>
     <figure class="diagram" :class="{ 'diagram-solo': !narrow }">
-        <div class="diagram-wide" v-html="wide" />
-        <div v-if="narrow" class="diagram-narrow" v-html="narrow" />
+        <div class="diagram-body">
+            <div class="diagram-wide" v-html="wide" />
+            <div v-if="narrow" class="diagram-narrow" v-html="narrow" />
+        </div>
         <figcaption>{{ caption }}</figcaption>
     </figure>
 </template>

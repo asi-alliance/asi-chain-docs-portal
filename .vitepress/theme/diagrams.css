@@ -35,15 +35,17 @@ html.dark { --d-group-bg: var(--vp-c-bg-soft); }
 /* Figure and caption. The counter gives every diagram on a page its number. */
 .vp-doc { counter-reset: diagram; }
 figure.diagram {
-  container-type: inline-size;
   margin: 24px 0;
   padding: 16px;
   border: 1px solid var(--vp-c-divider);
   border-radius: 12px;
   background: var(--d-surface);
 }
-figure.diagram > .diagram-wide,
-figure.diagram > .diagram-narrow { overflow-x: auto; }
+/* The query container is the inner .diagram-body and not the figure. container-type also turns on style
+   containment, which scopes counters to the element, so on the figure every caption would read Figure 1. */
+figure.diagram .diagram-body { container-type: inline-size; }
+figure.diagram .diagram-wide,
+figure.diagram .diagram-narrow { overflow-x: auto; }
 figure.diagram .diagram-narrow { display: none; }
 figure.diagram figcaption {
   margin-top: 12px;
