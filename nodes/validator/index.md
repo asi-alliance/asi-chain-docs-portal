@@ -1,10 +1,6 @@
 # Run a Validator
 
-This page prepares a Rust node that is meant to become a validator. Preparation comes first. Key generation, funding and the bond transaction follow on [Enroll a Validator](/nodes/validator-enrollment/). The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node.
-
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust image described here does not connect to it. A Rust node started with the DevNet bootstrap and `--network-id devnet1` listed eight nodes in `/api/status` but opened no connection to them. Use this guide for a Rust shard that you or your operator run.
-:::
+This page prepares a Rust node that is meant to become a validator. Preparation comes first. Key generation, funding and the bond transaction follow on [Enroll a Validator](/nodes/validator-enrollment/). The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node. The public DevNet runs a Scala node, which this Rust image does not connect to, so follow this guide on a Rust shard that you or your operator run.
 
 ## Prepare the Validator
 

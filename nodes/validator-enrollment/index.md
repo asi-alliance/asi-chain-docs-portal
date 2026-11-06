@@ -1,10 +1,6 @@
 # Enroll a Validator
 
-The ASI Rust client provides the key-generation and bonding operations needed to enroll a validator. A separate configurator or connector image is optional packaging around these operations. Older helper containers target a previous workflow, so do not assume they work with current Rust nodes.
-
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust client commands on this page do not work against it. In a test against Validator 1, `wallet-balance` returned HTTP 404, and `validator-status`, `bonds` and `active-validators` failed with `unexpected exploratory deploy response from the node: missing field cost`. The same commands passed against a Rust node. Run this procedure only against a Rust shard.
-:::
+The ASI Rust client provides the key-generation and bonding operations needed to enroll a validator. A separate configurator or connector image is optional packaging around these operations. Older helper containers target a previous workflow, so do not assume they work with current Rust nodes. The public DevNet runs a Scala node, and these Rust client commands do not work against it, so run the procedure on a Rust shard.
 
 ## Before You Start
 

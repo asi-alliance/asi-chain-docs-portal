@@ -26,10 +26,6 @@ Follow your transfers and balances in the [explorer](/explorer/usage/).
 
 You want to take part in the network as an observer or a validator.
 
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node, and the Rust node from these guides does not connect to it. Use the guides with a Rust shard that you or your operator run.
-:::
-
 - Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.
 - Start an [observer](/nodes/observer/) to follow the chain, or prepare a [validator](/nodes/validator/).
 - Follow [validator enrollment](/nodes/validator-enrollment/) to bond a validator.

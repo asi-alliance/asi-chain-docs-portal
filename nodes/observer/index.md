@@ -1,10 +1,6 @@
 # Run an Observer
 
-An observer is a Rust node that follows the chain and answers read requests. It runs the same image as a validator and is started without a validator key. The [image catalog](/reference/container-images/) has no separate observer image.
-
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node (Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`), and the Rust image described here does not connect to it. A Rust observer started with the DevNet bootstrap and `--network-id devnet1` listed eight nodes in `/api/status` but opened no connection to them, and `/api/ready` kept returning 503 for more than five minutes. Use this guide for a Rust shard that you or your operator run. DevNet reads go through the addresses on [Network Endpoints](/reference/endpoints/).
-:::
+An observer is a Rust node that follows the chain and answers read requests. It runs the same image as a validator and is started without a validator key. The [image catalog](/reference/container-images/) has no separate observer image. The public DevNet runs a Scala node, which this Rust image does not connect to, so follow this guide on a Rust shard that you or your operator run.
 
 ## What an Observer Does
 

@@ -2,10 +2,6 @@
 
 A shard combines peer connectivity, consensus, execution and persistent state. The exact genesis, native token, active bonded validator set and admission policy belong to the selected network.
 
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. Use the Rust node image described in this section for your own shard or for a network whose operator runs Rust. A Rust node started from it against the DevNet bootstrap did not get past `peers: 0`.
-:::
-
 | Role | Meaning |
 |---|---|
 | Bootstrap | Peer entry point; ceremony behavior depends on its configuration |

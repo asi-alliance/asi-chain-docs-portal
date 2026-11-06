@@ -1,10 +1,6 @@
 # Node Image
 
-The image contains the maintained Rust implementation of CBC Casper, Rholang and RSpace++. Its source is [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5).
-
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node: `GET /api/status` on Validator 1 reports `RChain Node 1.0.0-SNAPSHOT`. A node started from this Rust image with the DevNet bootstrap and `--network-id devnet1` found DevNet peers through discovery but stayed at `peers: 0` and never became ready. Use this image to run your own shard ([private shard](/nodes/private-shard/)) or when the operator of a network tells you it runs the Rust node. DevNet addresses are listed in [network endpoints](/reference/endpoints/).
-:::
+The image contains the maintained Rust implementation of CBC Casper, Rholang and RSpace++. Its source is [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5). The public DevNet runs a Scala node, which this image does not connect to, so run it in your own [private shard](/nodes/private-shard/) or in a network whose operator runs the Rust node.
 
 ## Select the Image
 
