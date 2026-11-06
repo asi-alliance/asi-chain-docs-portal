@@ -166,7 +166,7 @@
 }
 
 .VPSidebar .nav .VPSidebarItem.level-1 > .item .link {
-  padding-left: 12px;
+  padding-left: 16px;
 }
 
 .VPSidebar .nav .VPSidebarItem .item .text {
@@ -289,6 +289,7 @@
 
 .VPDocAsideOutline .outline-marker {
   height: 20px;
+  margin-top: -1px;
   background-color: var(--ds-accent);
 }
 
