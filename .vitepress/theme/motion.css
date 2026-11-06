@@ -2,7 +2,7 @@
  * Motion. Every transition and animation of the theme lives here, and this file is imported last so it wins
  * over the other theme files. Selectors carry :not(#a), one id of weight, to win over the scoped styles of the
  * VitePress components, which are stronger than a plain class.
- * Only transform, opacity and colours move, plus stroke-dashoffset for diagram edges. Layout properties are
+ * Only transform, opacity and colors move, plus stroke-dashoffset for diagram edges. Layout properties are
  * never animated, because that reflows the page on every frame. The one exception is the top of the outline
  * marker, see section 6.
  * A documentation site is read daily, so hover and press answer in 120-180 ms, panels take 240 ms at most,
@@ -44,7 +44,7 @@ html:not(#a) .VPMenuLink .link {
     fill var(--asi-dur-1) var(--asi-ease-out);
 }
 
-/* The logo link only changes colour. Its border is set to transparent when the page hydrates, and that
+/* The logo link only changes color. Its border is set to transparent when the page hydrates, and that
    must not fade. */
 html:not(#a) .VPNavBarTitle .title {
   transition: color var(--asi-dur-1) var(--asi-ease-out);
@@ -79,7 +79,8 @@ html:not(#a) .VPFlyout .button[aria-expanded='true'] + .menu {
     transform var(--asi-dur-2) var(--asi-ease-out);
 }
 
-/* Mobile menu: the hamburger lines and the screen that drops down. */
+/* On a phone the hamburger lines turn into a cross and the menu screen drops down, with the timing of the
+   bar menus. */
 html:not(#a) .VPNavBarHamburger .top,
 html:not(#a) .VPNavBarHamburger .middle,
 html:not(#a) .VPNavBarHamburger .bottom {
@@ -109,7 +110,8 @@ html:not(#a) .VPNavScreenMenuGroup .button-icon {
   transition: transform var(--asi-dur-2) var(--asi-ease-out);
 }
 
-/* Card titles: the underline is always there and only its colour fades in. */
+/* A card title is underlined at all times, so it reads as a link without a hover, and only the color of
+   the line fades in on hover. */
 html:not(#a) .asi-card-title {
   transition:
     color var(--asi-dur-1) var(--asi-ease-out),
@@ -262,7 +264,7 @@ html:not(#a) .vp-code-group .tabs label::after {
   transition: background-color var(--asi-dur-1) var(--asi-ease-out);
 }
 
-/* 7. Theme switch. The snapshot cross-fade is the whole effect, so colour transitions are off while it runs. */
+/* 7. Theme switch. The snapshot cross-fade is the whole effect, so color transitions are off while it runs. */
 html.asi-theme-switch *:not(#a),
 html.asi-theme-switch *:not(#a)::before,
 html.asi-theme-switch *:not(#a)::after {
@@ -283,7 +285,43 @@ html:not(#a) .vp-doc img.asi-img-wait {
   transition: none;
 }
 
-/* Reduced motion: every rule above becomes an instant change. */
+/*
+ * 10. VitePress parts that keep their own transitions of 250 to 500 ms. They answer a hover or a theme
+ * change like the rest of the interface, so they take the same timing. VPSwitch.vue sets its transitions
+ * with !important, so the switch rules need it too. The media query keeps them from overriding the
+ * reduced motion block below, and :not(.asi-theme-switch) keeps them from overriding section 7 while the
+ * theme changes.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(#a) .VPLocalNav .menu,
+  html:not(#a) .VPLocalNavOutlineDropdown > button,
+  html:not(#a) .DocSearch-Button .DocSearch-Search-Icon,
+  html:not(#a) .DocSearch-Button .DocSearch-Button-Key,
+  html:not(#a) .VPNavScreenMenuGroup,
+  html:not(#a) .VPMenu,
+  html:not(#a) .VPNav,
+  html:not(#a) .VPNavBarExtra .label,
+  html:not(#a) .VPDocFooter .pager-link,
+  html:not(#a) .VPDocFooter .edit-link-button,
+  html:not(#a) .vp-doc :not(pre) > code,
+  html:not(#a) .vp-doc div[class*='language-'] {
+    transition-duration: var(--asi-dur-1);
+  }
+  html:not(#a) .VPLocalNavOutlineDropdown > button .icon {
+    transition-duration: var(--asi-dur-2);
+  }
+  html:not(#a):not(.asi-theme-switch) .VPSwitchAppearance {
+    transition-duration: var(--asi-dur-1) !important;
+  }
+  html:not(#a):not(.asi-theme-switch) .VPSwitchAppearance .check,
+  html:not(#a):not(.asi-theme-switch) .VPSwitchAppearance .icon [class^='vpi-'] {
+    transition-duration: var(--asi-dur-2) !important;
+  }
+}
+
+/* With reduced motion set in the operating system, every rule above becomes an instant change. The
+   durations are 0.01 ms and not 0, so transitionend and animationend still fire for scripts that wait
+   for them. */
 @media (prefers-reduced-motion: reduce) {
   html:not(#a) {
     scroll-behavior: auto !important;

@@ -13,7 +13,9 @@
   --vp-local-nav-bg-color: var(--vp-c-bg-elv);
 }
 
-/* Top bar: one surface over the full width, with a 1 px line under it. */
+/* The top bar is one solid surface over the full width with a 1 px line under it. Every layer of the bar
+   gets the same color and no blur, so the page never shows through and the parts of the bar never differ
+   in shade. */
 
 .VPNav .VPNavBar,
 .VPNav .VPNavBar .wrapper,
@@ -40,17 +42,19 @@
 /* VitePress 1.6.4 adds has-sidebar to the bar in watchPostEffect, so the server HTML lays the bar
    out without the sidebar and the search and menus jump once the page hydrates (CLS 0.011 to 0.014).
    VPContent has the class in the server HTML, so until then the bar takes its layout from there.
-   The values copy the has-sidebar rules of VPNavBar.vue; check them after a VitePress update. */
+   The values copy the has-sidebar rules of VPNavBar.vue; check them after a VitePress update. Those rules
+   are scoped to the bar's own elements, so these use child combinators. The logo link inside VPNavBarTitle
+   is a .title too, and a descendant selector moved it out of place from 1440 px until hydration. */
 @media (min-width: 960px) {
-  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .wrapper {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper {
     padding: 0;
   }
 
-  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .container {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container {
     max-width: 100%;
   }
 
-  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .title {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container > .title {
     position: absolute;
     top: 0;
     left: 0;
@@ -61,7 +65,7 @@
     background-color: transparent;
   }
 
-  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .content {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container > .content {
     position: relative;
     z-index: 1;
     padding-right: 32px;
@@ -70,12 +74,12 @@
 }
 
 @media (min-width: 1440px) {
-  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .title {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container > .title {
     padding-left: max(32px, calc((100% - (var(--vp-layout-max-width) - 64px)) / 2));
     width: calc((100% - (var(--vp-layout-max-width) - 64px)) / 2 + var(--vp-sidebar-width) - 32px);
   }
 
-  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .content {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) > .wrapper > .container > .content {
     padding-right: calc((100vw - var(--vp-layout-max-width)) / 2 + 32px);
     padding-left: calc((100vw - var(--vp-layout-max-width)) / 2 + var(--vp-sidebar-width));
   }
@@ -107,7 +111,8 @@
   color: var(--vp-c-text-1);
 }
 
-/* Dropdown panel: a surface with a hairline, the only shadow on the bar. */
+/* A dropdown panel floats over the page, so it is the one part of the bar with a shadow. The 1 px border
+   keeps its edge visible in the dark theme, where a shadow barely shows. */
 
 .VPNavBar .VPFlyout .VPMenu {
   border: 1px solid var(--vp-c-border);
@@ -129,7 +134,8 @@
   background-color: transparent;
 }
 
-/* Search: a 40 px box with a border that reaches 3:1 against the bar. */
+/* The search box is 40 px high, and its border reaches 3:1 against the bar, the contrast WCAG requires for
+   the edge of a control, so the box stays visible without its fill. */
 
 @media (min-width: 768px) {
   .VPNavBarSearch .DocSearch-Button {
@@ -177,9 +183,9 @@
   }
 }
 
-/* Search results: a match is underlined in the link colour instead of being filled with a block of brand
-   colour, so a row with three matches stays readable. The selected result turns its whole title the link
-   colour, and there the underline is what still marks the match. The search box loads as its own chunk
+/* Search results: a match is underlined in the link color instead of being filled with a block of brand
+   color, so a row with three matches stays readable. The selected result turns its whole title the link
+   color, and there the underline is what still marks the match. The search box loads as its own chunk
    after this file, so the mark rule needs one more class than the VitePress rule it overrides. */
 :root {
   --vp-local-search-highlight-bg: transparent;
@@ -313,7 +319,7 @@
   }
 }
 
-/* Outline (right column): rows of 32 px like the sidebar. */
+/* The outline in the right column uses 32 px rows like the sidebar, so both lists have the same spacing. */
 
 .VPDocAsideOutline .content {
   font-size: 14px;
@@ -363,6 +369,28 @@
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
+/* From 960 to 1279 px the outline sits in a bar under the top bar. VitePress reads the headings in the
+   browser, so the server HTML marks the bar empty and hides it. Without this rule the bar appears after
+   hydration and the page drops by 48 px on every load (a layout shift of 0.21 to 0.25). A page with
+   headings shows the bar from the start, and the Return to top button that VitePress renders while the bar is empty stays
+   invisible until the outline button replaces it. The home page turns its outline off, so the rule
+   skips it by the class that index.md sets. */
+@media (min-width: 960px) and (max-width: 1279px) {
+  .Layout:not(.asi-home):has(.vp-doc :is(h2, h3)[id]) .VPLocalNav.has-sidebar.empty {
+    display: block;
+  }
+
+  .Layout:not(.asi-home):has(.vp-doc :is(h2, h3)[id]) .VPLocalNav.empty .VPLocalNavOutlineDropdown > button {
+    visibility: hidden;
+  }
+}
+
+/* The feedback button is fixed 30 px from the bottom-right corner and 55 px tall, so in windows up
+   to about 1500 px wide it covers the end of a long outline. The extra room lets the last entries scroll above it. */
+.VPDoc .aside .aside-content {
+  padding-bottom: 96px;
+}
+
 .VPLocalNav .menu {
   font-size: 14px;
   line-height: 24px;
@@ -375,7 +403,8 @@
   }
 }
 
-/* Prev/next and edit link: text only. */
+/* The previous and next links and the edit link are plain text without boxes, like the rest of the
+   navigation. */
 
 .VPDocFooter .pager-link {
   padding: 0;
@@ -421,7 +450,8 @@
   color: var(--vp-c-text-2);
 }
 
-/* Phone: a 56 px bar, a 40 px menu row and 12 px above the page, so the content starts near the top. */
+/* On a phone the top bar is 56 px, the menu row 40 px and the gap above the page 12 px, so the content
+   starts near the top of the screen. */
 
 @media (max-width: 767px) {
   :root {

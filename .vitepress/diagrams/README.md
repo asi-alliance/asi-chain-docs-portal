@@ -9,7 +9,7 @@ Each diagram is a spec in `src/<name>.mjs`. `npm run diagrams` renders every spe
 3. Look at the page with `npm run docs:dev`, in both themes and at 390 px.
 4. Commit the spec and both SVG files. `npm run diagrams:check` exits 1 when `out/` differs from what the specs render, so run it before the commit.
 
-Colours are never set in a spec. `.vitepress/theme/diagrams.css` maps the node kinds to `--vp-c-*` tokens.
+Colors are never set in a spec. `.vitepress/theme/diagrams.css` maps the node kinds to `--vp-c-*` tokens.
 
 ## Flow spec
 
@@ -28,12 +28,12 @@ export default {
 };
 ```
 
-- Node kinds are `chain` (brand colour), `store` (tip colour, drawn as a cylinder), `service` (default), `external` (dashed), `decision` (hexagon) and `terminal` (pill).
+- Node kinds are `chain` (brand color), `store` (tip color, drawn as a cylinder), `service` (default), `external` (dashed), `decision` (hexagon) and `terminal` (pill).
 - `col` and `row` put a node on a grid. Column widths and row heights follow the widest and tallest node, and `colGaps` and `rowGaps` (or `colGap`, `rowGap`) set the space after each column and row.
 - A coordinate between two integers lies inside the gap after the lower one, so `0.5` is the middle of the gap. A negative coordinate lies outside the grid on the left or top.
 - An edge runs from node centre to node centre through the `via` points, and the generator adds an elbow wherever two points differ in both x and y. `route: 'vh'` makes the first elbow go vertical first. The ends are cut at the node border.
 - `fromOff` and `toOff` move the first and the last segment sideways by pixels, so edges that share a node side do not overlap. A straight edge needs both equal, or only one of them.
-- `style: 'strong'` draws the edge in the chain colour and `'dashed'` dashes it. An edge ends in one arrowhead by default, `dir: 'both'` puts arrowheads on both ends and `dir: 'none'` draws a plain line for a relation that has no direction.
+- `style: 'strong'` draws the edge in the chain color and `'dashed'` dashes it. An edge ends in one arrowhead by default, `dir: 'both'` puts arrowheads on both ends and `dir: 'none'` draws a plain line for a relation that has no direction.
 - `sub` is the grey text under the node label. It is a string, where `\n` starts a new line, or an array with one line per item, and the node grows to fit it. This is how a table node lists its columns.
 - `legend: true` adds one sample per node kind in use, drawn in the shape of that kind (cylinder, hexagon, pill, box, dashed box). `legendLabels` renames a sample, with the defaults `chain: 'Chain node'`, `store: 'Data store'`, `service: 'Service'`, `external: 'External'`, `decision: 'Decision'` and `terminal: 'Start or end'`.
 - The label sits on the longest segment of the edge. `labelPos` (0 to 1) moves it along that segment, `labelAt: [col, row]` puts it on a grid point, and `labelWrap` wraps it at that many characters.

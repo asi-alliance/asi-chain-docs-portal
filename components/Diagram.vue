@@ -2,7 +2,7 @@
 import { computed } from "vue";
 
 // Inlines the SVG that `npm run diagrams` renders from .vitepress/diagrams/src/<name>.mjs, so the diagram
-// ends up in the server HTML, takes its colours from the site theme and keeps selectable text.
+// ends up in the server HTML, takes its colors from the site theme and keeps selectable text.
 const props = defineProps<{ name: string; caption: string }>();
 
 const files = import.meta.glob("../.vitepress/diagrams/out/*.svg", {

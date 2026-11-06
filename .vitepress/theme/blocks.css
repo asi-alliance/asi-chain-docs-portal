@@ -4,7 +4,7 @@
  * because .vp-doc p, .vp-doc h3 and .vp-doc a would otherwise win.
  */
 
-/* Review note: one quiet line above the H1 */
+/* The review note is one line of secondary text above the H1, so it does not compete with the page title. */
 
 .docs-review-note {
   margin: 0 0 24px;
@@ -24,7 +24,8 @@
   color: var(--vp-c-brand-1);
 }
 
-/* Steps: numbers come from a CSS counter on every ### inside the wrapper. The circle has the page colour so the
+/* Step numbers come from a CSS counter on every ### inside the wrapper, so a step can be added or removed
+   without renumbering the others. The circle has the page color so the
    line that links the steps does not run through it. */
 
 .asi-steps {
@@ -81,7 +82,8 @@
   margin-bottom: 0;
 }
 
-/* CardGrid and DocCard: a list of links, title first and the description under it. */
+/* CardGrid and DocCard make a list of links with the title first and the description under it. There are no
+   boxes or icons, so a list of next pages reads like the rest of the text. */
 
 .asi-card-grid {
   display: grid;
@@ -138,7 +140,7 @@
   color: var(--vp-c-text-2);
 }
 
-/* 404: a column in the middle, since there is no sidebar on this page. */
+/* The 404 page has no sidebar, so its content is a column in the middle of the screen. */
 
 .asi-not-found {
   box-sizing: border-box;

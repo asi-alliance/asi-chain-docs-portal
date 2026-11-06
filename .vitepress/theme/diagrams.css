@@ -1,8 +1,8 @@
 /*
- * Diagram colours. The SVG files carry classes only, so this file is the one place that maps them to the
+ * Diagram colors. The SVG files carry classes only, so this file is the one place that maps them to the
  * site theme. Everything derives from --vp-c-* tokens, which html.dark switches, so a diagram follows the
- * site toggle and not the OS setting. Chain nodes use the brand colour, data stores the tip colour,
- * decisions and notes the warning colour, services stay neutral and external parts are dashed.
+ * site toggle and not the OS setting. Chain nodes use the brand color, data stores the tip color,
+ * decisions and notes the warning color, services stay neutral and external parts are dashed.
  */
 :root {
   --d-text: var(--vp-c-text-1);
@@ -15,7 +15,7 @@
   --d-group-bg: var(--vp-c-bg-alt);
   /* Structure lines (group frames, lifelines, fragment frames, label chips) are boundaries a reader needs, so they
      must reach 3:1 against the page and the group fill. --vp-c-divider gives only 1.1 to 1.3. 85 % of --vp-c-text-3
-     over the page colour gives 3.7 (page) and 3.5 (group fill) in the light theme and 4.9 and 4.3 in the dark one. Do not lighten it. */
+     over the page color gives 3.7 (page) and 3.5 (group fill) in the light theme and 4.9 and 4.3 in the dark one. Do not lighten it. */
   --d-struct-line: color-mix(in srgb, var(--vp-c-text-3) 85%, var(--vp-c-bg));
   --d-group-line: var(--d-struct-line);
   --d-chain-bg: var(--vp-c-brand-soft);

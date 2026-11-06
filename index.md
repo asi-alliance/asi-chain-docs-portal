@@ -2,6 +2,7 @@
 title: Home
 description: Documentation for the ASI:Chain DevNet (wallet, explorer, faucet, node setup and developer tools)
 outline: false
+pageClass: asi-home
 prev: false
 next: false
 editLink: false
@@ -15,10 +16,10 @@ Use the wallet, get test tokens, run a node and build on ASI:Chain. This is the 
 ## Sections
 
 <CardGrid columns="2">
-<DocCard title="Get Started" href="/quick-start/">The node, the indexer and the applications, and how they fit together</DocCard>
+<DocCard title="Get Started" href="/quick-start/">How the node, the indexer and the applications fit together</DocCard>
 <DocCard title="Use ASI:Chain" href="/use/">Create an account, get test tokens and follow transfers in the explorer</DocCard>
 <DocCard title="Run a Node" href="/nodes/">Run a Rust validator or observer node from the published images</DocCard>
-<DocCard title="Build on ASI:Chain" href="/build/">Build wallets and integrations with the TypeScript SDK, with the Wallet CLI and the technical architecture (components, data flow and network topology)</DocCard>
+<DocCard title="Build on ASI:Chain" href="/build/">Build applications and scripts with the TypeScript SDK or the Wallet CLI, and read about the architecture</DocCard>
 <DocCard title="Reference" href="/reference/">Network endpoints, container images and useful links</DocCard>
 <DocCard title="Help" href="/help/">FAQ, troubleshooting and the documentation status</DocCard>
 </CardGrid>

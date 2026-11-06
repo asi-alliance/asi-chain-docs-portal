@@ -1,8 +1,8 @@
 import type { ThemeRegistration } from 'shiki'
 
 /**
- * Code colours for both site themes. The base text and the block background match
- * --ds-code-bg and --vp-code-block-color in style.css, and each colour keeps
+ * Code colors for both site themes. The base text and the block background match
+ * --ds-code-bg and --vp-code-block-color in style.css, and each color keeps
  * at least 5.5:1 against that background.
  */
 

@@ -3,7 +3,7 @@
  * Selectors start with .vp-doc so they win over the default theme without !important.
  */
 
-/* Inline code: a tinted chip, no frame. */
+/* Inline code is a tinted chip without a frame. A frame around every name in a sentence breaks up the line. */
 
 .vp-doc :not(pre, h1, h2, h3, h4, h5, h6) > code {
   padding: 2px 6px;
@@ -28,7 +28,7 @@
   color: inherit;
 }
 
-/* Code blocks: one surface with a 1 px frame. The language sits in the top right corner and gives way to the copy
+/* A code block is one surface with a 1 px frame. The language sits in the top-right corner and gives way to the copy
    button on hover and focus, which VitePress does through the opacity rules of span.lang. */
 
 .vp-doc div[class*='language-'] {
@@ -118,7 +118,7 @@
   border-radius: 8px;
 }
 
-/* Code groups: the tabs and the block under them share one frame. */
+/* In a code group the tabs and the block under them share one frame, so the tabs read as part of the block. */
 
 .vp-doc .vp-code-group {
   margin: 16px 0;
@@ -245,7 +245,8 @@
   }
 }
 
-/* Callouts: a tinted fill and a bold title. The type is named by the title and the tint, with no frame, bar or icon. */
+/* A callout is a tinted fill with a bold title in the color of its type. The title and the tint name the type,
+   so there is no frame, bar or icon. */
 
 :root {
   --ds-icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
@@ -374,7 +375,9 @@
   margin-bottom: 16px;
 }
 
-/* Badges: capsules, 24 px high. tip means live (green dot), info is neutral, warning is orange, danger is red. */
+/* No page uses a badge yet, and VitePress draws one as a capsule. These rules make it a tag with 4 px corners,
+   like the key hint in the search box, before the first author adds one. The type shows only in the color (tip is green, info
+   neutral, warning orange, danger red). */
 
 :root {
   --vp-badge-info-border: var(--vp-c-border);
@@ -396,8 +399,8 @@
   align-items: center;
   height: 24px;
   margin-left: 2px;
-  padding: 0 10px;
-  border-radius: 999px;
+  padding: 0 8px;
+  border-radius: var(--ds-r-sm);
   font-family: var(--vp-font-family-base);
   font-size: 12px;
   font-weight: 500;
@@ -405,16 +408,7 @@
   vertical-align: middle;
 }
 
-.VPBadge.tip::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  margin-right: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-/* Images: framed, with the alt text visible to screen readers only. */
+/* Images get a 1 px frame, so a screenshot with a white or dark edge does not merge with the page. */
 
 .vp-doc img {
   max-width: 100%;
