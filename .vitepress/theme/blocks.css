@@ -1,20 +1,8 @@
 /**
- * Components: Steps, CardGrid, DocCard, section label, review note, hero terminal.
+ * Components: Steps, CardGrid, DocCard, review note.
  * Class names start with asi- . Inside .vp-doc the selectors repeat .vp-doc,
  * because .vp-doc p, .vp-doc h3 and .vp-doc a would otherwise win.
  */
-
-/* Section label above the H1 */
-
-.asi-eyebrow {
-  margin: 0 0 12px;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--vp-c-text-2);
-}
 
 /* Review note: one slim neutral line */
 
@@ -186,86 +174,6 @@
   font-size: 14px;
   line-height: 1.55;
   color: var(--vp-c-text-2);
-}
-
-/* Hero terminal */
-
-.VPHero .image {
-  margin: 0;
-}
-
-.VPHero .image-container {
-  width: 100%;
-  height: auto;
-  transform: none;
-}
-
-.VPHero .image-bg {
-  display: none;
-}
-
-.asi-term {
-  width: 100%;
-  max-width: 520px;
-  margin: 24px 0 0;
-  border: 1px solid var(--ds-code-border);
-  border-radius: var(--ds-r-lg);
-  background: var(--ds-code-bg);
-  box-shadow: var(--ds-shadow-lg);
-  overflow: hidden;
-  text-align: left;
-}
-
-@media (min-width: 960px) {
-  .asi-term {
-    margin: 0;
-  }
-}
-
-.asi-term-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--ds-code-border);
-  font-family: var(--vp-font-family-mono);
-  font-size: 12px;
-  color: var(--ds-code-mute);
-}
-
-.asi-term-bar i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--ds-code-border);
-}
-
-.asi-term-bar span {
-  margin-left: 8px;
-}
-
-.asi-term pre {
-  margin: 0;
-  padding: 20px;
-  font-family: var(--vp-font-family-mono);
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--vp-code-block-color);
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.asi-term pre code {
-  font-family: inherit;
-}
-
-.asi-term-p {
-  color: var(--ds-code-mute);
-  user-select: none;
-}
-
-.asi-term-out {
-  color: var(--vp-c-brand-1);
 }
 
 /* The feedback button is fixed at the bottom right, so the page keeps room under its last block. */

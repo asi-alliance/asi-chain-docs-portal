@@ -4,8 +4,6 @@ import Steps from "../../components/Steps.vue";
 import CardGrid from "../../components/CardGrid.vue";
 import DocCard from "../../components/DocCard.vue";
 import Diagram from "../../components/Diagram.vue";
-import HeroTerminal from "../../components/HeroTerminal.vue";
-import SectionLabel from "../../components/SectionLabel.vue";
 import type { Theme } from "vitepress";
 import { h } from "vue";
 import "./style.css";
@@ -30,12 +28,7 @@ export default {
                     h("a", { href: "/reference/container-images/" }, "published container images"),
                     " before using setup or API examples.",
                 ]),
-                h(SectionLabel),
             ],
-            "home-hero-info-before": () => h("p", { class: "asi-hero-badges" }, [
-                h("span", { class: "VPBadge tip" }, "DevNet"),
-            ]),
-            "home-hero-image": () => h(HeroTerminal),
         });
     },
     enhanceApp({ app, router, siteData }) {
