@@ -49,7 +49,7 @@ html:not(#a) .VPMenuLink .link {
    0.5 s of the default theme runs when the page hydrates and the layers repaint against each other. */
 html:not(#a) .VPNavBar,
 html:not(#a) .VPNavBar .content-body,
-html:not(#a) .VPNavBar .title,
+html:not(#a) .VPNavBar .container > .title,
 html:not(#a) .VPNavBar .divider-line {
   transition: none;
 }
