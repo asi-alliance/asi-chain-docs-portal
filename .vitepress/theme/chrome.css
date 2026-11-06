@@ -37,6 +37,50 @@
   background-color: var(--vp-c-divider);
 }
 
+/* VitePress 1.6.4 adds has-sidebar to the bar in watchPostEffect, so the server HTML lays the bar
+   out without the sidebar and the search and menus jump once the page hydrates (CLS 0.011 to 0.014).
+   VPContent has the class in the server HTML, so until then the bar takes its layout from there.
+   The values copy the has-sidebar rules of VPNavBar.vue; check them after a VitePress update. */
+@media (min-width: 960px) {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .wrapper {
+    padding: 0;
+  }
+
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .container {
+    max-width: 100%;
+  }
+
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    padding: 0 32px;
+    width: var(--vp-sidebar-width);
+    height: var(--vp-nav-height);
+    background-color: transparent;
+  }
+
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .content {
+    position: relative;
+    z-index: 1;
+    padding-right: 32px;
+    padding-left: var(--vp-sidebar-width);
+  }
+}
+
+@media (min-width: 1440px) {
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .title {
+    padding-left: max(32px, calc((100% - (var(--vp-layout-max-width) - 64px)) / 2));
+    width: calc((100% - (var(--vp-layout-max-width) - 64px)) / 2 + var(--vp-sidebar-width) - 32px);
+  }
+
+  .Layout:has(> .VPContent.has-sidebar) .VPNavBar:not(.has-sidebar) .content {
+    padding-right: calc((100vw - var(--vp-layout-max-width)) / 2 + 32px);
+    padding-left: calc((100vw - var(--vp-layout-max-width)) / 2 + var(--vp-sidebar-width));
+  }
+}
+
 .VPNavBar .VPNavBarTitle .title {
   gap: 8px;
   font-family: var(--asi-font-heading);
