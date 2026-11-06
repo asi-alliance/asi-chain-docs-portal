@@ -372,6 +372,28 @@
   border-left-color: var(--vp-c-divider);
 }
 
+/* Each level of the sidebar starts 16 px to the right of the one above it: the text of levels 1, 2 and 3
+   sits at 16, 32 and 48 px. A level 1 title is 16 px in from its row, where its bar sits, so the guide
+   line of its children starts under that title. Deeper titles start at the row edge, so the guide line of
+   their children starts there. The 1 px line plus 15 px of padding keeps the 16 px step, and the bar of an
+   open page sits on the guide line of its group. */
+.VPSidebar .nav .VPSidebarItem.level-1 > .items {
+  margin-left: 16px;
+  padding-left: 15px;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-2 > .items,
+.VPSidebar .nav .VPSidebarItem.level-3 > .items {
+  margin-left: 0;
+  padding-left: 15px;
+}
+
+.VPSidebar .nav .VPSidebarItem.level-2 > .item > .indicator,
+.VPSidebar .nav .VPSidebarItem.level-3 > .item > .indicator,
+.VPSidebar .nav .VPSidebarItem.level-4 > .item > .indicator {
+  left: -16px;
+}
+
 .VPSidebar .nav .VPSidebarItem.is-link > .item > .link:hover > .text {
   color: var(--vp-c-text-1);
 }
