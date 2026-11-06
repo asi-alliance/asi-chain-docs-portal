@@ -40,7 +40,6 @@ const sidebarBuild = [
 export default defineConfig({
   title: "ASI:Chain Docs",
   description: "Use the wallet, get test tokens, run a node and build on ASI:Chain",
-  css: ['custom.css'],
   srcExclude: ['README.md', 'LICENSE.md'],
   buildEnd: writeRedirectStubs,
 
