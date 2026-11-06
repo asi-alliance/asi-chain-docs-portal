@@ -22,7 +22,8 @@ The **Custom Network Configuration** card holds the form. The **Existing Custom 
 
 DevNet is built into the wallet. It is not listed on this page and cannot be edited or deleted here. You select it in the network selector in the header, next to the connection status.
 
-![The Custom Network Configuration form with fields for the network name, node API profile and three URLs.](/images/wallet/custom-network-form.png)
+![The Custom Network Configuration form filled in with the Local Node values and the Direct Links block under the fields.](/images/wallet/custom-network-form.light.webp){.light-only width=648 height=1011}
+![The Custom Network Configuration form filled in with the Local Node values and the Direct Links block under the fields.](/images/wallet/custom-network-form.dark.webp){.dark-only width=648 height=1011}
 
 ## Form Fields
 

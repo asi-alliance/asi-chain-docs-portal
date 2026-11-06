@@ -12,7 +12,8 @@ The wallet shows the recovery phrase once, when the wallet is created. Anyone wh
 
 The first time you open the wallet it shows the **Welcome** screen with **Create your first wallet**. The **Account Type** switch chooses between an HD wallet and a private key wallet. An HD wallet is built from one 12- or 24-word recovery phrase and can hold any number of accounts. A private key wallet is built from a single key and holds exactly one account.
 
-![The Welcome screen with the Create your first wallet card, the Account Type switch and a hint about wallet types.](/images/wallet/accounts-create.png)
+![The Welcome screen with the Create your first wallet card, the Account Type switch and a hint about wallet types.](/images/wallet/accounts-create.light.webp){.light-only width=753 height=701}
+![The Welcome screen with the Create your first wallet card, the Account Type switch and a hint about wallet types.](/images/wallet/accounts-create.dark.webp){.dark-only width=753 height=701}
 
 To create an HD wallet, follow these steps.
 
@@ -52,7 +53,8 @@ Copy your address from **Accounts** or **Receive**, then request tokens from the
 
 The **Wallet** page is the dashboard. It shows the selected account, its balance and its ASI address, with **Send** and **Receive** buttons below. The header shows the same account with a shortened address and its balance, and the **DevNet** indicator next to it shows whether the wallet is connected to the network.
 
-![The Wallet page with the selected account, its balance and address, and the Send and Receive buttons.](/images/wallet/dashboard.png)
+![The Wallet page with the selected account, its balance and address, and the Send and Receive buttons.](/images/wallet/dashboard.light.webp){.light-only width=900 height=592}
+![The Wallet page with the selected account, its balance and address, and the Send and Receive buttons.](/images/wallet/dashboard.dark.webp){.dark-only width=900 height=592}
 
 The menu has these pages: **Wallet**, **Send**, **Bridge**, **Receive**, **Accounts**, **Transactions**, **Deploy** and **Network Settings**.
 
@@ -82,11 +84,13 @@ Click **Send**.
 
 **Clear all** empties the form.
 
-![The Send ASI page with the account selector, the balance and the Recipient Address field.](/images/wallet/send-page.png)
+![The Send ASI page with the account selector, the balance and the Recipient Address field.](/images/wallet/send-page.light.webp){.light-only width=648 height=631}
+![The Send ASI page with the account selector, the balance and the Recipient Address field.](/images/wallet/send-page.dark.webp){.dark-only width=648 height=631}
 
-Before anything is sent, the wallet shows **Confirm Transaction** with the sending account and address, the recipient, the amount, the estimated commission and the total cost. A transfer cannot be reversed. After **Confirm & Send** the wallet asks for the wallet password to sign the transaction.
+Before anything is sent, the wallet shows **Confirm Transaction** with the sending account and address, the recipient, the amount, the estimated commission and the total cost. A transfer cannot be reversed. After **Confirm & Send** the wallet signs the transfer with the unlocked wallet, without asking for the password again, and shows **Transaction pending** with the deploy ID until the transfer is finalized.
 
-![The Confirm Transaction dialog with the sender, recipient, amount, commission and total cost.](/images/wallet/send-confirmation.png)
+![The Confirm Transaction dialog with the sender, recipient, amount, commission and total cost.](/images/wallet/send-confirmation.light.webp){.light-only width=548 height=721}
+![The Confirm Transaction dialog with the sender, recipient, amount, commission and total cost.](/images/wallet/send-confirmation.dark.webp){.dark-only width=548 height=721}
 
 The transfer then appears in **Transactions**.
 
@@ -97,7 +101,8 @@ The transfer then appears in **Transactions**.
 - **Copy ASI Address** puts the address on the clipboard.
 - **Show QR Code** displays the address as a QR code, and **Download QR** saves it as an image.
 
-![The Receive Tokens page with the account and address format selectors, the ASI address with a copy icon and the Show QR Code control.](/images/wallet/receive.png)
+![The Receive Tokens page with the account and address format selectors, the ASI address with a copy icon and the Show QR Code control.](/images/wallet/receive.light.webp){.light-only width=648 height=791}
+![The Receive Tokens page with the account and address format selectors, the ASI address with a copy icon and the Show QR Code control.](/images/wallet/receive.dark.webp){.dark-only width=648 height=791}
 
 ::: tip Check the Network
 Send only ASI tokens to this address, and check that the wallet is on the right network (the page names it, for example DevNet) before you share the address.
@@ -109,7 +114,8 @@ Send only ASI tokens to this address, and check that the wallet is on the right 
 
 Each row has a date, a type (**Send**, **Receive** or **Deploy**), a status (**Pending**, **Completed** or **Failed**), the sender (**From**), the recipient (**To**), the amount and a **Details** value. The **Export** button under the list is inactive in this version of the wallet.
 
-![The Transactions page with the list of transactions and its column filters.](/images/wallet/history.png)
+![The Transactions page with the account selector, the column filters and one Send and one Receive row.](/images/wallet/history.light.webp){.light-only width=1026 height=349}
+![The Transactions page with the account selector, the column filters and one Send and one Receive row.](/images/wallet/history.dark.webp){.dark-only width=1026 height=349}
 
 The column headers open filters: a time range (the last hour up to the last 180 days, or custom dates), the type, the status, the sender, the recipient and an amount range. **Clear Filter** removes them all.
 
@@ -135,11 +141,13 @@ new stdout(`rho:io:stdout`), deployerId(`rho:rchain:deployerId`) in {
 }
 ```
 
-![The Deploy Rholang Contract page in Lite mode with the Phlo Limit and Phlo Price fields, the Load Example button and the Rholang code field.](/images/wallet/deploy-page.png)
+![The Deploy Rholang Contract page in Lite mode with the Phlo Limit and Phlo Price fields, the Load Example button and the Rholang code field.](/images/wallet/deploy-page.light.webp){.light-only width=900 height=906}
+![The Deploy Rholang Contract page in Lite mode with the Phlo Limit and Phlo Price fields, the Load Example button and the Rholang code field.](/images/wallet/deploy-page.dark.webp){.dark-only width=900 height=906}
 
 **Deploy** and **Explore** first open a confirmation dialog. For a deploy it shows the account, the length of the code, the phlo limit and price, the estimated cost and the code itself, with a warning that the deployment will consume gas (the dialog's word for phlo) and cannot be reversed. **Deploy Contract** then asks for the wallet password.
 
-![The Confirm Deployment dialog with the account, code length, phlo limit and price, and estimated cost.](/images/wallet/deploy-confirmation.png)
+![The Confirm Deployment dialog with the account, code length, phlo limit and price, and estimated cost.](/images/wallet/deploy-confirmation.light.webp){.light-only width=648 height=823}
+![The Confirm Deployment dialog with the account, code length, phlo limit and price, and estimated cost.](/images/wallet/deploy-confirmation.dark.webp){.dark-only width=648 height=823}
 
 ### Pro Mode
 
@@ -149,7 +157,8 @@ Pro mode replaces the single field with an editor. A file panel on the left hold
 
 **Accounts** shows the wallet and its accounts.
 
-![The Your Wallet section with one account card showing its name, balance, address and the refresh and delete buttons.](/images/wallet/accounts-list.png)
+![The Your Wallet section with the Main account and its Savings sub-account, each with its balance and address, above the import and export buttons.](/images/wallet/accounts-list.light.webp){.light-only width=900 height=1031}
+![The Your Wallet section with the Main account and its Savings sub-account, each with its balance and address, above the import and export buttons.](/images/wallet/accounts-list.dark.webp){.dark-only width=900 height=1031}
 
 - **Refresh Balances** reloads the balances.
 - The **Edit** button next to an account name renames the account.
@@ -164,7 +173,8 @@ The account selector in the header switches the active account on every page.
 
 DevNet is built into the wallet, so it does not appear on this page and cannot be edited. **Network Settings** is for networks of your own. The form **Custom Network Configuration** takes a **Network Name**, a **Node API Profile** (the node type the network runs), and the **Validator URL**, **Read-only URL** and **Indexer URL**. All three addresses are required, and **Save Custom Network** reports every field that is empty or invalid. Saved networks are listed under **Existing Custom Networks**.
 
-![The Network Settings page with the Custom Network Configuration form.](/images/wallet/settings-network.png)
+![The Network Settings page with the Custom Network Configuration form.](/images/wallet/settings-network.light.webp){.light-only width=648 height=1011}
+![The Network Settings page with the Custom Network Configuration form.](/images/wallet/settings-network.dark.webp){.dark-only width=648 height=1011}
 
 [Custom Network](/wallet/custom-network/) describes the form field by field, with examples for a local node.
 
