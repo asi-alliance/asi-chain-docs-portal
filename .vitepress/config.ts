@@ -215,6 +215,8 @@ export default defineConfig({
   markdown: {
     languages: CustomLanguages,
     theme: { light: deepSpaceLight, dark: deepSpaceDark },
+    // Screenshots load when they come near the screen, and the hidden one of a light and dark pair never loads.
+    image: { lazyLoading: true },
     // Tables get a scroll wrapper, so a wide table scrolls in its own box and not the page.
     config(md) {
       const open = md.renderer.rules.table_open

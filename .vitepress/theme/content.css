@@ -417,6 +417,13 @@
   border-radius: 8px;
 }
 
+/* A screenshot of an app with a light and a dark theme comes as a pair, and the page shows the image that
+   matches the portal theme. The hidden image has no box, so with loading="lazy" the browser does not fetch it. */
+html:not(.dark) .vp-doc img.dark-only,
+html.dark .vp-doc img.light-only {
+  display: none;
+}
+
 .vp-doc figure {
   margin: 24px 0;
 }
