@@ -252,8 +252,8 @@ export default defineConfig({
     ['link', { rel: 'manifest', href: '/site.webmanifest' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-    // Roboto Mono for code and the logo text. Inter comes with VitePress.
-    ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap', rel: 'stylesheet' }],
+    // Roboto for text and controls, Roboto Mono for headings, the wordmark and code, as in the products.
+    ['link', { href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap', rel: 'stylesheet' }],
     ['meta', { name: 'theme-color', content: '#0D1012' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'en' }],

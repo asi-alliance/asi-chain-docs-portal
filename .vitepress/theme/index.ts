@@ -1,4 +1,4 @@
-import DefaultTheme from "vitepress/theme";
+import DefaultTheme from "vitepress/theme-without-fonts";
 import FeedbackForm from "../../components/FeedbackForm.vue";
 import Steps from "../../components/Steps.vue";
 import CardGrid from "../../components/CardGrid.vue";
@@ -12,6 +12,7 @@ import "./chrome.css";
 import "./blocks.css";
 import "./diagrams.css";
 import { captchaPlugin } from "./captchaFetch";
+import { setupSidebarScroll } from "./sidebar";
 
 export default {
     extends: DefaultTheme,
@@ -33,6 +34,7 @@ export default {
     },
     enhanceApp({ app, router, siteData }) {
         app.use(captchaPlugin);
+        setupSidebarScroll(router);
         app.component("Steps", Steps);
         app.component("CardGrid", CardGrid);
         app.component("DocCard", DocCard);
