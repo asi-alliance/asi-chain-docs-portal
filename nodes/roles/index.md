@@ -26,7 +26,7 @@ DevNet addresses for wallets, tools and the explorer are on [network endpoints](
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Run a Validator" href="/nodes/validator/" icon="validator">Prepare a Rust node that is meant to become a validator</DocCard>
-<DocCard title="Run an Observer" href="/nodes/observer/" icon="observer">Start a read-only Rust node that follows the chain</DocCard>
-<DocCard title="Set Up a Private Shard" href="/nodes/private-shard/" icon="shard">Plan genesis, identities, bonds and token metadata for your own shard</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node that is meant to become a validator</DocCard>
+<DocCard title="Run an Observer" href="/nodes/observer/">Start a read-only Rust node that follows the chain</DocCard>
+<DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Plan genesis, identities, bonds and token metadata for your own shard</DocCard>
 </CardGrid>

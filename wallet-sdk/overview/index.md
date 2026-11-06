@@ -233,8 +233,8 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Wallet SDK API Reference" href="/wallet-sdk/api-reference/" icon="book">A page for every SDK module</DocCard>
-<DocCard title="Client" href="/wallet-sdk/api-reference/client/" icon="sdk">Wallets, networks, balances, transfers and events</DocCard>
-<DocCard title="Error Types" href="/wallet-sdk/api-reference/error-types/" icon="help">Every failure carries a machine-readable code</DocCard>
-<DocCard title="Useful Links" href="/reference/links/" icon="links">Repositories and DevNet service addresses</DocCard>
+<DocCard title="Wallet SDK API Reference" href="/wallet-sdk/api-reference/">A page for every SDK module</DocCard>
+<DocCard title="Client" href="/wallet-sdk/api-reference/client/">Wallets, networks, balances, transfers and events</DocCard>
+<DocCard title="Error Types" href="/wallet-sdk/api-reference/error-types/">Every failure carries a machine-readable code</DocCard>
+<DocCard title="Useful Links" href="/reference/links/">Repositories and DevNet service addresses</DocCard>
 </CardGrid>

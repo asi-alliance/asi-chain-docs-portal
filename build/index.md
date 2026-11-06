@@ -5,16 +5,16 @@ Build applications and scripts on ASI:Chain. The Wallet SDK signs and sends tran
 ## Tools
 
 <CardGrid columns="2">
-<DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">Build wallets and integrations with the TypeScript SDK</DocCard>
-<DocCard title="Wallet SDK API Reference" href="/wallet-sdk/api-reference/" icon="book">The client, services, domains and utilities of the SDK</DocCard>
-<DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">Create wallets, check balances and send tokens from a terminal</DocCard>
-<DocCard title="Technical Architecture" href="/architecture/" icon="architecture">Components, data flow and network topology</DocCard>
+<DocCard title="Wallet SDK" href="/wallet-sdk/overview/">Build wallets and integrations with the TypeScript SDK</DocCard>
+<DocCard title="Wallet SDK API Reference" href="/wallet-sdk/api-reference/">The client, services, domains and utilities of the SDK</DocCard>
+<DocCard title="Wallet CLI" href="/cli/usage/">Create wallets, check balances and send tokens from a terminal</DocCard>
+<DocCard title="Technical Architecture" href="/architecture/">Components, data flow and network topology</DocCard>
 </CardGrid>
 
 ## Addresses, Images and Links
 
 <CardGrid columns="2">
-<DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">Public DevNet addresses</DocCard>
-<DocCard title="Container Images" href="/reference/container-images/" icon="image">Image versions, digests and source revisions</DocCard>
-<DocCard title="Useful Links" href="/reference/links/" icon="links">Applications, packages and repositories</DocCard>
+<DocCard title="Network Endpoints" href="/reference/endpoints/">Public DevNet addresses</DocCard>
+<DocCard title="Container Images" href="/reference/container-images/">Image versions, digests and source revisions</DocCard>
+<DocCard title="Useful Links" href="/reference/links/">Applications, packages and repositories</DocCard>
 </CardGrid>

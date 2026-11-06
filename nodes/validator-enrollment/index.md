@@ -150,7 +150,7 @@ The client's pinned [validator lifecycle guide](https://github.com/asi-alliance/
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Run a Validator" href="/nodes/validator/" icon="validator">Prepare storage, keys and the node itself</DocCard>
-<DocCard title="Node Image" href="/nodes/image/" icon="image">Image selection, ports and configuration flags</DocCard>
-<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">What to check when the node does not start or does not find peers</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Prepare storage, keys and the node itself</DocCard>
+<DocCard title="Node Image" href="/nodes/image/">Image selection, ports and configuration flags</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/">What to check when the node does not start or does not find peers</DocCard>
 </CardGrid>

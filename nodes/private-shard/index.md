@@ -98,7 +98,7 @@ Use fresh private credentials. Do not reuse published development keys or older 
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Node Image" href="/nodes/image/" icon="image">Paths, ports and flags</DocCard>
-<DocCard title="Technical Architecture" href="/architecture/" icon="architecture">How the node, indexer, GraphQL and applications connect</DocCard>
-<DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">Check balances against the shard's read-only node</DocCard>
+<DocCard title="Node Image" href="/nodes/image/">Paths, ports and flags</DocCard>
+<DocCard title="Technical Architecture" href="/architecture/">How the node, indexer, GraphQL and applications connect</DocCard>
+<DocCard title="Wallet CLI" href="/cli/usage/">Check balances against the shard's read-only node</DocCard>
 </CardGrid>

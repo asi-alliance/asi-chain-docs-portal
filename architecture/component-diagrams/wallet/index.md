@@ -80,8 +80,8 @@ Balance queries run as exploratory deploys, and a node accepts them only if it i
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="ASI Wallet" href="/wallet/usage/" icon="wallet">How to use the wallet</DocCard>
-<DocCard title="Balance Query Flow" href="/architecture/sequence-diagrams/balance/" icon="diagram">How the balance is read</DocCard>
-<DocCard title="Transaction Flow" href="/architecture/sequence-diagrams/transaction/" icon="diagram">Transaction lifecycle</DocCard>
-<DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">The library under the wallet</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/">How to use the wallet</DocCard>
+<DocCard title="Balance Query Flow" href="/architecture/sequence-diagrams/balance/">How the balance is read</DocCard>
+<DocCard title="Transaction Flow" href="/architecture/sequence-diagrams/transaction/">Transaction lifecycle</DocCard>
+<DocCard title="Wallet SDK" href="/wallet-sdk/overview/">The library under the wallet</DocCard>
 </CardGrid>

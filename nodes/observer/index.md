@@ -79,7 +79,7 @@ Applications can call the node HTTP API directly or use the indexer's Hasura Gra
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Node Image" href="/nodes/image/" icon="image">Image selection, ports and configuration flags</DocCard>
-<DocCard title="Run a Validator" href="/nodes/validator/" icon="validator">Prepare a node that is meant to become a validator</DocCard>
-<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">What to check when peers stay at 0</DocCard>
+<DocCard title="Node Image" href="/nodes/image/">Image selection, ports and configuration flags</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a node that is meant to become a validator</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/">What to check when peers stay at 0</DocCard>
 </CardGrid>

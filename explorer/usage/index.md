@@ -105,10 +105,10 @@ The explorer does not read the node directly. The indexer reads blocks from the 
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Data Flow" href="/architecture/data-flow/" icon="diagram">The path from the node to the explorer</DocCard>
-<DocCard title="What Is ASI:Chain" href="/overview/" icon="book">The components of the network</DocCard>
-<DocCard title="ASI Wallet" href="/wallet/usage/" icon="wallet">Open the wallet at wallet.dev.asichain.io</DocCard>
-<DocCard title="Faucet" href="/faucet/usage/" icon="faucet">Request tokens at faucet.dev.asichain.io</DocCard>
+<DocCard title="Data Flow" href="/architecture/data-flow/">The path from the node to the explorer</DocCard>
+<DocCard title="What Is ASI:Chain" href="/overview/">The components of the network</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/">Open the wallet at wallet.dev.asichain.io</DocCard>
+<DocCard title="Faucet" href="/faucet/usage/">Request tokens at faucet.dev.asichain.io</DocCard>
 </CardGrid>
 
 The wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io), the faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io) and the documentation at [docs.asichain.io](https://docs.asichain.io). The explorer source is at [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer).

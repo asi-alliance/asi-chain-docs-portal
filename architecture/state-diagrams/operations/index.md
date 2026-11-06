@@ -47,7 +47,7 @@ curl -s http://localhost:40403/api/status
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Node Startup" href="/architecture/state-diagrams/startup/" icon="node">What happens before Running</DocCard>
-<DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="diagram">Node, explorer and wallet components</DocCard>
-<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Checks for common node and wallet problems</DocCard>
+<DocCard title="Node Startup" href="/architecture/state-diagrams/startup/">What happens before Running</DocCard>
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/">Node, explorer and wallet components</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/">Checks for common node and wallet problems</DocCard>
 </CardGrid>

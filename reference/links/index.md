@@ -45,8 +45,8 @@ To report a problem, open an issue in the affected repository. Describe how to r
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Container Images" href="/reference/container-images/" icon="image">Published images, tags and digests</DocCard>
-  <DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">TypeScript SDK for wallet management and chain access</DocCard>
-  <DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">Create wallets, check balances and send tokens from the command line</DocCard>
-  <DocCard title="Technical Architecture" href="/architecture/" icon="architecture">How the node, indexer, GraphQL and applications connect</DocCard>
+  <DocCard title="Container Images" href="/reference/container-images/">Published images, tags and digests</DocCard>
+  <DocCard title="Wallet SDK" href="/wallet-sdk/overview/">TypeScript SDK for wallet management and chain access</DocCard>
+  <DocCard title="Wallet CLI" href="/cli/usage/">Create wallets, check balances and send tokens from the command line</DocCard>
+  <DocCard title="Technical Architecture" href="/architecture/">How the node, indexer, GraphQL and applications connect</DocCard>
 </CardGrid>

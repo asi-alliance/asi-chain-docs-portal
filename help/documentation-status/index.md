@@ -35,8 +35,8 @@ When you add an instruction, link the source file or the command output it comes
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">What DevNet offers now</DocCard>
-  <DocCard title="Container Images" href="/reference/container-images/" icon="image">Tags and digests checked in ECR Public</DocCard>
-  <DocCard title="Wallet CLI" href="/cli/usage/" icon="cli">What works against DevNet today</DocCard>
-  <DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Checks for common node and wallet problems</DocCard>
+  <DocCard title="Network Endpoints" href="/reference/endpoints/">What DevNet offers now</DocCard>
+  <DocCard title="Container Images" href="/reference/container-images/">Tags and digests checked in ECR Public</DocCard>
+  <DocCard title="Wallet CLI" href="/cli/usage/">What works against DevNet today</DocCard>
+  <DocCard title="Troubleshooting" href="/help/troubleshooting/">Checks for common node and wallet problems</DocCard>
 </CardGrid>

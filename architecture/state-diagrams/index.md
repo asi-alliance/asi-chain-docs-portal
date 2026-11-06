@@ -31,7 +31,7 @@ docker logs <container> 2>&1 | grep "transition to Running"
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Component Diagrams" href="/architecture/component-diagrams/" icon="diagram">Node, explorer and wallet components</DocCard>
-<DocCard title="Sequence Diagrams" href="/architecture/sequence-diagrams/" icon="architecture">Interaction flows between the wallet and the nodes</DocCard>
-<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Checks for common node and wallet problems</DocCard>
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/">Node, explorer and wallet components</DocCard>
+<DocCard title="Sequence Diagrams" href="/architecture/sequence-diagrams/">Interaction flows between the wallet and the nodes</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/">Checks for common node and wallet problems</DocCard>
 </CardGrid>

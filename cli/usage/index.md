@@ -165,8 +165,8 @@ The node's native-token configuration and expected symbol must match the target 
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">DevNet applications and node addresses</DocCard>
-  <DocCard title="Container Images" href="/reference/container-images/" icon="image">Published images, tags and digests</DocCard>
-  <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/" icon="shard">Start a shard to try balance and send</DocCard>
-  <DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">Check which revision the CLI was built from</DocCard>
+  <DocCard title="Network Endpoints" href="/reference/endpoints/">DevNet applications and node addresses</DocCard>
+  <DocCard title="Container Images" href="/reference/container-images/">Published images, tags and digests</DocCard>
+  <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Start a shard to try balance and send</DocCard>
+  <DocCard title="Troubleshooting" href="/help/troubleshooting/">Check which revision the CLI was built from</DocCard>
 </CardGrid>

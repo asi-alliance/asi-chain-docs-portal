@@ -78,10 +78,10 @@ The balance updates when the status becomes `Finalized`. If it still shows the o
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="ASI Wallet" href="/wallet/usage/" icon="wallet">Open your account at wallet.dev.asichain.io</DocCard>
-<DocCard title="ASI Block Explorer" href="/explorer/usage/" icon="explorer">Look up the transfer at explorer.dev.asichain.io</DocCard>
-<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/" icon="rocket">The short path from a new wallet to a balance</DocCard>
-<DocCard title="Faucet Source" href="https://github.com/asi-alliance/asi-chain-faucet" icon="github">github.com/asi-alliance/asi-chain-faucet</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/">Open your account at wallet.dev.asichain.io</DocCard>
+<DocCard title="ASI Block Explorer" href="/explorer/usage/">Look up the transfer at explorer.dev.asichain.io</DocCard>
+<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">The short path from a new wallet to a balance</DocCard>
+<DocCard title="Faucet Source" href="https://github.com/asi-alliance/asi-chain-faucet">github.com/asi-alliance/asi-chain-faucet</DocCard>
 </CardGrid>
 
 The documentation is at [docs.asichain.io](https://docs.asichain.io).

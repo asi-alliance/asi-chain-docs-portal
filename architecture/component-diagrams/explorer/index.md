@@ -40,6 +40,6 @@ After migration 001, amounts in the smallest token unit (`amount_dust`, `stake`,
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Container Images" href="/reference/container-images/" icon="image">The published frontend and indexer revisions</DocCard>
-<DocCard title="Data Flow" href="/architecture/data-flow/" icon="diagram">How chain data reaches the explorer through the indexer</DocCard>
+<DocCard title="Container Images" href="/reference/container-images/">The published frontend and indexer revisions</DocCard>
+<DocCard title="Data Flow" href="/architecture/data-flow/">How chain data reaches the explorer through the indexer</DocCard>
 </CardGrid>

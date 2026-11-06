@@ -33,6 +33,6 @@ The faucet shows the new balance under **Address Balance**, and the wallet shows
 With a balance, you can send tokens on the wallet's **Send** page, deploy a contract on its **Deploy** page, or look up your transactions in the explorer at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
 
 <CardGrid columns="2">
-<DocCard title="ASI Wallet" href="/wallet/usage/" icon="wallet">Send tokens and deploy a contract</DocCard>
-<DocCard title="ASI Block Explorer" href="/explorer/usage/" icon="explorer">Look up your transactions</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/">Send tokens and deploy a contract</DocCard>
+<DocCard title="ASI Block Explorer" href="/explorer/usage/">Look up your transactions</DocCard>
 </CardGrid>

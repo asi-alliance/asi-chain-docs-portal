@@ -48,8 +48,8 @@ You want to write an application, a script or a contract.
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="What Is ASI:Chain" href="/overview/" icon="book">Components, networks and the token</DocCard>
-<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/" icon="faucet">Get an address and request tokens from the faucet</DocCard>
-<DocCard title="Network Endpoints" href="/reference/endpoints/" icon="endpoints">Public DevNet services</DocCard>
-<DocCard title="Documentation Status" href="/help/documentation-status/" icon="status">Known limits of these pages</DocCard>
+<DocCard title="What Is ASI:Chain" href="/overview/">Components, networks and the token</DocCard>
+<DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">Get an address and request tokens from the faucet</DocCard>
+<DocCard title="Network Endpoints" href="/reference/endpoints/">Public DevNet services</DocCard>
+<DocCard title="Documentation Status" href="/help/documentation-status/">Known limits of these pages</DocCard>
 </CardGrid>

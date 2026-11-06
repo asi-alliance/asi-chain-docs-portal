@@ -122,7 +122,7 @@ Follow [Run a Validator](/nodes/validator/) for the checks. Legacy configurator 
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Run a Validator" href="/nodes/validator/" icon="validator">Checks before a node joins as a validator</DocCard>
-<DocCard title="Set Up a Private Shard" href="/nodes/private-shard/" icon="shard">Run a node with your own genesis</DocCard>
-<DocCard title="Container Images" href="/reference/container-images/" icon="image">Other published node builds and the application images</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Checks before a node joins as a validator</DocCard>
+<DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Run a node with your own genesis</DocCard>
+<DocCard title="Container Images" href="/reference/container-images/">Other published node builds and the application images</DocCard>
 </CardGrid>

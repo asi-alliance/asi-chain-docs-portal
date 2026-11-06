@@ -143,8 +143,8 @@ Open an issue in the affected [public component repository](/reference/links/). 
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Container Images" href="/reference/container-images/" icon="image">Published tags and digests</DocCard>
-  <DocCard title="Run an Observer" href="/nodes/observer/" icon="observer">Start a read-only node</DocCard>
-  <DocCard title="Frequently Asked Questions" href="/help/faq/" icon="faq">Short answers on tokens, wallets and nodes</DocCard>
-  <DocCard title="Useful Links" href="/reference/links/" icon="links">Public applications, packages and source repositories</DocCard>
+  <DocCard title="Container Images" href="/reference/container-images/">Published tags and digests</DocCard>
+  <DocCard title="Run an Observer" href="/nodes/observer/">Start a read-only node</DocCard>
+  <DocCard title="Frequently Asked Questions" href="/help/faq/">Short answers on tokens, wallets and nodes</DocCard>
+  <DocCard title="Useful Links" href="/reference/links/">Public applications, packages and source repositories</DocCard>
 </CardGrid>

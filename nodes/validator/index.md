@@ -136,7 +136,7 @@ Do not run live transfers as an installation test. See [Troubleshooting](/help/t
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Enroll a Validator" href="/nodes/validator-enrollment/" icon="key">Generate keys, fund the vault and submit the bond</DocCard>
-<DocCard title="Node Image" href="/nodes/image/" icon="image">Image selection, ports and configuration flags</DocCard>
-<DocCard title="Troubleshooting" href="/help/troubleshooting/" icon="help">What to check when the node does not start or does not find peers</DocCard>
+<DocCard title="Enroll a Validator" href="/nodes/validator-enrollment/">Generate keys, fund the vault and submit the bond</DocCard>
+<DocCard title="Node Image" href="/nodes/image/">Image selection, ports and configuration flags</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/">What to check when the node does not start or does not find peers</DocCard>
 </CardGrid>

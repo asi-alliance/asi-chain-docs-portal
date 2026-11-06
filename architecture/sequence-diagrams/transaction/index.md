@@ -97,7 +97,7 @@ The Deploy page follows the same four phases. It differs in two places. The term
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Wallet Components" href="/architecture/component-diagrams/wallet/" icon="wallet">Layers, state and storage of the wallet app</DocCard>
-<DocCard title="Balance Query Flow" href="/architecture/sequence-diagrams/balance/" icon="diagram">How balance checks work</DocCard>
-<DocCard title="ASI Wallet" href="/wallet/usage/#send" icon="book">Send ASI from the wallet step by step</DocCard>
+<DocCard title="Wallet Components" href="/architecture/component-diagrams/wallet/">Layers, state and storage of the wallet app</DocCard>
+<DocCard title="Balance Query Flow" href="/architecture/sequence-diagrams/balance/">How balance checks work</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/#send">Send ASI from the wallet step by step</DocCard>
 </CardGrid>

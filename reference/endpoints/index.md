@@ -71,8 +71,8 @@ The GraphQL address of the indexer and the address behind the faucet are not lis
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Get DevNet ASI" href="/quick-start/get-asi/" icon="faucet">Request tokens through the faucet</DocCard>
-  <DocCard title="Custom Network Connection" href="/wallet/custom-network/" icon="wallet">Set the three addresses for a network of your own</DocCard>
-  <DocCard title="Wallet SDK" href="/wallet-sdk/overview/" icon="sdk">Use the node address from TypeScript</DocCard>
-  <DocCard title="Container Images" href="/reference/container-images/" icon="image">Published images, tags and digests</DocCard>
+  <DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">Request tokens through the faucet</DocCard>
+  <DocCard title="Custom Network Connection" href="/wallet/custom-network/">Set the three addresses for a network of your own</DocCard>
+  <DocCard title="Wallet SDK" href="/wallet-sdk/overview/">Use the node address from TypeScript</DocCard>
+  <DocCard title="Container Images" href="/reference/container-images/">Published images, tags and digests</DocCard>
 </CardGrid>
