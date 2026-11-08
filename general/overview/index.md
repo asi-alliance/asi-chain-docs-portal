@@ -1,5 +1,9 @@
 # General Overview
 
+::: info Token precision
+The planned testnet uses 18-decimal ASI amounts. See [Token Amounts and 18 Decimals](/general/token-amounts/) for conversion, exact-number handling and rollout status.
+:::
+
 ## What is ASI:Chain?
 
 ASI:Chain is a blockchain network built for the ASI Alliance ecosystem, powered by F1R3FLY technology. It provides a decentralized platform for executing smart contracts written in Rholang and managing digital assets.

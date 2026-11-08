@@ -1,5 +1,9 @@
 # DeployResubmitter
 
+::: warning Network precision and compatibility
+The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/general/token-amounts/).
+:::
+
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/Resubmit/DeployResubmitter.ts)
 
 Retry and resubmission logic for non-read-only deploys.

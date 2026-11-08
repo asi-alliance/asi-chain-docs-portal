@@ -48,6 +48,7 @@ export default withMermaid(defineConfig({
         collapsed: false,
         items: [
           { text: 'Overview', link: '/general/overview/' },
+          { text: 'Token Amounts and 18 Decimals', link: '/general/token-amounts/' },
           { text: 'Useful Links', link: '/general/useful-links/' },
         ]
       },

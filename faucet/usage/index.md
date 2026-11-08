@@ -1,5 +1,9 @@
 # Faucet
 
+::: info Token precision
+The planned testnet uses 18-decimal ASI. A faucet payout and eligibility threshold must use that network's atomic scale and a compatible client. A raw amount of `100000000` is only `0.0000000001` ASI at eighteen decimals. The public faucet link alone does not establish rollout status; see [Token Amounts and 18 Decimals](/general/token-amounts/).
+:::
+
 The ASI Chain Faucet allows you to receive test ASI tokens for development and testing purposes. These tokens have no real value and are exclusively for testing transactions and smart contracts.
 
 **Access the faucet**: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)

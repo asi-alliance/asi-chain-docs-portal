@@ -1,5 +1,9 @@
 # Wallet SDK
 
+::: warning Network precision and compatibility
+The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/general/token-amounts/).
+:::
+
 A lightweight, modular SDK for wallet integration and key management on [ASI Chain](https://github.com/asi-alliance/asi-chain). The SDK provides secure cryptographic operations, BIP-39/BIP-44 key derivation, encrypted storage mechanisms, and direct interaction with ASI Chain nodes.
 
 **GitHub**: [asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk)
@@ -75,7 +79,7 @@ console.log('Balance:', balance.toString());
 const deployId = await assetsService.transfer(
   fromAddress,
   toAddress,
-  BigInt(1000000000), // 10 ASI in atomic units
+  BigInt("1000000000"), // 10 ASI only on an eight-decimal network
   wallet,
   passwordProvider
 );

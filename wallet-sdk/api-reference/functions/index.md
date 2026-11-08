@@ -1,10 +1,14 @@
 # Functions
 
+::: warning Network precision and compatibility
+The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/general/token-amounts/).
+:::
+
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/functions/index.ts)
 
 Amount conversion helpers between human-readable ASI values and atomic integer representation.
 
-1 ASI = `100_000_000` atomic units (`ASI_BASE_UNIT` = `10^8`).
+For the legacy eight-decimal helpers documented here, 1 ASI = `100_000_000` atomic units (`ASI_BASE_UNIT` = `10^8`). This multiplier is not valid for the planned 18-decimal testnet.
 
 ## `toAtomicAmount`
 
@@ -49,7 +53,7 @@ Converts atomic units to a normalized decimal string. Trailing zeros are trimmed
 fromAtomicAmountToNumber(atomicAmount: bigint): number
 ```
 
-Converts atomic units to a JavaScript `number`. Logs a warning if the integer part exceeds `Number.MAX_SAFE_INTEGER`.
+Converts atomic units to a JavaScript `number`. Logs a warning if the integer part exceeds `Number.MAX_SAFE_INTEGER`. Fractional precision can be lost even below that boundary. Use string output for exact amounts; do not use this helper for signing, balance comparisons or fee calculations.
 
 **Parameters:**
 
@@ -96,5 +100,5 @@ Generates a random hex string of the specified length. Uses `Math.random()` — 
 ```ts
 const atomic = toAtomicAmount("1,234.56789012"); // BigInt(123456789012)
 const str = fromAtomicAmountToString(atomic);    // "1234.56789012"
-const num = fromAtomicAmountToNumber(atomic);    // 1234.56789012
+// Keep str as a string for exact monetary use.
 ```

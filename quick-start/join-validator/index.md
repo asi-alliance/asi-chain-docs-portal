@@ -1,5 +1,9 @@
 # Join DevNet as Validator
 
+::: info Token precision
+The `STAKE` examples below belong to the legacy network profile. For the planned 18-decimal testnet, verify genesis metadata and a compatible uint256 bonding client; do not reuse an eight-decimal raw stake as the same number of ASI. See [Token Amounts and 18 Decimals](/general/token-amounts/).
+:::
+
 > [!WARNING]
 > Attention! At the DevNet stage, ASI:Chain works in dev mode. To retrieve data from the blockchain, you can use the unbonded validator as an observer, using the same methods as for the observer node. **On the Testnet and Mainnet stages - it will change: only observer node will be available to retrieve data from the blockchain.**
 

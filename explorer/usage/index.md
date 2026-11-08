@@ -1,5 +1,9 @@
 # ASI Block Explorer
 
+::: info Token precision
+Balances, stakes, fees and transfer amounts require exact decimal strings and the precision recorded for their network or history entry. The planned testnet uses 18 decimals; changing display precision must not rescale old history. See [Token Amounts and 18 Decimals](/general/token-amounts/) for the indexer/GraphQL and export requirements.
+:::
+
 A real-time blockchain explorer for the ASI Chain network providing insights into blocks, transactions, validators, and network statistics.
 
 **Access the explorer**: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)

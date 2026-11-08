@@ -1,5 +1,9 @@
 # Constants
 
+::: warning Network precision and compatibility
+The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/general/token-amounts/).
+:::
+
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/utils/constants/index.ts)
 
 Library-wide constants used across the SDK.
@@ -9,9 +13,9 @@ Library-wide constants used across the SDK.
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
 | `ASI_CHAIN_PREFIX` | `{ coinId: string; version: string }` | `{ coinId: "000000", version: "00" }` | Chain payload prefix prepended to the address payload before checksum calculation. |
-| `ASI_DECIMALS` | `number` | `8` | Number of decimal places for ASI token amounts. |
+| `ASI_DECIMALS` | `number` | `8` | Legacy SDK default; not the planned testnet denomination. |
 | `POWER_BASE` | `number` | `10` | Base used for exponentiation when computing `ASI_BASE_UNIT`. |
-| `ASI_BASE_UNIT` | `bigint` | `BigInt(10) ** BigInt(8)` = `100_000_000n` | Atomic unit multiplier. 1 ASI = 100,000,000 atomic units. |
+| `ASI_BASE_UNIT` | `bigint` | `BigInt(10) ** BigInt(8)` = `100_000_000n` | Legacy eight-decimal multiplier. Use validated network precision for new integrations. |
 
 ## Keys and Addresses
 

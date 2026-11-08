@@ -1,5 +1,9 @@
 # Wallet CLI
 
+::: warning Planned testnet compatibility
+This page retains legacy eight-decimal atomic-input examples. Confirm a compatible CLI/client release before using the planned 18-decimal testnet; see [Token Decimals](#token-decimals).
+:::
+
 A command-line wallet for the ASI Chain network. The CLI provides wallet management, token transfers, balance checking, and deploy history monitoring directly from your terminal.
 
 **Source code**: [github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli)
@@ -34,11 +38,7 @@ git submodule init
 git submodule update
 ```
 
-To keep the submodule up-to-date:
-
-```bash
-git submodule update --init --remote -- rust-client
-```
+Use the client revision committed by the selected CLI release. Do not advance the submodule independently: its signing profile must match the target node.
 
 ### Step 3: Build the Project
 
@@ -158,7 +158,7 @@ Transfer ASI tokens to another address:
 cargo run -- send --to <recipient-address> --amount <amount>
 ```
 
-**Example:**
+**Legacy eight-decimal atomic-input example:**
 
 ```bash
 cargo run -- send --to 1111AtahZeefej4tvVR6ti9TJtv8yxLebT31SCEVDCKMNikBk5r3g --amount 100000000
@@ -300,7 +300,9 @@ Docker Compose automatically mounts `./credentials` and `./exports` directories,
 
 ## Token Decimals
 
-ASI token uses 8 decimal places. When specifying amounts in CLI commands, use the smallest unit:
+The planned testnet uses **18 decimals**. The legacy CLI examples on this page use atomic units with an **eight-decimal** network. Confirm the selected CLI version's input units and uint256 signing support before using it on the planned testnet. See [Token Amounts and 18 Decimals](/general/token-amounts/).
+
+For the legacy eight-decimal profile:
 
 | Human-Readable | CLI Amount |
 |----------------|------------|
@@ -309,10 +311,10 @@ ASI token uses 8 decimal places. When specifying amounts in CLI commands, use th
 | 10 ASI | 1000000000 |
 | 100 ASI | 10000000000 |
 
-**Formula:** `CLI Amount = Human Amount × 100000000`
+**Legacy atomic-input formula:** `CLI Amount = Human Amount × 10^8`. On an eighteen-decimal network the multiplier is `10^18`; that alone does not make an old CLI compatible.
 
 ::: tip
-To send 1 ASI token, use `--amount 100000000` (1 × 10⁸)
+`--amount 100000000` represents 1 ASI only with eight decimals. With eighteen decimals it represents `0.0000000001` ASI.
 :::
 
 ## Deploy Statuses
@@ -341,7 +343,7 @@ Deploys typically take a few seconds to finalize. The CLI automatically monitors
 
 **"Insufficient balance to complete the transfer":**
 - Check your current balance with `cargo run -- balance`
-- Remember to account for token decimals (1 ASI = 100000000)
+- Verify the network precision and the CLI input units; see [Token Decimals](#token-decimals).
 
 ## Project Structure
 

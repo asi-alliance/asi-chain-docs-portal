@@ -1,5 +1,9 @@
 # ASI Wallet
 
+::: info Token precision
+For the planned 18-decimal testnet, use a compatible wallet/SDK release and verify network metadata before entering an amount. Preserve exact decimal input, fee calculations and pending-operation precision. Existing eight-decimal history must retain its original units. See [Token Amounts and 18 Decimals](/general/token-amounts/).
+:::
+
 A secure, fully decentralized wallet for the ASI Chain network with an integrated Rholang IDE. The wallet runs entirely in your browser with direct blockchain connection and AES-256 encrypted local storage.
 
 **Access the wallet**: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
