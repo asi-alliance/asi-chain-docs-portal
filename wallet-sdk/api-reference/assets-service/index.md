@@ -6,6 +6,10 @@
 
 The package exports the class as `AssetsService`. You rarely build it yourself, because `ApiServiceRegistry.getInstance().assets` holds an instance. `Client.getBalance(address)` calls it with `DEFAULT_ASSET` and returns the amount as a `bigint`.
 
+::: warning Network precision and compatibility
+The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
+:::
+
 ## Import
 
 ```ts

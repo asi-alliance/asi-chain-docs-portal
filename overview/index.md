@@ -2,6 +2,10 @@
 
 ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecosystem. You use it through a web wallet, a block explorer and a faucet, and you can run your own node.
 
+::: info Token precision
+The planned testnet uses 18-decimal ASI amounts. See [Token Amounts and 18 Decimals](/reference/token-amounts/) for conversion, exact-number handling and rollout status.
+:::
+
 ## Components
 
 | Component | What it does | Guide |

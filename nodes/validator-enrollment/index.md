@@ -2,6 +2,10 @@
 
 Create the validator key, fund the validator and submit the bond with the ASI Rust client. Between the key and the funding you start the node on [Run a Validator](/nodes/validator/) and come back here. The public DevNet runs a Scala node, and these Rust client commands do not work against it, so run the procedure on a Rust shard.
 
+::: info Token precision
+The `STAKE_BASE_UNITS` examples below belong to the legacy network profile. For the planned 18-decimal testnet, verify genesis metadata and a compatible uint256 bonding client; do not reuse an eight-decimal raw stake as the same number of ASI. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
+:::
+
 ## Before You Start
 
 Ask the network operator for the following.

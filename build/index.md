@@ -16,5 +16,6 @@ Use the Wallet SDK to sign and send transactions from TypeScript code. Use the W
 <CardGrid columns="2">
 <DocCard title="Network Endpoints" href="/reference/endpoints/">Public DevNet addresses</DocCard>
 <DocCard title="Container Images" href="/reference/container-images/">Image versions, digests and source revisions</DocCard>
+<DocCard title="Token Amounts and 18 Decimals" href="/reference/token-amounts/">Atomic units, exact numbers and rollout status</DocCard>
 <DocCard title="Useful Links" href="/reference/links/">Applications, packages and repositories</DocCard>
 </CardGrid>

@@ -2,6 +2,10 @@
 
 The ASI wallet CLI creates wallets, queries balances, sends tokens and reads and exports deploy history from a terminal. Run it from the published image or build it from source.
 
+::: warning Planned testnet compatibility
+This page retains legacy eight-decimal atomic-input examples. Confirm a compatible CLI/client release before using the planned 18-decimal testnet; see [Commands](#commands).
+:::
+
 ::: warning DevNet Runs the Scala Node
 As of 5 November 2026 only `create` works against the public DevNet, because DevNet runs the Scala node and the CLI is written for the Rust node. See [Compatibility](#compatibility).
 :::
@@ -165,6 +169,8 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 | 0.5 | `50000000` |
 | 1 | `100000000` |
 | 10 | `1000000000` |
+
+The planned testnet uses **18 decimals**, and the table above is for an eight-decimal network: `--amount 100000000` represents 1 ASI only with eight decimals, and with eighteen decimals it represents `0.0000000001` ASI. On an eighteen-decimal network the multiplier is `10^18`; that alone does not make an old CLI compatible. Confirm the selected CLI version's input units and uint256 signing support before using it on the planned testnet. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
 
 Give amounts as exact integers. The CLI reads them without a size limit, so values above JavaScript's safe integer range (2^53 − 1) stay exact. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 

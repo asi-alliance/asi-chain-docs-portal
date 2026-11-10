@@ -4,6 +4,10 @@ ASI Wallet is a browser wallet for ASI:Chain. It has no backend of its own: it k
 
 The DevNet wallet is at [wallet.dev.asichain.io](https://wallet.dev.asichain.io). It connects to DevNet out of the box, so there is nothing to configure. Node and service addresses are listed on [Network Endpoints](/reference/endpoints/), and connecting the wallet to your own node is described in [Custom Network Connection](/wallet/custom-network/).
 
+::: info Token precision
+For the planned 18-decimal testnet, use a compatible wallet/SDK release and verify network metadata before entering an amount. Preserve exact decimal input, fee calculations and pending-operation precision. Existing eight-decimal history must retain its original units. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
+:::
+
 ::: warning Back Up Your Recovery Phrase
 The wallet shows the recovery phrase once, when the wallet is created. Anyone who has it can control your accounts, and if you lose both the phrase and the browser data you lose access for good. Write the phrase down, keep it offline, and never put it in a screenshot or a text file.
 :::

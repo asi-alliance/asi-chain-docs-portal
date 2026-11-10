@@ -4,9 +4,13 @@
 
 These functions convert amounts between human-readable values and atomic integers. A few small helpers come with them. All of them are plain functions exported from the package root.
 
-An atomic amount is a `bigint` count of the smallest token unit. A token with `decimals` decimal places has `10^decimals` atomic units in one whole token, so for ASI (`ASI_DECIMALS` = `8`) one ASI is `100_000_000` atomic units.
+An atomic amount is a `bigint` count of the smallest token unit. A token with `decimals` decimal places has `10^decimals` atomic units in one whole token, so for ASI (`ASI_DECIMALS` = `8`) one ASI is `100_000_000` atomic units. This multiplier is not valid for the planned 18-decimal testnet.
 
 Every conversion takes `decimals` as a required argument. Pass `ASI_DECIMALS` for ASI, or `asset.getDecimals()` when you work with an [`Asset`](/wallet-sdk/api-reference/asset/).
+
+::: warning Network precision and compatibility
+The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
+:::
 
 ## Import
 
@@ -72,7 +76,7 @@ Returns `string`.
 fromAtomicAmountToNumber(atomicAmount: bigint, decimals: number): number
 ```
 
-Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Use `fromAtomicAmount` when exact digits matter.
+Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Fractional precision can be lost even below that boundary. Use `fromAtomicAmount` when exact digits matter; do not use this helper for signing, balance comparisons or fee calculations.
 
 | Name | Type | Description |
 |------|------|-------------|
@@ -135,7 +139,6 @@ buildUrl(pathPrefix: string, params?: IUrlParams): string
 import {
     ASI_DECIMALS,
     fromAtomicAmount,
-    fromAtomicAmountToNumber,
     parseAtomicAmount,
     toAtomicAmount,
 } from "@asichain/asi-wallet-sdk";
@@ -144,7 +147,7 @@ const atomic = toAtomicAmount("1,234.56789012", ASI_DECIMALS);
 
 console.log(atomic); // 123456789012n
 console.log(fromAtomicAmount(atomic, ASI_DECIMALS)); // "1234.56789012"
-console.log(fromAtomicAmountToNumber(atomic, ASI_DECIMALS)); // 1234.56789012
+// Keep the string from fromAtomicAmount for exact monetary use.
 console.log(parseAtomicAmount("42")); // 42n
 console.log(parseAtomicAmount("1.5")); // null
 ```

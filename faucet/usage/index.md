@@ -2,6 +2,10 @@
 
 The ASI:Chain Faucet sends test ASI to a wallet address on the DevNet. These tokens have no real value and are meant for testing transfers and contract deployments. Open it at [faucet.dev.asichain.io](https://faucet.dev.asichain.io).
 
+::: info Token precision
+The planned testnet uses 18-decimal ASI. A faucet payout and eligibility threshold must use that network's atomic scale and a compatible client. A raw amount of `100000000` is only `0.0000000001` ASI at eighteen decimals. The public faucet link alone does not establish rollout status; see [Token Amounts and 18 Decimals](/reference/token-amounts/).
+:::
+
 ::: warning Security Notice
 The faucet never asks you to sign a transaction or to enter a seed phrase, a private key or a password. If a page asks for any of these, you are not on the official faucet.
 :::
