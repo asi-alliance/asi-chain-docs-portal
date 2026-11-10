@@ -77,7 +77,7 @@ Enter the **Recipient Address**. You can type it, paste it, or paste an image of
 Enter the **Amount**, or click **Max** to send the balance minus the estimated fee.
 
 ::: info Token Decimals
-The wallet counts ASI with 8 decimals, as DevNet does. TestNet is planned with 18 decimals and will need a new wallet release. See [Token Amounts](/reference/token-amounts/).
+The wallet counts ASI with 8 decimals, as DevNet does. For the planned TestNet, 18 decimals are proposed, and they would need a new wallet release. See [Token Amounts](/reference/token-amounts/).
 :::
 
 ### Send the Transfer

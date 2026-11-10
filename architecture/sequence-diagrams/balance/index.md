@@ -28,7 +28,7 @@ Because the node reads the last finalized block, a transfer that was just sent c
 
 ### Atomic Units
 
-The node returns the balance as an integer number of atomic units. On DevNet the token has 8 decimal places. TestNet is planned with 18, see [Token Amounts](/reference/token-amounts/).
+The node returns the balance as an integer number of atomic units. On DevNet the token has 8 decimal places. For the planned TestNet, 18 decimal places are proposed. See [Token Amounts](/reference/token-amounts/).
 
 | Unit | Value |
 |------|-------|

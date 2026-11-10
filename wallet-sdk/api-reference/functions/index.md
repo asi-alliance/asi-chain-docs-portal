@@ -35,7 +35,7 @@ toAtomicAmount(amount: number | string, decimals: number): bigint
 Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
 
 ::: warning Wrong Result for Decimals Other Than 8
-In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`. With 18 decimals `toAtomicAmount("1", 18)` returns `100000000n`, so the function cannot convert amounts for the 18 decimals planned for TestNet. See [Token Amounts](/reference/token-amounts/).
+In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`. With 18 decimals `toAtomicAmount("1", 18)` returns `100000000n`. The function therefore cannot convert amounts for the 18 decimals proposed for the planned TestNet. See [Token Amounts](/reference/token-amounts/).
 :::
 
 | Name | Type | Description |
@@ -72,7 +72,7 @@ Returns `string`.
 fromAtomicAmountToNumber(atomicAmount: bigint, decimals: number): number
 ```
 
-Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Fractional precision can be lost even below that boundary. Use `fromAtomicAmount` when exact digits matter. Do not use this helper for signing, balance comparisons or fee calculations.
+Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Fraction digits can also be lost below that value. Use `fromAtomicAmount` when exact digits matter. Do not use this function for signing, balance comparisons or fee calculations.
 
 | Name | Type | Description |
 |------|------|-------------|
@@ -143,7 +143,7 @@ const atomic = toAtomicAmount("1,234.56789012", ASI_DECIMALS);
 
 console.log(atomic); // 123456789012n
 console.log(fromAtomicAmount(atomic, ASI_DECIMALS)); // "1234.56789012"
-// Keep the string from fromAtomicAmount for exact monetary use.
+// Keep the string from fromAtomicAmount when you need the exact amount.
 console.log(parseAtomicAmount("42")); // 42n
 console.log(parseAtomicAmount("1.5")); // null
 ```

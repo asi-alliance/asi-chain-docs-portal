@@ -166,7 +166,7 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 | 1 | `100000000` |
 | 10 | `1000000000` |
 
-The table is for 8 decimals, as on DevNet. With the 18 decimals planned for TestNet, `--amount 100000000` would be `0.0000000001` ASI. The published image signs the deploy price as an int64 number, so it does not work with a node that uses uint256 amounts. See [Token Amounts](/reference/token-amounts/).
+The table is for 8 decimals, as on DevNet. With the 18 decimals proposed for the planned TestNet, `--amount 100000000` would be `0.0000000001` ASI. The published image signs the deploy price as an int64 number, so it does not work with a node that uses uint256 amounts. See [Token Amounts](/reference/token-amounts/).
 
 Give amounts as exact integers. The CLI reads them without a size limit, so values above JavaScript's safe integer range (2^53 − 1) stay exact. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 

@@ -3,7 +3,7 @@
 Use the TypeScript SDK `@asichain/asi-wallet-sdk` to manage wallets, read balances and send transfers on ASI:Chain. The pages in this section describe version 2.1.0, a beta release. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
 ::: warning SDK 2.1.0 Uses 8 Decimals
-Version 2.1.0 counts ASI with 8 decimals and signs the deploy price as an `int64` in protobuf field 7. A node with uint256 amounts expects 32 bytes in field 15, so 2.1.0 does not work with it. No SDK release supports the 18 decimals planned for TestNet yet. See [Token Amounts](/reference/token-amounts/).
+Version 2.1.0 counts ASI with 8 decimals and signs the deploy price as an `int64` in protobuf field 7. A node with uint256 amounts expects 32 bytes in field 15, so 2.1.0 does not work with it. No SDK release supports the 18 decimals proposed for the planned TestNet yet. See [Token Amounts](/reference/token-amounts/).
 :::
 
 ## What the SDK Does

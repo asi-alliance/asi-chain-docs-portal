@@ -64,7 +64,7 @@ getContractAddress(): string | null
 
 ## Default Asset
 
-`DEFAULT_ASSET` is the native ASI asset: name `"ASI"`, 8 decimals, no contract address, and a random `id` that is generated when the SDK is loaded. `Client.getBalance(address)` uses it. The 8 decimals are fixed in 2.1.0 and do not follow the network, see [Token Amounts](/reference/token-amounts/).
+`DEFAULT_ASSET` is the native ASI asset: name `"ASI"`, 8 decimals, no contract address, and a random `id` that is generated when the SDK is loaded. `Client.getBalance(address)` uses it. The 8 decimals are fixed in Wallet SDK 2.1.0 and do not follow the network. See [Token Amounts](/reference/token-amounts/).
 
 ## Example
 

@@ -23,7 +23,7 @@ import { ASI_DECIMALS, GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain
 | `ASI_BASE_UNIT` | `bigint` | `100_000_000n` | Atomic units in one ASI with 8 decimals (`10n ** 8n`). |
 | `PRIVATE_KEY_LENGTH` | `number` | `32` | Length of a secp256k1 private key in bytes. |
 
-In 2.1.0 the decimal constants are fixed at 8, and no SDK API reads the decimals of the network. See [Token Amounts](/reference/token-amounts/).
+In Wallet SDK 2.1.0 the decimal constants are fixed at 8, and no SDK API reads the decimals of the network. See [Token Amounts](/reference/token-amounts/).
 
 ### Node Responses
 

@@ -14,9 +14,9 @@ Repository paths are relative to the namespace above. Each source link points to
 
 | Component | Repository | Source |
 |---|---|---|
-| Latest ASI dev build, uint256 | `node-rust` | [0ccc315d84b3](https://github.com/asi-alliance/asi-chain-rust-node/tree/0ccc315d84b32d668e8db49cd56ba3c576693e15) |
-| Newer ASI dev build | `node-rust` | [2cce114a52ac](https://github.com/asi-alliance/asi-chain-rust-node/tree/2cce114a52ac1e1a85bbd03e0120de848df80d6d) |
-| Guide ASI dev build | `node-rust` | [8e6517d630e2](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) |
+| ASI dev build with uint256 | `node-rust` | [0ccc315d84b3](https://github.com/asi-alliance/asi-chain-rust-node/tree/0ccc315d84b32d668e8db49cd56ba3c576693e15) |
+| Last ASI dev build before uint256 | `node-rust` | [2cce114a52ac](https://github.com/asi-alliance/asi-chain-rust-node/tree/2cce114a52ac1e1a85bbd03e0120de848df80d6d) |
+| ASI dev build used in the guides | `node-rust` | [8e6517d630e2](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) |
 | Previous ASI dev build | `node-rust` | [e18defd44d43](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) |
 | Earlier ASI dev build | `node-rust` | [72c9126ca17b](https://github.com/asi-alliance/asi-chain-rust-node/tree/72c9126ca17b26c4b5c33b093422020cabe91f45) |
 | Node baseline | `node-rust` | [e6ecf23814a3](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) |
@@ -62,17 +62,23 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 
 ## Select Compatible Artifacts
 
-### Latest ASI Dev Node
+### ASI Dev Node With uint256
 
-The `0ccc315` image is the `asi-chain-rust-node` merge of upstream PR #966 and the first published build with uint256 amounts (upstream PR #881). The floating `dev` tag points to it today. The API returns amounts as decimal strings, `defaults.conf` holds the bond and price limits as strings, the block hash scheme changed, and old deploy records are quarantined. It includes the known-peers change from [PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927). The published ASI client 0.2.9, the Wallet CLI and SDK 2.1.0 sign the deploy price in a field that this build reserved, so they do not work with it. Its manifest and labels were read on 10 November 2026, the image was not started, and no CI result or client check is recorded here. See [node image](/nodes/image/#build-0ccc315-with-uint256) for the changes and [Token Amounts and 18 Decimals](/reference/token-amounts/) for the amount format.
+The `0ccc315` image is the `asi-chain-rust-node` merge of upstream PR #966 and the first published build with uint256 amounts (upstream PR #881). On 10 November 2026 the floating `dev` tag points to it.
 
-### Newer ASI Dev Node
+The API returns amounts as decimal strings, `defaults.conf` holds the bond and price limits as strings, the block hash scheme changed, and old deploy records are quarantined. It includes the known-peers change from upstream PR #927 ([github.com/F1R3FLY-io/f1r3node-rust/pull/927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927)).
 
-The `2cce114` image is the `asi-chain-rust-node` merge of upstream PR #951 from 6 November, built before uint256. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `8e6517d6`. Its manifest and labels were read on 10 November 2026, and the image was not started. See [node image](/nodes/image/#build-2cce114).
+The published ASI client 0.2.9, the Wallet CLI and Wallet SDK 2.1.0 sign the deploy price in a field that this build reserves, so they do not work with it.
 
-### Guide ASI Dev Node
+Its manifest and labels were read on 10 November 2026, the image was not started, and no CI result or client check is recorded here. See [Node Image](/nodes/image/#build-0ccc315-with-uint256) for the changes and [Token Amounts](/reference/token-amounts/) for the amount format.
 
-The `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([github.com/F1R3FLY-io/f1r3node-rust/pull/941](https://github.com/F1R3FLY-io/f1r3node-rust/pull/941)), 12 commits after `e18defd4`. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `e18defd4`. Its manifest, `org.opencontainers.image.revision` label and a container start were checked on 5 November 2026. This catalog records no CI result for this exact revision and no client check against it. The instructions of [node image](/nodes/image/) are written for this build, and the published client 0.2.9 signs deploys in the format that this build accepts. It does not contain the known-peers change from PR #927, which is in `0ccc315`.
+### Last ASI Dev Node Before uint256
+
+The `2cce114` image is the `asi-chain-rust-node` merge of upstream PR #951 from 6 November, built before uint256. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `8e6517d6`. Its manifest and labels were read on 10 November 2026, and the image was not started. See [Node Image](/nodes/image/#build-2cce114).
+
+### ASI Dev Node Used in the Guides
+
+The `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([github.com/F1R3FLY-io/f1r3node-rust/pull/941](https://github.com/F1R3FLY-io/f1r3node-rust/pull/941)), 12 commits after `e18defd4`. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `e18defd4`. Its manifest, `org.opencontainers.image.revision` label and a container start were checked on 5 November 2026. This catalog records no CI result for this exact revision and no client check against it. The instructions in [Node Image](/nodes/image/) are written for this build, and the published client 0.2.9 signs deploys in the format that this build accepts. It does not contain the known-peers change from PR #927, which is in `0ccc315`.
 
 ### Previous ASI Dev Node
 
@@ -88,11 +94,11 @@ The `72c9126` image comes from the ASI fork of the maintained pure-Rust reposito
 
 ### Wallet CLI
 
-The `8f6c20e` image embeds the ASI client at submodule commit `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. It does not acquire later `dev` or PR changes. Both the embedded client and the standalone `client` image use the node models of `5dafbc37`, so they sign the deploy price as `int64` and do not support uint256 nodes. The standalone client image is a separate operator tool, and the listed `client` tag was built from a different commit than that submodule commit. The image built from the submodule commit is tagged `0.2.9-pr3.20261103-77cbdc8180d8`, digest `sha256:b3ba6dcb31dd08b7d89c57193672947821d0c13eb65bd33527d62ada409cfc19`.
+The `8f6c20e` image embeds the ASI client at submodule commit `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. It does not acquire later `dev` or PR changes. Both the embedded client and the standalone `client` image use the node protobuf models from f1r3node-rust commit `5dafbc37`, so they sign the deploy price as `int64` and do not support uint256 nodes. The standalone client image is a separate operator tool, and the listed `client` tag was built from a different commit than that submodule commit. The image built from the submodule commit is tagged `0.2.9-pr3.20261103-77cbdc8180d8`, digest `sha256:b3ba6dcb31dd08b7d89c57193672947821d0c13eb65bd33527d62ada409cfc19`.
 
 ### Indexer
 
-The `0bb60e8` image includes the merged PR #20 behavior, the PostgreSQL 18.6 and Hasura v2.51.4 upgrade (PR #25) and CI for pull requests (PR #26). PR #38 was merged on 9 November 2026 but is not in this image, and the registry has no newer indexer tag. Later API or cost-accounting candidates are separate work. PostgreSQL, migrations and the Hasura metadata and permissions remain deployment inputs.
+The `0bb60e8` image includes the merged PR #20 behavior, the PostgreSQL 18.6 and Hasura v2.51.4 upgrade (PR #25) and CI for pull requests (PR #26). Indexer PR #38 was merged on 9 November 2026 but is not in this image, and the registry has no newer indexer tag. Later API or cost-accounting candidates are separate work. PostgreSQL, migrations and the Hasura metadata and permissions remain deployment inputs.
 
 ### Faucet API
 

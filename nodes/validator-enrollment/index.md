@@ -121,7 +121,7 @@ The output shows the current block and epoch, the epoch length and the quarantin
 
 Send the deploy to an already bonded validator, because a node that cannot propose accepts a deploy and never includes it. Do not send it to the joining node itself or to the bootstrap or ceremony-master node. Use the read-only observer for status and result queries. The stake must be at least the shard's `bond-minimum`, and bonding the same key twice fails with `already bonded`.
 
-`STAKE_BASE_UNITS` depends on the decimals of the shard, which the node reports as `nativeTokenDecimals` in `/api/status`. Client 0.2.9 works only with nodes from before uint256 amounts, see [Node Image](/nodes/image/) and [Token Amounts](/reference/token-amounts/).
+`STAKE_BASE_UNITS` depends on the decimals of the shard, which the node reports as `nativeTokenDecimals` in `/api/status`. Client 0.2.9 works only with nodes that predate uint256 amounts. See [Node Image](/nodes/image/) and [Token Amounts](/reference/token-amounts/).
 
 ```bash
 client bond-validator --stake "$STAKE_BASE_UNITS" \
