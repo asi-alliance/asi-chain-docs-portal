@@ -8,7 +8,9 @@ On 10 November 2026 DevNet and the current wallet, explorer, faucet, Wallet CLI 
 
 ## Find the Decimals of a Network
 
-A Rust node reports its token in `GET /api/status`, in the fields `nativeTokenName`, `nativeTokenSymbol` and `nativeTokenDecimals`.
+A Rust node reports its token in `GET /api/status`, in the fields `nativeTokenName`, `nativeTokenSymbol` and `nativeTokenDecimals`. As of 5 November 2026 the public DevNet runs the Scala node, so read these fields on a Rust shard. See [Wallet CLI](/cli/usage/#compatibility).
+
+The symbol alone does not identify a network. Check `networkId` and `shardId` in the same response as well.
 
 The node accepts 0 to 18 decimals. It refuses to start when the value is above 18 or when the name or the symbol is empty. Without settings of its own the node reports the defaults `F1R3CAP`, `F1R3` and 8 decimals.
 
@@ -27,7 +29,7 @@ One ASI is 10^d atomic units, where d is the number of decimals. Convert with in
 | `1.000000000000000001` | Too many digits | `1000000000000000001` |
 | `10` | `1000000000` | `10000000000000000000` |
 
-The raw amount `100000000` is 1 ASI with 8 decimals and `0.0000000001` ASI with 18 decimals. Raw amounts from DevNet examples, such as the Wallet CLI commands, do not mean the same amount on TestNet.
+The raw amount `100000000` is 1 ASI with 8 decimals and `0.0000000001` ASI with 18 decimals. Raw amounts from DevNet examples, such as the Wallet CLI commands, do not mean the same amount on a network with 18 decimals.
 
 In Wallet SDK 2.1.0, `toAtomicAmount` multiplies the integer part by 10^8 for any `decimals`. `toAtomicAmount("1", 18)` returns `100000000n` instead of `1000000000000000000n`, so use it only with 8 decimals.
 
@@ -79,7 +81,7 @@ Decimals and the uint256 format are independent. A client that shows 18 digits c
 
 The indexer added a `uint256` build profile in [github.com/asi-alliance/asi-chain-indexer/pull/38](https://github.com/asi-alliance/asi-chain-indexer/pull/38) on 9 November 2026. The published image `0bb60e89db36` was built before it. Work on support in the other tools is tracked in [github.com/asi-alliance/asi-chain-wallet-sdk/pull/221](https://github.com/asi-alliance/asi-chain-wallet-sdk/pull/221), [github.com/asi-alliance/asi-chain-wallet-sdk/issues/220](https://github.com/asi-alliance/asi-chain-wallet-sdk/issues/220), [github.com/F1R3FLY-io/rust-client/issues/87](https://github.com/F1R3FLY-io/rust-client/issues/87) and [github.com/F1R3FLY-io/rust-client/pull/88](https://github.com/F1R3FLY-io/rust-client/pull/88).
 
-Before you move an app to 18 decimals or uint256, send transfers of 1, `9007199254740993` and `10000000000000000001` atomic units through the node, the indexer and the app, and compare the balances and the history.
+Before you move an app to 18 decimals or uint256, send transfers of 1, `9007199254740993` and `10000000000000000001` atomic units through the node, the indexer and the app, and compare the balances and the history. Check network switching and saved pending operations too.
 
 ## Sources
 

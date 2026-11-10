@@ -14,10 +14,10 @@ For the short path from a new wallet to a balance, see [Get DevNet ASI](/quick-s
 - There is no waiting time between requests. You can ask again as soon as the previous request is finished.
 - A request is refused when the balance of the address is above 20,000 ASI. Below that limit the FAUCET button works for any address.
 
-The faucet page checks the 20,000 ASI limit. The 10,000 ASI per request is the default of the faucet server with 8 decimals. An operator can change both.
+The faucet page checks the 20,000 ASI limit. By default the faucet server sends 10^12 atomic units, which is 10,000 ASI with 8 decimals. An operator can change both.
 
 ::: info Token Decimals
-These amounts are for DevNet, where ASI has 8 decimals. For the planned TestNet, 18 decimals are proposed, and they would need a new faucet release. See [Token Amounts](/reference/token-amounts/).
+For the planned TestNet, 18 decimals are proposed, and they would need a new faucet release. See [Token Amounts](/reference/token-amounts/).
 :::
 
 ## Request Tokens
