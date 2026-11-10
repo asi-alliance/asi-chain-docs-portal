@@ -4,10 +4,6 @@
 
 An `Asset` is the model of a token. It holds the identifier, the name and the number of decimals, and optionally the address of its contract. `AssetsService.getBalance` takes an `Asset` and returns it together with the balance.
 
-::: warning Network precision and compatibility
-The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
-:::
-
 The module also defines the types `AssetId = string` and `Assets = Map<AssetId, Asset>`.
 
 ## Import
@@ -68,7 +64,7 @@ getContractAddress(): string | null
 
 ## Default Asset
 
-`DEFAULT_ASSET` is the native ASI asset: name `"ASI"`, 8 decimals, no contract address, and a random `id` that is generated when the SDK is loaded. `Client.getBalance(address)` uses it.
+`DEFAULT_ASSET` is the native ASI asset: name `"ASI"`, 8 decimals, no contract address, and a random `id` that is generated when the SDK is loaded. `Client.getBalance(address)` uses it. The 8 decimals are fixed in 2.1.0 and do not follow the network, see [Token Amounts](/reference/token-amounts/).
 
 ## Example
 

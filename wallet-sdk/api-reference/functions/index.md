@@ -4,13 +4,9 @@
 
 These functions convert amounts between human-readable values and atomic integers. A few small helpers come with them. All of them are plain functions exported from the package root.
 
-An atomic amount is a `bigint` count of the smallest token unit. A token with `decimals` decimal places has `10^decimals` atomic units in one whole token, so for ASI (`ASI_DECIMALS` = `8`) one ASI is `100_000_000` atomic units. This multiplier is not valid for the planned 18-decimal testnet.
+An atomic amount is a `bigint` count of the smallest token unit. A token with `decimals` decimal places has `10^decimals` atomic units in one whole token, so for ASI (`ASI_DECIMALS` = `8`) one ASI is `100_000_000` atomic units.
 
 Every conversion takes `decimals` as a required argument. Pass `ASI_DECIMALS` for ASI, or `asset.getDecimals()` when you work with an [`Asset`](/wallet-sdk/api-reference/asset/).
-
-::: warning Network precision and compatibility
-The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
-:::
 
 ## Import
 
@@ -39,7 +35,7 @@ toAtomicAmount(amount: number | string, decimals: number): bigint
 Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
 
 ::: warning Wrong Result for Decimals Other Than 8
-In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`.
+In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`. With 18 decimals `toAtomicAmount("1", 18)` returns `100000000n`, so the function cannot convert amounts for the 18 decimals planned for TestNet. See [Token Amounts](/reference/token-amounts/).
 :::
 
 | Name | Type | Description |
@@ -76,7 +72,7 @@ Returns `string`.
 fromAtomicAmountToNumber(atomicAmount: bigint, decimals: number): number
 ```
 
-Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Fractional precision can be lost even below that boundary. Use `fromAtomicAmount` when exact digits matter; do not use this helper for signing, balance comparisons or fee calculations.
+Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Fractional precision can be lost even below that boundary. Use `fromAtomicAmount` when exact digits matter. Do not use this helper for signing, balance comparisons or fee calculations.
 
 | Name | Type | Description |
 |------|------|-------------|

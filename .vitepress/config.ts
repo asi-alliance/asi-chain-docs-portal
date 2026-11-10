@@ -149,7 +149,7 @@ const sidebar = [
     items: [
       { text: 'Network Endpoints', link: '/reference/endpoints/' },
       { text: 'Container Images', link: '/reference/container-images/' },
-      { text: 'Token Amounts and 18 Decimals', link: '/reference/token-amounts/' },
+      { text: 'Token Amounts', link: '/reference/token-amounts/' },
       { text: 'Useful Links', link: '/reference/links/' },
     ]
   },

@@ -18,7 +18,7 @@ Use the maintained [Rust source at the selected revision](https://github.com/asi
 | Persistence | Ownership, backups, recovery and retention |
 | Consumers | Indexer migrations, PostgreSQL, Hasura metadata/permissions and application endpoints |
 
-The ASI wallet and SDK use eight decimals, which is also the node default, so set the decimals flag only when you want a different value. Always set the token name and symbol, because the defaults carry the upstream names, not ASI ones.
+The ASI wallet and SDK use eight decimals, which is also the node default, so set the decimals flag only when you want a different value. For TestNet 18 decimals are proposed, see [Token Amounts](/reference/token-amounts/). Always set the token name and symbol, because the defaults carry the upstream names, not ASI ones.
 
 The number of nodes in a sample topology is not a minimum and does not guarantee fault tolerance. Check the bonded set and stake assumptions of your own shard. Review fixed block times and safety thresholds before you copy them from older examples.
 

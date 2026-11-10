@@ -2,10 +2,6 @@
 
 The explorer shows blocks, transactions, validators and network statistics for the ASI:Chain DevNet. Open it at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
 
-::: info Token precision
-Balances, stakes, fees and transfer amounts require exact decimal strings and the precision recorded for their network or history entry. The planned testnet uses 18 decimals; changing display precision must not rescale old history. See [Token Amounts and 18 Decimals](/reference/token-amounts/) for the indexer/GraphQL and export requirements.
-:::
-
 ::: tip Live Updates
 New blocks appear without reloading the page. A green check icon in the header shows that the live connection is up.
 :::
@@ -76,6 +72,10 @@ The **Validators** page starts with three cards, **Total Validators**, **Total A
 - status
 
 Large stakes are shortened, so 100000 ASI appears as 100.00K.
+
+::: info Token Decimals
+Amounts in the explorer are for DevNet, where ASI has 8 decimals. TestNet is planned with 18 decimals and will need a new explorer release. See [Token Amounts](/reference/token-amounts/).
+:::
 
 The **View History** button opens the **Validator History** page.
 

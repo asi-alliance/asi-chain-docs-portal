@@ -2,10 +2,6 @@
 
 ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecosystem. You use it through a web wallet, a block explorer and a faucet, and you can run your own node.
 
-::: info Token precision
-The planned testnet uses 18-decimal ASI amounts. See [Token Amounts and 18 Decimals](/reference/token-amounts/) for conversion, exact-number handling and rollout status.
-:::
-
 ## Components
 
 | Component | What it does | Guide |
@@ -28,7 +24,7 @@ A network is made of nodes with different roles. A bootstrap node is the entry p
 
 ## Token
 
-The native token is ASI. It has 8 decimal places, so 1 ASI is `100000000` in the smallest unit, and the Wallet CLI takes amounts in that unit. Account addresses are Base58 strings that start with `1111`.
+The native token is ASI. On DevNet it has 8 decimal places, so 1 ASI is `100000000` in the smallest unit, and the Wallet CLI takes amounts in that unit. TestNet is planned with 18 decimal places, as described in [Token Amounts](/reference/token-amounts/). Account addresses are Base58 strings that start with `1111`.
 
 ## Next Steps
 

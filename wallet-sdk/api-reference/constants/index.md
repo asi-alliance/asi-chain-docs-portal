@@ -4,10 +4,6 @@
 
 The SDK exports these constants from the package root. They live in two files: `utils/constants` holds the chain and encoding constants, and `config` holds the defaults for gas, timeouts and storage.
 
-::: warning Network precision and compatibility
-The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
-:::
-
 ## Import
 
 ```ts
@@ -21,11 +17,13 @@ import { ASI_DECIMALS, GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
 | `ASI_CHAIN_PREFIX` | `{ coinId: string; version: string }` | `{ coinId: "000000", version: "00" }` | Chain prefix prepended to the address payload before the checksum is calculated. |
-| `ASI_DECIMALS` | `number` | `8` | Legacy SDK default; not the planned testnet denomination. |
+| `ASI_DECIMALS` | `number` | `8` | Decimal places of ASI amounts in this SDK version. |
 | `NATIVE_TOKEN_DECIMALS_AMOUNT` | `number` | `8` | Default `decimals` of an [`Asset`](/wallet-sdk/api-reference/asset/). |
 | `POWER_BASE` | `number` | `10` | Base used to compute `ASI_BASE_UNIT`. |
-| `ASI_BASE_UNIT` | `bigint` | `100_000_000n` | Legacy eight-decimal multiplier (`10n ** 8n`, atomic units in one ASI). Use validated network precision for new integrations. |
+| `ASI_BASE_UNIT` | `bigint` | `100_000_000n` | Atomic units in one ASI with 8 decimals (`10n ** 8n`). |
 | `PRIVATE_KEY_LENGTH` | `number` | `32` | Length of a secp256k1 private key in bytes. |
+
+In 2.1.0 the decimal constants are fixed at 8, and no SDK API reads the decimals of the network. See [Token Amounts](/reference/token-amounts/).
 
 ### Node Responses
 

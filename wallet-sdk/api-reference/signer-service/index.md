@@ -4,10 +4,6 @@
 
 `SignerService` serializes deploy data into the bytes that get signed. It has one member and does not sign anything itself.
 
-::: warning Network precision and compatibility
-The planned testnet uses 18 decimals. These SDK examples describe the legacy eight-decimal API; changing a constant does not provide uint256 signing support. Select a compatible SDK release and verified network metadata before using it on the new testnet. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
-:::
-
 ## Import
 
 ```ts
@@ -23,6 +19,8 @@ static deployDataProtobufSerialize(deployData: DeployData): Uint8Array
 ```
 
 Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId` is written as an empty string.
+
+`phloPrice` goes into field 7 as an `int64`. A node with uint256 amounts reserves field 7 and reads the price from 32 bytes in field 15, so deploys serialized by 2.1.0 do not work with it. See [Token Amounts](/reference/token-amounts/).
 
 | Name | Type | Description |
 |------|------|-------------|

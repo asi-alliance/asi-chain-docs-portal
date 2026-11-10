@@ -2,10 +2,6 @@
 
 Create the validator key, fund the validator and submit the bond with the ASI Rust client. Between the key and the funding you start the node on [Run a Validator](/nodes/validator/) and come back here. The public DevNet runs a Scala node, and these Rust client commands do not work against it, so run the procedure on a Rust shard.
 
-::: info Token precision
-The `STAKE_BASE_UNITS` examples below belong to the legacy network profile. For the planned 18-decimal testnet, verify genesis metadata and a compatible uint256 bonding client; do not reuse an eight-decimal raw stake as the same number of ASI. See [Token Amounts and 18 Decimals](/reference/token-amounts/).
-:::
-
 ## Before You Start
 
 Ask the network operator for the following.
@@ -124,6 +120,8 @@ The output shows the current block and epoch, the epoch length and the quarantin
 ### Submit the Bond and Verify Participation
 
 Send the deploy to an already bonded validator, because a node that cannot propose accepts a deploy and never includes it. Do not send it to the joining node itself or to the bootstrap or ceremony-master node. Use the read-only observer for status and result queries. The stake must be at least the shard's `bond-minimum`, and bonding the same key twice fails with `already bonded`.
+
+`STAKE_BASE_UNITS` depends on the decimals of the shard, which the node reports as `nativeTokenDecimals` in `/api/status`. Client 0.2.9 works only with nodes from before uint256 amounts, see [Node Image](/nodes/image/) and [Token Amounts](/reference/token-amounts/).
 
 ```bash
 client bond-validator --stake "$STAKE_BASE_UNITS" \
