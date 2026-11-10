@@ -4,9 +4,9 @@ The image contains the maintained Rust implementation of CBC Casper, Rholang and
 
 ## Select the Image
 
-The latest build comes from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5). The builds below were checked on 5 November 2026 with `docker buildx imagetools inspect`. Pin the digest, not the tag. Tags in the registry can be removed, and the floating `dev` tag moves with every build, so do not use it.
+The instructions on this site use the build from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) at commit `8e6517d`. Two newer builds exist, described in [Newer Builds](#newer-builds). The build `0ccc315` already uses uint256 amounts and does not work with the published client 0.2.9, Wallet CLI or SDK 2.1.0, so the guides stay on `8e6517d`. The `8e6517d` and `e18defd` builds were checked on 5 November 2026 with `docker buildx imagetools inspect`. Pin the digest, not the tag. Tags in the registry can be removed, and the floating `dev` tag moves with every build, so do not use it.
 
-The latest build has the tag `0.4.46-dev.20261105-8e6517d630e2` and this manifest digest:
+The `8e6517d` build has the tag `0.4.46-dev.20261105-8e6517d630e2` and this manifest digest:
 
 ```text
 sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
@@ -18,7 +18,7 @@ The previous build has the tag `0.4.46-dev.20261104-e18defd44d43` and this manif
 sha256:e06a0a4ca43d9e60309c514a19f4c664d27eb216796b9b52d1bc67c10947694e
 ```
 
-Both are published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The latest build is 12 commits after the previous one. The Dockerfile, the entrypoint, `defaults.conf` and the example shard configuration are identical in both, so everything below applies to either. The [catalog](/reference/container-images/) lists the other published node builds and the application images. Choose the node revision together with its client and API contract. A newer tag does not upgrade a running shard.
+Both are published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The `8e6517d` build is 12 commits after the previous one. The Dockerfile, the entrypoint, `defaults.conf` and the example shard configuration are identical in both, so everything below applies to either. The [catalog](/reference/container-images/) lists the other published node builds and the application images. Choose the node revision together with its client and API contract. A newer tag does not upgrade a running shard.
 
 ```bash
 NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
@@ -29,6 +29,39 @@ docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" run --help
 ```
 
 These commands inspect the image without starting a network. The `org.opencontainers.image.revision` label holds the source commit. The image is published for `linux/amd64` only, so keep `--platform` on Apple silicon and other ARM hosts.
+
+## Newer Builds
+
+Two builds were published after `8e6517d`. Their manifests and labels were read from the registry on 10 November 2026, and their source differences come from the repository history. The images were not started.
+
+### Build 2cce114
+
+The tag is `0.4.46-dev.20261106-2cce114a52ac`, built from [commit `2cce114`](https://github.com/asi-alliance/asi-chain-rust-node/tree/2cce114a52ac1e1a85bbd03e0120de848df80d6d) of 6 November. The manifest digest is:
+
+```text
+sha256:185d1db5853a5fa454fb6575238cd2bdcb948cdd772241345d4fb22414adc235
+```
+
+Compared with `8e6517d`, the Dockerfile, the entrypoint, `defaults.conf` and the example shard configuration are unchanged, so the sections below apply to it. The API reports values of lambda, application and Pi expressions as `ExprUnknown` (upstream PR #942), and other responses keep their format. Blocks now hash their justifications and the node checks that hash on receipt (upstream PR #790). It is not verified whether this build can share a shard with `8e6517d`, so run one build per shard. The other merges are internal changes with no trace in the API, the ports or the configuration. This build has no uint256 changes.
+
+### Build 0ccc315 With uint256
+
+The tag is `0.4.46-dev.20261109-0ccc315d84b3`, built from [commit `0ccc315`](https://github.com/asi-alliance/asi-chain-rust-node/tree/0ccc315d84b32d668e8db49cd56ba3c576693e15) of 8 November. The floating `dev` tag points to this image today. The manifest digest is:
+
+```text
+sha256:d91e1325ca7b3aa539b6d6009b5351ce9033bce4d10c7ac58f68dbc0172b6c1b
+```
+
+This is the first published build with uint256 amounts, merged in `43d69b7` as upstream PR #881. Amounts range from 0 to 2^256−1. See [Token Amounts and 18 Decimals](/reference/token-amounts/) for the contract. For an operator the build changes the following:
+
+- The API returns amounts as decimal strings: `balance`, `stake`, `totalStake`, `minPhloPrice`, `phloPrice`, `transfers[].amount`, and `ExprInt.data` and `ExprUint64.data` at any depth. In `2cce114` and `8e6517d`, `minPhloPrice` is still a JSON number. A client that parses these fields as numbers breaks.
+- In `defaults.conf`, `bond-minimum`, `bond-maximum` and `min-phlo-price` are decimal strings. The defaults are `"1"`, 2^256−1 and `"1"`. The command-line options accept only canonical decimal digits and reject negative values, leading zeros and values above 2^256−1. `native-token-name`, `native-token-symbol` and `native-token-decimals` stay `F1R3CAP`, `F1R3` and 8, and `network-id` stays `testnet`.
+- The block hash scheme is version 3, and old deploy records are quarantined instead of migrated. Data and peers of a build from before uint256 are not compatible with this build, and the upstream change describes no migration.
+- Propose refusals have typed errors (upstream PR #924). HTTP 409 now includes `validator_not_bonded`, `not_enough_new_blocks` and `too_far_ahead_of_finalized`. A new HTTP 503 carries `observer_busy`, `block_not_held`, `history_incomplete` or `missing_block`.
+- The build includes the known-peers change from [PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927). See the warning below.
+- The Dockerfile, the entrypoint, the example shard configuration and the ports are the same as in `8e6517d`.
+
+The published ASI client 0.2.9 and the Wallet CLI sign `phloPrice` as `int64` in field 7, and SDK 2.1.0 does the same. This build reserved field 7 and expects 32 bytes in field 15, so deploys from these tools do not work against it. No published client, Wallet CLI or SDK version signs the new format yet. The [catalog](/reference/container-images/) lists the builds.
 
 ## Runtime and Configuration
 
@@ -118,7 +151,7 @@ curl -s http://localhost:40403/api/status
 For a network of your own, add `--standalone` and a genesis directory as described in [private shard](/nodes/private-shard/).
 
 ::: warning Restart Needs the Bootstrap
-After a restart the node reconnects only through `--bootstrap`. The source revision of this image does not contain the [known-peers change in PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927), which is still open. If the bootstrap is unreachable, the node waits at `Waiting for first connection...`.
+After a restart the node reconnects only through `--bootstrap`. The source revision of the `8e6517d` build does not contain the [known-peers change in PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927). The `0ccc315` build does, and it keeps connected peers in `known-peers` in the data directory and adds them to the routing table when it starts without connections. On the `8e6517d` build, if the bootstrap is unreachable, the node waits at `Waiting for first connection...`.
 :::
 
 ## Becoming a Validator

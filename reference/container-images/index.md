@@ -2,9 +2,9 @@
 
 Look up the published ASI:Chain container images. Use the versioned tags to identify an artifact and the digests to pin it.
 
-The current namespace is `public.ecr.aws/l2u2v4a8/asi-chain/`, and all listed artifacts are `linux/amd64`. Every tag and digest below was read with `docker buildx imagetools inspect` on 5 November 2026.
+The current namespace is `public.ecr.aws/l2u2v4a8/asi-chain/`, and all listed artifacts are `linux/amd64`. The tags and digests were read with `docker buildx imagetools inspect` on 5 November 2026. The two node builds `2cce114` and `0ccc315` were added on 10 November 2026, and their digests were read from the registry manifests.
 
-The catalog lists twelve artifacts of eight components, five of them node builds. The registry can hold more tags than the catalog, and tags are removed over time. One tag that was in the registry on 4 November 2026 was gone on 5 November 2026.
+The catalog lists fourteen artifacts of eight components, seven of them node builds. The registry can hold more tags than the catalog, and tags are removed over time. One tag that was in the registry on 4 November 2026 was gone on 5 November 2026.
 
 The floating `dev` tags of `node-rust` and `indexer` move with every build, so do not use them. Pin the digest. A published image is not proof that it is deployed or that every combination of images works together.
 
@@ -14,7 +14,9 @@ Repository paths are relative to the namespace above. Each source link points to
 
 | Component | Repository | Source |
 |---|---|---|
-| Latest ASI dev build | `node-rust` | [8e6517d630e2](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) |
+| Latest ASI dev build, uint256 | `node-rust` | [0ccc315d84b3](https://github.com/asi-alliance/asi-chain-rust-node/tree/0ccc315d84b32d668e8db49cd56ba3c576693e15) |
+| Newer ASI dev build | `node-rust` | [2cce114a52ac](https://github.com/asi-alliance/asi-chain-rust-node/tree/2cce114a52ac1e1a85bbd03e0120de848df80d6d) |
+| Guide ASI dev build | `node-rust` | [8e6517d630e2](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) |
 | Previous ASI dev build | `node-rust` | [e18defd44d43](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) |
 | Earlier ASI dev build | `node-rust` | [72c9126ca17b](https://github.com/asi-alliance/asi-chain-rust-node/tree/72c9126ca17b26c4b5c33b093422020cabe91f45) |
 | Node baseline | `node-rust` | [e6ecf23814a3](https://github.com/F1R3FLY-io/f1r3node-rust/tree/e6ecf23814a306e4ad9850ea44fc753f40966db8) |
@@ -30,6 +32,8 @@ Repository paths are relative to the namespace above. Each source link points to
 Each line below gives the repository, the versioned tag and the manifest digest of one artifact, in the order of the table. The end of each tag matches the commit in the Source column.
 
 ```text
+node-rust:0.4.46-dev.20261109-0ccc315d84b3@sha256:d91e1325ca7b3aa539b6d6009b5351ce9033bce4d10c7ac58f68dbc0172b6c1b
+node-rust:0.4.46-dev.20261106-2cce114a52ac@sha256:185d1db5853a5fa454fb6575238cd2bdcb948cdd772241345d4fb22414adc235
 node-rust:0.4.46-dev.20261105-8e6517d630e2@sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
 node-rust:0.4.46-dev.20261104-e18defd44d43@sha256:e06a0a4ca43d9e60309c514a19f4c664d27eb216796b9b52d1bc67c10947694e
 node-rust:0.4.46-dev.20261104-72c9126ca17b@sha256:269bee1885371eb7918380984730217c36cd4d259b13ca85e579f1ba2cb5e1e8
@@ -60,7 +64,15 @@ Anonymous pulls do not require AWS credentials. The ECR Public gallery at [galle
 
 ### Latest ASI Dev Node
 
-The `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([github.com/F1R3FLY-io/f1r3node-rust/pull/941](https://github.com/F1R3FLY-io/f1r3node-rust/pull/941)), 12 commits after `e18defd4`. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `e18defd4`. Its manifest, `org.opencontainers.image.revision` label and a container start were checked on 5 November 2026. This catalog records no CI result for this exact revision and no client check against it. See [node image](/nodes/image/) for how to run it.
+The `0ccc315` image is the `asi-chain-rust-node` merge of upstream PR #966 and the first published build with uint256 amounts (upstream PR #881). The floating `dev` tag points to it today. The API returns amounts as decimal strings, `defaults.conf` holds the bond and price limits as strings, the block hash scheme changed, and old deploy records are quarantined. It includes the known-peers change from [PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927). The published ASI client 0.2.9, the Wallet CLI and SDK 2.1.0 sign the deploy price in a field that this build reserved, so they do not work with it. Its manifest and labels were read on 10 November 2026, the image was not started, and no CI result or client check is recorded here. See [node image](/nodes/image/#build-0ccc315-with-uint256) for the changes and [Token Amounts and 18 Decimals](/reference/token-amounts/) for the amount format.
+
+### Newer ASI Dev Node
+
+The `2cce114` image is the `asi-chain-rust-node` merge of upstream PR #951 from 6 November, built before uint256. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `8e6517d6`. Its manifest and labels were read on 10 November 2026, and the image was not started. See [node image](/nodes/image/#build-2cce114).
+
+### Guide ASI Dev Node
+
+The `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([github.com/F1R3FLY-io/f1r3node-rust/pull/941](https://github.com/F1R3FLY-io/f1r3node-rust/pull/941)), 12 commits after `e18defd4`. Its Dockerfile, entrypoint and `defaults.conf` are identical to those of `e18defd4`. Its manifest, `org.opencontainers.image.revision` label and a container start were checked on 5 November 2026. This catalog records no CI result for this exact revision and no client check against it. The instructions of [node image](/nodes/image/) are written for this build, and the published client 0.2.9 signs deploys in the format that this build accepts. It does not contain the known-peers change from PR #927, which is in `0ccc315`.
 
 ### Previous ASI Dev Node
 
@@ -76,11 +88,11 @@ The `72c9126` image comes from the ASI fork of the maintained pure-Rust reposito
 
 ### Wallet CLI
 
-The `8f6c20e` image embeds the ASI client at submodule commit `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. It does not acquire later `dev` or PR changes. The standalone client image is a separate operator tool, and the listed `client` tag was built from a different commit than that submodule commit. The image built from the submodule commit is tagged `0.2.9-pr3.20261103-77cbdc8180d8`, digest `sha256:b3ba6dcb31dd08b7d89c57193672947821d0c13eb65bd33527d62ada409cfc19`.
+The `8f6c20e` image embeds the ASI client at submodule commit `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. It does not acquire later `dev` or PR changes. Both the embedded client and the standalone `client` image use the node models of `5dafbc37`, so they sign the deploy price as `int64` and do not support uint256 nodes. The standalone client image is a separate operator tool, and the listed `client` tag was built from a different commit than that submodule commit. The image built from the submodule commit is tagged `0.2.9-pr3.20261103-77cbdc8180d8`, digest `sha256:b3ba6dcb31dd08b7d89c57193672947821d0c13eb65bd33527d62ada409cfc19`.
 
 ### Indexer
 
-The `0bb60e8` image includes the merged PR #20 behavior, the PostgreSQL 18.6 and Hasura v2.51.4 upgrade (PR #25) and CI for pull requests (PR #26). Later API or cost-accounting candidates are separate work. PostgreSQL, migrations and the Hasura metadata and permissions remain deployment inputs.
+The `0bb60e8` image includes the merged PR #20 behavior, the PostgreSQL 18.6 and Hasura v2.51.4 upgrade (PR #25) and CI for pull requests (PR #26). PR #38 was merged on 9 November 2026 but is not in this image, and the registry has no newer indexer tag. Later API or cost-accounting candidates are separate work. PostgreSQL, migrations and the Hasura metadata and permissions remain deployment inputs.
 
 ### Faucet API
 
