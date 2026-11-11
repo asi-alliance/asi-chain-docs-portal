@@ -33,7 +33,7 @@ A transfer can fail for several reasons.
 
 - The sender's balance does not cover the amount and the fee. The wallet warns with `Insufficient balance to cover the estimated fee.` A deploy that runs out of funds after it was accepted fails inside its block with `Deploy payment failed: Insufficient funds`.
 - The recipient address is not a valid ASI address. Addresses start with `1111`.
-- The result is still pending. Keep the original deploy ID and check it in the explorer before you send again. A timeout is not proof that the payment failed.
+- The result is pending. Keep the original deploy ID and check it in the explorer before you send again. A timeout is not proof that the payment failed.
 
 ## Set the Container Name
 
@@ -80,13 +80,13 @@ Read the peer count and the node's own view of the network:
 curl -s http://127.0.0.1:40403/api/status
 ```
 
-A node that has not connected yet reports `"peers": 0` and `"isReady": false`, and the log repeats `Waiting for first connection...`.
+A node that has not connected reports `"peers": 0` and `"isReady": false`, and the log repeats `Waiting for first connection...`.
 
 ### Likely Causes
 
 Check these in order.
 
-1. The network runs the Rust node. The public DevNet runs a Scala node, and a Rust node started with its bootstrap lists other nodes in `/api/status` but keeps `peers` at 0.
+1. The network runs the Rust node. A node started with the bootstrap of a network that does not run the Rust node lists other nodes in `/api/status` but keeps `peers` at 0.
 2. The bootstrap URI is complete and the node ID in it belongs to the bootstrap node. The ID is the `address` field of `/api/status` on that node.
 3. `--network-id` equals the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from other networks.
 4. `--shard-name` equals the `shardId` that the bootstrap node reports. The default is `root`. With another name the node reports `"peers": 1` but stays at `Waiting for first connection...`.
@@ -95,7 +95,7 @@ Check these in order.
 
 ### Notes
 
-A restarted node reconnects only through its configured bootstrap node, because the image does not include the known-peers change from upstream PR #927. If the bootstrap node is down, the log stays on `Waiting for first connection...`.
+A restarted node reconnects only through its configured bootstrap node. If the bootstrap node is down, the log stays on `Waiting for first connection...`.
 
 TCP connectivity alone does not establish the correct shard, synchronization or finalization.
 
@@ -126,7 +126,7 @@ Check which source revision the CLI or indexer was built from, and for the CLI a
 
 ### Compatibility
 
-Before you change a client, check which HTTP and Protobuf API the selected node exposes. Cost-accounting APIs and newer integer and transfer representations need compatible clients and separate acceptance checks. The Rust client commands `wallet-balance`, `validator-status`, `bonds` and `active-validators` fail against the Scala DevNet node.
+Before you change a client, check which HTTP and Protobuf API the selected node exposes.
 
 ## Slow Sync or Restart
 

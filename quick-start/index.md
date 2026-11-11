@@ -38,7 +38,7 @@ Public DevNet services are listed on [Network Endpoints](/reference/endpoints/).
 You want to write an application, a script or a contract.
 
 - Read the [Wallet SDK overview](/wallet-sdk/overview/) and the [API reference](/wallet-sdk/api-reference/) to sign and send transactions from TypeScript.
-- Use the [Wallet CLI](/cli/usage/) to create wallets and send tokens from a terminal. The CLI is built for the Rust node API. Against the Scala node of the public DevNet, only `create` works as of 5 November 2026.
+- Use the [Wallet CLI](/cli/usage/) to create wallets and send tokens from a terminal.
 - Look at the [architecture](/architecture/) pages to see how the node, indexer, GraphQL API and applications fit together.
 
 ## Next Steps

@@ -2,10 +2,6 @@
 
 The ASI wallet CLI creates wallets, queries balances, sends tokens and reads and exports deploy history from a terminal. Run it from the published image or build it from source.
 
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 only `create` works against the public DevNet, because DevNet runs the Scala node and the CLI is written for the Rust node. See [Compatibility](#compatibility).
-:::
-
 ## Published Image
 
 ```text
@@ -28,11 +24,7 @@ docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --hel
 
 ## Compatibility
 
-The CLI is written for the HTTP and gRPC API of the Rust node. The public DevNet still runs the Scala node, and on 5 November 2026 only `create` works against it:
-
-- `balance` and `send` stop with `Wrong native token: expected ASI, node reports `, because the DevNet node status has no token symbol.
-- With `EXPECTED_TOKEN_SYMBOL` set to an empty value, `balance` and `send` stop with `HTTP 404` on `/api/balance/<address>`.
-- `history` and `export` could not connect to the DevNet GraphQL endpoint either (see [Configuration](#configuration)).
+The CLI is written for the HTTP and gRPC API of the Rust node.
 
 Use a Rust node, such as one started from the [node image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
 
@@ -65,7 +57,7 @@ The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappi
 
 `send` submits through the external gRPC port of a validator (`40401` by default). Open it only to the clients that need it. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
 
-`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. On 5 November 2026 no public GraphQL endpoint was known to work with them, so ask the network operator for one. Acceptance of `history` and `export` on a deployment is tracked in [github.com/asi-alliance/asi-chain-wallet-cli/issues/5](https://github.com/asi-alliance/asi-chain-wallet-cli/issues/5).
+`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. Ask the network operator for the endpoint.
 
 ### Private Shard
 
@@ -80,7 +72,7 @@ EXPECTED_TOKEN_SYMBOL=ASI
 SHARD_ID=my-shard
 ```
 
-`SHARD_ID` must match `--shard-name`. Nodes started without the token flags report `F1R3`, and `balance` then stops with `Wrong native token: expected ASI, node reports F1R3` until `EXPECTED_TOKEN_SYMBOL` matches the reported symbol. On 5 November 2026 a transfer of 1 ASI between two wallets on this shard ended with `Transfer complete`, and the sender paid 0.00250669 ASI in fees.
+`SHARD_ID` must match `--shard-name`. Nodes started without the token flags report `F1R3`, and `balance` then stops with `Wrong native token: expected ASI, node reports F1R3` until `EXPECTED_TOKEN_SYMBOL` matches the reported symbol.
 
 ## Run the Image
 
@@ -135,7 +127,7 @@ The build downloads its dependencies from crates.io and GitHub. `cargo build` it
 ::: warning Select the dev Branch
 Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client.
 
-Do not use `git submodule update --remote`: it replaces the pinned client with the newest commit of its branch.
+Do not use `git submodule update --remote`: it replaces the pinned client with whatever commit its branch points to.
 :::
 
 </Steps>
@@ -166,11 +158,11 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 | 1 | `100000000` |
 | 10 | `1000000000` |
 
-The table is for 8 decimals, as on DevNet. With the 18 decimals proposed for the planned TestNet, `--amount 100000000` would be `0.0000000001` ASI. The published image signs the deploy price as an int64 number, so it does not work with a node that uses uint256 amounts. See [Token Amounts](/reference/token-amounts/).
+The table is for 8 decimals, as on DevNet. See [Token Amounts](/reference/token-amounts/).
 
 Give amounts as exact integers. The CLI reads them without a size limit, so values above JavaScript's safe integer range (2^53 − 1) stay exact. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 
-The node's native-token configuration and expected symbol must match the target shard. Cost-accounting APIs and later node API changes require a matching source and image of their own, and changing the image tag here does not enable them.
+The node's native-token configuration and expected symbol must match the target shard.
 
 ## Next Steps
 

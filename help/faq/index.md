@@ -14,7 +14,7 @@ Start at [Get Started](/quick-start/). It has one path for using the network, on
 
 ### What Does an ASI Address Look Like?
 
-It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. On DevNet amounts have 8 decimal places, so one ASI is `100000000` atomic units. For the planned TestNet, 18 decimal places are proposed. See [Token Amounts](/reference/token-amounts/).
+It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. On DevNet amounts have 8 decimal places, so one ASI is `100000000` atomic units. See [Token Amounts](/reference/token-amounts/).
 
 ## Wallet and Keys
 
@@ -42,11 +42,11 @@ The wallet refreshes account data every 30 seconds.
 
 ### How Do I Get Test Tokens?
 
-Create a wallet account, copy its address and paste it into the faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io). The steps are in [Get DevNet ASI](/quick-start/get-asi/). On 5 November 2026 one request credited 10,000 ASI.
+Create a wallet account, copy its address and paste it into the faucet at [faucet.dev.asichain.io](https://faucet.dev.asichain.io). The steps are in [Get DevNet ASI](/quick-start/get-asi/).
 
 ### Is There a Waiting Period Between Requests?
 
-No. The faucet API sets no time limit between requests, but a proxy in front of the public faucet can still limit the request rate. The faucet refuses an address only when its balance is above the faucet's limit. The page then shows `Your address is not eligible`.
+No. The faucet API sets no time limit between requests, but a proxy in front of the public faucet can limit the request rate. The faucet refuses an address only when its balance is above the faucet's limit. The page then shows `Your address is not eligible`.
 
 ### The Tokens Have Not Arrived. What Should I Do?
 
@@ -66,19 +66,19 @@ No. The explorer is a web frontend that queries a Hasura GraphQL API. A separate
 
 ### Which Node Implementation Is Maintained?
 
-The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New images record this source. As of 5 November 2026 the public DevNet still runs the Scala node, and a Rust node started with the DevNet bootstrap did not connect to it. The older Scala repositories and deployment helpers are not the setup source for the current images.
+The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New images record this source. The older Scala repositories and deployment helpers are not the setup source for the images.
 
 ### Which Container Registry Should I Use?
 
 `public.ecr.aws/l2u2v4a8/asi-chain/`. Use the versioned tags and digests from the [container images](/reference/container-images/) catalog and pin a digest. The catalog lists the node, indexer, explorer, wallet, faucet, Wallet CLI and ASI client images.
 
-### Does a Newer Image Mean I Should Upgrade?
+### Should I Upgrade to Every Published Image?
 
 Not by itself. Pick the image that matches the network's accepted configuration and the API your clients use. A published image does not show that a network runs it.
 
 ### Can I Use a Node IP Address from an Older Page?
 
-No. Take the current DevNet addresses from [Network Endpoints](/reference/endpoints/). For any other network, ask its operator for the current URLs and the bootstrap identity. Old IP addresses and the availability of a particular observer are not a current inventory, and host port mappings can differ from the container defaults.
+No. Take the DevNet addresses from [Network Endpoints](/reference/endpoints/). For any other network, ask its operator for the URLs and the bootstrap identity. Old IP addresses and the availability of a particular observer are not a current inventory, and host port mappings can differ from the container defaults.
 
 ### Which Ports Must Be Reachable?
 
@@ -86,17 +86,13 @@ Peers connect over TCP on `40400` and `40404`. Clients need access to the extern
 
 ### Does an Observer Reject Writes?
 
-Yes. A node started without a validator key runs in read-only mode. It rejects deploys with `Deploy was rejected because node is running in read-only mode.` and does not propose blocks, but it still answers queries. Exploratory deploys, which balance queries use, run only on a read-only node or on a node started in developer mode, such as DevNet Validator 1.
+Yes. A node started without a validator key runs in read-only mode. It rejects deploys with `Deploy was rejected because node is running in read-only mode.` and does not propose blocks, but it answers queries. Exploratory deploys, which balance queries use, run only on a read-only node or on a node started in developer mode, such as DevNet Validator 1.
 
 ## Tools
 
-### Does the Wallet CLI Work with DevNet?
-
-On 5 November 2026 only `create` does, because the public DevNet still runs the Scala node and the CLI is written for the Rust node API. See [Wallet CLI](/cli/usage/#compatibility).
-
 ### What Amount Does the Wallet CLI Expect?
 
-An integer in atomic units. On DevNet `100000000` is one ASI. [Token Amounts](/reference/token-amounts/) shows the values proposed for the planned TestNet. Keep the exact integer, and if a transfer ends with an unknown result, check its deploy ID before sending again.
+An integer in atomic units. On DevNet `100000000` is one ASI. See [Token Amounts](/reference/token-amounts/). Keep the exact integer, and if a transfer ends with an unknown result, check its deploy ID before sending again.
 
 ### Should I Update the Wallet CLI Submodule with `--remote`?
 

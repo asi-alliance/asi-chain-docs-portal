@@ -34,7 +34,7 @@ The Wallet SDK is published on npm as [@asichain/asi-wallet-sdk](https://www.npm
 
 The repository [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) is the legacy deployment repository. Do not use it as the source for node setup.
 
-Check the branch or tag you build from, because the default branch of a repository does not always hold the current ASI integration.
+Check the branch or tag you build from, because the default branch of a repository does not always hold the ASI integration.
 
 ## Report a Problem
 
