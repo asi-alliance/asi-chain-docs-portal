@@ -34,7 +34,7 @@ Read these from the node:
 
 - The balance of an address through `GET /api/balance/{address}`, or with a Rholang query through `POST /api/explore-deploy`
 - Deploy status and finalization through `/api/deploy/{deploy_id}`, `/api/pending-deploys`, `/api/is-finalized/{hash}` and `/api/deploy-finalization-status/{sig}`
-- The latest blocks, the validators and the epoch through `/api/last-finalized-block`, `/api/blocks`, `/api/validators` and `/api/epoch`
+- Blocks, the validators and the epoch through `/api/last-finalized-block`, `/api/blocks`, `/api/validators` and `/api/epoch`
 
 Read these from the indexer through Hasura GraphQL:
 

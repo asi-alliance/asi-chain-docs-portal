@@ -14,13 +14,7 @@ The `8e6517d` build has the tag `0.4.46-dev.20261105-8e6517d630e2` and this mani
 sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
 ```
 
-The previous build has the tag `0.4.46-dev.20261104-e18defd44d43` and this manifest digest:
-
-```text
-sha256:e06a0a4ca43d9e60309c514a19f4c664d27eb216796b9b52d1bc67c10947694e
-```
-
-Both are published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The `8e6517d` build is 12 commits after the previous one. The Dockerfile, the entrypoint, `defaults.conf` and the example shard configuration are identical in both, so everything below applies to either. The [catalog](/reference/container-images/) lists the other published node builds and the application images. Choose the node revision together with its client and API contract. A tag does not upgrade a running shard.
+It is published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The [catalog](/reference/container-images/) lists the images of the other components. A tag does not upgrade a running shard.
 
 ```bash
 NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
@@ -125,14 +119,12 @@ After a restart the node reconnects only through `--bootstrap`. If the bootstrap
 
 ## Becoming a Validator
 
-Obtain the target shard's bootstrap peer, shard and genesis settings, native-token metadata, approved digest and admission process. Prepare persistent storage owned by `daemon` and private TLS and signing inputs. A running container or a configured validator key does not by itself give the node active bonded stake, synchronization or finalization.
-
-Follow [Run a Validator](/nodes/validator/) for the checks. Legacy configurator and connector recipes and JVM options do not configure this Rust image.
+[Run a Validator](/nodes/validator/) describes how to run this image as a validator.
 
 ## Next Steps
 
 <CardGrid columns="2">
 <DocCard title="Run a Validator" href="/nodes/validator/">Checks before a node joins as a validator</DocCard>
 <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Run a node with your own genesis</DocCard>
-<DocCard title="Container Images" href="/reference/container-images/">Other published node builds and the application images</DocCard>
+<DocCard title="Container Images" href="/reference/container-images/">Tags and digests of the published images</DocCard>
 </CardGrid>

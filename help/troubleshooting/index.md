@@ -18,14 +18,7 @@ See [ASI Wallet](/wallet/usage/) for the screens.
 
 ### Faucet Limits
 
-The faucet refuses an address only when its balance is above the limit, which is 20,000 ASI in the production web build. The page then shows `Your address is not eligible` and disables the FAUCET button. There is no waiting period between requests. An address starts with `1111`, and the faucet form accepts 50 to 54 characters.
-
-After a request the faucet page checks the deploy every 30 seconds. It stops in two cases:
-
-- after 15 minutes, with `Polling stopped after 15 minutes.`
-- on an error status, with `Polling stopped due to error status returned by node.`
-
-The status is one of `Deploying`, `Finalized`, `DeployError` or `Unknown`, and some builds also report `Finalizing` and `FinalizationError`. To see the current status, paste the deploy ID into the TX status check field on the faucet page. Do not send a second request until you have checked the first.
+The faucet refuses an address only when its balance is above 20,000 ASI. The page then shows `Your address is not eligible`. See [Faucet](/faucet/usage/) for how the page checks a request and what each status means. Do not send a second request until you have checked the first.
 
 ### Failed Transfers
 
@@ -117,16 +110,6 @@ The route returns `{"ready":true}` with HTTP 200 when the node is up, and `{"rea
 The image healthcheck calls `/api/ready` on container port `40403` every 30 seconds, with a 120-second start period. A joining node reports `unhealthy` until it has a peer and reaches the Running state. It also reports `unhealthy` after you move the HTTP port with `--api-port-http`, even if the node works.
 
 Keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. Do not disable TLS or expose privileged listeners as a diagnostic shortcut.
-
-## CLI or Indexer Response Mismatch
-
-### Check the Revision
-
-Check which source revision the CLI or indexer was built from, and for the CLI also which client commit its `rust-client` submodule points to. An image does not include changes merged after it was built. [Container Images](/reference/container-images/) identifies client and CLI artifacts, and [CLI configuration](/cli/usage/#configuration) uses explicit URLs.
-
-### Compatibility
-
-Before you change a client, check which HTTP and Protobuf API the selected node exposes.
 
 ## Slow Sync or Restart
 

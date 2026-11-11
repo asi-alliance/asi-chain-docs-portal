@@ -46,7 +46,7 @@ Create a wallet account, copy its address and paste it into the faucet at [fauce
 
 ### Is There a Waiting Period Between Requests?
 
-No. The faucet API sets no time limit between requests, but a proxy in front of the public faucet can limit the request rate. The faucet refuses an address only when its balance is above the faucet's limit. The page then shows `Your address is not eligible`.
+No. The faucet API sets no time limit between requests. The faucet refuses an address only when its balance is above the faucet's limit. The page then shows `Your address is not eligible`.
 
 ### The Tokens Have Not Arrived. What Should I Do?
 
@@ -71,10 +71,6 @@ The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/
 ### Which Container Registry Should I Use?
 
 `public.ecr.aws/l2u2v4a8/asi-chain/`. Use the versioned tags and digests from the [container images](/reference/container-images/) catalog and pin a digest. The catalog lists the node, indexer, explorer, wallet, faucet, Wallet CLI and ASI client images.
-
-### Should I Upgrade to Every Published Image?
-
-Not by itself. Pick the image that matches the network's accepted configuration and the API your clients use. A published image does not show that a network runs it.
 
 ### Can I Use a Node IP Address from an Older Page?
 

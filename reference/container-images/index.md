@@ -4,9 +4,7 @@ Look up the published ASI:Chain container images. Use the versioned tags to iden
 
 The namespace is `public.ecr.aws/l2u2v4a8/asi-chain/`, and all listed artifacts are `linux/amd64`.
 
-The catalog lists ten artifacts of eight components, three of them node builds. The registry can hold more tags than the catalog, and tags are removed over time.
-
-The floating `dev` tags of `node-rust` and `indexer` move with every build, so do not use them. Pin the digest. A published image is not proof that it is deployed or that every combination of images works together.
+The floating `dev` tags of `node-rust` and `indexer` move with every build, so do not use them. Pin the digest.
 
 ## Published Artifacts
 
@@ -15,8 +13,6 @@ Repository paths are relative to the namespace above. Each source link points to
 | Component | Repository | Source |
 |---|---|---|
 | ASI dev build used in the guides | `node-rust` | [8e6517d630e2](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) |
-| Previous ASI dev build | `node-rust` | [e18defd44d43](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) |
-| Node client-compatibility target | `node-rust` | [5dafbc37dad3](https://github.com/F1R3FLY-io/f1r3node-rust/tree/5dafbc37dad3ebf3da810641fc0d8cecd5a1127b) |
 | Indexer | `indexer` | [0bb60e89db36](https://github.com/asi-alliance/asi-chain-indexer/tree/0bb60e89db364145b547e2da5dd31dbd6a2adbcd) |
 | Explorer frontend | `explorer` | [0ae1eea64234](https://github.com/asi-alliance/asi-chain-explorer/tree/0ae1eea64234c86937b3adf39fc6a5551b228f1a) |
 | Wallet frontend | `wallet` | [b2e3a45f70d1](https://github.com/asi-alliance/asi-chain-wallet/tree/b2e3a45f70d17c05979de38290d7a4fb7e8c42dd) |
@@ -29,8 +25,6 @@ Each line below gives the repository, the versioned tag and the manifest digest 
 
 ```text
 node-rust:0.4.46-dev.20261105-8e6517d630e2@sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
-node-rust:0.4.46-dev.20261104-e18defd44d43@sha256:e06a0a4ca43d9e60309c514a19f4c664d27eb216796b9b52d1bc67c10947694e
-node-rust:0.4.46-dev.20261103-5dafbc37dad3@sha256:e6e82cdc5c9bc794367e15314d9c22256a8ebc0b2457d9492d633b2453c4c1df
 indexer:1.0.0-dev.20261105-0bb60e89db36@sha256:922c96e4f172c001fcda8bb331f38945b99c0435166ef0375bd75950b30b6943
 explorer:0.1.0-dev.20261102-0ae1eea64234@sha256:9e1922fd33a952ca4e8c1c68b8457745c1e7dcac44f98ba679439ce12fd2d107
 wallet:0.2.0-dev.20261102-b2e3a45f70d1@sha256:b4222f3676cb24a2c7c20fdd805aa46e5744ad2c867ff25f67e1c96554f3afa7
@@ -76,8 +70,6 @@ The other variables behave as follows:
 - `REACT_APP_EXPLORER_URL` and `REACT_APP_FAUCET_URL` add optional public links to the wallet.
 - `REACT_APP_RCHAIN_NODE_URL` is accepted by the explorer, but no page of this explorer image calls the node, so the variable can stay unset.
 - `REACT_APP_HASURA_ADMIN_SECRET` and `REACT_APP_AUTH_TOKEN` must stay empty, because the explorer image rejects non-empty values. Configure restricted public Hasura permissions or a server-side gateway instead.
-
-Do not assume that the Wallet SDK's indexer URL works with every raw GraphQL endpoint. Check its route first.
 
 The frontend images substitute endpoint URLs at startup. Supply the image-specific public URL variables, permit their startup write paths, and recreate containers when changing endpoints. The Dockerfiles in the source repositories can differ from these published images, so inspect the artifact before you rely on its runtime configuration.
 

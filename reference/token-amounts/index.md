@@ -52,12 +52,6 @@ console.log(BigInt(Number(raw))); // 1000000000000000000n, the last digit is los
 
 `JSON.stringify` throws a `TypeError` on a `bigint`, so convert it to a string first. Format each history record with the decimals it was recorded with. Show a balance that cannot be loaded as unknown, never as zero.
 
-## Sources
-
-- [github.com/asi-alliance/asi-chain-rust-node/node/src/rust/api/web_api.rs](https://github.com/asi-alliance/asi-chain-rust-node/blob/43d69b76046a3750527ad4495074f71a6dd15afb/node/src/rust/api/web_api.rs#L1472-L1485) defines the token fields of `/api/status`.
-- [github.com/asi-alliance/asi-chain-rust-node/node/src/main/resources/defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blob/43d69b76046a3750527ad4495074f71a6dd15afb/node/src/main/resources/defaults.conf#L543-L545) holds the default token values.
-- [github.com/asi-alliance/asi-chain-wallet-sdk/src/utils/functions/index.ts](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/2c09c24225e12bc8ac688d3669b294049362a3e6/src/utils/functions/index.ts#L23-L76) contains `toAtomicAmount` of Wallet SDK 2.1.0.
-
 ## Next Steps
 
 <CardGrid columns="2">

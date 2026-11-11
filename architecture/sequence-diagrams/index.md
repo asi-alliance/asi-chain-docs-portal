@@ -25,14 +25,7 @@ How the wallet reads and shows the balance of an account.
 
 ## Quick Reference
 
-The wallet takes the address of every node role from the network configuration. See [Wallet Components](/architecture/component-diagrams/wallet/#network-connections) for the roles.
-
-| Operation | Calls | Addresses used |
-|-----------|-------|----------------|
-| Send tokens | `GET /api/blocks`, `POST /api/deploy`, then `GET /api/deploy/{id}` until finalized | `ReadOnlyURL` and `ValidatorURL` |
-| Deploy contract | The same calls as for sending tokens | `ReadOnlyURL` and `ValidatorURL` |
-| Check balance | `POST /api/explore-deploy` | `ReadOnlyURL` |
-| Transaction history | GraphQL query | `IndexerURL` |
+[Wallet Components](/architecture/component-diagrams/wallet/#network-connections) lists each call and the address it uses.
 
 ## Next Steps
 

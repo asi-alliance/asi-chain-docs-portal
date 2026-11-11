@@ -6,8 +6,6 @@ The wallet, the Wallet SDK, the CLI and the faucet send requests to the node, an
 
 The indexer calls node APIs directly through its Python gRPC/HTTP client and writes the results to PostgreSQL. Hasura exposes PostgreSQL as a GraphQL API. The explorer is only a frontend and does not index or store data.
 
-Sources: the [pinned node source](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf), the [node image](/nodes/image/) page, the [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py), [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer/tree/0ae1eea64234c86937b3adf39fc6a5551b228f1a) and [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet/tree/b2e3a45f70d17c05979de38290d7a4fb7e8c42dd).
-
 ## Next Steps
 
 <CardGrid columns="2">

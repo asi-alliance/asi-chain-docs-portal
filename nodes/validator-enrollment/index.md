@@ -36,8 +36,6 @@ docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 
 This image contains client 0.2.9 built from commit [`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) on the `dev` branch of asi-chain-client. The image exists for `linux/amd64` only. Confirm with the operator that this client works with their node digest. The same version label on another image does not prove that it does.
 
-A separate configurator or connector image is only optional packaging around the same operations. Older helper containers target a previous workflow and may not work with the Rust node.
-
 ## Enroll the Validator
 
 <Steps>

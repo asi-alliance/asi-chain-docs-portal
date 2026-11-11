@@ -1,6 +1,6 @@
 # State Diagrams
 
-These pages show how the Rust node from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) starts and what it does once it is running. The log lines quoted on them come from the `node-rust` image `0.4.46-dev.20261104-e18defd44d43`.
+These pages show how the Rust node from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node) starts and what it does once it is running.
 
 ← [Back to Architecture Overview](/architecture/)
 

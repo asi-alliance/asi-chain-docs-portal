@@ -9,9 +9,7 @@ public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli:0.1.0-dev.20261103-8f6c20ea43eb
 public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
 ```
 
-This image was built from the wallet CLI at commit `8f6c20ea43ebc6d333783f936372d4220e449681` ([github.com/asi-alliance/asi-chain-wallet-cli](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/8f6c20ea43ebc6d333783f936372d4220e449681)), with ASI client gitlink `77cbdc8180d8f83a7216dbf54b23268106ea3e91`. Its compatibility tests target the node image `5dafbc37` listed in [Container Images](/reference/container-images/). Later changes to the source do not modify this image.
-
-The CLI builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, and its image tag for enrollment is built from a different commit than the one in this submodule, so do not swap one for the other.
+The CLI builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, so do not swap one for the other.
 
 To show the help text without connecting to a network, pull the image and run it with `--network none`:
 
@@ -22,13 +20,11 @@ docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" --help
 docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --help
 ```
 
-## Compatibility
+## Configuration
 
 The CLI is written for the HTTP and gRPC API of the Rust node.
 
 Use a Rust node, such as one started from the [node image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
-
-## Configuration
 
 Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
 
@@ -122,10 +118,10 @@ git submodule update --init --recursive
 cargo build --release --locked
 ```
 
-The build downloads its dependencies from crates.io and GitHub. `cargo build` itself takes 6 to 8 minutes on a 12-core machine.
+The build downloads its dependencies from crates.io and GitHub.
 
 ::: warning Select the dev Branch
-Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client.
+Select `dev` explicitly. The default branch `main` is older, so a plain clone builds a different client.
 
 Do not use `git submodule update --remote`: it replaces the pinned client with the newest commit of its branch.
 :::
@@ -160,7 +156,7 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 
 The table is for 8 decimals, as on DevNet. See [Token Amounts](/reference/token-amounts/).
 
-Give amounts as exact integers. The CLI reads them without a size limit, so values above JavaScript's safe integer range (2^53 − 1) stay exact. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
+Give amounts as exact integers. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 
 The node's native-token configuration and expected symbol must match the target shard.
 

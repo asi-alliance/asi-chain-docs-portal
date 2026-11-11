@@ -14,7 +14,7 @@ Native-token metadata is part of the shard and genesis configuration. The upstre
 
 The HTTP API listens on port 40403. Most routes are under `/api`, while `/status`, `/version`, `/metrics` and the `/ws/events` WebSocket sit at the root. Swagger UI is at `/swagger-ui`.
 
-The block routes (`/api/block/{hash}`, `/api/last-finalized-block` and the `/api/blocks` routes) and `/api/deploy/{deploy_id}` take `?view=full|summary`. The default view differs by route.
+The block routes (`/api/block/{hash}`, `/api/last-finalized-block` and the `/api/blocks` routes) and `/api/deploy/{deploy_id}` take `?view=full|summary`.
 
 | Endpoints | Purpose |
 |---|---|
@@ -51,4 +51,4 @@ The node logs through `tracing`. Three flags control it:
 | `--log-format <FORMAT>` | `json` (default) or `pretty` |
 | `--log-sink <SINK>` | `stdout` (default), `file` or `both`; the file is `<data-dir>/logs/node.log` |
 
-The repository Compose files set `--log-sink=stdout`, so `docker logs` shows the output.
+With `--log-sink=stdout`, `docker logs` shows the output.

@@ -1,6 +1,6 @@
 # Run a Validator
 
-Prepare a Rust node that you later bond as a validator. A validator that joins an existing shard starts on [Enroll a Validator](/nodes/validator-enrollment/), which creates the key with the ASI client, sends you here to start the node, and then funds the validator and submits the bond. The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node.
+Prepare a Rust node that you later bond as a validator. A validator that joins an existing shard starts on [Enroll a Validator](/nodes/validator-enrollment/), which creates the key with the ASI client, sends you here to start the node, and then funds the validator and submits the bond.
 
 ## Prepare the Validator
 
@@ -8,14 +8,14 @@ Prepare a Rust node that you later bond as a validator. A validator that joins a
 
 ### Get the Network Settings
 
-Ask the shard operator for the bootstrap URI, the shard and genesis configuration, the native-token metadata, the admission and bonding process and the node image that the shard accepts. A matching version number or a downloaded image does not show that your node is compatible with a running network.
+Ask the shard operator for the bootstrap URI, the shard and genesis configuration, the native-token metadata, the admission and bonding process and the node image that the shard accepts.
 
 - The bootstrap URI looks like `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. The node ID is the `address` field of `GET /api/status` on the bootstrap node.
 - The `--network-id` value must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from any other network.
 - The `--shard-name` value must equal the `shardId` that the bootstrap node reports. The default is `root`.
 - The `--host` value is the address other nodes use to reach yours. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks.
 
-Check storage, CPU, memory and retention requirements with the operator. No sizing has been measured for these images.
+Check storage, CPU, memory and retention requirements with the operator.
 
 ### Inspect the Published Image
 
@@ -43,13 +43,7 @@ The node keeps its state, its TLS certificate and its identity in `/var/lib/rnod
 
 The validator key reaches the node in one of two ways, and both are used together with `--validator-public-key`. The node does not check at start that the public key belongs to the private key, so take both from the same key pair.
 
-- `--validator-private-key-path` takes an encrypted PEM file. The node asks for its password at start, or reads it from the `F1R3NODE_VALIDATOR_PASSWORD` environment variable. The plain hex file saved by the ASI client is not accepted. When the node cannot read the key, it exits with the first error below if there is no terminal and no password variable, with the second if the password is wrong, and with the third for the plain hex file:
-
-  ```text
-  No such device or address
-  Could not decrypt PEM file
-  malformedframing
-  ```
+- `--validator-private-key-path` takes an encrypted PEM file. The node asks for its password at start, or reads it from the `F1R3NODE_VALIDATOR_PASSWORD` environment variable. The plain hex file saved by the ASI client is not accepted. For the errors when the node cannot read the key, see [Troubleshooting](/help/troubleshooting/#image-pull-or-startup-fails).
 - `--validator-private-key` takes the hex key itself. The option is hidden from `run --help`, and the key then shows in `docker inspect` and in the process list, so use it only on a host that nobody else can read.
 
 If you created the key with the ASI client on [Enroll a Validator](/nodes/validator-enrollment/), convert `validator-keys/private_key.hex` to an encrypted PEM file with OpenSSL 3 and copy the result into the volume. `openssl pkcs8` asks for the password of the new file. The `rm -f` line removes the temporary files that hold the plain key. The public key does not change and stays the one in `validator-keys/public_key.hex`.
@@ -133,7 +127,7 @@ The node is synchronized when `/api/status` shows `isReady: true`, a positive `p
 - `GET /api/validators` lists the bonded validators and their stakes.
 - `GET /api/epoch` shows the epoch length and `blocksUntilNextEpoch`.
 
-A bond and a withdrawal take effect only at an epoch boundary. Between boundaries a new bond is recorded but not active. Confirm the actual validator set before you count the node as a consensus participant.
+A bond and a withdrawal take effect only at an epoch boundary. Between boundaries a new bond is recorded but not active. Check `GET /api/validators` for the validator set.
 
 Do not run live transfers as an installation test. See [Troubleshooting](/help/troubleshooting/) if the node does not start or does not find peers.
 

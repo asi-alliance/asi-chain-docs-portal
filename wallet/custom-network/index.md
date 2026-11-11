@@ -59,13 +59,6 @@ For a node on your own machine, the values depend on the ports the node publishe
 
 A Rust validator started without developer mode refuses balance queries with `readonly_node_required`. In that case, set Read-only URL to a read-only node, for example the one from [Set Up a Private Shard](/nodes/private-shard/#start-a-read-only-node) on port `40453`.
 
-The compose files in [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) publish different ports:
-
-- `chain/validator/validator.yml` maps the validator HTTP API to `40443`.
-- `chain/genesis/devnet-observer/observer.yml` maps the observer HTTP API to `40403`.
-
-Set the URLs to the port that your own compose file publishes. The compose files need their `.env` values and a bootstrap address, so start from the [observer guide](/nodes/observer/) or the [validator guide](/nodes/validator/) instead of running them as they are.
-
 Check the node before you save the network.
 
 ```bash
