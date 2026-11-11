@@ -35,7 +35,7 @@ toAtomicAmount(amount: number | string, decimals: number): bigint
 Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
 
 ::: warning Wrong Result for Decimals Other Than 8
-In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`. With 18 decimals `toAtomicAmount("1", 18)` returns `100000000n`. The function therefore cannot convert amounts for the 18 decimals proposed for the planned TestNet. See [Token Amounts](/reference/token-amounts/).
+In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`. With 18 decimals `toAtomicAmount("1", 18)` returns `100000000n`. See [Token Amounts](/reference/token-amounts/).
 :::
 
 | Name | Type | Description |

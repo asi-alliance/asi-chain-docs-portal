@@ -73,9 +73,7 @@ The **Validators** page starts with three cards, **Total Validators**, **Total A
 
 Large stakes are shortened, so 100000 ASI appears as 100.00K.
 
-::: info Token Decimals
-Amounts in the explorer are for DevNet, where ASI has 8 decimals. For the planned TestNet, 18 decimals are proposed, and they would need a new explorer release. See [Token Amounts](/reference/token-amounts/).
-:::
+Amounts in the explorer are for DevNet, where ASI has 8 decimals. See [Token Amounts](/reference/token-amounts/).
 
 The **View History** button opens the **Validator History** page.
 

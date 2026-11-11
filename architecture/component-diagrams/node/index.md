@@ -1,6 +1,6 @@
 # Node Components
 
-The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates. The public DevNet currently runs a Scala node, and [Network Endpoints](/reference/endpoints/) shows the version it reports.
+The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates.
 
 ## Components
 

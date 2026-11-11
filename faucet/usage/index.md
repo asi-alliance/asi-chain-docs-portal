@@ -16,10 +16,6 @@ For the short path from a new wallet to a balance, see [Get DevNet ASI](/quick-s
 
 The faucet page checks the 20,000 ASI limit. By default the faucet server sends 10^12 atomic units, which is 10,000 ASI with 8 decimals. An operator can change both.
 
-::: info Token Decimals
-For the planned TestNet, 18 decimals are proposed, and they would need a new faucet release. See [Token Amounts](/reference/token-amounts/).
-:::
-
 ## Request Tokens
 
 <Steps>

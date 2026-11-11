@@ -20,8 +20,6 @@ static deployDataProtobufSerialize(deployData: DeployData): Uint8Array
 
 Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId` is written as an empty string.
 
-`phloPrice` goes into field 7 as an `int64`. A node with uint256 amounts reserves field 7 and reads the price from 32 bytes in field 15, so deploys serialized by 2.1.0 do not work with it. See [Token Amounts](/reference/token-amounts/).
-
 | Name | Type | Description |
 |------|------|-------------|
 | `deployData` | `DeployData` | Deploy fields to encode. |

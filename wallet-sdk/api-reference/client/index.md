@@ -341,7 +341,7 @@ interface ITransactionsHistoryOptions {
 
 The two sides come from different backends, because a reservation is released when the node confirms the deploy and the indexer ingests the block later. For a short time a transaction can therefore be in both lists or in neither.
 
-Only the first page of the executed history is reliable, because the indexer query applies `offset` and `limit` to transfers and deployments separately. The issue is tracked in [github.com/asi-alliance/asi-chain-wallet-sdk/issues/178](https://github.com/asi-alliance/asi-chain-wallet-sdk/issues/178).
+Only the first page of the executed history is reliable, because the indexer query applies `offset` and `limit` to transfers and deployments separately.
 
 ## Keyfiles
 

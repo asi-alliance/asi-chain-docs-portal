@@ -28,7 +28,7 @@ DevNet is built into the wallet. It is not listed on this page and cannot be edi
 ## Form Fields
 
 - **Network Name** is the label shown in the network selector. It cannot be empty and must differ, ignoring case, from the name of every other network, including DevNet.
-- **Node API Profile** tells the wallet which node implementation answers on the URLs below. The list offers `Scala node` (stable) and `Rust node` (experimental), and the default is `Scala node`. The public DevNet currently runs a Scala node.
+- **Node API Profile** tells the wallet which node implementation answers on the URLs below. The list offers `Scala node` and `Rust node`, and the default is `Scala node`. For DevNet, choose `Scala node`.
 - **Validator URL** is where the wallet sends deploys and transfers.
 - **Read-only URL** is where the wallet sends read queries, such as balances, deploy status and blocks. There is no fallback to the validator URL, so enter the same address again if one node serves both.
 - **Indexer URL** is the GraphQL endpoint the wallet reads transaction history from. The field cannot be left empty, and without a working indexer the Transactions page has no history to show.
@@ -58,10 +58,6 @@ For a node on your own machine, the values depend on the ports the node publishe
 | Indexer URL | `http://localhost:8080/v1/graphql` |
 
 A Rust validator started without developer mode refuses balance queries with `readonly_node_required`. In that case, set Read-only URL to a read-only node, for example the one from [Set Up a Private Shard](/nodes/private-shard/#start-a-read-only-node) on port `40453`.
-
-::: warning Rust Node Profile
-This version of the wallet uses Wallet SDK 2.1.0, which cannot read balances from a Rust node or send transfers through it. See [Wallet SDK](/wallet-sdk/overview/).
-:::
 
 The compose files in [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) publish different ports:
 

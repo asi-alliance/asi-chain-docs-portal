@@ -1,10 +1,6 @@
 # Wallet SDK
 
-Use the TypeScript SDK `@asichain/asi-wallet-sdk` to manage wallets, read balances and send transfers on ASI:Chain. The pages in this section describe version 2.1.0, a beta release. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
-
-::: warning SDK 2.1.0 Uses 8 Decimals
-Version 2.1.0 counts ASI with 8 decimals and signs the deploy price as an `int64` in protobuf field 7. A node with uint256 amounts expects 32 bytes in field 15, so 2.1.0 does not work with it. No SDK release supports the 18 decimals proposed for the planned TestNet yet. See [Token Amounts](/reference/token-amounts/).
-:::
+Use the TypeScript SDK `@asichain/asi-wallet-sdk` to manage wallets, read balances and send transfers on ASI:Chain. The pages in this section describe version 2.1.0. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
 ## What the SDK Does
 
@@ -35,7 +31,7 @@ The package ships ES module and CommonJS builds with type declarations.
 - `IndexerURL` is the GraphQL indexer that serves transaction history.
 - `nodeApiProfile` selects the request format of the node, `NodeApiProfile.SCALA` or `NodeApiProfile.RUST`.
 
-`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. The public DevNet runs a Scala node, so use `NodeApiProfile.SCALA` for it. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). The indexer address is not published there, so ask the network operator for it if you need transaction history.
+`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. For the DevNet addresses use `NodeApiProfile.SCALA`. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the indexer address if you need transaction history.
 
 ```ts
 import { NodeApiProfile, type TNetworksConfig } from "@asichain/asi-wallet-sdk";

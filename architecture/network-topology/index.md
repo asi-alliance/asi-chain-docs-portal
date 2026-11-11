@@ -1,6 +1,6 @@
 # Network Topology
 
-Learn which role each node and service plays, which ports a node listens on by default and which of them to open in a firewall. Current DevNet addresses are on [Network Endpoints](/reference/endpoints/).
+Learn which role each node and service plays, which ports a node listens on by default and which of them to open in a firewall. DevNet addresses are on [Network Endpoints](/reference/endpoints/).
 
 ## Roles
 
