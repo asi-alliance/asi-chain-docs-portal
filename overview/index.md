@@ -24,7 +24,7 @@ A network is made of nodes with different roles. A bootstrap node is the entry p
 
 ## Token
 
-The native token is ASI. On DevNet it has 8 decimal places, so 1 ASI is `100000000` atomic units, and the Wallet CLI takes amounts in atomic units, as described in [Token Amounts](/reference/token-amounts/). Account addresses are Base58 strings that start with `1111`.
+The native token is ASI. On DevNet it has 8 decimal places, so 1 ASI is `100000000` atomic units, and the Wallet CLI takes amounts in atomic units. See [Token Amounts](/reference/token-amounts/). Account addresses are Base58 strings that start with `1111`.
 
 ## Next Steps
 

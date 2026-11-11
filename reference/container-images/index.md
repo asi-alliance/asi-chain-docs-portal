@@ -64,11 +64,11 @@ The `8e6517d6` image is the `asi-chain-rust-node` merge of upstream PR #941 ([gi
 
 ### Previous ASI Dev Node
 
-The `e18defd4` image was compiled from a clean LF export of the ASI `dev` branch. This source does not contain the known-peers change from [PR #927](https://github.com/F1R3FLY-io/f1r3node-rust/pull/927). Checks of the client and of deployments with this image are separate and not recorded here.
+The `e18defd4` image was compiled from a clean LF export of the ASI `dev` branch. Checks of the client and of deployments with this image are separate and not recorded here.
 
 ### Earlier ASI Dev Node
 
-The `72c9126` image comes from the ASI fork of the maintained pure-Rust repository. Client and deployment checks of older builds do not carry over to this image.
+The `72c9126` image comes from the ASI fork of the maintained pure-Rust repository. Client and deployment checks of other builds do not carry over to this image.
 
 ### Node Baseline and Compatibility Target
 

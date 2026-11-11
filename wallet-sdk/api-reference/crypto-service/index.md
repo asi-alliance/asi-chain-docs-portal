@@ -116,7 +116,7 @@ Throws the errors of `decryptWithPassword`, and `CorruptedDataError` if the decr
 | `data` | `string` | Base64 ciphertext with the GCM tag. |
 | `salt` | `string` | Base64 salt. |
 | `iv` | `string` | Base64 IV. |
-| `version` | `number` | Profile version, `2`. |
+| `version` | `number` | Profile version (`2`). |
 
 ### Crypto Profile
 

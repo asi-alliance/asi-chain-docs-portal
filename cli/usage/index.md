@@ -127,7 +127,7 @@ The build downloads its dependencies from crates.io and GitHub. `cargo build` it
 ::: warning Select the dev Branch
 Select `dev` explicitly. The default branch `main` is older and points the `rust-client` submodule to another repository (`singnet/rust-client`, commit `cb3caab`), so a plain clone builds a different client.
 
-Do not use `git submodule update --remote`: it replaces the pinned client with whatever commit its branch points to.
+Do not use `git submodule update --remote`: it replaces the pinned client with the newest commit of its branch.
 :::
 
 </Steps>

@@ -78,7 +78,7 @@ Not by itself. Pick the image that matches the network's accepted configuration 
 
 ### Can I Use a Node IP Address from an Older Page?
 
-No. Take the DevNet addresses from [Network Endpoints](/reference/endpoints/). For any other network, ask its operator for the URLs and the bootstrap identity. Old IP addresses and the availability of a particular observer are not a current inventory, and host port mappings can differ from the container defaults.
+No. Take the DevNet addresses from [Network Endpoints](/reference/endpoints/). For any other network, ask its operator for the URLs and the bootstrap identity. Old IP addresses and the availability of a particular observer can change, and host port mappings can differ from the container defaults.
 
 ### Which Ports Must Be Reachable?
 

@@ -31,7 +31,7 @@ The package ships ES module and CommonJS builds with type declarations.
 - `IndexerURL` is the GraphQL indexer that serves transaction history.
 - `nodeApiProfile` selects the request format of the node, `NodeApiProfile.SCALA` or `NodeApiProfile.RUST`.
 
-`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. For the DevNet addresses use `NodeApiProfile.SCALA`. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the indexer address if you need transaction history.
+`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. For DevNet use `NodeApiProfile.SCALA`. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the indexer address if you need transaction history.
 
 ```ts
 import { NodeApiProfile, type TNetworksConfig } from "@asichain/asi-wallet-sdk";
