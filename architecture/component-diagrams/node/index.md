@@ -1,140 +1,54 @@
-# ASI Node Architecture
+# Node Components
 
-The ASI Scala Node is the core blockchain engine running in Docker.
+The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates.
 
-← [Back to Component Diagrams](../)
+## Components
 
-## High-Level Overview
+<Diagram name="node-components" caption="API calls enter the node crate, peer traffic goes through comm, and casper drives the Rholang interpreter and block storage." />
 
-```mermaid
-graph TB
-    subgraph "ASI Node"
-        Core[Node Core]
-        API[API Layer]
-        P2P[P2P Network]
-    end
-    
-    subgraph "External"
-        Bootstrap[Bootstrap Node]
-        Peers[Peer Nodes]
-        Clients[API Clients]
-    end
-    
-    Bootstrap --> P2P
-    Peers <-.-> P2P
-    Clients --> API
-    API --> Core
-    P2P --> Core
-```
+The runtime binary is `/opt/docker/bin/node`, and it needs no Scala or JVM runtime configuration. [Node Image](/nodes/image/) covers the entrypoint, defaults, ports and access boundaries.
 
-## Port Configuration
+Native-token metadata is part of the shard and genesis configuration. The upstream defaults do not set ASI token metadata for a deployed chain.
 
-Each node exposes multiple ports for different protocols.
+## API
 
-```mermaid
-graph LR
-    subgraph "Node Ports"
-        N[Node]
-    end
-    
-    N --> P1[":40400 Protocol/P2P"]
-    N --> P2[":40401 gRPC ext"]
-    N --> P3[":40402 gRPC int"]
-    N --> P4[":40403 HTTP API"]
-    N --> P5[":40404 Discovery"]
-    N --> P6[":40405 Admin"]
-```
+The HTTP API listens on port 40403. Most routes are under `/api`, while `/status`, `/version`, `/metrics` and the `/ws/events` WebSocket sit at the root. Swagger UI is at `/swagger-ui`.
 
-| Port | Protocol | Purpose | Access |
-|------|----------|---------|--------|
-| 40400 | TCP | Protocol / P2P communication | Public |
-| 40401 | TCP | Public gRPC API | Public |
-| 40402 | TCP | Internal gRPC API | Localhost |
-| 40403 | HTTP | Deploy and query REST API | Public |
-| 40404 | UDP | Kademlia peer discovery | Public |
-| 40405 | HTTP | Admin API | Localhost only |
+The block routes (`/api/block/{hash}`, `/api/last-finalized-block` and the `/api/blocks` routes) and `/api/deploy/{deploy_id}` take `?view=full|summary`. The default view differs by route.
 
-## Core Services
+| Endpoints | Purpose |
+|---|---|
+| `GET /api/status`, `GET /api/ready` | Node identity, sync state, `isReady`; readiness probe that returns 200 once the node is Running and 503 before that |
+| `GET`, `POST /api/prepare-deploy` | Data needed to build a deploy |
+| `POST /api/deploy` | Submit a signed deploy |
+| `POST /api/explore-deploy`, `/api/explore-deploy-by-block-hash`, `/api/data-at-name-by-block-hash` | Read-only Rholang execution and data reads |
+| `GET /api/last-finalized-block`, `/api/block/{hash}`, `/api/blocks`, `/api/blocks/{start}/{end}`, `/api/blocks/{depth}` | Blocks |
+| `GET /api/deploy/{deploy_id}`, `/api/is-finalized/{hash}`, `/api/deploy-finalization-status/{sig}`, `/api/pending-deploys` | Deploy status and finalization |
+| `GET /api/balance/{address}`, `/api/registry/{uri}` | Balance and registry lookups |
+| `GET /api/validators`, `/api/validator/{pubkey}`, `/api/bond-status/{pubkey}`, `/api/epoch`, `/api/epoch/rewards` | Validators, bonds and epochs |
+| `POST /api/estimate-cost` | Cost estimate for a deploy |
+| `GET /status`, `/version`, `/metrics`, `/ws/events` | Status, version, Prometheus metrics and an event stream |
+| `/api/v1/*` | Versioned variants of status, deploy, explore-deploy and block routes |
 
-The node core handles consensus and smart contract execution.
+The admin HTTP API on port 40405 has `POST /api/propose` and the admin variants under `/api/v1`. The external gRPC server on 40401 serves only the Deploy service. The internal gRPC server on 40402 serves Repl, Deploy, Propose and Lsp. Peer transport uses port 40400 and discovery uses port 40404.
 
-```mermaid
-graph TD
-    subgraph "Core Services"
-        CE[Consensus Engine]
-        RR[Rholang Runtime]
-        ST[Storage]
-    end
-    
-    CE --> |validates| Blocks[Blocks]
-    RR --> |executes| Deploys[Smart Contracts]
-    ST --> |persists| State[Blockchain State]
-```
+## Configuration
 
-| Service | Function |
-|---------|----------|
-| Consensus Engine | CBC Casper block validation and finalization |
-| Rholang Runtime | Smart contract execution environment |
-| Storage Layer | Block and state persistence (LMDB) |
+The node reads HOCON. The embedded `defaults.conf` is the base. A file at `<data-dir>/f1r3fly.conf`, or the path given with `--config-file`, overrides it, and command-line flags override both.
 
-## API Layer
+- `network-id` defaults to `testnet` and must be the same on every node of a network.
+- The TLS key at `<data-dir>/node.key.pem` determines the node ID, so deleting the data directory gives the node a new identity.
+- The heartbeat proposer is on by default and checks every 5 seconds.
+- In Docker the data directory is `/var/lib/rnode`.
 
-HTTP and gRPC interfaces for client interaction.
+## Logs
 
-```mermaid
-graph LR
-    subgraph "HTTP API"
-        D[/api/deploy]
-        E[/api/explore-deploy]
-        B[/api/blocks]
-        S[/status]
-    end
-```
+The node logs through `tracing`. Three flags control it:
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/api/deploy` | POST | Submit signed deploy |
-| `/api/explore-deploy` | POST | Read-only query |
-| `/api/blocks` | GET | Block information |
-| `/status` | GET | Node status |
+| Flag | Values |
+|---|---|
+| `--log-level <EXPR>` | An `EnvFilter` expression such as `info`; the `RUST_LOG` environment variable wins if set |
+| `--log-format <FORMAT>` | `json` (default) or `pretty` |
+| `--log-sink <SINK>` | `stdout` (default), `file` or `both`; the file is `<data-dir>/logs/node.log` |
 
-## P2P Networking
-
-Nodes communicate using the Kademlia protocol.
-
-```mermaid
-graph TD
-    subgraph "P2P Flow"
-        BT[Connect to Bootstrap]
-        PD[Peer Discovery]
-        SY[Synchronization]
-        BG[Block Gossip]
-    end
-    
-    BT --> PD
-    PD --> SY
-    SY --> BG
-```
-
-| Phase | Description |
-|-------|-------------|
-| Bootstrap | Initial connection to known node |
-| Discovery | Find and connect to peers |
-| Sync | Download missing blocks |
-| Gossip | Propagate new blocks/deploys |
-
-## Configuration Files
-
-| File | Purpose |
-|------|---------|
-| `rnode.conf` | Network and node settings |
-| `logback.xml` | Logging configuration |
-| Validator keys | Private key for signing |
-
----
-
-## Related Documentation
-
-- [Validator Setup](/quick-start/join-validator/) - How to run a validator
-- [Observer Setup](/quick-start/join-observer/) - Read-only node setup
-- [Node Lifecycle](../../state-diagrams/) - Node states
+The repository Compose files set `--log-sink=stdout`, so `docker logs` shows the output.

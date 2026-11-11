@@ -1,90 +1,46 @@
-# Data Flow Diagrams
+# Data Flow
 
-How data moves through the ASI:Chain ecosystem.
+How chain data reaches the explorer and the wallet, and how a deploy (signed Rholang code sent to a node) moves from signature to finalization.
 
-← [Back to Architecture Overview](../)
+## Indexing Path
 
-## Wallet Data Flow
+<Diagram name="data-pipeline" caption="The indexer copies node data into PostgreSQL, Hasura serves it as GraphQL, and the wallet and SDK also read the node directly." />
 
-Data flow from user actions to blockchain.
+The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py) calls the node over gRPC and HTTP. PostgreSQL and Hasura run as separate services. The explorer reads indexed data from Hasura and neither extracts chain blocks nor owns the database.
 
-```mermaid
-graph LR
-    User([User]) --> UI[Wallet UI]
-    UI --> Store[Redux Store]
-    Store --> Services[Services]
-    Services --> Nodes[Blockchain Nodes]
-    Nodes --> Services
-    Services --> Store
-    Store --> UI
-```
+The indexer polls the node every `SYNC_INTERVAL`. Besides blocks it reads bonds and the node's pending deploys. A separate `metrics-cron` service refreshes the aggregated network metrics every three minutes.
 
-### Flow Details
+## Deploy Lifecycle
 
-| Layer | Input | Output |
-|-------|-------|--------|
-| UI | User actions | Display updates |
-| Store | State changes | Persisted state |
-| Services | API calls | Responses |
-| Nodes | Deploys/queries | Results |
+A deploy passes through separate states. Each one is visible through a different node endpoint, and a successful response at one step does not guarantee the next state.
 
-### Data Types
+<Diagram name="deploy-lifecycle" caption="The states of a deploy from signature to finalization, and what moves it to the next one." />
 
-| Type | Encryption | Storage |
-|------|------------|---------|
-| Private keys | AES-256 | Browser |
-| Transactions | Signed | Blockchain |
-| Balances | None | In-memory |
+| State | What it means | Where to look |
+|---|---|---|
+| Pending | The node accepted the deploy and holds it in its local queue. Observers always answer with an empty list | `GET /api/pending-deploys` |
+| In a block | A validator included the deploy, executed its Rholang and signed the block | `GET /api/deploy/{deploy_id}` |
+| Finalized | The block that holds the deploy is finalized. Whether the deploy's effects were kept is reported per deploy | `GET /api/is-finalized/{hash}`, `GET /api/deploy-finalization-status/{sig}` |
 
----
+A validator creates a block when its proposer triggers and both the synchrony and the height constraints hold. By default the heartbeat proposer checks every 5 seconds. Peers that receive the block validate it before adding it to their DAG.
 
-## Explorer Data Flow
+A block can finalize while some of its deploys have their effects dropped during state merge. Poll `deploy-finalization-status` with the deploy signature rather than the block hash alone. `GET /api/deploy/{deploy_id}` returns 404 while no block known to the node contains the deploy, so a 404 right after submission does not mean the deploy was lost.
 
-Blockchain data to user interface.
+A successful API response or an indexed row alone does not prove a successful, finalized token transfer. Handle amounts as exact raw integers (atomic units).
 
-```mermaid
-graph LR
-    Node[ASI Node] --> Parser[Parser]
-    Parser --> DB[(SQLite)]
-    DB --> API[Flask API]
-    API --> Browser([Browser])
-```
+## Node and GraphQL
 
-### Indexing Pipeline
+Read these from the node:
 
-| Source | Process | Storage |
-|--------|---------|---------|
-| Docker logs | Parse blocks | blocks table |
-| RPC API | Get details | deployments table |
-| HTTP API | Query balance | Live query |
+- The balance of an address through `GET /api/balance/{address}`, or with a Rholang query through `POST /api/explore-deploy`
+- Deploy status and finalization through `/api/deploy/{deploy_id}`, `/api/pending-deploys`, `/api/is-finalized/{hash}` and `/api/deploy-finalization-status/{sig}`
+- The latest blocks, the validators and the epoch through `/api/last-finalized-block`, `/api/blocks`, `/api/validators` and `/api/epoch`
 
----
+Read these from the indexer through Hasura GraphQL:
 
-## Transaction Lifecycle
+- The transaction history of an address
+- Block and transfer lists and network statistics
 
-End-to-end transaction flow.
+The wallet reads balances through the SDK from the node, and its history from GraphQL.
 
-```mermaid
-graph TD
-    Create[Create Transaction] --> Sign[Sign Deploy]
-    Sign --> Submit[Submit to Validator]
-    Submit --> Validate[Validate]
-    Validate --> Block[Include in Block]
-    Block --> Finalize[Finalize]
-    Finalize --> Confirm[Confirmation]
-```
-
-| Stage | Component |
-|-------|-----------|
-| Create/Sign | Wallet |
-| Submit/Validate | Validator |
-| Block | Consensus |
-| Finalize | Network |
-
----
-
-## Related Documentation
-
-- [Sequence Diagrams](../sequence-diagrams/) - Detailed interactions
-- [Component Diagrams](../component-diagrams/) - Internal structure
-- [Network Topology](../network-topology/) - Infrastructure
+Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision.

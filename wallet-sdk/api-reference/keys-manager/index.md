@@ -1,17 +1,18 @@
 # KeysManager
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/main/src/services/KeysManager/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/KeysManager/index.ts)
 
-secp256k1 key generation and management utilities.
+`KeysManager` generates secp256k1 keys, converts them to hex and derives private keys for HD wallets. All methods are `static`.
 
-**Interface `KeyPair`:**
+## Import
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `privateKey` | `Uint8Array` | Private key (32 bytes). |
-| `publicKey` | `Uint8Array` | Derived public key. |
+```ts
+import { KeysManager } from "@asichain/asi-wallet-sdk";
+```
 
-## `generateRandomKey`
+## Methods
+
+### generateRandomKey()
 
 ```ts
 generateRandomKey(length?: number): Uint8Array
@@ -19,17 +20,15 @@ generateRandomKey(length?: number): Uint8Array
 
 Generates cryptographically secure random bytes.
 
-**Parameters:**
+| Name | Type | Description |
+|------|------|-------------|
+| `length` | `number` | Optional. Number of bytes. Defaults to `32`. Must be a positive integer. |
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `length` | `number` | No | Number of bytes. Defaults to `32`. Must be a positive integer. |
+Returns `Uint8Array` with the random bytes.
 
-**Returns:** `Uint8Array` — random bytes.
+Throws `Error("PrivateKeyLength must be a positive integer")` if `length` is not a positive integer.
 
-**Throws:** `Error("PrivateKeyLength must be a positive integer")` — if `length` is not a positive integer.
-
-## `generateKeyPair`
+### generateKeyPair()
 
 ```ts
 generateKeyPair(keyLength?: number): KeyPair
@@ -37,17 +36,15 @@ generateKeyPair(keyLength?: number): KeyPair
 
 Generates a random secp256k1 key pair.
 
-**Parameters:**
+| Name | Type | Description |
+|------|------|-------------|
+| `keyLength` | `number` | Optional. Private key length in bytes. Defaults to `32`. |
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `keyLength` | `number` | No | Private key length in bytes. Defaults to `32`. |
+Returns `KeyPair` as `{ privateKey, publicKey }`.
 
-**Returns:** `KeyPair` — `{ privateKey, publicKey }`.
+Throws `Error("PrivateKeyLength must be a positive integer")` if `keyLength` is not a positive integer.
 
-**Throws:** `Error("PrivateKeyLength must be a positive integer")` — if `keyLength` is invalid.
-
-## `getKeyPairFromPrivateKey`
+### getKeyPairFromPrivateKey()
 
 ```ts
 getKeyPairFromPrivateKey(privateKey: Uint8Array): KeyPair
@@ -55,15 +52,13 @@ getKeyPairFromPrivateKey(privateKey: Uint8Array): KeyPair
 
 Derives a `KeyPair` from an existing private key.
 
-**Parameters:**
+| Name | Type | Description |
+|------|------|-------------|
+| `privateKey` | `Uint8Array` | secp256k1 private key (32 bytes). |
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `privateKey` | `Uint8Array` | Yes | secp256k1 private key (32 bytes). |
+Returns `KeyPair` as `{ privateKey, publicKey }`.
 
-**Returns:** `KeyPair` — `{ privateKey, publicKey }`.
-
-## `getPublicKeyFromPrivateKey`
+### getPublicKeyFromPrivateKey()
 
 ```ts
 getPublicKeyFromPrivateKey(privateKey: Uint8Array): Uint8Array
@@ -71,15 +66,13 @@ getPublicKeyFromPrivateKey(privateKey: Uint8Array): Uint8Array
 
 Derives the public key from a private key.
 
-**Parameters:**
+| Name | Type | Description |
+|------|------|-------------|
+| `privateKey` | `Uint8Array` | secp256k1 private key (32 bytes). |
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `privateKey` | `Uint8Array` | Yes | secp256k1 private key (32 bytes). |
+Returns `Uint8Array` with the uncompressed public key (65 bytes, starting with `0x04`).
 
-**Returns:** `Uint8Array` — compressed public key.
-
-## `convertKeyToHex`
+### convertKeyToHex()
 
 ```ts
 convertKeyToHex(key: Uint8Array): string
@@ -87,27 +80,63 @@ convertKeyToHex(key: Uint8Array): string
 
 Converts a binary key to a lowercase hex string.
 
-**Parameters:**
+| Name | Type | Description |
+|------|------|-------------|
+| `key` | `Uint8Array` | Key bytes to encode. |
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `key` | `Uint8Array` | Yes | Key bytes to encode. |
+Returns `string` with the hex-encoded key.
 
-**Returns:** `string` — hex-encoded key.
-
-## `deriveKeyFromMnemonic`
+### getInitialHDPathFromOptions()
 
 ```ts
-deriveKeyFromMnemonic(mnemonicWords: string[], options?: Bip44PathOptions): Promise<Uint8Array>
+getInitialHDPathFromOptions(hdWalletOptions: TCreateHDPathWalletOptions): Promise<Bip44Path>
 ```
 
-Convenience wrapper over `KeyDerivationService.deriveKeyFromMnemonic`.
+Returns the BIP-44 path for a new HD wallet. With `{ index }` it builds a path from `ASI_COIN_TYPE`, account 0, change 0 and that index, and with `{ customHDPath }` it returns that path unchanged.
 
-**Parameters:**
+| Name | Type | Description |
+|------|------|-------------|
+| `hdWalletOptions` | `TCreateHDPathWalletOptions` | `{ index: number }` or `{ customHDPath: Bip44Path }`. |
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `mnemonicWords` | `string[]` | Yes | Mnemonic word array. |
-| `options` | `Bip44PathOptions` | No | BIP-44 path options. |
+Returns `Promise<Bip44Path>`.
 
-**Returns:** `Promise<Uint8Array>` — derived private key (32 bytes).
+### getPrivateDataFromSeed()
+
+```ts
+getPrivateDataFromSeed(seed: Uint8Array, path: Bip44Path): Promise<IHDWalletPrivateKeyDataFromSeed>
+```
+
+Derives the private key at `path` from a BIP-39 seed.
+
+| Name | Type | Description |
+|------|------|-------------|
+| `seed` | `Uint8Array` | Seed bytes, for example from `KeyDerivation.mnemonicToSeed`. |
+| `path` | `Bip44Path` | Derivation path. |
+
+Returns `Promise<IHDWalletPrivateKeyDataFromSeed>` with `{ privateKey, path, index }`.
+
+## Types
+
+### KeyPair
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `privateKey` | `Uint8Array` | Private key (32 bytes). |
+| `publicKey` | `Uint8Array` | Derived public key. |
+
+### HD Wallet Key Data
+
+```ts
+interface IBaseHDWalletPrivateKeyData {
+  path: Bip44Path
+  privateKey: Uint8Array
+}
+
+interface IHDWalletPrivateKeyDataFromSeed extends IBaseHDWalletPrivateKeyData {
+  index: number
+}
+```
+
+::: info Mnemonic Derivation Is in KeyDerivation
+`KeysManager` has no `deriveKeyFromMnemonic`. Use `KeyDerivation.deriveKeyFromMnemonic(mnemonic, bip44path)` from the [KeyDerivation](/wallet-sdk/api-reference/key-derivation/) page.
+:::

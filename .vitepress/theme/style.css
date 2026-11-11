@@ -1,145 +1,287 @@
 /**
- * Customize default theme styling by overriding CSS variables:
- * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
+ * ASI:Chain tokens. The values come from the ASI Wallet Brand Guide as the
+ * products use it. VitePress reads the --vp-c-* variables, the --ds-* ones are
+ * extra values for parts the default theme has no variable for. Text pairs
+ * reach 4.5:1 and borders of controls 3:1 on the surface they sit on.
+ * The light brand green #5A9C4F is only 3.2:1 on the page, so it is a fill
+ * (bars, ring) and the text links use the darker --vp-c-brand-1.
  */
 
-/**
- * Colors
- *
- * Each colors have exact same color scale system with 3 levels of solid
- * colors with different brightness, and 1 soft color.
- *
- * - `XXX-1`: The most solid color used mainly for colored text. It must
- *   satisfy the contrast ratio against when used on top of `XXX-soft`.
- *
- * - `XXX-2`: The color used mainly for hover state of the button.
- *
- * - `XXX-3`: The color for solid background, such as bg color of the button.
- *   It must satisfy the contrast ratio with pure white (#ffffff) text on
- *   top of it.
- *
- * - `XXX-soft`: The color used for subtle background such as custom container
- *   or badges. It must satisfy the contrast ratio when putting `XXX-1` colors
- *   on top of it.
- *
- *   The soft color must be semi transparent alpha channel. This is crucial
- *   because it allows adding multiple "soft" colors on top of each other
- *   to create a accent, such as when having inline code block inside
- *   custom containers.
- *
- * - `default`: The color used purely for subtle indication without any
- *   special meanings attached to it such as bg color for menu hover state.
- *
- * - `brand`: Used for primary brand colors, such as link text, button with
- *   brand theme, etc.
- *
- * - `tip`: Used to indicate useful information. The default theme uses the
- *   brand color for this by default.
- *
- * - `warning`: Used to indicate warning to the users. Used in custom
- *   container, badges, etc.
- *
- * - `danger`: Used to show error, or dangerous message to the users. Used
- *   in custom container, badges, etc.
- * -------------------------------------------------------------------------- */
-
 :root {
-  --vp-font-family-base: "Roboto Mono", monospace;
-  --vp-font-family-mono:  "Roboto Mono", monospace;
-  
-  --vp-c-default-1: var(--vp-c-gray-1);
-  --vp-c-default-2: var(--vp-c-gray-2);
-  --vp-c-default-3: var(--vp-c-gray-3);
-  --vp-c-default-soft: var(--vp-c-gray-soft);
+  --vp-font-family-base: 'Roboto', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --vp-font-family-mono: 'Roboto Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --asi-font-heading: 'Roboto Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
-  --vp-c-brand-1: var(--vp-c-indigo-1);
-  --vp-c-brand-2: var(--vp-c-indigo-2);
-  --vp-c-brand-3: var(--vp-c-indigo-3);
-  --vp-c-brand-soft: var(--vp-c-indigo-soft);
+  --vp-c-white: #ffffff;
+  --vp-c-black: #0d1012;
 
-  --vp-c-tip-1: var(--vp-c-brand-1);
-  --vp-c-tip-2: var(--vp-c-brand-2);
-  --vp-c-tip-3: var(--vp-c-brand-3);
-  --vp-c-tip-soft: var(--vp-c-brand-soft);
+  --vp-c-bg: #f7f9fa;
+  --vp-c-bg-alt: #eef1f2;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-bg-soft: #ffffff;
+  --vp-c-divider: #e0e4e6;
+  --vp-c-border: #e0e4e6;
+  --vp-c-gutter: #e0e4e6;
 
-  --vp-c-warning-1: var(--vp-c-yellow-1);
-  --vp-c-warning-2: var(--vp-c-yellow-2);
-  --vp-c-warning-3: var(--vp-c-yellow-3);
-  --vp-c-warning-soft: var(--vp-c-yellow-soft);
+  --vp-c-text-1: #0d1012;
+  --vp-c-text-2: #5a5a5a;
+  --vp-c-text-3: #6b6b6b;
 
-  --vp-c-danger-1: var(--vp-c-red-1);
-  --vp-c-danger-2: var(--vp-c-red-2);
-  --vp-c-danger-3: var(--vp-c-red-3);
-  --vp-c-danger-soft: var(--vp-c-red-soft);
+  --vp-c-default-1: #6b6b6b;
+  --vp-c-default-2: #e0e4e6;
+  --vp-c-default-3: #c9cfd2;
+  --vp-c-default-soft: #eef1f2;
+  /* Fill of a row or button under the pointer in menus and the sidebar. */
+  --asi-hover-fill: #eef1f2;
+
+  --vp-c-brand-1: #37702d;
+  --vp-c-brand-2: #2b5a23;
+  --vp-c-brand-3: #5a9c4f;
+  --vp-c-brand-soft: rgba(90, 156, 79, 0.12);
+
+  --vp-c-tip-1: #006d84;
+  --vp-c-tip-2: #006d84;
+  --vp-c-tip-3: #006d84;
+  --vp-c-tip-soft: rgba(0, 163, 204, 0.08);
+
+  --vp-c-warning-1: #8f5200;
+  --vp-c-warning-2: #8f5200;
+  --vp-c-warning-3: #8f5200;
+  --vp-c-warning-soft: rgba(255, 184, 77, 0.14);
+
+  --vp-c-danger-1: #b3282b;
+  --vp-c-danger-2: #b3282b;
+  --vp-c-danger-3: #b3282b;
+  --vp-c-danger-soft: rgba(255, 77, 79, 0.08);
+
+  --ds-control-border: #868f94;
+  --ds-ring: #5a9c4f;
+  --ds-accent: #5a9c4f;
+
+  --ds-info-soft: #eef1f2;
+  --ds-callout-code: rgba(13, 16, 18, 0.07);
+  --ds-scroll-edge: rgba(13, 16, 18, 0.18);
+
+  --ds-code-bg: #eef1f2;
+  --ds-code-border: #e0e4e6;
+  --ds-code-mute: #5a5a5a;
+  --ds-code-hover: #e0e4e6;
+  --ds-inline-bg: #eef1f2;
+  --ds-inline-fg: #1b2326;
+
+  --ds-ok-fg: #37702d;
+  --ds-ok-soft: rgba(90, 156, 79, 0.12);
+
+  --ds-r-sm: 4px;
+  --ds-r-md: 8px;
+
+  --vp-code-font-size: 14px;
+  --vp-code-line-height: 1.7;
+  --vp-code-color: var(--ds-inline-fg);
+  --vp-code-bg: var(--ds-inline-bg);
+  --vp-code-block-bg: var(--ds-code-bg);
+  --vp-code-block-color: #1b2326;
+  --vp-code-block-divider-color: var(--ds-code-border);
+  --vp-code-lang-color: var(--ds-code-mute);
+  --vp-code-line-number-color: var(--ds-code-mute);
+  --vp-code-tab-bg: var(--ds-code-bg);
+  --vp-code-tab-divider: var(--ds-code-border);
+  --vp-code-tab-text-color: var(--ds-code-mute);
+  --vp-code-tab-hover-text-color: var(--vp-c-text-1);
+  --vp-code-tab-active-text-color: var(--vp-c-text-1);
+  --vp-code-tab-active-bar-color: var(--ds-accent);
 }
 
-/**
- * Component: Button
- * -------------------------------------------------------------------------- */
+.dark {
+  --vp-c-bg: #0d1012;
+  --vp-c-bg-alt: #14181a;
+  --vp-c-bg-elv: #1b1f21;
+  --vp-c-bg-soft: #1b1f21;
+  --vp-c-divider: #272b2e;
+  --vp-c-border: #272b2e;
+  --vp-c-gutter: #272b2e;
 
-:root {
-  --vp-button-brand-border: transparent;
-  --vp-button-brand-text: var(--vp-c-white);
-  --vp-button-brand-bg: var(--vp-c-brand-3);
-  --vp-button-brand-hover-border: transparent;
-  --vp-button-brand-hover-text: var(--vp-c-white);
-  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
-  --vp-button-brand-active-border: transparent;
-  --vp-button-brand-active-text: var(--vp-c-white);
-  --vp-button-brand-active-bg: var(--vp-c-brand-1);
+  --vp-c-text-1: #f7f9fa;
+  --vp-c-text-2: #b8b8b8;
+  --vp-c-text-3: #868686;
+
+  --vp-c-default-1: #868686;
+  --vp-c-default-2: #272b2e;
+  --vp-c-default-3: #353a3d;
+  --vp-c-default-soft: #1b1f21;
+  /* The soft gray of the dark theme is the color of the menus themselves, so the fill is one step lighter. */
+  --asi-hover-fill: #272b2e;
+
+  --vp-c-brand-1: #93e27c;
+  --vp-c-brand-2: #b3eda1;
+  --vp-c-brand-3: #93e27c;
+  --vp-c-brand-soft: rgba(147, 226, 124, 0.12);
+
+  --vp-c-tip-1: #33e4ff;
+  --vp-c-tip-2: #33e4ff;
+  --vp-c-tip-3: #33e4ff;
+  --vp-c-tip-soft: rgba(51, 228, 255, 0.08);
+
+  --vp-c-warning-1: #ffb84d;
+  --vp-c-warning-2: #ffb84d;
+  --vp-c-warning-3: #ffb84d;
+  --vp-c-warning-soft: rgba(255, 184, 77, 0.09);
+
+  --vp-c-danger-1: #ff4d4f;
+  --vp-c-danger-2: #ff4d4f;
+  --vp-c-danger-3: #ff4d4f;
+  --vp-c-danger-soft: rgba(255, 77, 79, 0.1);
+
+  --ds-control-border: #6a767c;
+  --ds-ring: #33e4ff;
+  --ds-accent: #93e27c;
+
+  --ds-info-soft: #14181a;
+  --ds-callout-code: rgba(255, 255, 255, 0.08);
+  --ds-scroll-edge: rgba(255, 255, 255, 0.16);
+
+  --ds-code-bg: #14181a;
+  --ds-code-border: #272b2e;
+  --ds-code-mute: #868686;
+  --ds-code-hover: #272b2e;
+  --ds-inline-bg: #1b1f21;
+  --ds-inline-fg: #e6ecee;
+
+  --ds-ok-fg: #93e27c;
+  --ds-ok-soft: rgba(147, 226, 124, 0.12);
+
+  --vp-code-block-color: #e6ecee;
 }
 
-/**
- * Component: Home
- * -------------------------------------------------------------------------- */
+/* Base */
 
-:root {
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(
-    120deg,
-    #bd34fe 30%,
-    #41d1ff
-  );
-
-  --vp-home-hero-image-background-image: linear-gradient(
-    -45deg,
-    #bd34fe 50%,
-    #47caff 50%
-  );
-  --vp-home-hero-image-filter: blur(44px);
+html {
+  scroll-padding-top: calc(var(--vp-nav-height) + 16px);
 }
 
-@media (min-width: 640px) {
-  :root {
-    --vp-home-hero-image-filter: blur(56px);
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ds-ring);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--vp-c-brand-soft);
+}
+
+/* Typography. Spacing and line heights are multiples of 4 px. Font sizes follow the type scale 14, 16, 18, 24, 32. */
+
+.vp-doc {
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.vp-doc h1 {
+  margin: 0 0 16px;
+  font-family: var(--asi-font-heading, "Roboto Mono", ui-monospace, monospace);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.vp-doc h2 {
+  margin: 48px 0 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--vp-c-divider);
+  font-family: var(--asi-font-heading, "Roboto Mono", ui-monospace, monospace);
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.vp-doc h3 {
+  margin: 32px 0 8px;
+  font-family: var(--asi-font-heading, "Roboto Mono", ui-monospace, monospace);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.vp-doc h4 {
+  margin: 24px 0 8px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* The paragraph right under the H1 is the lead. */
+.vp-doc h1 + p {
+  margin: 0 0 24px;
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--vp-c-text-2);
+}
+
+.vp-doc p {
+  margin: 16px 0;
+  line-height: 28px;
+}
+
+.vp-doc p,
+.vp-doc li {
+  overflow-wrap: break-word;
+}
+
+.vp-doc a {
+  font-weight: 500;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.vp-doc a:hover {
+  color: var(--vp-c-brand-2);
+}
+
+.vp-doc ul,
+.vp-doc ol {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.vp-doc li > ul,
+.vp-doc li > ol {
+  margin: 8px 0;
+}
+
+.vp-doc li + li {
+  margin-top: 8px;
+}
+
+.vp-doc li > p {
+  margin: 8px 0;
+}
+
+.vp-doc blockquote {
+  margin: 16px 0;
+  border-left: 3px solid var(--vp-c-border);
+  padding-left: 16px;
+  color: var(--vp-c-text-2);
+}
+
+.vp-doc blockquote > p {
+  color: inherit;
+}
+
+.vp-doc .header-anchor {
+  font-weight: 400;
+}
+
+@media (max-width: 639px) {
+  .vp-doc h1 {
+    font-size: 28px;
+    line-height: 36px;
   }
 }
-
-@media (min-width: 960px) {
-  :root {
-    --vp-home-hero-image-filter: blur(68px);
-  }
-}
-
-/**
- * Component: Custom Block
- * -------------------------------------------------------------------------- */
-
-:root {
-  --vp-custom-block-tip-border: transparent;
-  --vp-custom-block-tip-text: var(--vp-c-text-1);
-  --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
-  --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
-}
-
-/**
- * Component: Algolia
- * -------------------------------------------------------------------------- */
-
-.DocSearch {
-  --docsearch-primary-color: var(--vp-c-brand-1) !important;
-}
-/* 
-.title {
-  font-size: 14px !important;
-} */

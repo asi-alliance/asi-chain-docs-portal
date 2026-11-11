@@ -1,242 +1,123 @@
 # ASI Block Explorer
 
-A real-time blockchain explorer for the ASI Chain network providing insights into blocks, transactions, validators, and network statistics.
+The explorer shows blocks, transactions, validators and network statistics for the ASI:Chain DevNet. Open it at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
 
-**Access the explorer**: [explorer.dev.asichain.io](https://explorer.dev.asichain.io)
-
-::: tip REAL-TIME UPDATES
-The explorer automatically updates via WebSocket connection. Look for the green "Connected" indicator in the header to ensure you're receiving live updates.
+::: tip Live Updates
+New blocks appear without reloading the page. A green check icon in the header shows that the live connection is up.
 :::
 
 ## Navigation
 
-The explorer provides five main sections:
+The menu under the header has five sections: **Blocks**, **Transactions**, **Validators**, **Statistics** and **Indexer**. The search box in the header works on every page.
 
-- **[Blocks](https://explorer.dev.asichain.io/)**: Main dashboard with recent blocks and live activity
-- **[Transactions](https://explorer.dev.asichain.io/transactions)**: Smart contract deployments and token transfers
-- **[Validators](https://explorer.dev.asichain.io/validators)**: Active validator information and stake distribution
-- **[Statistics](https://explorer.dev.asichain.io/statistics)**: Network performance metrics and analytics
-- **[Indexer](https://explorer.dev.asichain.io/indexer-status)**: Indexer synchronization status
+## Search
 
-## Blocks Page
+The search box in the header looks up blocks, transfers and deployments. Type a block number or hash, a transfer or deployment ID or an address and press Enter. The matches appear under the box, and a click opens the block or transaction details.
 
-The [Blocks page](https://explorer.dev.asichain.io/) is the main dashboard showing network overview and recent blocks.
+The funnel icon opens **Filters**. **Search Type** narrows the search to **All Types**, **Blocks**, **Transfers** or **Deployments**. The panel has one group of filters for each type.
 
-**Network Summary:**
+![The search box with the Filters panel open, showing Search Type and the block, transfer and deployment filter fields.](/images/explorer/search-tab.webp){width=976 height=912}
 
-Four key metrics displayed at the top:
-- **Latest Block**: Current block number
-- **Active Validators**: Number of validators currently validating (3)
-- **Avg Block Time**: Average time between blocks (20.0s)
-- **Network Status**: Overall network health
+| Group | Filters |
+| --- | --- |
+| Block Filters | Proposer address and minimum and maximum block number |
+| Transfer Filters | Sender and recipient address, and minimum and maximum amount in ASI |
+| Deployment Filters | Deployer address, and minimum and maximum phlo cost |
 
-**Live Activity Feed:**
+**Clear All** resets the form.
 
-Real-time feed showing recent network events:
-- **Block Proposals**: Block number, proposing validator, deployments count, time
-- **Deployments**: Deployer address, contract type, time
-- **Transfers**: Transfer amount, sender/recipient addresses, time
+## Blocks
 
-**Recent Blocks Table:**
+The **Blocks** page is the start page. The four cards at its top show the latest block number, the number of active validators, the average block time and the network status. Next to them, **Live Activity** lists new blocks, deployments and transfers as they arrive.
 
-Displays recent blocks with search and pagination:
-- Block number (clickable)
-- Block hash (abbreviated)
-- Validator public key (abbreviated)
-- Time (relative)
-- Status (✓ Confirmed)
+Under the cards, the **Recent Blocks** table lists the newest blocks with their number, abbreviated hash, abbreviated validator key and age. The number is a link to the block details. The **Status** column shows a check mark and **Confirmed**, because the explorer lists only blocks that the indexer has already stored. The search field above the table filters it by block number or hash.
 
-![Blocks Page](/images/explorer/blocks-page.png)
+![The Blocks page with the summary cards, Live Activity and the Recent Blocks table.](/images/explorer/blocks-page.webp){width=976 height=974}
 
-## Transactions Page
+## Block Details
 
-The [Transactions page](https://explorer.dev.asichain.io/transactions) displays all smart contract deployments and token transfers.
+Click a block number to open the details page. The top of the page repeats the block number, proposer, age and status. Below it, the **Block Details** list shows these fields:
 
-**Transaction Statistics:**
+- block hash, parent hash, state hash, state root hash and pre-state hash
+- proposer public key
+- timestamp and finalization status
+- version, sequence number, shard ID and fault tolerance
+- deployment count
 
-Three summary cards:
-- **Deployments**: Total contract deployments
-- **Transfers**: Total token transfers
-- **Total**: Combined transactions
+The **Advanced Information** section holds the block signature and its algorithm, the validator bonds map with the stake of every validator at that block, and the block justifications. At the bottom, **Transactions / Deployments** lists the deployments included in the block, each with its status, deploy ID and deployer.
 
-**Transaction Types:**
+## Transactions
 
-Tab navigation to filter:
-- **Deployments Tab**: Shows all smart contract deployments with deployer address, block number, timestamp, and status
-- **Transfers Tab**: Shows all token transfers with amount, sender/recipient addresses, timestamp, and status
+The **Transactions** page lists deployments and token transfers on two tabs, **Deployments** and **Transfers**. Every row has a type badge (DEPLOY or TRANSFER), a short description, the block number and the age. The field above the list searches by ID, address or block hash.
 
-**Transaction Cards:**
+Click a deployment to open the transaction details. The header of that page has a button that downloads the transaction as JSON.
 
-Each transaction displays:
-- Type badge (DEPLOY/TRANSFER)
-- Summary information
-- Block number and time
-- Status icon (✓ for confirmed)
+![The Transactions page with the Deployments and Transfers tabs and a list of rows.](/images/explorer/transactions-page.webp){width=976 height=668}
 
-**Features:**
-- Search by ID, address, or block hash
-- Filter by type
-- Pagination controls
+## Transaction Details
 
-![Transactions Page](/images/explorer/transactions-page.png)
+The details page has four tabs: **Overview**, **Code**, **Transfers** and **Block Info**.
 
-## Validators Page
+The **Overview** tab shows the transaction ID, deployer, type and timestamp. Under **Execution Details** it lists the phlo cost, phlo price, phlo limit, the block after which the deploy is valid, and the signature. **Blockchain Information** gives the number and hash of the block that contains the transaction. The **Code** tab shows the deployed Rholang source, and the **Transfers** tab lists the transfers made by that deployment.
 
-The [Validators page](https://explorer.dev.asichain.io/validators) shows all active validators and their stake information.
+## Validators
 
-**Validator Summary:**
+The **Validators** page starts with three cards, **Total Validators**, **Total ASI Staked** and **Avg. Stake**. The table below lists every validator with these columns:
 
-Three key metrics:
-- **Total Validators**: Number of active validators (3)
-- **Total ASI Staked**: Combined stake across all validators
-- **Avg. Stake**: Average stake per validator
+- abbreviated public key
+- stake in ASI and share of the total stake
+- number of blocks it proposed
+- block where it first appeared and last block where it appeared
+- block of its latest bond (the **Last Active** column)
+- status
 
-**Active Validators Table:**
+Large stakes are shortened, so 100000 ASI appears as 100.00K.
 
-Displays comprehensive validator information:
-- Public Key (abbreviated)
-- Stake (ASI) and Stake %
-- Blocks Proposed
-- First Seen, Last Seen, Last Active (block numbers)
-- Status (active/inactive with color coding)
+Amounts in the explorer are for DevNet, where ASI has 8 decimals. See [Token Amounts](/reference/token-amounts/).
 
-**Features:**
-- Live Updates indicator
-- "View History" button for historical validator data
-- Color-coded status (green for active)
+The **View History** button opens the **Validator History** page.
 
-![Validators Page](/images/explorer/validators-page.png)
+![The Validators page with summary cards and the table of validators and their stakes.](/images/explorer/validators-page.webp){width=976 height=692}
 
 ### Validator History
 
-The [Validator History page](https://explorer.dev.asichain.io/validator-history) shows validator status at specific block heights.
+**Validator History** shows the validator set at any block. Type a block number into the **Block** field. The page then shows the block time and proposer, the number of active validators, and a table with each validator's stake and share, where the block proposer is marked. Total, average, minimum and maximum stake for that block are listed under the table.
 
-**Block Selection:**
+![The Validator History page for one block with its proposer, validator count and stake table.](/images/explorer/validators-history.webp){width=976 height=876}
 
-Select any block number to view validator state at that point in time.
+## Statistics
 
-**Validator Details:**
+The **Statistics** page is titled **Network Dashboard**. The buttons in the top right set the time range to 1h, 6h, 1d or 7d, and 1d is selected by default.
 
-For the selected block:
-- Block number and time
-- Block proposer
-- Active validators count
-- List of all validators with stake, stake percentage, and proposer indicator
+Four cards show the latest block, the average block time, transactions per second and the number of active validators. Below them, the **Performance Metrics** chart plots block time and transactions per second over the chosen range, and the **Network Activity** chart plots deployments and transfers.
 
-**Stake Summary:**
+![The Network Dashboard with the time range buttons, summary cards and two charts.](/images/explorer/statistics-page.webp){width=976 height=890}
 
-Displays total stake, average stake, minimum stake, and maximum stake for the selected block.
+## Indexer Status
 
-![Validator History](/images/explorer/validators-history.png)
+The indexer is the service that reads blocks from the node and stores them in the database that the explorer queries. The **Indexer** page shows how far it has progressed.
 
-## Statistics Page
+The label in the top right is **Synched** when the indexer is up to date, **Syncing** when it is slightly behind and **Behind** when it is far behind. The cards show the sync progress, the last indexed block with the number of blocks it is behind, the highest block, and the age of the last update. The table at the bottom repeats the last indexed block, the highest block and the sync status.
 
-The [Statistics page](https://explorer.dev.asichain.io/statistics) provides network performance metrics and analytics.
+The highest block on this page is the newest block in the explorer database, not a value read from the node. The **Last Update** age is therefore the more useful sign of a stalled indexer: if it keeps growing while the **Blocks** page shows no new blocks, the indexer has stopped.
 
-**Time Range Selector:**
+![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.webp){width=976 height=760}
 
-Choose data timeframe:
-- 1h, 6h, 24h (default), 7d
+## Export
 
-**Network Health Overview:**
+The green icon next to the page title downloads a CSV file with up to 5,000 records. On the **Blocks** page it sits next to **Recent Blocks** and saves `recent_blocks.csv`. On the **Transactions** page it exports the open tab and saves `recent_deployments.csv` or `recent_transfers.csv`.
 
-Overall health status with key metrics:
-- Block Time (20.0s)
-- Finality Time (40.0s)
-- Validator Uptime (100.0%)
-- Network Latency (150.0ms)
+## Data Source
 
-**Network Metrics Cards:**
+The explorer does not read the node directly. The indexer reads blocks from the node and writes them into PostgreSQL, and the explorer queries that database through a GraphQL API. A block therefore shows up in the explorer shortly after the node finalizes it. See [Data Flow](/architecture/data-flow/) for the whole path and [What Is ASI:Chain](/overview/) for the components.
 
-Six detailed metric cards with trend indicators:
-- **Block Time**: Average time between blocks with mini sparkline
-- **Transactions/sec**: Network throughput (TPS)
-- **Active Validators**: Currently validating nodes count
-- **Network Health**: Overall network performance percentage
-- **Total Stake**: Total staked tokens
-- **Latest Block**: Most recent block number
+## Next Steps
 
-**Performance Charts:**
+<CardGrid columns="2">
+<DocCard title="Data Flow" href="/architecture/data-flow/">The path from the node to the explorer</DocCard>
+<DocCard title="What Is ASI:Chain" href="/overview/">The components of the network</DocCard>
+<DocCard title="ASI Wallet" href="/wallet/usage/">Open the wallet at wallet.dev.asichain.io</DocCard>
+<DocCard title="Faucet" href="/faucet/usage/">Request tokens at faucet.dev.asichain.io</DocCard>
+</CardGrid>
 
-Two interactive charts:
-- **Performance Metrics Chart**: Block Time and TPS over time
-- **Network Activity Chart**: Deployments and Transfers over time
-
-![Statistics Page](/images/explorer/statistics-page.png)
-
-## Indexer Status Page
-
-The [Indexer Status page](https://explorer.dev.asichain.io/indexer-status) displays the synchronization status of the blockchain indexer.
-
-**Sync Status:**
-
-Shows current synchronization state with color indicator:
-- Green: Synced (up to date)
-- Yellow: Syncing (catching up)
-- Red: Out of sync (behind)
-
-**Sync Progress Overview:**
-
-Four key metrics:
-- **Sync Progress**: Percentage complete with progress bar
-- **Last Indexed Block**: Block number and blocks behind
-- **Highest Block**: Latest block on network
-- **Last Update**: Time of last sync
-
-**Indexer Status Table:**
-
-Detailed status information showing last indexed block, highest block, and sync status.
-
-![Indexer Status](/images/explorer/indexer-status.png)
-
-## Search Functionality
-
-The universal search bar is available in the header on all pages.
-
-![Search Tab](/images/explorer/search-tab.png)
-
-**Search Types:**
-- Block numbers
-- Block hashes
-- Transaction IDs
-- Validator addresses
-- User addresses
-
-**Advanced Filters:**
-
-Click the funnel icon to access:
-- Filter by transaction type
-- Date range selection
-- Status filtering
-
-## Understanding the Data
-
-**Block Information:**
-- **Block Number**: Sequential identifier starting from #0
-- **Block Hash**: Unique cryptographic hash
-- **Validator**: Public key of block proposer
-- **Timestamp**: Relative time since block creation
-- **Status**: Confirmed or Pending
-
-**Transaction Information:**
-- **Deployment Transactions**: Smart contract deployments (DEPLOY badge)
-- **Transfer Transactions**: ASI token transfers (TRANSFER badge)
-- **Status**: ✓ Confirmed (in finalized block) or Pending
-
-**Validator Information:**
-- **Public Key**: Unique validator identifier (130+ characters)
-- **Stake**: Amount of ASI tokens locked
-- **Stake Percentage**: Validator's portion of total network stake
-- **Status**: Active or Inactive
-
-## Support Resources
-
-- **Documentation**: [docs.asichain.io](https://docs.asichain.io)
-- **Wallet**: [wallet.dev.asichain.io](https://wallet.dev.asichain.io)
-- **Network Indexer**: [explorer.dev.asichain.io/indexer-status](https://explorer.dev.asichain.io/indexer-status)
-- **Faucet**: [faucet.dev.asichain.io](https://faucet.dev.asichain.io)
-- **GitHub**: [asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer)
-
----
-
-**Note**: The explorer is updated in real-time as new blocks are produced on the ASI Chain network. Data shown is pulled directly from the blockchain and reflects the current state of the network.
+The explorer source is at [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer).

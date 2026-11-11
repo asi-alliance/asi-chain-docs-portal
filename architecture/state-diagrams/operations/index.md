@@ -1,106 +1,60 @@
-# Node Operational States
+# Running Node
 
-Runtime states for active validator and observer nodes.
+Once the Rust node is Running, it works as a validator or as a read-only node. This page shows when a validator proposes a block, which checks a block from a peer passes and how the node handles lost peers.
 
-← [Back to State Diagrams](../)
+← [Back to State Diagrams](/architecture/state-diagrams/)
 
-## Validator States
+## Roles
 
-Active validator nodes cycle through consensus states.
+A node in the Running state has one of two roles, and both use the same engine.
 
-```mermaid
-flowchart TD
-    subgraph Consensus["Consensus Cycle"]
-        Active((Active))
-        Proposing[Proposing]
-        Voting[Voting]
-        Finalizing[Finalizing]
-        
-        Active --> |Create block| Proposing
-        Active --> |Validate block| Voting
-        Active --> |Commit block| Finalizing
-        
-        Proposing --> Active
-        Voting --> Active
-        Finalizing --> Active
-    end
-    
-    subgraph Recovery["Connection Recovery"]
-        Disconnected[Disconnected]
-        Reconnecting[Reconnecting]
-    end
-    
-    Active --> |Network loss| Disconnected
-    Disconnected --> |Auto retry| Reconnecting
-    Reconnecting --> |Restored| Active
-```
+| Role | `/api/status` | Behavior |
+|------|---------------|----------|
+| Validator | `isValidator: true` | Proposes blocks while it is bonded and in the active set, validates blocks from peers, serves the API. |
+| Read-only | `isValidator: false`, `isReadOnly: true` | Receives and validates blocks, keeps the DAG and serves queries. Does not propose. |
 
-## Observer States
+`isValidator` reports only that the node has a validator key configured, not that it is bonded. A validator that is not yet bonded behaves like a read-only node. It skips proposing and picks up its bond without a restart once the bond takes effect at an epoch boundary.
 
-Observer nodes monitor without participating in consensus.
+## Block Proposal
 
-```mermaid
-flowchart LR
-    subgraph Normal["Normal Operation"]
-        Observer((Observer))
-    end
-    
-    subgraph Recovery["Connection Recovery"]
-        Disconnected[Disconnected]
-        Reconnecting[Reconnecting]
-    end
-    
-    Observer --> |Network loss| Disconnected
-    Disconnected --> |Auto retry| Reconnecting
-    Reconnecting --> |Restored| Observer
-```
+A validator proposes through the heartbeat proposer, which is enabled by default.
 
-::: tip Observer Mode
-Observer nodes continuously receive and store blocks but do not participate in consensus voting.
-:::
+<Diagram name="block-proposal" caption="The checks a validator passes before it creates, signs and relays a block." />
 
-## State Descriptions
+The proposer checks every `casper.heartbeat.check-interval` (5 seconds by default), and a deploy submission wakes it immediately. It proposes in two cases:
 
-### Active (Validator)
+- There are pending deploys.
+- The shard is stalled, which means the last finalized block is older than `max-lfb-age` (the maximum age of the last finalized block, 5 seconds by default). Every bonded validator then proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval.
 
-| State | Trigger | Description |
-|-------|---------|-------------|
-| **Proposing** | Block slot | Creating new block proposal |
-| **Voting** | Received block | Validating peer's block |
-| **Finalizing** | Consensus reached | Committing finalized block |
+A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals.
 
-### Observer
+A single-node development shard can set `casper.heartbeat.enabled = false` and rely on `autopropose` or on an operator calling the admin API.
 
-| State | Description |
-|-------|-------------|
-| **Observer** | Receiving and storing blocks |
-| **Disconnected** | Network connection lost |
-| **Reconnecting** | Attempting to restore connection |
+## Block Validation
 
-## Monitoring
+A block from a peer passes these checks in order. A block that fails a check is rejected. A block whose parents are not in the DAG yet waits in a buffer until they arrive.
 
-Check current node activity:
+<Diagram name="block-validation" caption="The checks a block from a peer passes in order, and the points where it is rejected or buffered." />
+
+Voting is not a separate step. A validator endorses blocks by listing them in the justifications of its next block, and finalization is computed from the DAG by the clique oracle, so every node reaches it on its own.
+
+## Connection Loss
+
+The node has no Disconnected or Reconnecting state. Two background loops keep the peer list current.
+
+- The clear-connections loop checks peers every `cleanup-interval` (10 seconds) and drops a peer after `heartbeat-failure-threshold` (3) failed checks in a row. A single success resets the count.
+- The node discovery loop looks up new peers through Kademlia, so a dropped peer can return when it answers again.
+
+Read the peer count and the last finalized block from the status endpoint.
 
 ```bash
-# Watch consensus activity
-docker logs -f validator 2>&1 | grep -E "propose|vote|finalized"
-
-# Check connection status
-docker logs validator 2>&1 | grep -i "connected\|disconnected"
+curl -s http://localhost:40403/api/status
 ```
 
-## Connection Recovery
+## Next Steps
 
-| Scenario | Auto-Recovery |
-|----------|---------------|
-| Brief network drop | Yes, automatic |
-| Extended outage | Yes, with resync |
-| Bootstrap unreachable | Retry with backoff |
-
----
-
-## Related Documentation
-
-- [Startup States](../startup/) - Node initialization
-- [Network Topology](../../network-topology/) - Node connections
-- [Troubleshooting](/quick-start/troubleshooting/) - Common issues
+<CardGrid columns="2">
+<DocCard title="Node Startup" href="/architecture/state-diagrams/startup/">What happens before Running</DocCard>
+<DocCard title="Component Diagrams" href="/architecture/component-diagrams/">Node, explorer and wallet components</DocCard>
+<DocCard title="Troubleshooting" href="/help/troubleshooting/">Checks for common node and wallet problems</DocCard>
+</CardGrid>
