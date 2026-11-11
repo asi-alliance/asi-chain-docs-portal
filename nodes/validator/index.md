@@ -1,6 +1,6 @@
 # Run a Validator
 
-Prepare a Rust node that you later bond as a validator. A validator that joins an existing shard starts on [Enroll a Validator](/nodes/validator-enrollment/), which creates the key with the ASI client, sends you here to start the node, and then funds the validator and submits the bond. The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node. The public DevNet runs a Scala node, which this Rust image does not connect to, so follow this guide on a Rust shard that you or your operator run.
+Prepare a Rust node that you later bond as a validator. A validator that joins an existing shard starts on [Enroll a Validator](/nodes/validator-enrollment/), which creates the key with the ASI client, sends you here to start the node, and then funds the validator and submits the bond. The configurator and connector workflow in `asi-chain/chain/validator` does not apply to this node.
 
 ## Prepare the Validator
 

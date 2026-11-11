@@ -1,6 +1,6 @@
 # Run an Observer
 
-An observer is a Rust node that follows the chain and answers read requests. It runs the same image as a validator and is started without a validator key. The public DevNet runs a Scala node, which this Rust image does not connect to, so follow this guide on a Rust shard that you or your operator run.
+An observer is a Rust node that follows the chain and answers read requests. It runs the same image as a validator and is started without a validator key.
 
 ## What an Observer Does
 

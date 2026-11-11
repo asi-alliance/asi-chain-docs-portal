@@ -1,10 +1,6 @@
 # Run a Node
 
-Take part in the network as an observer or a validator. Both roles run the same Rust node image.
-
-::: warning DevNet Runs the Scala Node
-As of 5 November 2026 the public DevNet runs a Scala node, and the Rust node from these guides does not connect to it. Use the guides with a Rust shard that you or your operator run.
-:::
+Take part in the network as an observer or a validator. Both roles run the same Rust node image. Use the guides with a Rust shard that you or your operator run.
 
 ## Choose a Role
 

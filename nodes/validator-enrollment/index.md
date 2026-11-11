@@ -1,6 +1,6 @@
 # Enroll a Validator
 
-Create the validator key, fund the validator and submit the bond with the ASI Rust client. Between the key and the funding you start the node on [Run a Validator](/nodes/validator/) and come back here. The public DevNet runs a Scala node, and these Rust client commands do not work against it, so run the procedure on a Rust shard.
+Create the validator key, fund the validator and submit the bond with the ASI Rust client. Between the key and the funding you start the node on [Run a Validator](/nodes/validator/) and come back here.
 
 ## Before You Start
 
@@ -36,7 +36,7 @@ docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 
 This image contains client 0.2.9 built from commit [`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) on the `dev` branch of asi-chain-client. The image exists for `linux/amd64` only. Confirm with the operator that this client works with their node digest. The same version label on another image does not prove that it does.
 
-A separate configurator or connector image is only optional packaging around the same operations. Older helper containers target a previous workflow and may not work with current Rust nodes.
+A separate configurator or connector image is only optional packaging around the same operations. Older helper containers target a previous workflow and may not work with the Rust node.
 
 ## Enroll the Validator
 
@@ -121,7 +121,7 @@ The output shows the current block and epoch, the epoch length and the quarantin
 
 Send the deploy to an already bonded validator, because a node that cannot propose accepts a deploy and never includes it. Do not send it to the joining node itself or to the bootstrap or ceremony-master node. Use the read-only observer for status and result queries. The stake must be at least the shard's `bond-minimum`, and bonding the same key twice fails with `already bonded`.
 
-`STAKE_BASE_UNITS` depends on the decimals of the shard, which the node reports as `nativeTokenDecimals` in `/api/status`. Client 0.2.9 works only with nodes that predate uint256 amounts. See [Node Image](/nodes/image/) and [Token Amounts](/reference/token-amounts/).
+`STAKE_BASE_UNITS` depends on the decimals of the shard, which the node reports as `nativeTokenDecimals` in `/api/status`. See [Token Amounts](/reference/token-amounts/).
 
 ```bash
 client bond-validator --stake "$STAKE_BASE_UNITS" \
