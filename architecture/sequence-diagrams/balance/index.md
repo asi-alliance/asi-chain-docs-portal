@@ -6,7 +6,7 @@ The wallet reads a balance with a free read-only query to the node and then subt
 
 ## How a Balance Query Works
 
-A balance query is an exploratory deploy. The node runs a short Rholang term against the state of the last finalized block and returns the result. The query is not signed, is not written to a block and costs nothing. The node still limits it: a query that runs out of phlogiston is rejected with `out_of_phlogistons`, and one that runs too long times out.
+A balance query is an exploratory deploy. The node runs a short Rholang term against the state of the last finalized block and returns the result. The query is not signed, is not written to a block and costs nothing. The node limits it: a query that runs out of phlogiston is rejected with `out_of_phlogistons`, and one that runs too long times out.
 
 The query goes to the node behind `ReadOnlyURL` (see [Wallet Components](/architecture/component-diagrams/wallet/#network-connections)).
 
