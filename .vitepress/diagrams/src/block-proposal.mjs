@@ -2,11 +2,11 @@
 export default {
   kind: 'flow',
   title: 'Block proposal',
-  desc: 'A validator starts when the heartbeat check fires every 5 seconds or a deploy is submitted. If it is not bonded and active, it waits. If synchrony and height constraints are not met, it waits. Otherwise it creates a block from the deploy pool, executes the deploys, signs the block, adds it to the DAG, relays it to peers and waits again.',
+  desc: 'A validator starts when the heartbeat check fires every 3 seconds or a deploy is submitted. If it is not bonded and active, it waits. If synchrony and height constraints are not met, it waits. Otherwise it creates a block from the deploy pool, executes the deploys, signs the block, adds it to the DAG, relays it to peers and waits again.',
   legend: true,
   opts: { colGaps: [96], rowGaps: [34, 46, 46, 30, 30, 30], wrap: 22, labelWrap: 0 },
   nodes: [
-    { id: 'start', label: 'Heartbeat check every 5 seconds or a deploy is submitted', kind: 'terminal', col: 0, row: 0, wrap: 22 },
+    { id: 'start', label: 'Heartbeat check every 3 seconds or a deploy is submitted', kind: 'terminal', col: 0, row: 0, wrap: 22 },
     { id: 'bonded', label: 'Bonded and active?', kind: 'decision', col: 0, row: 1, wrap: 18 },
     { id: 'sync', label: 'Synchrony and height constraints met?', kind: 'decision', col: 0, row: 2, wrap: 18 },
     { id: 'create', label: 'Create block from deploy pool', col: 0, row: 3 },

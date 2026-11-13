@@ -1,6 +1,6 @@
 # Wallet Components
 
-The ASI Wallet is a browser-based React application for managing accounts and sending transactions. Every call to the network goes through the [Wallet SDK](/wallet-sdk/overview/), which signs deploys, keeps wallets in the browser and calls the node and the indexer.
+The ASI Wallet is a browser-based React application for managing accounts and sending transactions. Account calls to the network go through the [Wallet SDK](/wallet-sdk/overview/), which signs deploys, keeps wallets in the browser and calls the node and the indexer.
 
 ← [Back to Component Diagrams](/architecture/component-diagrams/)
 
@@ -16,7 +16,7 @@ The ASI Wallet is a browser-based React application for managing accounts and se
 | `Client` | Creates and unlocks wallets, signs and submits deploys, reads balances, watches deploy status |
 | `ApiClientManager` | Holds one HTTP client per node role |
 
-React components do not call the SDK directly. A page dispatches a Redux thunk or uses an RTK Query hook, and the thunk calls `SdkWalletService`.
+React components do not call the SDK client directly. A page dispatches a Redux thunk or uses an RTK Query hook, and the thunk calls `SdkWalletService`.
 
 ## Pages
 
@@ -39,8 +39,8 @@ React components do not call the SDK directly. A page dispatches a Redux thunk o
 | `walletsApi` | Balances and transaction history, fetched through the SDK and cached for 30 seconds |
 | `auth` | Whether the wallet is unlocked |
 | `theme` | Light or dark theme |
-
-Some builds carry more slices, but the ones above are in every build.
+| `networkActivity` | Whether a network operation is running and which networks are busy |
+| `sdkClient` | Whether the SDK client is pending, ready or failed |
 
 ## Storage
 
@@ -63,14 +63,14 @@ The SDK reads three addresses and a node profile for every network from its conf
 | `IndexerURL` | GraphQL endpoint with transaction history |
 | `nodeApiProfile` | `scala` or `rust`. It selects the Rholang terms, the request body of balance queries and the finalization threshold |
 
-The preinstalled network of the hosted wallet uses addresses that are built into the application. For the endpoints of the public network, see [Network Endpoints](/reference/endpoints/).
+The preinstalled network of the hosted wallet uses addresses that are built into the application. For the endpoints of DevNet, see [Network Endpoints](/reference/endpoints/).
 
 Which call goes to which address:
 
 | Operation | Request | Address |
 |-----------|---------|---------|
 | Balance | `POST /api/explore-deploy` | `ReadOnlyURL` |
-| Latest block number (before signing) | `GET /api/blocks` | `ReadOnlyURL` |
+| Block number (before signing) | `GET /api/blocks` | `ReadOnlyURL` |
 | Send tokens or deploy code | `POST /api/deploy` | `ValidatorURL` |
 | Deploy status | `GET /api/deploy/{id}` | `ReadOnlyURL` |
 | Transaction history | GraphQL query | `IndexerURL` |

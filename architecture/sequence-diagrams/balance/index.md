@@ -35,7 +35,7 @@ The node returns the balance as an integer number of atomic units. ASI has 18 de
 | 1 ASI | 1,000,000,000,000,000,000 atomic units |
 | 1 atomic unit | 0.000000000000000001 ASI |
 
-Use exact conversion with the network's precision. The released SDK's conversion behavior is documented in [SDK Functions](/wallet-sdk/api-reference/functions/).
+Convert amounts with `toExactAtomicAmount(amount, 18)`. See [SDK Functions](/wallet-sdk/api-reference/functions/).
 
 ### Query Rholang
 
@@ -82,9 +82,7 @@ new return, rl(`rho:registry:lookup`), systemVaultCh, vaultCh, balanceCh in {
 }
 ```
 
-::: warning Balance Expression on Rust Nodes
-A Rust node returns the balance as `ExprBigInt`, while a Scala node returns `ExprInt`. Wallet SDK 2.1.0 reads only `ExprInt`. With the `rust` profile, `getBalance` therefore fails with `BALANCE_UNAVAILABLE` (the node returned no balance expression). Any transfer fails the same way, because it checks the balance first.
-:::
+A Rust node returns the balance as `ExprBigInt`, while a Scala node returns `ExprInt`. The SDK accepts both.
 
 ### Auto-Refresh
 

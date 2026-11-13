@@ -6,7 +6,7 @@ How chain data reaches the explorer and the wallet, and how a deploy (signed Rho
 
 <Diagram name="data-pipeline" caption="The indexer copies node data into PostgreSQL, Hasura serves it as GraphQL, and the wallet and SDK also read the node directly." />
 
-The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/71e80edb0bbae7dfbbab0e0393901edb70df471d/src/grpc_node_client.py) calls the node over gRPC and HTTP. PostgreSQL and Hasura run as separate services. The explorer reads indexed data from Hasura and neither extracts chain blocks nor owns the database.
+The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/dev/src/grpc_node_client.py) calls the node over gRPC and HTTP. PostgreSQL and Hasura run as separate services. The explorer reads indexed data from Hasura and neither extracts chain blocks nor owns the database.
 
 The indexer polls the node every `SYNC_INTERVAL`. Besides blocks it reads bonds and the node's pending deploys. A separate `metrics-cron` service refreshes the aggregated network metrics every three minutes.
 
@@ -22,7 +22,7 @@ A deploy passes through separate states. Each one is visible through a different
 | In a block | A validator included the deploy, executed its Rholang and signed the block | `GET /api/deploy/{deploy_id}` |
 | Finalized | The block that holds the deploy is finalized. Whether the deploy's effects were kept is reported per deploy | `GET /api/is-finalized/{hash}`, `GET /api/deploy-finalization-status/{sig}` |
 
-A validator creates a block when its proposer triggers and both the synchrony and the height constraints hold. By default the heartbeat proposer checks every 5 seconds. Peers that receive the block validate it before adding it to their DAG.
+A validator creates a block when its proposer triggers and both the synchrony and the height constraints hold. By default the heartbeat proposer checks every 3 seconds. Peers that receive the block validate it before adding it to their DAG.
 
 A block can finalize while some of its deploys have their effects dropped during state merge. Poll `deploy-finalization-status` with the deploy signature rather than the block hash alone. `GET /api/deploy/{deploy_id}` returns 404 while no block known to the node contains the deploy, so a 404 right after submission does not mean the deploy was lost.
 
@@ -43,4 +43,4 @@ Read these from the indexer through Hasura GraphQL:
 
 The wallet reads balances through the SDK from the node, and its history from GraphQL.
 
-Migrations, Hasura relationships, permissions and endpoint selection must match the deployed indexer revision.
+Migrations, Hasura relationships, permissions and endpoint selection must match the indexer you run.

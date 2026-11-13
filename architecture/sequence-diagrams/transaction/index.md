@@ -25,7 +25,7 @@ The wallet calls the SDK `Client`, and the SDK talks to the nodes behind `Valida
 |----------|------|-------------|
 | 1-2 | User input | Recipient address and amount. The wallet does not send to `0x...` addresses |
 | 3-5 | Password | Needed only while the signing session is closed. By default a session stays open for 15 minutes after unlocking |
-| 6 | Reserve | The amount held for the transfer is `amount + GasFee.MAX`, where `GasFee.MAX` is 250000 atomic units (0.0025 ASI) |
+| 6 | Reserve | The amount held for the transfer is `amount + GasFee.MAX`, where `GasFee.MAX` is 250000 atomic units |
 | 7-9 | Balance check | The SDK reads the balance as described in [Balance Query Flow](/architecture/sequence-diagrams/balance/). If the balance minus funds already reserved does not cover the new reserve, the transfer stops with an error before anything is signed |
 
 The private key is not kept in the Redux store. The SDK decrypts it only while the signing session is open.
@@ -40,10 +40,10 @@ The private key is not kept in the Redux store. The SDK decrypts it only while t
 | `timestamp` | Current time in milliseconds |
 | `phloPrice` | 1 |
 | `phloLimit` | 500000 |
-| `validAfterBlockNumber` | Number of the latest block minus 1 |
+| `validAfterBlockNumber` | Number of the newest block minus 1 |
 | `shardId` | `root` |
 
-The result is a signed deploy: the serialized data, the public key of the deployer, the signature in hex and the algorithm `secp256k1`. If the node cannot return the latest block number, signing fails with `Invalid block number`.
+The result is a signed deploy: the serialized data, the public key of the deployer, the signature in hex and the algorithm `secp256k1`. If the node cannot return the newest block number, signing fails with `Invalid block number`.
 
 ## Phase 3: Submission
 
@@ -78,7 +78,7 @@ If the deploy is not finalized within 180 seconds, the watch ends with `DeployTi
 For a Scala node the SDK reads the `faultTolerance` field of the answer and treats the deploy as finalized at 0.99 or above. For a Rust node the SDK looks for the same field with a threshold of 0.33, but a Rust node does not send it.
 
 ::: warning Finalization on Rust Nodes
-A Rust node answers `GET /api/deploy/{id}` with `isFinalized` and `finalizationState` instead of `faultTolerance`. Wallet SDK 2.1.0 with the `rust` profile therefore keeps the status at `IncludedInBlock` for a deploy that the node already reports as `Finalized`, and the watch ends with `DeployTimeoutError`.
+A Rust node answers `GET /api/deploy/{id}` with `isFinalized` and `finalizationState` instead of `faultTolerance`. With the `rust` profile the SDK keeps the status at `IncludedInBlock` for a deploy that the node already reports as `Finalized`, and the watch ends with `DeployTimeoutError`.
 
 The node returns the deploy as soon as a block it knows contains it, with `isFinalized: false` until that block is finalized. If no known block contains the deploy, the node answers `404 deploy_not_found`, and the SDK reports `CheckingError`.
 :::

@@ -1,19 +1,20 @@
 # Explorer Components
 
-The explorer at [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer/tree/0ae1eea64234c86937b3adf39fc6a5551b228f1a) is a React frontend served by nginx in its published image. It reads chain data from Hasura over GraphQL, so most of this page describes the indexer tables behind Hasura.
+The explorer at [github.com/asi-alliance/asi-chain-explorer](https://github.com/asi-alliance/asi-chain-explorer/tree/dev) is a React frontend served by nginx in its published image. It reads chain data from Hasura over GraphQL, so most of this page describes the indexer tables behind Hasura.
 
-The frontend uses two connections.
+The frontend uses three connections.
 
-- Queries and mutations go to `REACT_APP_GRAPHQL_URL` as GraphQL over HTTP.
-- Live updates (new blocks, transfers, deployments, network statistics) arrive as GraphQL subscriptions over WebSocket at `REACT_APP_GRAPHQL_WS_URL`.
+- Queries go to `REACT_APP_GRAPHQL_URL` as GraphQL over HTTP.
+- Live updates (new blocks, transfers and deployments) arrive as GraphQL subscriptions over WebSocket at `REACT_APP_GRAPHQL_WS_URL`.
+- The status page polls the indexer status endpoint through the web server of the explorer (`REACT_APP_INDEXER_API_URL`, `/api/indexer` by default).
 
-The source also contains a wallet balance lookup (`WalletSearch` and `walletService`) that would send a Rholang query to `REACT_APP_RCHAIN_NODE_URL` with `POST /api/explore-deploy`. No page of the explorer uses it at this revision, so the explorer does not call a node.
+The source also contains a wallet balance lookup (`WalletSearch` and `walletService`) that would send a Rholang query to `REACT_APP_RCHAIN_NODE_URL` with `POST /api/explore-deploy`. No page of the explorer uses it, so the explorer does not call a node.
 
 The Python indexer extracts chain data and writes it to the database. Hasura adds relationships and permissions and serves GraphQL. Both run separately from the frontend container.
 
 ## Indexer Database
 
-The indexer writes the tables below to PostgreSQL, as defined by migrations 000 to 003 in [github.com/asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer/tree/71e80edb0bbae7dfbbab0e0393901edb70df471d/migrations). The figure shows how the tables relate, and the two tables below list their keys, relations and main columns.
+The indexer writes the tables below to PostgreSQL, as defined by migrations 000 to 007 in [github.com/asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer/tree/dev/migrations). The figure shows how the tables relate, and the two tables below list their keys, relations and main columns.
 
 Hasura serves every table except these three, and adds the `native_transfer_lifecycle` view:
 
@@ -65,11 +66,11 @@ The figure and the tables leave out the link table `native_transfer_result_alias
 | `indexer_state` | `value` text |
 | `network_metrics_buckets` | `deployments_count` bigint, `transfers_count` bigint |
 
-After migration 001, amounts in the smallest token unit (`amount_dust`, `stake`, `total_stake`, `bonded_balance_dust` and `unbonded_balance_dust`) are `NUMERIC(78,0)` and limited to the unsigned 256-bit range. The matching `*_asi` columns are `NUMERIC(155,77)`, and the generated totals in `balance_states` are one digit wider. Each of the tables `blocks`, `transfers`, `validators`, `validator_bonds` and `balance_states` carries a `token_decimals` column. The tables `validators`, `pending_deploys`, `epoch_transitions`, `network_stats`, `indexer_state` and `network_metrics_buckets` have no foreign keys. A `validators` row is linked to `validator_bonds` only by the public key value.
+Amounts in the smallest token unit (`amount_dust`, `stake`, `total_stake`, `bonded_balance_dust` and `unbonded_balance_dust`) are `NUMERIC(78,0)` and limited to the unsigned 256-bit range. Migration 004 widens `phlo_price` in `deployments` and `pending_deploys` the same way. The matching `*_asi` columns are `NUMERIC(155,77)`, and the generated totals in `balance_states` are one digit wider. Each of the tables `blocks`, `transfers`, `validators`, `validator_bonds` and `balance_states` carries a `token_decimals` column, and so does `native_transfer_calls`. The tables `validators`, `pending_deploys`, `epoch_transitions`, `network_stats`, `indexer_state` and `network_metrics_buckets` have no foreign keys. A `validators` row is linked to `validator_bonds` only by the public key value.
 
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Container Images" href="/reference/container-images/">The published frontend and indexer revisions</DocCard>
+<DocCard title="Container Images" href="/reference/container-images/">Published frontend and indexer images</DocCard>
 <DocCard title="Data Flow" href="/architecture/data-flow/">How chain data reaches the explorer through the indexer</DocCard>
 </CardGrid>
