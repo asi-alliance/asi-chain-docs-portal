@@ -62,7 +62,9 @@ The **Overview** tab shows the transaction ID, deployer, type and timestamp. Und
 
 ## Pending
 
-The **Pending** page is titled **Pending Deploys** and shows a counter. It lists deploys that sit in the node deploy buffers and are not in a block yet. The table has the columns **Deploy**, **Deployer**, **Submitted**, **Phlo Limit**, **Phlo Price** and **Status**, where the status is **Included**, **Pending** or **Retrying after rejection**. It shows the 20 newest deploys at most and refreshes every 5 seconds. If no deploy is waiting, the page shows `No deploys are waiting for a block.` Click a deploy to open its details page, which refreshes every 5 seconds until the deploy is in a block.
+The **Pending** page is titled **Pending Deploys** and shows a counter. It lists the newest deploys, 20 at most, that sit in the node deploy buffers and are not in a block yet, and it refreshes every 5 seconds. If no deploy is waiting, the page shows `No deploys are waiting for a block.`
+
+The table has the columns **Deploy**, **Deployer**, **Submitted**, **Phlo Limit**, **Phlo Price** and **Status**. The status is **Included**, **Pending** or **Retrying after rejection**. Click a deploy to open its details page, which refreshes every 5 seconds until the deploy is in a block.
 
 ## Validators
 
@@ -113,7 +115,7 @@ The green icon next to the page title downloads a CSV file with up to 5,000 reco
 
 ## Data Source
 
-The explorer does not read the node directly. The indexer reads blocks from the node and writes them into PostgreSQL, and the explorer queries that database through a GraphQL API, and the **Indexer** page also reads the indexer status endpoint. A block therefore shows up in the explorer shortly after the node finalizes it. See [Data Flow](/architecture/data-flow/) for the whole path and [What Is ASI:Chain](/overview/) for the components.
+The explorer does not read the node directly. The indexer reads blocks from the node and writes them into PostgreSQL. The explorer queries that database through a GraphQL API, and the **Indexer** page also reads the indexer status endpoint. A block therefore shows up in the explorer shortly after the node finalizes it. See [Data Flow](/architecture/data-flow/) for the whole path and [What Is ASI:Chain](/overview/) for the components.
 
 ## Next Steps
 
