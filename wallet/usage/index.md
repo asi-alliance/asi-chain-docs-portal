@@ -166,7 +166,7 @@ Pro mode replaces the single field with an editor. A file panel on the left hold
 
 - **Refresh Balances** reloads the balances.
 - The **Edit** button next to an account name renames the account.
-- **Create Account** derives a new account from the recovery phrase of an HD wallet. A private key wallet has no such button.
+- **Create Account** derives a new account from the recovery phrase of an HD wallet and asks for the wallet password before it adds the account. A private key wallet has no such button.
 - **Import Wallet**, **Import Private Key** and **Import Wallet from keyfile** add another wallet.
 - **Export Keyfile**, in **Wallet backup**, saves the wallet to a keyfile that **Import Wallet from keyfile** can read back.
 - **Delete Wallet** removes the wallet and all its accounts from this browser. Restoring it needs the recovery phrase or the private key.
