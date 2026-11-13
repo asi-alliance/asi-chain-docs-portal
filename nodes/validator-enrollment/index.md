@@ -82,7 +82,7 @@ The default Docker bridge must reach the operator's URLs. For local container ne
 
 ### Start and Synchronize the Joining Node
 
-Go to [Run a Validator](/nodes/validator/#prepare-storage-configuration-and-keys), follow its steps from Prepare Storage, Configuration and Keys to Start the Node with the key from the previous step, and then come back here. Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
+Go to [Run a Validator](/nodes/validator/#prepare-storage-configuration-and-keys), follow its steps from Prepare Storage, Configuration and Keys to Start the Node with the key from the step above, and then come back here. Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
 
 - `--bootstrap` with the operator's URI.
 - `--network-id` equal to the shard's `networkId`.
