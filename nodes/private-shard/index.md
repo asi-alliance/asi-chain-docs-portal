@@ -91,6 +91,8 @@ If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-conn
 
 </Steps>
 
+For several validators, see the compose layout in the upstream [shard topology](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/docker/shard.yml). Set the native-token flags of every node to `ASI`, `ASI` and `18`.
+
 ::: danger Use Fresh Credentials
 Use fresh private credentials. Do not reuse published development keys.
 :::

@@ -6,7 +6,7 @@ How chain data reaches the explorer and the wallet, and how a deploy (signed Rho
 
 <Diagram name="data-pipeline" caption="The indexer copies node data into PostgreSQL, Hasura serves it as GraphQL, and the wallet and SDK also read the node directly." />
 
-The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/dev/src/grpc_node_client.py) calls the node over gRPC and HTTP. PostgreSQL and Hasura run as separate services. The explorer reads indexed data from Hasura and neither extracts chain blocks nor owns the database.
+The [indexer node client](https://github.com/asi-alliance/asi-chain-indexer/blob/dev/src/grpc_node_client.py) calls the node over gRPC and HTTP. PostgreSQL and Hasura run as separate services. The explorer reads indexed data from Hasura. It does not extract chain blocks and does not own the database.
 
 The indexer polls the node every `SYNC_INTERVAL`. Besides blocks it reads bonds and the node's pending deploys. A separate `metrics-cron` service refreshes the aggregated network metrics every three minutes.
 

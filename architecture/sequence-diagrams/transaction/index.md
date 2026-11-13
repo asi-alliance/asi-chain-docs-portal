@@ -56,7 +56,7 @@ The result is a signed deploy: the serialized data, the public key of the deploy
 | 3 | Validate | The node checks the signature algorithm, the phlo price against its minimum price and the term |
 | 4 | Deploy ID | The node returns the signature of the deploy in hex. The wallet tracks the transfer by that signature |
 
-If the node refuses the deploy with a 4xx answer, the reservation is released (messages 5 and 6). If the outcome is unknown, for example after a network error, the reservation stays, because the deploy may reach the network later.
+If the node refuses the deploy with a 4xx response, the reservation is released (messages 5 and 6). If the outcome is unknown, for example after a network error, the reservation stays, because the deploy may reach the network later.
 
 The validator answers `400` for a malformed request or a bad term and `409` for a duplicate deploy. Other failures come back as `422`, `500` or `502`.
 
@@ -88,7 +88,7 @@ The node returns the deploy as soon as a block it knows contains it, with `isFin
 | Error | When |
 |-------|------|
 | `BalanceUnavailableError` | The balance could not be read in phase 1 |
-| `DeploySubmissionRejectedError` | The validator refused the deploy with a 4xx answer. The reservation is released |
+| `DeploySubmissionRejectedError` | The validator refused the deploy with a 4xx response. The reservation is released |
 | `ApiRequestError` | A request to a node failed |
 | `DeployTimeoutError` | The deploy was not finalized within the watch time |
 

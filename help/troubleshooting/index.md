@@ -18,7 +18,7 @@ See [ASI Wallet](/wallet/usage/) for the screens.
 
 ### Faucet Limits
 
-Each request sends the amount that the faucet operator has set. The faucet refuses an address when its balance equals the operator's threshold or exceeds it, and the page then shows `Your address is not eligible`. See [Faucet](/faucet/usage/) for how the page checks a request and what each status means. Do not send a second request until you have checked the first.
+Each request sends the amount that the faucet operator configured. The faucet refuses an address when its balance is equal to or above the eligibility limit, and the page then shows `Your address is not eligible`. See [Faucet](/faucet/usage/) for how the page checks a request and what each status means. Do not send a second request until you have checked the first.
 
 ### Failed Transfers
 

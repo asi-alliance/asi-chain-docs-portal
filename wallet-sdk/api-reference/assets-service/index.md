@@ -18,7 +18,7 @@ import { AssetsService } from "@asichain/asi-wallet-sdk";
 new AssetsService(deployService: DeployService, nodeApiProvider?: NodeApiProvider)
 ```
 
-`nodeApiProvider` is optional. It is used to pick the Rholang balance query that fits the profile of the active node (Scala or Rust).
+`nodeApiProvider` is optional. The service uses it to pick the Rholang balance query that fits the profile of the active node (Scala or Rust).
 
 ## Methods
 

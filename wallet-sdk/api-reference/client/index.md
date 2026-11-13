@@ -401,7 +401,7 @@ getEventBus(): IClientEventSource
 | `reservationsChanged` | `TReservationsByWallet` | A reservation was added, replaced, removed, confirmed or expired |
 | `networkBusyChanged` | `networkId, isBusy` | An operation started or finished on a network |
 | `walletLocked` | `walletId` | A signing session ended, by `lockWallet` or by the auto-lock |
-| `walletFingerprintUpgraded` | `walletId` | A wallet stored by version 2.0.0 or earlier got a new fingerprint when it was opened. Transitional |
+| `walletFingerprintUpgraded` | `walletId` | When the wallet was opened, the SDK replaced its stored fingerprint with the one computed from its key. Transitional |
 
 The names are the values of the `ClientEvent` enum.
 

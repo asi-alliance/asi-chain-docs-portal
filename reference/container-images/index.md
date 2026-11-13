@@ -84,7 +84,7 @@ The frontend images substitute endpoint URLs at startup. Supply the image-specif
 | `OBSERVER_HOST`, `OBSERVER_GRPC_PORT`, `OBSERVER_HTTP_PORT` | Read-only node that answers balance queries |
 | `FAUCET_TOKEN_DECIMALS` | Decimal places of the token, from 0 to 18. Set `18` for ASI |
 | `FAUCET_AMOUNT` | Amount of one payout in atomic units, for example `1000000000000000000` for 1 ASI |
-| `FAUCET_MAX_BALANCE` | Balance threshold in whole ASI. A request is rejected when the balance of the address equals the threshold or exceeds it |
+| `FAUCET_MAX_BALANCE` | Eligibility limit in whole ASI. A request is refused when the balance of the address is equal to or above it |
 
 `GET /config` of the faucet API returns the values that the process uses.
 

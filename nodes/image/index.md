@@ -47,7 +47,7 @@ unexpected argument '--profile' found
 the argument '--profile <PROFILE>' cannot be used multiple times
 ```
 
-Read the [defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/main/resources/defaults.conf). The node reads `/var/lib/rnode/f1r3fly.conf` when it exists. `run --config-file /path/to/node.conf` selects a file explicitly and takes priority. The upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/docker/conf/default.conf) show the structure. Development keys and genesis files from that directory are not inputs for joining another network.
+Read the [defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/main/resources/defaults.conf). The node reads `/var/lib/rnode/f1r3fly.conf` when it exists. `run --config-file /path/to/node.conf` selects a file explicitly and takes priority. The upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/docker/conf/default.conf) show the structure. Do not use the development keys and genesis files from that directory to join another network.
 
 ## Network Settings
 

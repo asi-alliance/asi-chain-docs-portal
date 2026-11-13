@@ -120,7 +120,7 @@ cargo build --release --locked
 The build downloads its dependencies from crates.io and GitHub.
 
 ::: warning Select the dev Branch
-Select `dev` explicitly with `--branch dev`.
+This guide follows the `dev` branch. A plain clone checks out the default branch `main` instead, so pass `--branch dev`.
 :::
 
 </Steps>
@@ -137,7 +137,7 @@ Run these from the source directory after a build. With the image, put the comma
 ./target/release/asi-chain-wallet-cli export --format json --limit 10
 ```
 
-`create --save` writes private wallet credentials under `OUTPUT_DIR`. Protect its output and the generated file. `balance`, `send` and `history` require a complete wallet file whose private key, public key and address match, and watch-only files are not supported.
+`create --save` prints the private key and writes the wallet credentials to a file under `OUTPUT_DIR`. Protect both the printed output and the file. `balance`, `send` and `history` require a complete wallet file whose private key, public key and address match, and watch-only files are not supported.
 
 To send tokens, pass the recipient address and the amount in raw dust, the smallest unit:
 

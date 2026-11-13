@@ -11,7 +11,7 @@ For the short path from a new wallet to a balance, see [Get DevNet ASI](/quick-s
 ## Rules
 
 - One request sends the amount that the faucet operator configured.
-- There is no waiting time between requests. You can ask again as soon as the earlier request is finished.
+- There is no waiting time between requests. You can ask again as soon as the earlier request has finished.
 - A request is refused when the balance of the address is equal to or above the eligibility limit.
 
 The frontend reads `native_token_decimals`, `faucet_amount` and `eligibility_ceiling` from the API's `/config` endpoint. See [Token Amounts](/reference/token-amounts/).
@@ -48,16 +48,16 @@ If the transfer is not finalized after 15 minutes, the page stops checking and s
 
 | Status | Meaning |
 |--------|---------|
-| `Deploying` | The transfer is being sent to the network. |
+| `Deploying` | The transfer is sent and is not finalized yet. |
 | `Finalized` | The transfer is final and the tokens are on your address. |
-| `DeployError` | The transfer could not be sent. The page shows the error text from the node. |
+| `DeployError` | The transfer failed or expired. The page shows the reason, for example `Deploy expired`. |
 | `Unknown` | The status cannot be determined. |
 
 ## Troubleshooting
 
 ### Your Address Is Not Eligible
 
-The balance of the address is equal to or above the eligibility limit of the faucet. Send some of it to another address or use a different address.
+The balance of the address is equal to or above the eligibility limit of the faucet. Send some tokens to another address or use a different address.
 
 ### The Balance Cannot Be Loaded
 

@@ -32,6 +32,8 @@ The Wallet SDK is published on npm as [@asichain/asi-wallet-sdk](https://www.npm
 | Faucet | [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
 | Documentation | [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal) |
 
+The pages of this portal describe the `dev` branch of each repository. The default branch of a repository can differ from it, so select `dev` when you build from source.
+
 ## Report a Problem
 
 Open an issue in the affected repository from the Source Code table. Describe how to reproduce the problem, and leave out keys and `.env` values.

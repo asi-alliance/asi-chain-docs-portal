@@ -46,11 +46,11 @@ Create a wallet account, copy its address and paste it into the faucet at [fauce
 
 ### Is There a Waiting Period Between Requests?
 
-No. The faucet API sets no time limit between requests. Each request sends the amount that the faucet operator has set. The faucet refuses an address when its balance equals the operator's threshold or exceeds it, and the page then shows `Your address is not eligible`.
+No. The faucet API sets no time limit between requests. Each request sends the amount that the faucet operator configured. The faucet refuses an address when its balance is equal to or above the eligibility limit, and the page then shows `Your address is not eligible`.
 
 ### The Tokens Have Not Arrived. What Should I Do?
 
-The faucet page checks the transfer status every 30 seconds and, with the default settings, stops after 15 minutes. If nothing arrived by then, look the transfer up in the [explorer](/explorer/usage/) by its deploy ID before you ask again. A second request sends a second amount as long as your balance is below the threshold.
+The faucet page checks the transfer status every 30 seconds and, with the default settings, stops after 15 minutes. If nothing arrived by then, look the transfer up in the [explorer](/explorer/usage/) by its deploy ID before you ask again. A second request sends a second amount as long as your balance is below the eligibility limit.
 
 ## Explorer
 
