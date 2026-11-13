@@ -5,16 +5,16 @@ The ASI wallet CLI creates wallets, queries balances, sends tokens and reads and
 ## Published Image
 
 ```text
-public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli:0.1.0-dev.20261103-8f6c20ea43eb
-public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
+public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli:0.1.0-dev.20261112-971f6ba2ac85
+public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:c05db1874773b0e740299439e3e900852ae341f5f8bda228234f6835c40cc252
 ```
 
-The CLI builds the ASI client from the `rust-client` git submodule into its own binary. The standalone `client` container is a different tool, so do not swap one for the other.
+The CLI compiles the ASI client library into its own binary. The standalone `client` container is a different tool, so do not swap one for the other.
 
 To show the help text without connecting to a network, pull the image and run it with `--network none`:
 
 ```bash
-WALLET_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:a954cc84152aaa32c35f24d906714d9f657e112645e194e69115c87c0f75b32d
+WALLET_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:c05db1874773b0e740299439e3e900852ae341f5f8bda228234f6835c40cc252
 docker pull --platform linux/amd64 "$WALLET_IMAGE"
 docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" --help
 docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --help
@@ -26,7 +26,7 @@ The CLI is written for the HTTP and gRPC API of the Rust node.
 
 Use a Rust node, such as one started from the [node image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
 
-Copy the [pinned `.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/8f6c20ea43ebc6d333783f936372d4220e449681/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
+Copy the [`.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/dev/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
 
 - `VALIDATOR_GRPC_URL`, the gRPC endpoint of a validator, which `send` uses to submit the deploy.
 - `VALIDATOR_HTTP_URL`, the HTTP endpoint of the same validator.
@@ -68,7 +68,7 @@ EXPECTED_TOKEN_SYMBOL=ASI
 SHARD_ID=my-shard
 ```
 
-`SHARD_ID` must match `--shard-name`. Nodes started without the token flags report `F1R3`, and `balance` then stops with `Wrong native token: expected ASI, node reports F1R3` until `EXPECTED_TOKEN_SYMBOL` matches the reported symbol.
+`SHARD_ID` must match `--shard-name`. `balance` stops with `Wrong native token: expected <EXPECTED_TOKEN_SYMBOL>, node reports <symbol>` when the symbol that the node reports differs from `EXPECTED_TOKEN_SYMBOL`.
 
 ## Run the Image
 
@@ -113,17 +113,14 @@ The repository pins `nightly-2026-02-09` in `rust-toolchain.toml`, and `rustup` 
 ```bash
 git clone --branch dev https://github.com/asi-alliance/asi-chain-wallet-cli.git
 cd asi-chain-wallet-cli
-git checkout --detach 8f6c20ea43ebc6d333783f936372d4220e449681
-git submodule update --init --recursive
+git checkout --detach 971f6ba2ac852073699c4666eb9ec49444cc75fe
 cargo build --release --locked
 ```
 
 The build downloads its dependencies from crates.io and GitHub.
 
 ::: warning Select the dev Branch
-Select `dev` explicitly. The default branch `main` is older, so a plain clone builds a different client.
-
-Do not use `git submodule update --remote`: it replaces the pinned client with the newest commit of its branch.
+This guide follows the `dev` branch. A plain clone checks out the default branch `main` instead, so pass `--branch dev`.
 :::
 
 </Steps>
@@ -140,7 +137,7 @@ Run these from the source directory after a build. With the image, put the comma
 ./target/release/asi-chain-wallet-cli export --format json --limit 10
 ```
 
-`create --save` writes private wallet credentials under `OUTPUT_DIR`. Protect its output and the generated file. `balance` and `history` also require a complete matching wallet file at this revision, and watch-only files are not supported.
+`create --save` prints the private key and writes the wallet credentials to a file under `OUTPUT_DIR`. Protect both the printed output and the file. `balance`, `send` and `history` require a complete wallet file whose private key, public key and address match, and watch-only files are not supported.
 
 To send tokens, pass the recipient address and the amount in raw dust, the smallest unit:
 
@@ -148,13 +145,13 @@ To send tokens, pass the recipient address and the amount in raw dust, the small
 asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 ```
 
-| ASI Amount | Raw CLI Amount (8 Decimals) |
+| ASI Amount | Raw CLI Amount (18 Decimals) |
 |---|---|
-| 0.5 | `50000000` |
-| 1 | `100000000` |
-| 10 | `1000000000` |
+| 0.5 | `500000000000000000` |
+| 1 | `1000000000000000000` |
+| 10 | `10000000000000000000` |
 
-The table is for 8 decimals, as on DevNet. See [Token Amounts](/reference/token-amounts/).
+ASI has 18 decimal places. See [Token Amounts](/reference/token-amounts/).
 
 Give amounts as exact integers. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 
@@ -166,5 +163,5 @@ The node's native-token configuration and expected symbol must match the target 
   <DocCard title="Network Endpoints" href="/reference/endpoints/">DevNet applications and node addresses</DocCard>
   <DocCard title="Container Images" href="/reference/container-images/">Published images, tags and digests</DocCard>
   <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Start a shard to try balance and send</DocCard>
-  <DocCard title="Troubleshooting" href="/help/troubleshooting/">Check which revision the CLI was built from</DocCard>
+  <DocCard title="Troubleshooting" href="/help/troubleshooting/">Find a symptom and work through its checks</DocCard>
 </CardGrid>

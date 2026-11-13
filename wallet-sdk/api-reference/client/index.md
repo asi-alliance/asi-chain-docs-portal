@@ -1,6 +1,6 @@
 # Client
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Client/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/Client/index.ts)
 
 `Client` is the entry point of the SDK. It owns the open wallets, the networks, the signing sessions, the transaction reservations and the event bus. Create it with `Client.create`, because the constructor is private. The [Wallet](/wallet-sdk/api-reference/wallet/) page covers the objects that `Client` returns.
 
@@ -195,10 +195,11 @@ export async function addStaging(client: Client, validatorUrl: string, indexerUr
 getBalance(address: Address): Promise<bigint>
 getAvailableBalance(walletId: string, accountId: string): Promise<bigint>
 toDisplayAmount(atomicAmount: bigint): string
-toAtomicAmount(amount: number | string): bigint
+toAtomicAmount(amount: number | string): bigint // deprecated
+toExactAtomicAmount(amount: string): bigint
 ```
 
-`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units, and ASI has 8 decimal places, so `toAtomicAmount("10")` is `1000000000n`. Both conversion methods use the fixed `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. See [Token Amounts](/reference/token-amounts/).
+`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units. The conversion methods use `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. For ASI call `toExactAtomicAmount(amount, 18)` from [Functions](/wallet-sdk/api-reference/functions/#toexactatomicamount). `toAtomicAmount` is deprecated, because it truncates excess fractional digits where `toExactAtomicAmount` rejects them. See [Token Amounts](/reference/token-amounts/).
 
 A balance that cannot be trusted throws `BalanceUnavailableError` with status `502`, carrying the address and a reason. It never resolves to `0n`, because an unreachable node, a vault that reports an error and an empty account are three different outcomes.
 
@@ -400,7 +401,7 @@ getEventBus(): IClientEventSource
 | `reservationsChanged` | `TReservationsByWallet` | A reservation was added, replaced, removed, confirmed or expired |
 | `networkBusyChanged` | `networkId, isBusy` | An operation started or finished on a network |
 | `walletLocked` | `walletId` | A signing session ended, by `lockWallet` or by the auto-lock |
-| `walletFingerprintUpgraded` | `walletId` | A wallet stored by version 2.0.0 or earlier got a new fingerprint when it was opened. Transitional |
+| `walletFingerprintUpgraded` | `walletId` | When the wallet was opened, the SDK replaced its stored fingerprint with the one computed from its key. Transitional |
 
 The names are the values of the `ClientEvent` enum.
 

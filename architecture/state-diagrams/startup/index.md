@@ -21,8 +21,8 @@ The Rust node runs a fixed sequence of startup steps and then reaches the Runnin
 | Mode | Condition | Path to Running |
 |------|-----------|-----------------|
 | Reconnect | The block store holds an approved block, which is any restart on existing data. | Builds Casper from local storage and goes to Running directly, in about a second. |
-| Ceremony master | No approved block and `ceremony_master_mode` is set. A standalone node starts in this mode. | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
-| Genesis validator | No approved block and `genesis_validator_mode` is set. | Verifies and signs the candidate genesis block and then moves to Initializing, where it waits for the approved block like a joining node. |
+| Ceremony master | No approved block and `ceremony-master-mode` is set. A standalone node starts in this mode. | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
+| Genesis validator | No approved block and `genesis-validator-mode` is set. | Verifies and signs the candidate genesis block and then moves to Initializing, where it waits for the approved block like a joining node. |
 | Join | No approved block and neither ceremony mode is set. | Moves to Initializing (see below). |
 
 At launch the node logs one of these lines, in the order of the table:

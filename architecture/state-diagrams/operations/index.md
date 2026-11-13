@@ -21,10 +21,11 @@ A validator proposes through the heartbeat proposer, which is enabled by default
 
 <Diagram name="block-proposal" caption="The checks a validator passes before it creates, signs and relays a block." />
 
-The proposer checks every `casper.heartbeat.check-interval` (5 seconds by default), and a deploy submission wakes it immediately. It proposes in two cases:
+The proposer checks every `casper.heartbeat.check-interval` (3 seconds by default), and a deploy submission wakes it immediately. It proposes in these cases:
 
 - There are pending deploys.
-- The shard is stalled, which means the last finalized block is older than `max-lfb-age` (the maximum age of the last finalized block, 5 seconds by default). Every bonded validator then proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval.
+- New blocks from peers arrive. The proposer paces these proposals and skips them while the validator is too far ahead of the last finalized block.
+- The shard is stalled, which means the last finalized block is older than `max-lfb-age` (the maximum age of the last finalized block, 3 seconds by default). Every bonded validator then proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval.
 
 A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals.
 

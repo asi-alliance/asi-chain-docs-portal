@@ -6,7 +6,7 @@ The wallet reads a balance with a free read-only query to the node and then subt
 
 ## How a Balance Query Works
 
-A balance query is an exploratory deploy. The node runs a short Rholang term against the state of the last finalized block and returns the result. The query is not signed, is not written to a block and costs nothing. The node still limits it: a query that runs out of phlogiston is rejected with `out_of_phlogistons`, and one that runs too long times out.
+A balance query is an exploratory deploy. The node runs a short Rholang term against the state of the last finalized block and returns the result. The query is not signed, is not written to a block and costs nothing. The node limits it: a query that runs out of phlogiston is rejected with `out_of_phlogistons`, and one that runs too long times out.
 
 The query goes to the node behind `ReadOnlyURL` (see [Wallet Components](/architecture/component-diagrams/wallet/#network-connections)).
 
@@ -28,14 +28,14 @@ Because the node reads the last finalized block, a transfer that was just sent c
 
 ### Atomic Units
 
-The node returns the balance as an integer number of atomic units. On DevNet the token has 8 decimal places. See [Token Amounts](/reference/token-amounts/).
+The node returns the balance as an integer number of atomic units. ASI has 18 decimal places. See [Token Amounts](/reference/token-amounts/).
 
 | Unit | Value |
 |------|-------|
-| 1 ASI | 100,000,000 atomic units |
-| 1 atomic unit | 0.00000001 ASI |
+| 1 ASI | 1,000,000,000,000,000,000 atomic units |
+| 1 atomic unit | 0.000000000000000001 ASI |
 
-The SDK converts with `toDisplayAmount` and `toAtomicAmount`.
+Convert amounts with `toExactAtomicAmount(amount, 18)`. See [SDK Functions](/wallet-sdk/api-reference/functions/).
 
 ### Query Rholang
 
@@ -82,9 +82,7 @@ new return, rl(`rho:registry:lookup`), systemVaultCh, vaultCh, balanceCh in {
 }
 ```
 
-::: warning Balance Expression on Rust Nodes
-A Rust node returns the balance as `ExprBigInt`, while a Scala node returns `ExprInt`. Wallet SDK 2.1.0 reads only `ExprInt`. With the `rust` profile, `getBalance` therefore fails with `BALANCE_UNAVAILABLE` (the node returned no balance expression). Any transfer fails the same way, because it checks the balance first.
-:::
+A Rust node returns the balance as `ExprBigInt`, while a Scala node returns `ExprInt`. The SDK accepts both.
 
 ### Auto-Refresh
 

@@ -14,7 +14,7 @@ Start at [Get Started](/quick-start/). It has one path for using the network, on
 
 ### What Does an ASI Address Look Like?
 
-It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. On DevNet amounts have 8 decimal places, so one ASI is `100000000` atomic units. See [Token Amounts](/reference/token-amounts/).
+It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. ASI has 18 decimal places, so one ASI is `1000000000000000000` atomic units. See [Token Amounts](/reference/token-amounts/).
 
 ## Wallet and Keys
 
@@ -46,11 +46,11 @@ Create a wallet account, copy its address and paste it into the faucet at [fauce
 
 ### Is There a Waiting Period Between Requests?
 
-No. The faucet API sets no time limit between requests. The faucet refuses an address only when its balance is above the faucet's limit. The page then shows `Your address is not eligible`.
+No. The faucet API sets no time limit between requests. Each request sends the amount that the faucet operator configured. The faucet refuses an address when its balance is equal to or above the eligibility limit, and the page then shows `Your address is not eligible`.
 
 ### The Tokens Have Not Arrived. What Should I Do?
 
-The faucet page checks the transfer status every 30 seconds and, with the default settings, stops after 15 minutes. If nothing arrived by then, look the transfer up in the [explorer](/explorer/usage/) by its deploy ID before you ask again. A second request sends a second amount as long as your balance is below the limit.
+The faucet page checks the transfer status every 30 seconds and, with the default settings, stops after 15 minutes. If nothing arrived by then, look the transfer up in the [explorer](/explorer/usage/) by its deploy ID before you ask again. A second request sends a second amount as long as your balance is below the eligibility limit.
 
 ## Explorer
 
@@ -66,15 +66,15 @@ No. The explorer is a web frontend that queries a Hasura GraphQL API. A separate
 
 ### Which Node Implementation Is Maintained?
 
-The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). New images record this source. The older Scala repositories and deployment helpers are not the setup source for the images.
+The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). The images record this repository in their `org.opencontainers.image.source` label.
 
 ### Which Container Registry Should I Use?
 
 `public.ecr.aws/l2u2v4a8/asi-chain/`. Use the versioned tags and digests from the [container images](/reference/container-images/) catalog and pin a digest. The catalog lists the node, indexer, explorer, wallet, faucet, Wallet CLI and ASI client images.
 
-### Can I Use a Node IP Address from an Older Page?
+### Where Do I Find a Node Address?
 
-No. Take the DevNet addresses from [Network Endpoints](/reference/endpoints/). For any other network, ask its operator for the URLs and the bootstrap identity. Old IP addresses and the availability of a particular observer can change, and host port mappings can differ from the container defaults.
+Take the DevNet addresses from [Network Endpoints](/reference/endpoints/). For any other network, ask its operator for the URLs and the bootstrap identity. Host port mappings can differ from the container defaults.
 
 ### Which Ports Must Be Reachable?
 
@@ -88,11 +88,7 @@ Yes. A node started without a validator key runs in read-only mode. It rejects d
 
 ### What Amount Does the Wallet CLI Expect?
 
-An integer in atomic units. On DevNet `100000000` is one ASI. See [Token Amounts](/reference/token-amounts/). Keep the exact integer, and if a transfer ends with an unknown result, check its deploy ID before sending again.
-
-### Should I Update the Wallet CLI Submodule with `--remote`?
-
-No. Run `git submodule update --init --recursive` and keep the committed client revision. The [Wallet CLI](/cli/usage/) page names the revision of the published image.
+An integer in atomic units. With ASI's 18 decimal places, `1000000000000000000` is one ASI. See [Token Amounts](/reference/token-amounts/). Keep the exact integer, and if a transfer ends with an unknown result, check its deploy ID before sending again.
 
 ## More Help
 

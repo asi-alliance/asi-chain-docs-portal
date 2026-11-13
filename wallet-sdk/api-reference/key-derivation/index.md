@@ -1,6 +1,6 @@
 # KeyDerivation
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/KeyDerivation/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/services/KeyDerivation/index.ts)
 
 `KeyDerivation` derives BIP-32 and BIP-44 private keys from a mnemonic. All of its methods are static. The BIP-44 path is a [`Bip44Path`](#bip44path) object, and the package exports that class as well.
 
@@ -114,7 +114,7 @@ Returns `number`. It is `0` if both are `null`, `1` if only the first is `null`,
 
 ### Bip44Path
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Bip44Path/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/Bip44Path/index.ts)
 
 A validated BIP-44 path of the form `m/44'/coinType'/account'/change/index`.
 

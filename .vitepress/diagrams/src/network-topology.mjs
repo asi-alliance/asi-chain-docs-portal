@@ -14,7 +14,7 @@ export default {
     { id: 'faucet', label: 'Faucet', col: 0, row: 0 },
     { id: 'apps', label: 'Wallet, SDK, CLI', col: 0, row: 1, wrap: 8 },
     { id: 'explorer', label: 'Explorer', col: 0, row: 2 },
-    { id: 'validator', label: 'Validator', sub: 'public entry point', kind: 'chain', col: 1, row: 0, w: 136 },
+    { id: 'validator', label: 'Validator', sub: 'entry point', kind: 'chain', col: 1, row: 0, w: 136 },
     { id: 'bootstrap', label: 'Bootstrap peer', kind: 'chain', col: 2, row: 0, wrap: 10 },
     { id: 'observer', label: 'Observer', kind: 'chain', col: 3, row: 0 },
     { id: 'hasura', label: 'Hasura GraphQL', col: 1, row: 2, wrap: 8 },

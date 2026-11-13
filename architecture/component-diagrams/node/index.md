@@ -1,6 +1,6 @@
 # Node Components
 
-The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/e18defd44d43fe460379efefb88223797709a0cf) separates node services, consensus, contract execution, storage and networking into Rust crates.
+The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/dev) separates node services, consensus, contract execution, storage and networking into Rust crates.
 
 ## Components
 
@@ -8,7 +8,7 @@ The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](http
 
 The runtime binary is `/opt/docker/bin/node`, and it needs no Scala or JVM runtime configuration. [Node Image](/nodes/image/) covers the entrypoint, defaults, ports and access boundaries.
 
-Native-token metadata is part of the shard and genesis configuration. The upstream defaults do not set ASI token metadata for a deployed chain.
+Native-token metadata is part of the shard and genesis configuration. The shard sets `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18`. The values are fixed in genesis, and a node started with other values stops. A node that joins a network uses the values of that network.
 
 ## API
 
@@ -38,7 +38,7 @@ The node reads HOCON. The embedded `defaults.conf` is the base. A file at `<data
 
 - `network-id` defaults to `testnet` and must be the same on every node of a network.
 - The TLS key at `<data-dir>/node.key.pem` determines the node ID, so deleting the data directory gives the node a new identity.
-- The heartbeat proposer is on by default and checks every 5 seconds.
+- The heartbeat proposer is on by default and checks every 3 seconds.
 - In Docker the data directory is `/var/lib/rnode`.
 
 ## Logs

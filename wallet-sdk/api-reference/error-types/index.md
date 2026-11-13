@@ -1,6 +1,6 @@
 # Error Types
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/CustomError/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/CustomError/index.ts)
 
 Typed errors thrown by the SDK. Every error extends `CustomError`, so a caller can branch on a machine-readable `code` and an HTTP-style `status` instead of matching message strings. All classes and enums on this page are exported from `@asichain/asi-wallet-sdk`.
 

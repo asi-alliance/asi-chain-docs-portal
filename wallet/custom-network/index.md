@@ -1,6 +1,6 @@
 # Custom Network Connection
 
-The ASI Wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) comes with one built-in network, DevNet. To use the wallet with your own node, such as a local observer or a private shard, add a custom network on the Network Settings page. The public DevNet addresses are listed on the [Network Endpoints](/reference/endpoints/) page.
+The ASI Wallet at [wallet.dev.asichain.io](https://wallet.dev.asichain.io) comes with one built-in network, DevNet. To use the wallet with your own node, such as a local observer or a private shard, add a custom network on the Network Settings page. The DevNet addresses are listed on the [Network Endpoints](/reference/endpoints/) page.
 
 ## Open the Form
 

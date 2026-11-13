@@ -1,6 +1,6 @@
 # Useful Links
 
-Open the public ASI:Chain applications, the npm package and the source repositories.
+Open the ASI:Chain applications, the npm package and the source repositories.
 
 ## Applications
 
@@ -32,9 +32,7 @@ The Wallet SDK is published on npm as [@asichain/asi-wallet-sdk](https://www.npm
 | Faucet | [github.com/asi-alliance/asi-chain-faucet](https://github.com/asi-alliance/asi-chain-faucet) |
 | Documentation | [github.com/asi-alliance/asi-chain-docs-portal](https://github.com/asi-alliance/asi-chain-docs-portal) |
 
-The repository [github.com/asi-alliance/asi-chain](https://github.com/asi-alliance/asi-chain) is the legacy deployment repository. Do not use it as the source for node setup.
-
-Check the branch or tag you build from, because the default branch of a repository does not always hold the ASI integration.
+The pages of this portal describe the `dev` branch of each repository. The default branch of a repository can differ from it, so select `dev` when you build from source.
 
 ## Report a Problem
 

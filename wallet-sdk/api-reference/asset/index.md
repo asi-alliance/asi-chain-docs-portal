@@ -1,6 +1,6 @@
 # Asset
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Asset/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/Asset/index.ts)
 
 An `Asset` is the model of a token. It holds the identifier, the name and the number of decimals, and optionally the address of its contract. `AssetsService.getBalance` takes an `Asset` and returns it together with the balance.
 
@@ -31,7 +31,7 @@ interface IAssetOptions {
 |-------|------|-------------|
 | `id` | `string` | Unique asset identifier. |
 | `name` | `string` | Human-readable asset name. |
-| `decimals` | `number` | Optional. Number of decimal places. Defaults to `NATIVE_TOKEN_DECIMALS_AMOUNT` (`8`). |
+| `decimals` | `number` | Optional. Number of decimal places. Defaults to `NATIVE_TOKEN_DECIMALS_AMOUNT`. For ASI pass `18`. |
 | `contractAddress` | `string` | Optional. Address of the token contract. `getContractAddress()` returns `null` when it is not set. |
 
 ## Methods
@@ -64,15 +64,14 @@ getContractAddress(): string | null
 
 ## Default Asset
 
-`DEFAULT_ASSET` is the native ASI asset: name `"ASI"`, 8 decimals, no contract address, and a random `id` that is generated when the SDK is loaded. `Client.getBalance(address)` uses it. The 8 decimals are fixed in Wallet SDK 2.1.0 and do not follow the network. See [Token Amounts](/reference/token-amounts/).
+`DEFAULT_ASSET` is the `Asset` that `Client.getBalance` and `Client.transfer` use. An `Account` also takes it as its primary asset unless another one is given. Its name is `"ASI"`, its `id` is random and generated when the SDK loads, and its `decimals` is the default `NATIVE_TOKEN_DECIMALS_AMOUNT`.
 
 ## Example
 
 ```ts
-import { Asset, DEFAULT_ASSET } from "@asichain/asi-wallet-sdk";
+import { Asset } from "@asichain/asi-wallet-sdk";
 
 const token = new Asset({ id: "demo-token", name: "Demo", decimals: 6 });
 
 console.log(token.getName(), token.getDecimals(), token.getContractAddress()); // Demo 6 null
-console.log(DEFAULT_ASSET.getName(), DEFAULT_ASSET.getDecimals()); // ASI 8
 ```

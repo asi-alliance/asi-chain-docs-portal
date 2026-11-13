@@ -4,20 +4,20 @@ The image contains the maintained Rust implementation of CBC Casper, Rholang and
 
 ## Select the Image
 
-The instructions on this site use the build from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/8e6517d630e22c24004b7feb2d9685a44d7384d5) at commit `8e6517d`.
+The instructions on this site use the build of the `dev` branch of [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node/tree/dev).
 
 Pin the digest, not the tag. Tags in the registry can be removed, and the floating `dev` tag moves with every build, so do not use it.
 
-The `8e6517d` build has the tag `0.4.46-dev.20261105-8e6517d630e2` and this manifest digest:
+The build has the tag `0.4.46-dev.20261113-d57a3f450151` and this manifest digest:
 
 ```text
-sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
+sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6
 ```
 
 It is published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The [catalog](/reference/container-images/) lists the images of the other components. A tag does not upgrade a running shard.
 
 ```bash
-NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:983fa20895078bc74ad6c447dc505b5f539b54e9e2f092708f08290e09d6ea55
+NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6
 docker pull --platform linux/amd64 "$NODE_IMAGE"
 docker image inspect "$NODE_IMAGE" --format '{{json .Config.Labels}}'
 docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" --version
@@ -28,7 +28,7 @@ These commands inspect the image without starting a network. The `org.opencontai
 
 ## Runtime and Configuration
 
-The pinned [Dockerfile](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/node/Dockerfile) and [entrypoint](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/node/docker-entrypoint-rust.sh) define:
+The [Dockerfile](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/Dockerfile) and [entrypoint](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/docker-entrypoint-rust.sh) define:
 
 | Item | Value |
 |---|---|
@@ -47,15 +47,15 @@ unexpected argument '--profile' found
 the argument '--profile <PROFILE>' cannot be used multiple times
 ```
 
-Read the [defaults.conf at the same revision](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/node/src/main/resources/defaults.conf). The node reads `/var/lib/rnode/f1r3fly.conf` when it exists, and falls back to the older name `rnode.conf` with a warning. `run --config-file /path/to/node.conf` selects a file explicitly and takes priority over both. The upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/8e6517d630e22c24004b7feb2d9685a44d7384d5/docker/conf/default.conf) show the structure. Development keys and genesis files from that directory are not inputs for joining another network.
+Read the [defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/main/resources/defaults.conf). The node reads `/var/lib/rnode/f1r3fly.conf` when it exists. `run --config-file /path/to/node.conf` selects a file explicitly and takes priority. The upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/docker/conf/default.conf) show the structure. Do not use the development keys and genesis files from that directory to join another network.
 
 ## Network Settings
 
-- `--network-id` sets the network ID, `testnet` by default. Both ends must match, because a node drops messages from peers with another ID.
+- `--network-id` sets the network ID, `testnet` by default. Both ends must match, because a node that joins with another ID exits with a `Wrong network id` error.
 - `--host` sets the public address that other nodes use to reach this one. By default the node guesses it from the public IP. If the address is wrong, the node connects out but receives nothing, and `peers` stays at 0.
 - `--bootstrap` names the bootstrap peer as `rnode://<node-id>@<host>?protocol=40400&discovery=40404` and has no default. The node ID is the `address` field of the peer's `GET /api/status`.
 - `--shard-name` sets the shard name, `root` by default.
-- `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` set the native token, `F1R3CAP`, `F1R3` and 8 by default. They are fixed at genesis, and the upstream defaults are not the ASI token values.
+- `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` set the native token. They are fixed at genesis. For ASI pass `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` on every node of the shard, and a node with other values stops.
 
 Add `--allow-private-addresses` when peers use container or private addresses, and `--no-upnp` when you forward ports by hand.
 

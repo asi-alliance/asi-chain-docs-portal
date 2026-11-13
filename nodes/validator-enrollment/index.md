@@ -30,11 +30,11 @@ STAKE_BASE_UNITS=<stake in base units>
 The standalone ASI client is published as this image:
 
 ```bash
-CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:f26511e261ca9d21c568b2a523fee916630ed7ac2622e65cebd2099e72db4fe7'
+CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:5b192be72df772f2a0f446245d583f1f916e970b8a6fd6ad97d32b0ab8ef20f4'
 docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 ```
 
-This image contains client 0.2.9 built from commit [`40f2a9408040`](https://github.com/asi-alliance/asi-chain-client/tree/40f2a9408040252dd23761cd06adb9f1407ef228) on the `dev` branch of asi-chain-client. The image exists for `linux/amd64` only. Confirm with the operator that this client works with their node digest. The same version label on another image does not prove that it does.
+This image contains the ASI client built from the `rust-dev` branch of [asi-chain-client](https://github.com/asi-alliance/asi-chain-client/tree/rust-dev). The image exists for `linux/amd64` only. Confirm with the operator that this client works with their node image.
 
 ## Enroll the Validator
 
@@ -82,16 +82,16 @@ The default Docker bridge must reach the operator's URLs. For local container ne
 
 ### Start and Synchronize the Joining Node
 
-Go to [Run a Validator](/nodes/validator/#prepare-storage-configuration-and-keys), follow its steps from Prepare Storage, Configuration and Keys to Start the Node with the key from the previous step, and then come back here. Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
+Go to [Run a Validator](/nodes/validator/#prepare-storage-configuration-and-keys), follow its steps from Prepare Storage, Configuration and Keys to Start the Node with the key from the step above, and then come back here. Joining an existing shard needs these node options, and `--genesis-validator` and `--ceremony-master-mode` stay unset:
 
 - `--bootstrap` with the operator's URI.
 - `--network-id` equal to the shard's `networkId`.
 - `--shard-name` equal to the shard's `shardId`.
 - `--host` with the address that other nodes use to reach this node.
 - `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY` and `--validator-private-key-path` with the key converted from `private_key.hex` as shown in [Set Up the Validator Key](/nodes/validator/#set-up-the-validator-key). The node does not read `private_key.hex` itself.
-- The token flags `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` when the shard does not use the defaults.
+- The token flags with the values of the shard's genesis, `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` for ASI. A node with other values stops.
 
-The pinned [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/e18defd44d43fe460379efefb88223797709a0cf/node/src/rust/configuration/commandline/options.rs) list every flag. Keep management APIs and metrics private and confirm container-to-host port mappings.
+The [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/rust/configuration/commandline/options.rs) list every flag. Keep management APIs and metrics private and confirm container-to-host port mappings.
 
 Before bonding, check peers, synchronization and advancing canonical finalization with the commands in [Validate the Node](/nodes/validator/#validate-the-node). A ready HTTP endpoint or the `isValidator` flag alone does not mean that the node takes part in consensus.
 
@@ -152,7 +152,7 @@ Bonded membership and active membership are separate. Activation follows the sha
 
 Confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The client's `blocks` command prints recent blocks from the observer as JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`.
 
-The client's pinned [validator lifecycle guide](https://github.com/asi-alliance/asi-chain-client/blob/40f2a9408040252dd23761cd06adb9f1407ef228/docs/guides/bonding-a-validator.md) explains bonding, activation, withdrawal and troubleshooting. Its example topology and ports are test fixtures, not the target network's connection data.
+The client's [validator lifecycle guide](https://github.com/asi-alliance/asi-chain-client/blob/rust-dev/docs/guides/bonding-a-validator.md) explains bonding, activation, withdrawal and troubleshooting. Its example topology and ports are test fixtures, not the target network's connection data.
 
 </Steps>
 

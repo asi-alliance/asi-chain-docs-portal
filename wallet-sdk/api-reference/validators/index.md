@@ -1,6 +1,6 @@
 # Validators
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/validators/domain.ts) · [Primitives](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/validators/primitives.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/utils/validators/domain.ts) · [Primitives](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/utils/validators/primitives.ts)
 
 These plain functions validate names, addresses, URLs, keys and request payloads without touching the network. Most of them return `{ isValid: boolean; error?: string }`, and the address validator returns an error code instead of a message.
 

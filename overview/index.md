@@ -18,13 +18,13 @@ ASI:Chain is a blockchain for Rholang contracts and applications of the ASI ecos
 
 ## Networks
 
-DevNet is the public development network at `dev.asichain.io`. Its tokens have no real value. The DevNet addresses are on [Network Endpoints](/reference/endpoints/). The node guides in this portal describe the Rust node from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). It uses CBC Casper consensus and keeps state in RSpace++.
+DevNet is the development network at `dev.asichain.io`. Its tokens have no real value. The DevNet addresses are on [Network Endpoints](/reference/endpoints/). The node guides in this portal describe the Rust node from [github.com/asi-alliance/asi-chain-rust-node](https://github.com/asi-alliance/asi-chain-rust-node). The node uses CBC Casper consensus and keeps state in RSpace++.
 
 A network is made of nodes with different roles. A bootstrap node is the entry point for new peers. A validator proposes and validates blocks. An observer follows the chain and answers read requests without taking part in consensus. [Shard and Node Roles](/nodes/roles/) describes them in more detail.
 
 ## Token
 
-The native token is ASI. On DevNet it has 8 decimal places, so 1 ASI is `100000000` atomic units, and the Wallet CLI takes amounts in atomic units. See [Token Amounts](/reference/token-amounts/). Account addresses are Base58 strings that start with `1111`.
+The native token is ASI. It has 18 decimal places, so 1 ASI is `1000000000000000000` atomic units, and the Wallet CLI takes amounts in atomic units. See [Token Amounts](/reference/token-amounts/). Account addresses are Base58 strings that start with `1111`.
 
 ## Next Steps
 

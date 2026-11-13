@@ -8,7 +8,7 @@ New blocks appear without reloading the page. A green check icon in the header s
 
 ## Navigation
 
-The menu under the header has five sections: **Blocks**, **Transactions**, **Validators**, **Statistics** and **Indexer**. The search box in the header works on every page.
+The menu under the header has six sections: **Blocks**, **Transactions**, **Pending**, **Validators**, **Statistics** and **Indexer**. The search box in the header works on every page.
 
 ## Search
 
@@ -58,7 +58,13 @@ Click a deployment to open the transaction details. The header of that page has 
 
 The details page has four tabs: **Overview**, **Code**, **Transfers** and **Block Info**.
 
-The **Overview** tab shows the transaction ID, deployer, type and timestamp. Under **Execution Details** it lists the phlo cost, phlo price, phlo limit, the block after which the deploy is valid, and the signature. **Blockchain Information** gives the number and hash of the block that contains the transaction. The **Code** tab shows the deployed Rholang source, and the **Transfers** tab lists the transfers made by that deployment.
+The **Overview** tab shows the transaction ID, deployer, type and timestamp. Under **Execution Details** it lists the phlo cost, phlo price, phlo limit, the block after which the deploy is valid, and the signature. **Blockchain Information** gives the number and hash of the block that contains the transaction. The **Code** tab shows the deployed Rholang source, and the **Transfers** tab lists the transfers made by that deployment. When the deployment started or completed native transfer calls, the tab also has a **Native Transfer Calls** block with the tables **Calls started by this deploy** and **Calls completed by this deploy**. A call is **Pending**, **Completed**, **Rejected** or **Coalesced**.
+
+## Pending
+
+The **Pending** page is titled **Pending Deploys** and shows a counter. It lists the newest deploys, 20 at most, that sit in the node deploy buffers and are not in a block yet, and it refreshes every 5 seconds. If no deploy is waiting, the page shows `No deploys are waiting for a block.`
+
+The table has the columns **Deploy**, **Deployer**, **Submitted**, **Phlo Limit**, **Phlo Price** and **Status**. The status is **Included**, **Pending** or **Retrying after rejection**. Click a deploy to open its details page, which refreshes every 5 seconds until the deploy is in a block.
 
 ## Validators
 
@@ -68,12 +74,14 @@ The **Validators** page starts with three cards, **Total Validators**, **Total A
 - stake in ASI and share of the total stake
 - number of blocks it proposed
 - block where it first appeared and last block where it appeared
-- block of its latest bond (the **Last Active** column)
+- block of its most recent bond (the **Last Active** column)
 - status
 
-Large stakes are shortened, so 100000 ASI appears as 100.00K.
+Stakes are shown in full, without rounding.
 
-Amounts in the explorer are for DevNet, where ASI has 8 decimals. See [Token Amounts](/reference/token-amounts/).
+Below the table, the **Inactive Validators** section lists validators that are not in the current bond set. Its columns are **Public Key**, **Last Recorded Stake (ASI)**, **Blocks Proposed**, **First Seen**, **Last Seen** and **Status**. Their last recorded stake is not counted in the totals above.
+
+ASI has 18 decimal places. The explorer formats amounts using their recorded precision. See [Token Amounts](/reference/token-amounts/).
 
 The **View History** button opens the **Validator History** page.
 
@@ -81,7 +89,7 @@ The **View History** button opens the **Validator History** page.
 
 ### Validator History
 
-**Validator History** shows the validator set at any block. Type a block number into the **Block** field. The page then shows the block time and proposer, the number of active validators, and a table with each validator's stake and share, where the block proposer is marked. Total, average, minimum and maximum stake for that block are listed under the table.
+**Validator History** shows the validator set at any block. Type a block number into the **Block** field. The page then shows the block time and proposer, the number of active validators, and a table with each validator's stake and share, where the block proposer is marked. If several blocks share the height, a **Block hash** list lets you pick one of them. Total, average, minimum and maximum stake for that block are listed under the table.
 
 ![The Validator History page for one block with its proposer, validator count and stake table.](/images/explorer/validators-history.webp){width=976 height=876}
 
@@ -97,9 +105,7 @@ Four cards show the latest block, the average block time, transactions per secon
 
 The indexer is the service that reads blocks from the node and stores them in the database that the explorer queries. The **Indexer** page shows how far it has progressed.
 
-The label in the top right is **Synched** when the indexer is up to date, **Syncing** when it is slightly behind and **Behind** when it is far behind. The cards show the sync progress, the last indexed block with the number of blocks it is behind, the highest block, and the age of the last update. The table at the bottom repeats the last indexed block, the highest block and the sync status.
-
-The highest block on this page is the newest block in the explorer database, not a value read from the node. The **Last Update** age is therefore the more useful sign of a stalled indexer: if it keeps growing while the **Blocks** page shows no new blocks, the indexer has stopped.
+The label in the top right is **Synced**, **Syncing**, **Ahead of node**, **Waiting for first block**, **Stopped** or **Unavailable**. **Stopped** means that the indexer process is not running, and **Unavailable** means that the indexer cannot reach the node. The cards show **Sync Progress**, the **Last Indexed Block** with the number of blocks it is behind, the **Node Finalized Block** and the age of the **Last Update**. The table at the bottom repeats the last indexed block, the node finalized block and the sync status. The page reads the indexer status endpoint and refreshes every 5 seconds.
 
 ![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.webp){width=976 height=760}
 
@@ -109,7 +115,7 @@ The green icon next to the page title downloads a CSV file with up to 5,000 reco
 
 ## Data Source
 
-The explorer does not read the node directly. The indexer reads blocks from the node and writes them into PostgreSQL, and the explorer queries that database through a GraphQL API. A block therefore shows up in the explorer shortly after the node finalizes it. See [Data Flow](/architecture/data-flow/) for the whole path and [What Is ASI:Chain](/overview/) for the components.
+The explorer does not read the node directly. The indexer reads blocks from the node and writes them into PostgreSQL. The explorer queries that database through a GraphQL API, and the **Indexer** page also reads the indexer status endpoint. A block therefore shows up in the explorer shortly after the node finalizes it. See [Data Flow](/architecture/data-flow/) for the whole path and [What Is ASI:Chain](/overview/) for the components.
 
 ## Next Steps
 

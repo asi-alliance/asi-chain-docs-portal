@@ -1,6 +1,6 @@
 # Network Endpoints
 
-Find the public DevNet addresses of the apps and the node, and the values to enter in the wallet, the Wallet SDK and the CLI.
+Find the DevNet addresses of the apps and the node, and the values to enter in the wallet, the Wallet SDK and the CLI.
 
 ## Applications
 
@@ -15,10 +15,10 @@ All four answer on HTTPS. Plain HTTP is redirected to HTTPS.
 
 ## Node
 
-DevNet has one public node address, Validator 1 at `34.196.119.4`. It runs in developer mode, so it serves both reads and writes, including balance queries.
+DevNet has one node address, Validator 1 at `34.196.119.4`. It runs in developer mode, so it serves both reads and writes, including balance queries.
 
 - HTTP API at `http://34.196.119.4:40403` for status, balance queries, deploy submission, deploy and block lookup.
-- Public gRPC API at `34.196.119.4:40401` for gRPC clients.
+- gRPC API at `34.196.119.4:40401` for gRPC clients.
 
 Check that the node is reachable:
 
