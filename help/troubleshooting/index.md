@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Find your symptom below and work through its checks. For a node, check the image tag or digest, the source revision, the configuration and the host port mappings first. The node runtime is Rust, so JVM tuning and the older configurator and connector commands do not apply.
+Find your symptom below and work through its checks. For a node, check the image tag or digest, the source revision, the configuration and the host port mappings first.
 
 ## Wallet Does Not Show the Balance
 
@@ -18,7 +18,7 @@ See [ASI Wallet](/wallet/usage/) for the screens.
 
 ### Faucet Limits
 
-The faucet refuses an address only when its balance is above 20,000 ASI. The page then shows `Your address is not eligible`. See [Faucet](/faucet/usage/) for how the page checks a request and what each status means. Do not send a second request until you have checked the first.
+Each request sends the amount that the faucet operator has set. The faucet refuses an address when its balance equals the operator's threshold or exceeds it, and the page then shows `Your address is not eligible`. See [Faucet](/faucet/usage/) for how the page checks a request and what each status means. Do not send a second request until you have checked the first.
 
 ### Failed Transfers
 
@@ -81,8 +81,8 @@ Check these in order.
 
 1. The network runs the Rust node. A node started with the bootstrap of a network that does not run the Rust node lists other nodes in `/api/status` but keeps `peers` at 0.
 2. The bootstrap URI is complete and the node ID in it belongs to the bootstrap node. The ID is the `address` field of `/api/status` on that node.
-3. `--network-id` equals the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from other networks.
-4. `--shard-name` equals the `shardId` that the bootstrap node reports. The default is `root`. With another name the node reports `"peers": 1` but stays at `Waiting for first connection...`.
+3. `--network-id` equals the `networkId` that the bootstrap node reports. The default is `testnet`, and a node that joins with another network ID exits with a `Wrong network id` error.
+4. `--shard-name` equals the `shardId` that the bootstrap node reports. The default is `root`. With another name the node gets a peer but does not become ready, and `lastFinalizedBlockNumber` stays at `-1`.
 5. `--host` is an address that the other nodes can reach. A joining node must be reachable as well as able to connect out, because the bootstrap node answers the handshake on the advertised address. Add `--allow-private-addresses` if the shard uses private or container addresses, and `--no-upnp` if you forward the ports by hand.
 6. TCP `40400` and TCP `40404` are open for peers. Discovery on `40404` uses TCP. Do not open the API and admin ports to fix P2P connectivity.
 
@@ -133,5 +133,5 @@ Open an issue in the affected [public component repository](/reference/links/). 
   <DocCard title="Container Images" href="/reference/container-images/">Published tags and digests</DocCard>
   <DocCard title="Run an Observer" href="/nodes/observer/">Start a read-only node</DocCard>
   <DocCard title="Frequently Asked Questions" href="/help/faq/">Answers to common questions about accounts, tokens and nodes</DocCard>
-  <DocCard title="Useful Links" href="/reference/links/">Public applications, packages and source repositories</DocCard>
+  <DocCard title="Useful Links" href="/reference/links/">Applications, packages and source repositories</DocCard>
 </CardGrid>
