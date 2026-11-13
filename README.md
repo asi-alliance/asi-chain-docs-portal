@@ -20,10 +20,11 @@ Part of the [Artificial Superintelligence Alliance](https://superintelligence.io
 
 1. [Overview](#overview)
 2. [Quick Start](#quick-start)
-3. [Project Structure](#project-structure)
-4. [Feedback Form](#feedback-form)
-5. [Contributing](#contributing)
-6. [License](#license)
+3. [Validation](#validation)
+4. [Project Structure](#project-structure)
+5. [Feedback Form](#feedback-form)
+6. [Contributing](#contributing)
+7. [License](#license)
 
 ---
 
@@ -57,6 +58,27 @@ npm run docs:build
 # Preview production build
 npm run docs:preview
 ```
+
+---
+
+## Validation
+
+Run the checks in this order:
+
+```bash
+npm install --no-audit --no-fund --package-lock=false
+npm run diagrams:check
+npm run docs:build
+```
+
+The diagram check compares committed SVG files with their specs. Run it before
+the build, which regenerates those files. VitePress compiles the Markdown, Vue
+components and theme, checks internal page links, and validates redirect sources
+and destinations through the build hook.
+
+GitHub Actions runs these checks with Node.js 24 for every PR targeting `dev`
+or `main`, and on manual dispatch. There are no path filters or push triggers.
+The checks require no feedback-form credentials or live chain services.
 
 ---
 
