@@ -79,19 +79,19 @@ The **Validators** page starts with three cards, **Total Validators**, **Total A
 
 Stakes are shown in full, without rounding.
 
-Below the table, the **Inactive Validators** section lists validators that are not in the current bond set. Its columns are **Public Key**, **Last Recorded Stake (ASI)**, **Blocks Proposed**, **First Seen**, **Last Seen** and **Status**. Their last recorded stake is not counted in the totals above.
+If some validators are not in the current bond set, the **Inactive Validators** section appears below the table and lists them. Its columns are **Public Key**, **Last Recorded Stake (ASI)**, **Blocks Proposed**, **First Seen**, **Last Seen** and **Status**. Their last recorded stake is not counted in the totals above.
 
 ASI has 18 decimal places. The explorer formats amounts using their recorded precision. See [Token Amounts](/reference/token-amounts/).
 
 The **View History** button opens the **Validator History** page.
 
-![The Validators page with summary cards and the table of validators and their stakes.](/images/explorer/validators-page.webp){width=976 height=692}
+![The Validators page with summary cards and the table of validators and their stakes.](/images/explorer/validators-page.webp){width=1048 height=592}
 
 ### Validator History
 
 **Validator History** shows the validator set at any block. Type a block number into the **Block** field. The page then shows the block time and proposer, the number of active validators, and a table with each validator's stake and share, where the block proposer is marked. If several blocks share the height, a **Block hash** list lets you pick one of them. Total, average, minimum and maximum stake for that block are listed under the table.
 
-![The Validator History page for one block with its proposer, validator count and stake table.](/images/explorer/validators-history.webp){width=976 height=876}
+![The Validator History page for one block with its block hash list, proposer, validator count and stake table.](/images/explorer/validators-history.webp){width=976 height=931}
 
 ## Statistics
 
@@ -107,7 +107,7 @@ The indexer is the service that reads blocks from the node and stores them in th
 
 The label in the top right is **Synced**, **Syncing**, **Ahead of node**, **Waiting for first block**, **Stopped** or **Unavailable**. **Stopped** means that the indexer process is not running, and **Unavailable** means that the indexer cannot reach the node. The cards show **Sync Progress**, the **Last Indexed Block** with the number of blocks it is behind, the **Node Finalized Block** and the age of the **Last Update**. The table at the bottom repeats the last indexed block, the node finalized block and the sync status. The page reads the indexer status endpoint and refreshes every 5 seconds.
 
-![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.webp){width=976 height=760}
+![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.webp){width=976 height=765}
 
 ## Export
 
