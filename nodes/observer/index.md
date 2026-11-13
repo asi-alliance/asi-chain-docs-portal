@@ -18,10 +18,10 @@ Ask the operator of the shard for these values.
 
 - The image tag or digest that the shard accepts. The [image catalog](/reference/container-images/) has no separate observer image, and [Node Image](/nodes/image/) explains how to pick one.
 - The bootstrap URI, which looks like `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. The node ID is the `address` field of `GET /api/status` on the bootstrap node.
-- The `--network-id` value, which must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node ignores messages from other networks.
+- The `--network-id` value, which must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node that joins with another network ID exits with a `Wrong network id` error.
 - The `--shard-name` value, which must equal the `shardId` that the bootstrap node reports. The default is `root`. With another value the node gets a peer but stays at `Waiting for first connection...`.
 - The `--host` value, which is the address other nodes use to reach this node. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks.
-- The native-token flags and other genesis settings, but only when they differ from the built-in defaults. Each node reports its own token settings, so a node started without the flags reports `F1R3` even on a shard with another symbol.
+- The native-token settings of the shard. They are fixed at genesis, and the observer takes the same values: `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` for ASI. A node with other values stops.
 
 ## Run the Observer
 
@@ -45,7 +45,7 @@ docker run -d --name observer --platform linux/amd64 \
   -v observer-data:/var/lib/rnode \
   -p 40400:40400 -p 40404:40404 -p 127.0.0.1:40403:40403 \
   "$NODE_IMAGE" run --network-id "$NETWORK_ID" --shard-name "$SHARD_NAME" \
-  --host "$PUBLIC_HOST" --bootstrap "$BOOTSTRAP_URI"
+  --host "$PUBLIC_HOST" --bootstrap "$BOOTSTRAP_URI"   --native-token-name ASI --native-token-symbol ASI --native-token-decimals 18
 ```
 
 The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/nodes/image/#default-container-ports).
