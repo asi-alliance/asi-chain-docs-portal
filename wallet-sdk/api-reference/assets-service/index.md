@@ -1,10 +1,10 @@
 # AssetsService
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/AssetsService/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/services/AssetsService/index.ts)
 
 `AssetsService` reads the balance of an address through an exploratory deploy (see [Balance Query Flow](/architecture/sequence-diagrams/balance/)). The service has one method. Transfers are not part of it: they go through [`Client`](/wallet-sdk/api-reference/client/), which signs and submits them.
 
-The package exports the class as `AssetsService`. You rarely build it yourself, because `ApiServiceRegistry.getInstance().assets` holds an instance. `Client.getBalance(address)` calls it with `DEFAULT_ASSET` and returns the amount as a `bigint`.
+The package exports the class as `AssetsService`. You rarely build it yourself, because `ApiServiceRegistry.getInstance().assets` holds an instance. `Client.getBalance(address)` calls it and returns the amount as a `bigint`.
 
 ## Import
 
@@ -18,7 +18,7 @@ import { AssetsService } from "@asichain/asi-wallet-sdk";
 new AssetsService(deployService: DeployService, nodeApiProvider?: NodeApiProvider)
 ```
 
-`nodeApiProvider` is optional. It is used to pick the Rholang balance query that fits the profile of the active node (Scala or Rust). With a Rust node, SDK 2.1.0 cannot read balances, so `getBalance` throws `BalanceUnavailableError` (see [Configure Networks](/wallet-sdk/overview/#configure-networks)).
+`nodeApiProvider` is optional. It is used to pick the Rholang balance query that fits the profile of the active node (Scala or Rust).
 
 ## Methods
 
@@ -33,7 +33,7 @@ Reads the balance of `address` and returns it together with `asset`. The `asset`
 | Name | Type | Description |
 |------|------|-------------|
 | `address` | `Address` | Address to query. |
-| `asset` | [`Asset`](/wallet-sdk/api-reference/asset/) | Token the amount is reported in. `DEFAULT_ASSET` is the native ASI. |
+| `asset` | [`Asset`](/wallet-sdk/api-reference/asset/) | Token the amount is reported in. |
 
 Returns `Promise<IBalanceData>`.
 
@@ -47,7 +47,7 @@ interface IBalanceData {
 It throws:
 
 - `Error("AssetsService.getBalance: Invalid address: <errorCode>")` when `address` fails [`validateAddress`](/wallet-sdk/api-reference/validators/). The code is one of the `AddressValidationErrorCode` values.
-- `BalanceUnavailableError` when the balance cannot be read: the node request fails, the node returns no balance or an unexpected value, or the vault replies with an error string.
+- `BalanceUnavailableError` when the balance cannot be read: the node request fails, the node returns no balance or an unexpected value (not an integer from 0 to 2^256 - 1), or the vault replies with an error string.
 
 The method does not return `0n` on failure, so a zero in `amount` is a real zero balance.
 
@@ -69,8 +69,8 @@ The method does not return `0n` on failure, so a zero in `amount` is a real zero
 
 ```ts
 import {
+    Asset,
     BalanceUnavailableError,
-    DEFAULT_ASSET,
     fromAtomicAmount,
     type Address,
     type AssetsService,
@@ -81,7 +81,8 @@ export async function printBalance(
     owner: Address,
 ): Promise<void> {
     try {
-        const { amount, asset } = await assets.getBalance(owner, DEFAULT_ASSET);
+        const asi = new Asset({ id: "asi", name: "ASI", decimals: 18 });
+        const { amount, asset } = await assets.getBalance(owner, asi);
 
         console.log(`${fromAtomicAmount(amount, asset.getDecimals())} ${asset.getName()}`);
     } catch (error) {

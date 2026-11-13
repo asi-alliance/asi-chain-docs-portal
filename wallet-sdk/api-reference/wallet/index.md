@@ -1,6 +1,6 @@
 # Wallet
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Wallet/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/Wallet/index.ts)
 
 A `Wallet` owns one `Signer` and a set of `Account` objects. It is either a private-key wallet with a single account or an HD (hierarchical deterministic) wallet with accounts derived from a mnemonic. This page also covers `Account`, `Signer` and `SigningSession`, which a wallet is built from.
 
@@ -163,7 +163,7 @@ interface ITransferDetails {
 
 ### Account
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Account/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/Account/index.ts)
 
 An `Account` is one address inside a wallet, together with its asset portfolio.
 
@@ -191,7 +191,7 @@ class Account {
 
 ### Signer
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/Signer/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/Signer/index.ts)
 
 A `Signer` is the signing boundary. It holds the encrypted secret and produces signatures without handing key bytes to callers. `HDSigner` and `PrivateKeySigner` implement it. `Wallet.getSigner()` returns the wallet's signer.
 
@@ -219,7 +219,7 @@ type TSigningContext = TPKSigningContext | THDSigningContext
 
 ### SigningSession
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/SigningSession/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/SigningSession/index.ts)
 
 A `SigningSession` is the in-memory session of one signer. A `Signer` creates it and keeps it for its whole life, so you rarely build one yourself.
 

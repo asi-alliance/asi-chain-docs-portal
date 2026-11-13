@@ -1,6 +1,6 @@
 # Wallets
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Wallets/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/services/Wallets/index.ts)
 
 `Wallets` creates wallet metadata and derives addresses. Inside the SDK the class is declared as `WalletsService`, and all four methods are `static`.
 

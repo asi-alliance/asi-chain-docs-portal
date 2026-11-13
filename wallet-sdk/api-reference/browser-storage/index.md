@@ -1,6 +1,6 @@
 # BrowserStorage
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/BrowserStorage/index.ts) · [Table interface](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/domains/TableService/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/BrowserStorage/index.ts) · [Table interface](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/TableService/index.ts)
 
 `BrowserStorage` wraps the browser's IndexedDB. It keeps records in named tables and implements `ITableService<ITableRecord>`. You only need it directly when you want your own tables next to the SDK's.
 

@@ -1,8 +1,6 @@
 # Wallet SDK
 
-Use the TypeScript SDK `@asichain/asi-wallet-sdk` to manage wallets, read balances and send transfers on ASI:Chain. The pages in this section describe version 2.1.0. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
-
-For ASI's 18-decimal network, use a release with network precision and uint256 signing support. Version 2.1.0 predates that integration; its conversion limits are documented in [Functions](/wallet-sdk/api-reference/functions/#toatomicamount).
+Use the TypeScript SDK `@asichain/asi-wallet-sdk` to manage wallets, read balances and send transfers on ASI:Chain. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
 ## What the SDK Does
 
@@ -33,7 +31,7 @@ The package ships ES module and CommonJS builds with type declarations.
 - `IndexerURL` is the GraphQL indexer that serves transaction history.
 - `nodeApiProfile` selects the request format of the node, `NodeApiProfile.SCALA` or `NodeApiProfile.RUST`.
 
-`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. For DevNet use `NodeApiProfile.SCALA`. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the indexer address if you need transaction history.
+`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the indexer address if you need transaction history.
 
 ```ts
 import { NodeApiProfile, type TNetworksConfig } from "@asichain/asi-wallet-sdk";
@@ -52,8 +50,8 @@ console.log(Object.keys(networksConfig));
 
 `Client.create` rejects an invalid URL, so replace the placeholders above before you create a client.
 
-::: warning Rust Nodes and SDK 2.1.0
-With `NodeApiProfile.RUST`, Wallet SDK 2.1.0 cannot read balances, because a Rust node returns them as `ExprBigInt` and the SDK reads only `ExprInt`. `getBalance` then fails with `BALANCE_UNAVAILABLE`, and so does every transfer. `watchDeploy` also never reports a deploy as finalized on a Rust node. See [Balance Query Flow](/architecture/sequence-diagrams/balance/) and [Transaction Flow](/architecture/sequence-diagrams/transaction/).
+::: warning Rust Nodes
+With `NodeApiProfile.RUST`, `watchDeploy` never reports a deploy as finalized, because a Rust node does not send the fault tolerance field that the SDK reads. See [Transaction Flow](/architecture/sequence-diagrams/transaction/).
 :::
 
 ## Try the SDK
@@ -114,10 +112,15 @@ await client.close();
 
 ### Check Balance and Transfer
 
-A transfer needs a compatible node and an account with funds, so this example is a function that you call yourself. `transfer` returns the deploy id at once, and the `subscribe` callbacks follow the deploy until the node confirms it. Amounts are `bigint` values in atomic units. This version 2.1.0 example uses its legacy fixed-precision converters; use the updated SDK for the 18-decimal ASI network.
+A transfer needs a compatible node and an account with funds, so this example is a function that you call yourself. `transfer` returns the deploy id at once, and the `subscribe` callbacks follow the deploy until the node confirms it. Amounts are `bigint` values in atomic units. ASI has 18 decimal places, so the example passes `18` to the conversion functions.
 
 ```ts
-import { Client, isAddress } from "@asichain/asi-wallet-sdk";
+import {
+    Client,
+    fromAtomicAmount,
+    isAddress,
+    toExactAtomicAmount,
+} from "@asichain/asi-wallet-sdk";
 
 export async function sendTen(
     client: Client,
@@ -134,7 +137,7 @@ export async function sendTen(
     const balance = await client.getBalance(account.getAddress());
     const available = await client.getAvailableBalance(walletId, accountId);
     console.log(
-        `Balance ${client.toDisplayAmount(balance)}, available ${client.toDisplayAmount(available)}`,
+        `Balance ${fromAtomicAmount(balance, 18)}, available ${fromAtomicAmount(available, 18)}`,
     );
 
     const { deployId, subscribe } = await client.transfer(
@@ -142,7 +145,7 @@ export async function sendTen(
             walletId,
             accountId,
             to: recipient,
-            amount: client.toAtomicAmount("10"),
+            amount: toExactAtomicAmount("10", 18),
         },
         password,
     );

@@ -1,6 +1,6 @@
 # Codec
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/codec/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/utils/codec/index.ts)
 
 These plain functions encode and decode Base16, Base58 and Base64 and do a few byte conversions. All of them are exported from the package root.
 

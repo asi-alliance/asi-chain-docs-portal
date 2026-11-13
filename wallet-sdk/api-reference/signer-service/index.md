@@ -1,6 +1,6 @@
 # SignerService
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Signer/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/services/Signer/index.ts)
 
 `SignerService` serializes deploy data into the bytes that get signed. It has one member and does not sign anything itself.
 

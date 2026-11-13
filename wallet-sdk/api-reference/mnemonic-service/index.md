@@ -1,6 +1,6 @@
 # Mnemonic
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Mnemonic/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/services/Mnemonic/index.ts)
 
 `Mnemonic` generates, validates and converts BIP-39 mnemonics. All its methods are static. The `MnemonicStrength` enum sets the length of a new mnemonic in words. Importing the module also calls [`setupBufferPolyfill`](/wallet-sdk/api-reference/polyfills/).
 

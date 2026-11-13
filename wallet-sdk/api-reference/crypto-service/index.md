@@ -1,6 +1,6 @@
 # Crypto
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/Crypto/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/services/Crypto/index.ts)
 
 `Crypto` encrypts and decrypts data with a password through WebCrypto. All its methods are static. They need the global `crypto.subtle` and `crypto.getRandomValues`, which browsers provide and Node.js provides globally from version 19.
 

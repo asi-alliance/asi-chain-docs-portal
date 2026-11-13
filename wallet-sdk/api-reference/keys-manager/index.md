@@ -1,6 +1,6 @@
 # KeysManager
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/services/KeysManager/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/services/KeysManager/index.ts)
 
 `KeysManager` generates secp256k1 keys, converts them to hex and derives private keys for HD wallets. All methods are `static`.
 

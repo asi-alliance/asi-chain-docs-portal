@@ -1,6 +1,6 @@
 # Wallet SDK API Reference
 
-Each page below describes one module of `@asichain/asi-wallet-sdk` 2.1.0. Start with `Client`. The services are low-level primitives that `Client` builds on, and you rarely call them directly. The source code is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
+Each page below describes one module of `@asichain/asi-wallet-sdk`. Start with `Client`. The services are low-level primitives that `Client` builds on, and you rarely call them directly. The source code is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
 ## Client
 
@@ -37,5 +37,5 @@ Each page below describes one module of `@asichain/asi-wallet-sdk` 2.1.0. Start 
 | [Codec](/wallet-sdk/api-reference/codec/) | Base16, Base58 and Base64 encoding helpers |
 | [Functions](/wallet-sdk/api-reference/functions/) | Atomic amount conversion |
 | [Validators](/wallet-sdk/api-reference/validators/) | Address checksum and account name validation |
-| [Constants](/wallet-sdk/api-reference/constants/) | Library-wide constants such as `ASI_DECIMALS`, `ASI_BASE_UNIT` and `GasFee` |
+| [Constants](/wallet-sdk/api-reference/constants/) | Library-wide constants such as `GasFee` and the timeouts |
 | [Polyfills](/wallet-sdk/api-reference/polyfills/) | Browser `Buffer` polyfill setup |

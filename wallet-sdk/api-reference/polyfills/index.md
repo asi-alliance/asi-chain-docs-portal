@@ -1,6 +1,6 @@
 # Polyfills
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/polyfills/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/utils/polyfills/index.ts)
 
 `setupBufferPolyfill` provides the global `Buffer` in a browser, where the SDK needs it.
 

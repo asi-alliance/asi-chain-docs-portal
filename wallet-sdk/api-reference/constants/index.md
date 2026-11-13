@@ -1,6 +1,6 @@
 # Constants
 
-[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/utils/constants/index.ts) · [Config](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/v2.1.0/src/config/index.ts)
+[Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/utils/constants/index.ts) · [Config](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/config/index.ts)
 
 The SDK exports these constants from the package root. They live in two files: `utils/constants` holds the chain and encoding constants, and `config` holds the defaults for gas, timeouts and storage.
 
@@ -17,13 +17,15 @@ import { ASI_DECIMALS, GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
 | `ASI_CHAIN_PREFIX` | `{ coinId: string; version: string }` | `{ coinId: "000000", version: "00" }` | Chain prefix prepended to the address payload before the checksum is calculated. |
-| `ASI_DECIMALS` | `number` | `8` | Decimal places of ASI amounts in this SDK version. |
-| `NATIVE_TOKEN_DECIMALS_AMOUNT` | `number` | `8` | Default `decimals` of an [`Asset`](/wallet-sdk/api-reference/asset/). |
+| `ASI_DECIMALS` | `number` | `8` | Default precision of the SDK converters. For ASI pass `18`. |
+| `NATIVE_TOKEN_DECIMALS_AMOUNT` | `number` | `8` | Default precision of an [`Asset`](/wallet-sdk/api-reference/asset/) and of the `Client` conversion methods. For ASI pass `18`. |
 | `POWER_BASE` | `number` | `10` | Base used to compute `ASI_BASE_UNIT`. |
-| `ASI_BASE_UNIT` | `bigint` | `100_000_000n` | Atomic units in one ASI with 8 decimals (`10n ** 8n`). |
+| `ASI_BASE_UNIT` | `bigint` | `100_000_000n` | `POWER_BASE ** ASI_DECIMALS`. The scale for the default precision. |
 | `PRIVATE_KEY_LENGTH` | `number` | `32` | Length of a secp256k1 private key in bytes. |
+| `MAX_INT64` | `bigint` | `(1n << 63n) - 1n` | Largest signed 64-bit integer. |
+| `MAX_UINT256` | `bigint` | `(1n << 256n) - 1n` | Largest unsigned 256-bit integer. |
 
-In Wallet SDK 2.1.0 the decimal constants are fixed at 8, and no SDK API reads the decimals of the network. See [Token Amounts](/reference/token-amounts/).
+ASI has 18 decimal places. Pass `18` as `decimals` to the functions in [Functions](/wallet-sdk/api-reference/functions/). See [Token Amounts](/reference/token-amounts/).
 
 ### Node Responses
 
