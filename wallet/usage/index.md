@@ -70,13 +70,13 @@ Pick the **Account** to send from.
 
 ### Enter the Recipient
 
-Enter the **Recipient Address**. You can type it, paste it, or paste an image of a QR code from the clipboard.
+Enter the **Recipient Address**. You can type it, paste it, paste an image of a QR code from the clipboard, or scan a QR code with the camera (**Scan recipient QR code**).
 
 ### Enter the Amount
 
 Enter the **Amount**, or click **Max** to send the balance minus the estimated fee.
 
-ASI uses 18 decimal places. Use a wallet build with compatible SDK precision and signing support; builds based on SDK 2.1.0 use legacy fixed precision. See [Token Amounts](/reference/token-amounts/) and [SDK compatibility](/wallet-sdk/overview/).
+ASI uses 18 decimal places. See [Token Amounts](/reference/token-amounts/).
 
 ### Send the Transfer
 
@@ -114,7 +114,7 @@ Send only ASI tokens to this address, and check that the wallet is on the right 
 
 **Transactions** lists the transactions of the selected account and refreshes itself every 30 seconds. The history comes from the indexer.
 
-Each row has a date, a type (**Send**, **Receive** or **Deploy**), a status (**Pending**, **Completed** or **Failed**), the sender (**From**), the recipient (**To**), the amount and a **Details** value. The **Export** button under the list is inactive in this version of the wallet.
+Each row has a date, a type (**Send**, **Receive** or **Deploy**), a status (**Pending**, **Completed** or **Failed**), the sender (**From**), the recipient (**To**), the amount and a **Details** value. The **Export** button under the list is inactive.
 
 ![The Transactions page with the account selector, the column filters and one Send and one Receive row.](/images/wallet/history.light.webp){.light-only width=1026 height=349}
 ![The Transactions page with the account selector, the column filters and one Send and one Receive row.](/images/wallet/history.dark.webp){.dark-only width=1026 height=349}

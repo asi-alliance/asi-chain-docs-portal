@@ -16,7 +16,7 @@ Open [wallet.dev.asichain.io](https://wallet.dev.asichain.io), create a wallet o
 
 ### Request Tokens
 
-Open [faucet.dev.asichain.io](https://faucet.dev.asichain.io), paste the address into the **Address** field and press **FAUCET**. The faucet sends 10,000 ASI if the address holds 20,000 ASI or less.
+Open [faucet.dev.asichain.io](https://faucet.dev.asichain.io), paste the address into the **Address** field and press **FAUCET**. The faucet sends the amount set in its configuration and refuses an address whose balance is equal to or above its eligibility limit.
 
 ### Wait for the Finalized Status
 

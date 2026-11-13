@@ -1,6 +1,6 @@
 # Token Amounts
 
-ASI uses **18 decimal places**: **1 ASI = 1,000,000,000,000,000,000 atomic units**. This page shows how to convert ASI to atomic units and how to keep amounts exact in code.
+ASI has 18 decimal places, so 1 ASI is 1,000,000,000,000,000,000 atomic units. This page shows how to convert ASI to atomic units and how to keep amounts exact in code.
 
 ## Check the Network Configuration
 
@@ -8,9 +8,9 @@ A Rust node reports its token in `GET /api/status`, in the fields `nativeTokenNa
 
 The symbol alone does not identify a network. Check `networkId` and `shardId` in the same response as well.
 
-For ASI, configure `nativeTokenName` and `nativeTokenSymbol` as `ASI` and `nativeTokenDecimals` as `18`. Set these values explicitly at genesis and use matching settings on every node. See [Set Up a Private Shard](/nodes/private-shard/).
+For ASI, start every node with `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18`. `GET /api/status` then reports `ASI` and `18`. See [Set Up a Private Shard](/nodes/private-shard/).
 
-The token values are fixed at genesis. A node whose token settings differ from those of the chain stops. Records keep the decimals of the network they come from, so do not rescale them.
+The token values are fixed at genesis. A node that joins a network uses the values of that network, and a node whose token settings differ from those of the chain stops. Records keep the decimals of the network they come from, so do not rescale them.
 
 ## Convert ASI and Atomic Units
 
@@ -25,7 +25,7 @@ One ASI is 10^18 atomic units. Convert with integer arithmetic. Reject input wit
 | `1.000000000000000001` | `1000000000000000001` |
 | `10` | `10000000000000000000` |
 
-One atomic unit is `0.000000000000000001` ASI. For example, the raw amount `100000000` represents `0.0000000001` ASI.
+One atomic unit is `0.000000000000000001` ASI. For example, the raw amount `1500000000000000000` represents `1.5` ASI.
 
 ## Keep Amounts Exact
 
@@ -53,7 +53,7 @@ console.log(BigInt(Number(raw))); // 1000000000000000000n, the last digit is los
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="SDK Functions" href="/wallet-sdk/api-reference/functions/">Version-specific conversion behavior and compatibility</DocCard>
+<DocCard title="Functions" href="/wallet-sdk/api-reference/functions/">Convert amounts between ASI and atomic units</DocCard>
 <DocCard title="Wallet CLI" href="/cli/usage/">Raw amounts for the send command</DocCard>
 <DocCard title="Node Image" href="/nodes/image/">Run the Rust node from its image</DocCard>
 <DocCard title="Container Images" href="/reference/container-images/">Image versions, digests and source revisions</DocCard>

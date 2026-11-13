@@ -1,6 +1,6 @@
 # Get Started
 
-Pick the path that matches what you want to do. The wallet, faucet and explorer work with the public ASI:Chain DevNet, and DevNet tokens have no real value. If you are new here, read [What Is ASI:Chain](/overview/) first.
+Pick the path that matches what you want to do. The wallet, faucet and explorer work with ASI:Chain DevNet, and DevNet tokens have no real value. If you are new here, read [What Is ASI:Chain](/overview/) first.
 
 ## Use the Network
 
@@ -18,7 +18,7 @@ Request test tokens for that address at the [faucet](/faucet/usage/). [Get DevNe
 
 ### Follow Your Transfers
 
-Follow your transfers and balances in the [explorer](/explorer/usage/).
+Follow your transfers and deploys in the [explorer](/explorer/usage/).
 
 </Steps>
 
@@ -31,7 +31,7 @@ You want to take part in the network as an observer or a validator.
 - Follow [validator enrollment](/nodes/validator-enrollment/) to bond a validator.
 - See [troubleshooting](/help/troubleshooting/) if a node does not connect or stays out of sync.
 
-Public DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the bootstrap identity before you connect a node.
+DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the bootstrap identity before you connect a node.
 
 ## Build on ASI:Chain
 
@@ -46,6 +46,6 @@ You want to write an application, a script or a contract.
 <CardGrid columns="2">
 <DocCard title="What Is ASI:Chain" href="/overview/">Components, networks and the token</DocCard>
 <DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">Get an address and request tokens from the faucet</DocCard>
-<DocCard title="Network Endpoints" href="/reference/endpoints/">Public DevNet services</DocCard>
+<DocCard title="Network Endpoints" href="/reference/endpoints/">DevNet services</DocCard>
 <DocCard title="Frequently Asked Questions" href="/help/faq/">Answers to common questions about accounts, tokens and nodes</DocCard>
 </CardGrid>
