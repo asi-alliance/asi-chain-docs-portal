@@ -4,9 +4,9 @@
 
 These functions convert amounts between human-readable values and atomic integers. A few small helpers come with them. All of them are plain functions exported from the package root.
 
-An atomic amount is a `bigint` count of the smallest token unit. A token with `decimals` decimal places has `10^decimals` atomic units in one whole token, so for ASI (`ASI_DECIMALS` = `8`) one ASI is `100_000_000` atomic units.
+An atomic amount is a `bigint` count of the smallest token unit. ASI uses 18 decimal places, so one ASI is `1_000_000_000_000_000_000` atomic units. This page documents SDK 2.1.0, whose legacy `ASI_DECIMALS` constant is fixed at `8`.
 
-Every conversion takes `decimals` as a required argument. Pass `ASI_DECIMALS` for ASI, or `asset.getDecimals()` when you work with an [`Asset`](/wallet-sdk/api-reference/asset/).
+Every conversion takes `decimals` as a required argument. Pass the precision of the network or asset; for ASI it is `18`. See the version 2.1.0 restriction on `toAtomicAmount` below before using that function.
 
 ## Import
 
@@ -34,8 +34,8 @@ toAtomicAmount(amount: number | string, decimals: number): bigint
 
 Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
 
-::: warning Wrong Result for Decimals Other Than 8
-In version 2.1.0 the integer part is always multiplied by `ASI_BASE_UNIT` (10^8), and only the fraction follows `decimals`. The result is right for 8 decimals, but `toAtomicAmount("1.5", 6)` returns `100500000n` instead of `1500000n`. With 18 decimals `toAtomicAmount("1", 18)` returns `100000000n`. See [Token Amounts](/reference/token-amounts/).
+::: warning SDK 2.1.0 Conversion Compatibility
+Version 2.1.0 always scales the integer part by its legacy `ASI_BASE_UNIT` (10^8). As a result, `toAtomicAmount("1", 18)` returns `100000000n` instead of `1000000000000000000n`. Use a version with corrected conversion and network-precision support for ASI. See [Token Amounts](/reference/token-amounts/) for the 18-decimal denomination.
 :::
 
 | Name | Type | Description |
@@ -57,7 +57,7 @@ It throws:
 fromAtomicAmount(atomicAmount: bigint, decimals: number): string
 ```
 
-Converts atomic units to a decimal string with trailing zeros trimmed, for example `150000000n` with 8 decimals gives `"1.5"`. Negative amounts keep their sign.
+Converts atomic units to a decimal string with trailing zeros trimmed, for example `1500000000000000000n` with 18 decimals gives `"1.5"`. Negative amounts keep their sign.
 
 | Name | Type | Description |
 |------|------|-------------|
@@ -133,16 +133,14 @@ buildUrl(pathPrefix: string, params?: IUrlParams): string
 
 ```ts
 import {
-    ASI_DECIMALS,
     fromAtomicAmount,
     parseAtomicAmount,
-    toAtomicAmount,
 } from "@asichain/asi-wallet-sdk";
 
-const atomic = toAtomicAmount("1,234.56789012", ASI_DECIMALS);
+const atomic = 1234567890120000000000n;
 
-console.log(atomic); // 123456789012n
-console.log(fromAtomicAmount(atomic, ASI_DECIMALS)); // "1234.56789012"
+console.log(atomic); // 1234567890120000000000n
+console.log(fromAtomicAmount(atomic, 18)); // "1234.56789012"
 // Keep the string from fromAtomicAmount when you need the exact amount.
 console.log(parseAtomicAmount("42")); // 42n
 console.log(parseAtomicAmount("1.5")); // null

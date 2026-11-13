@@ -10,11 +10,11 @@ For the short path from a new wallet to a balance, see [Get DevNet ASI](/quick-s
 
 ## Rules
 
-- One request sends 10,000 ASI.
+- One request sends the amount shown on the page, supplied by the faucet API configuration.
 - There is no waiting time between requests. You can ask again as soon as the previous request is finished.
-- A request is refused when the balance of the address is above 20,000 ASI. Below that limit the FAUCET button works for any address.
+- A request is refused when the balance of the address is above the configured eligibility limit.
 
-The faucet page checks the 20,000 ASI limit. By default the faucet server sends 10^12 atomic units, which is 10,000 ASI with 8 decimals. An operator can change both.
+The frontend reads `native_token_decimals`, `faucet_amount` and `eligibility_ceiling` from the API's `/config` endpoint. For ASI, operators set `FAUCET_TOKEN_DECIMALS=18` and the matching raw amount and eligibility limit. For example, 10,000 ASI is `10000000000000000000000` atomic units. See [Token Amounts](/reference/token-amounts/).
 
 ## Request Tokens
 
@@ -61,7 +61,7 @@ If the transfer is still not finalized after 15 minutes, the page stops checking
 
 ### Your Address Is Not Eligible
 
-The balance of the address is above 20,000 ASI. Send some of it to another address or use a different address.
+The balance of the address is above the faucet's configured eligibility limit. Send some of it to another address or use a different address.
 
 ### The Balance Cannot Be Loaded
 
@@ -69,7 +69,7 @@ If the page shows `Unable to acquire address balance. Please try again…`, chec
 
 ### The Status Stays at Deploying
 
-The network may be busy. Wait for the next check. If the page has stopped checking, clear the field and paste the `deploy_id` back before you request tokens a second time, because every request sends another 10,000 ASI.
+The network may be busy. Wait for the next check. If the page has stopped checking, clear the field and paste the `deploy_id` back before you request tokens a second time, because every accepted request sends the configured amount again.
 
 ### The Balance Does Not Change
 

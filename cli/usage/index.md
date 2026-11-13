@@ -148,13 +148,13 @@ To send tokens, pass the recipient address and the amount in raw dust, the small
 asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 ```
 
-| ASI Amount | Raw CLI Amount (8 Decimals) |
+| ASI Amount | Raw CLI Amount (18 Decimals) |
 |---|---|
-| 0.5 | `50000000` |
-| 1 | `100000000` |
-| 10 | `1000000000` |
+| 0.5 | `500000000000000000` |
+| 1 | `1000000000000000000` |
+| 10 | `10000000000000000000` |
 
-The table is for 8 decimals, as on DevNet. See [Token Amounts](/reference/token-amounts/).
+The table uses ASI's 18 decimal places. See [Token Amounts](/reference/token-amounts/).
 
 Give amounts as exact integers. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 

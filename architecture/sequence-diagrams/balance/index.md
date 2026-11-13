@@ -28,14 +28,14 @@ Because the node reads the last finalized block, a transfer that was just sent c
 
 ### Atomic Units
 
-The node returns the balance as an integer number of atomic units. On DevNet the token has 8 decimal places. See [Token Amounts](/reference/token-amounts/).
+The node returns the balance as an integer number of atomic units. ASI has 18 decimal places. See [Token Amounts](/reference/token-amounts/).
 
 | Unit | Value |
 |------|-------|
-| 1 ASI | 100,000,000 atomic units |
-| 1 atomic unit | 0.00000001 ASI |
+| 1 ASI | 1,000,000,000,000,000,000 atomic units |
+| 1 atomic unit | 0.000000000000000001 ASI |
 
-The SDK converts with `toDisplayAmount` and `toAtomicAmount`.
+Use exact conversion with the network's precision. The released SDK's conversion behavior is documented in [SDK Functions](/wallet-sdk/api-reference/functions/).
 
 ### Query Rholang
 

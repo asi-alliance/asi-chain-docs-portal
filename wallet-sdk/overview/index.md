@@ -2,6 +2,8 @@
 
 Use the TypeScript SDK `@asichain/asi-wallet-sdk` to manage wallets, read balances and send transfers on ASI:Chain. The pages in this section describe version 2.1.0. The source is at [github.com/asi-alliance/asi-chain-wallet-sdk](https://github.com/asi-alliance/asi-chain-wallet-sdk).
 
+For ASI's 18-decimal network, use a release with network precision and uint256 signing support. Version 2.1.0 predates that integration; its conversion limits are documented in [Functions](/wallet-sdk/api-reference/functions/#toatomicamount).
+
 ## What the SDK Does
 
 - `Client` is the single entry point for wallets, networks, balances, transfers and events. See the [Client](/wallet-sdk/api-reference/client/) page.
@@ -112,7 +114,7 @@ await client.close();
 
 ### Check Balance and Transfer
 
-A transfer needs a reachable DevNet node and an account with funds, so this example is a function that you call yourself. `transfer` returns the deploy id at once, and the `subscribe` callbacks follow the deploy until the node confirms it. Amounts are `bigint` values in atomic units. The SDK uses 8 decimal places, as DevNet does, so 1 ASI is `100000000n`.
+A transfer needs a compatible node and an account with funds, so this example is a function that you call yourself. `transfer` returns the deploy id at once, and the `subscribe` callbacks follow the deploy until the node confirms it. Amounts are `bigint` values in atomic units. This version 2.1.0 example uses its legacy fixed-precision converters; use the updated SDK for the 18-decimal ASI network.
 
 ```ts
 import { Client, isAddress } from "@asichain/asi-wallet-sdk";

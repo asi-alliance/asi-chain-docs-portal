@@ -76,7 +76,7 @@ Enter the **Recipient Address**. You can type it, paste it, or paste an image of
 
 Enter the **Amount**, or click **Max** to send the balance minus the estimated fee.
 
-The wallet counts ASI with 8 decimals, as DevNet does. See [Token Amounts](/reference/token-amounts/).
+ASI uses 18 decimal places. Use a wallet build with compatible SDK precision and signing support; builds based on SDK 2.1.0 use legacy fixed precision. See [Token Amounts](/reference/token-amounts/) and [SDK compatibility](/wallet-sdk/overview/).
 
 ### Send the Transfer
 
@@ -182,7 +182,7 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 
 ## Bridge
 
-**Bridge** is the form for transfers from ASI:Chain to an EVM network. On DevNet it offers **ASI Chain** as the source and **Sepolia** as the destination. You pick the account and the **Amount** (up to 8 decimal places), connect an EVM wallet with **Connect EVM Wallet**, enter the **ETH recipient address** and start with **Lock on ASI Chain**.
+**Bridge** is the form for transfers from ASI:Chain to an EVM network. On DevNet it offers **ASI Chain** as the source and **Sepolia** as the destination. You pick the account and the **Amount**, connect an EVM wallet with **Connect EVM Wallet**, enter the **ETH recipient address** and start with **Lock on ASI Chain**.
 
 ## Next Steps
 

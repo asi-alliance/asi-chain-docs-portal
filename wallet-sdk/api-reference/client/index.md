@@ -198,7 +198,7 @@ toDisplayAmount(atomicAmount: bigint): string
 toAtomicAmount(amount: number | string): bigint
 ```
 
-`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units, and ASI has 8 decimal places, so `toAtomicAmount("10")` is `1000000000n`. Both conversion methods use the fixed `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. See [Token Amounts](/reference/token-amounts/).
+`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units. In SDK 2.1.0 both conversion methods use the legacy fixed `NATIVE_TOKEN_DECIMALS_AMOUNT` (`8`), so `toAtomicAmount("10")` is `1000000000n`. Use a release with network-precision support for ASI's 18 decimals. See [Token Amounts](/reference/token-amounts/).
 
 A balance that cannot be trusted throws `BalanceUnavailableError` with status `502`, carrying the address and a reason. It never resolves to `0n`, because an unreachable node, a vault that reports an error and an empty account are three different outcomes.
 

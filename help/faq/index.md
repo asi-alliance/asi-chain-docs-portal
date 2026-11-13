@@ -14,7 +14,7 @@ Start at [Get Started](/quick-start/). It has one path for using the network, on
 
 ### What Does an ASI Address Look Like?
 
-It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. On DevNet amounts have 8 decimal places, so one ASI is `100000000` atomic units. See [Token Amounts](/reference/token-amounts/).
+It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. ASI has 18 decimal places, so one ASI is `1000000000000000000` atomic units. See [Token Amounts](/reference/token-amounts/).
 
 ## Wallet and Keys
 
@@ -88,7 +88,7 @@ Yes. A node started without a validator key runs in read-only mode. It rejects d
 
 ### What Amount Does the Wallet CLI Expect?
 
-An integer in atomic units. On DevNet `100000000` is one ASI. See [Token Amounts](/reference/token-amounts/). Keep the exact integer, and if a transfer ends with an unknown result, check its deploy ID before sending again.
+An integer in atomic units. With ASI's 18 decimal places, `1000000000000000000` is one ASI. See [Token Amounts](/reference/token-amounts/). Keep the exact integer, and if a transfer ends with an unknown result, check its deploy ID before sending again.
 
 ### Should I Update the Wallet CLI Submodule with `--remote`?
 
