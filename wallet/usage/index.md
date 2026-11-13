@@ -58,6 +58,8 @@ The **Wallet** page is the dashboard. It shows the selected account, its balance
 
 The menu has these pages: **Wallet**, **Send**, **Bridge**, **Receive**, **Accounts**, **Transactions**, **Deploy** and **Network Settings**.
 
+The menu also has **Explorer** and **Faucet**, which open the block explorer and the faucet in a new tab.
+
 ## Send
 
 Open **Send** to transfer ASI.
