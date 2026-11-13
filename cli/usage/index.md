@@ -151,7 +151,7 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 | 1 | `1000000000000000000` |
 | 10 | `10000000000000000000` |
 
-The table uses ASI's 18 decimal places. See [Token Amounts](/reference/token-amounts/).
+ASI has 18 decimal places. See [Token Amounts](/reference/token-amounts/).
 
 Give amounts as exact integers. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
 
