@@ -9,7 +9,7 @@ The module also defines the types `AssetId = string` and `Assets = Map<AssetId, 
 ## Import
 
 ```ts
-import { Asset } from "@asichain/asi-wallet-sdk";
+import { Asset, DEFAULT_ASSET } from "@asichain/asi-wallet-sdk";
 ```
 
 ## Constructor
@@ -61,6 +61,10 @@ getDecimals(): number
 ```ts
 getContractAddress(): string | null
 ```
+
+## Default Asset
+
+`DEFAULT_ASSET` is the `Asset` that `Client.getBalance` and `Client.transfer` use. An `Account` also takes it as its primary asset unless another one is given. Its name is `"ASI"`, its `id` is random and generated when the SDK loads, and its `decimals` is the default `NATIVE_TOKEN_DECIMALS_AMOUNT`.
 
 ## Example
 

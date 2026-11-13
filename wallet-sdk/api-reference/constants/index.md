@@ -7,7 +7,7 @@ The SDK exports these constants from the package root. They live in two files: `
 ## Import
 
 ```ts
-import { ASI_DECIMALS, GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain/asi-wallet-sdk";
+import { GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain/asi-wallet-sdk";
 ```
 
 ## Constants
@@ -17,10 +17,10 @@ import { ASI_DECIMALS, GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
 | `ASI_CHAIN_PREFIX` | `{ coinId: string; version: string }` | `{ coinId: "000000", version: "00" }` | Chain prefix prepended to the address payload before the checksum is calculated. |
-| `ASI_DECIMALS` | `number` | `8` | Default precision of the SDK converters. For ASI pass `18`. |
+| `ASI_DECIMALS` | `number` | `8` | Exponent used to compute `ASI_BASE_UNIT`. The conversion functions take `decimals` as an argument instead. |
 | `NATIVE_TOKEN_DECIMALS_AMOUNT` | `number` | `8` | Default precision of an [`Asset`](/wallet-sdk/api-reference/asset/) and of the `Client` conversion methods. For ASI pass `18`. |
 | `POWER_BASE` | `number` | `10` | Base used to compute `ASI_BASE_UNIT`. |
-| `ASI_BASE_UNIT` | `bigint` | `100_000_000n` | `POWER_BASE ** ASI_DECIMALS`. The scale for the default precision. |
+| `ASI_BASE_UNIT` | `bigint` | `100_000_000n` | `POWER_BASE ** ASI_DECIMALS`. |
 | `PRIVATE_KEY_LENGTH` | `number` | `32` | Length of a secp256k1 private key in bytes. |
 | `MAX_INT64` | `bigint` | `(1n << 63n) - 1n` | Largest signed 64-bit integer. |
 | `MAX_UINT256` | `bigint` | `(1n << 256n) - 1n` | Largest unsigned 256-bit integer. |

@@ -56,7 +56,7 @@ It throws:
 toExactAtomicAmount(amount: string, decimals: number): bigint
 ```
 
-Converts a decimal string to atomic units without rounding. It trims surrounding whitespace and accepts a leading `-`. It accepts neither thousands separators nor numbers. Trailing zeros beyond `decimals` are allowed, so `toExactAtomicAmount("1.50", 1)` is `15n`.
+Converts a decimal string to atomic units without rounding. It trims surrounding whitespace, accepts a leading `-` and rejects thousands separators. Trailing zeros beyond `decimals` are allowed, so `toExactAtomicAmount("1.50", 1)` is `15n`.
 
 | Name | Type | Description |
 |------|------|-------------|
