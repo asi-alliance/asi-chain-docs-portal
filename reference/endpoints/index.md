@@ -31,7 +31,7 @@ The reply is JSON. These fields describe the network:
 ```json
 {
   "shardId": "root",
-  "minPhloPrice": "1"
+  "minPhloPrice": 1
 }
 ```
 
