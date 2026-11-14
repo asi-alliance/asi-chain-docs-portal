@@ -195,11 +195,10 @@ export async function addStaging(client: Client, validatorUrl: string, indexerUr
 getBalance(address: Address): Promise<bigint>
 getAvailableBalance(walletId: string, accountId: string): Promise<bigint>
 toDisplayAmount(atomicAmount: bigint): string
-toAtomicAmount(amount: number | string): bigint // deprecated
 toExactAtomicAmount(amount: string): bigint
 ```
 
-`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units. The conversion methods use `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. The `amount` and `gasCost` of pending entries in `getTransactionsHistory` are converted with `NATIVE_TOKEN_DECIMALS_AMOUNT` in the same way. For ASI call `toExactAtomicAmount(amount, 18)` from [Functions](/wallet-sdk/api-reference/functions/#toexactatomicamount). `toAtomicAmount` is deprecated, because it truncates excess fractional digits where `toExactAtomicAmount` rejects them. See [Token Amounts](/reference/token-amounts/).
+`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units. The conversion methods use `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. The `amount` and `gasCost` of pending entries in `getTransactionsHistory` are converted with `NATIVE_TOKEN_DECIMALS_AMOUNT` in the same way. For ASI call `toExactAtomicAmount(amount, 18)` from [Functions](/wallet-sdk/api-reference/functions/#toexactatomicamount). See [Token Amounts](/reference/token-amounts/).
 
 A balance that cannot be trusted throws `BalanceUnavailableError` with status `502`, carrying the address and a reason. It never resolves to `0n`, because an unreachable node, a vault that reports an error and an empty account are three different outcomes.
 
@@ -397,11 +396,10 @@ getEventBus(): IClientEventSource
 | `walletsChanged` | `Wallet[]` | A wallet was opened, closed, created, imported or removed |
 | `accountsChanged` | `walletId, Account[]` | The accounts of an open wallet changed |
 | `networksChanged` | `INetworksState` | A network was added, updated, removed or selected |
-| `networkChanged` | `INetworkRecord` | The selection changed. Deprecated in favor of `networksChanged` |
 | `reservationsChanged` | `TReservationsByWallet` | A reservation was added, replaced, removed, confirmed or expired |
 | `networkBusyChanged` | `networkId, isBusy` | An operation started or finished on a network |
 | `walletLocked` | `walletId` | A signing session ended, by `lockWallet` or by the auto-lock |
-| `walletFingerprintUpgraded` | `walletId` | When the wallet was opened, the SDK replaced its stored fingerprint with the one computed from its key. Transitional |
+| `walletFingerprintUpgraded` | `walletId` | A wallet was opened and its stored fingerprint was replaced with the one computed from its key |
 
 The names are the values of the `ClientEvent` enum.
 

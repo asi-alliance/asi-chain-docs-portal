@@ -20,35 +20,11 @@ import {
     isSameAddress,
     normalizeAddress,
     parseAtomicAmount,
-    toAtomicAmount,
     toExactAtomicAmount,
 } from "@asichain/asi-wallet-sdk";
 ```
 
 ## Functions
-
-### toAtomicAmount()
-
-```ts
-toAtomicAmount(amount: number | string, decimals: number): bigint
-```
-
-Converts a human-readable amount to atomic units. It strips thousands separators (commas and spaces), accepts negative values, and truncates excess fractional digits with a `console.warn`.
-
-Deprecated. Use `toExactAtomicAmount`, which rejects an amount with more fractional digits than `decimals` instead of truncating it.
-
-| Name | Type | Description |
-|------|------|-------------|
-| `amount` | `number \| string` | Decimal amount, for example `"1,234.56"` or `1234.56`. |
-| `decimals` | `number` | Number of decimal places of the token. |
-
-Returns `bigint`.
-
-It throws:
-
-- `Error("Cannot process empty amount")` for an empty string.
-- `Error("Invalid amount format")` when the string is not a decimal number.
-- `Error("Invalid number")` when a numeric input is not finite.
 
 ### toExactAtomicAmount()
 

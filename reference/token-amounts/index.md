@@ -10,7 +10,7 @@ The symbol alone does not identify a network. Check `networkId` and `shardId` in
 
 For ASI, start every node with `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18`. `GET /api/status` then reports `ASI` and `18`. See [Set Up a Private Shard](/nodes/private-shard/).
 
-The token values are fixed at genesis. A node that joins a network uses the values of that network, and a node whose token settings differ from those of the chain stops. Records keep the decimals of the network they come from, so do not rescale them.
+The token values are fixed at genesis. A node that joins a network needs the values of that network, and a node restarted with other values stops. Records keep the decimals of the network they come from, so do not rescale them.
 
 ## Convert ASI and Atomic Units
 

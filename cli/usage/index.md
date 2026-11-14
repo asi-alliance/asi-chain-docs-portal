@@ -106,7 +106,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profil
 . "$HOME/.cargo/env"
 ```
 
-The repository pins `nightly-2026-02-09` in `rust-toolchain.toml`, and `rustup` installs it on the first `cargo build`.
+The repository pins a nightly Rust toolchain in `rust-toolchain.toml`, and `rustup` installs it on the first `cargo build`.
 
 ### Clone and Build
 

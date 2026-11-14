@@ -221,18 +221,18 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 
 ## Dependencies
 
-| Package | Version Range | Purpose |
-|---------|---------------|---------|
-| [axios](https://github.com/axios/axios) | ^1.13.2 | HTTP client for node communication |
-| [bip32](https://github.com/bitcoinjs/bip32) | ^4.0.0 | BIP-32 hierarchical deterministic wallets |
-| [bip39](https://github.com/bitcoinjs/bip39) | ^3.1.0 | BIP-39 mnemonic generation |
-| [blakejs](https://github.com/dcposch/blakejs) | ^1.2.1 | BLAKE2b hashing for addresses |
-| [bs58](https://github.com/cryptocoinjs/bs58) | ^6.0.0 | Base58 encoding |
-| [buffer](https://github.com/feross/buffer) | ^6.0.3 | `Buffer` polyfill for browser environments |
-| [@noble/hashes](https://github.com/paulmillr/noble-hashes) | ^1.6.0 | Cryptographic hash helpers |
-| [@noble/secp256k1](https://github.com/paulmillr/noble-secp256k1) | ^1.7.0 | secp256k1 key generation and signing |
-| [js-sha3](https://github.com/emn178/js-sha3) | ^0.9.3 | keccak256 hashing |
-| [node-persist](https://github.com/simonlast/node-persist) | ^4.0.4 | Storage in Node.js |
+| Package | Purpose |
+|---------|---------|
+| [axios](https://github.com/axios/axios) | HTTP client for node communication |
+| [bip32](https://github.com/bitcoinjs/bip32) | BIP-32 hierarchical deterministic wallets |
+| [bip39](https://github.com/bitcoinjs/bip39) | BIP-39 mnemonic generation |
+| [blakejs](https://github.com/dcposch/blakejs) | BLAKE2b hashing for addresses |
+| [bs58](https://github.com/cryptocoinjs/bs58) | Base58 encoding |
+| [buffer](https://github.com/feross/buffer) | `Buffer` polyfill for browser environments |
+| [@noble/hashes](https://github.com/paulmillr/noble-hashes) | Cryptographic hash helpers |
+| [@noble/secp256k1](https://github.com/paulmillr/noble-secp256k1) | secp256k1 key generation and signing |
+| [js-sha3](https://github.com/emn178/js-sha3) | keccak256 hashing |
+| [node-persist](https://github.com/simonlast/node-persist) | Storage in Node.js |
 
 ## Next Steps
 
