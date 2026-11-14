@@ -14,7 +14,7 @@ The ASI Wallet is a browser-based React application for managing accounts and se
 | Redux store and RTK Query | Wallet list, selected network and account, auth state, theme, cached balances and history |
 | `SdkWalletService` | The wallet's only entry point to the SDK |
 | `Client` | Creates and unlocks wallets, signs and submits deploys, reads balances, watches deploy status |
-| `ApiClientManager` | Holds one HTTP client per node role |
+| `ApiClientManager` | Holds one HTTP client each for the validator, the read-only node and the indexer |
 
 React components do not call the SDK client directly. A page dispatches a Redux thunk or uses an RTK Query hook, and the thunk calls `SdkWalletService`.
 
@@ -23,11 +23,12 @@ React components do not call the SDK client directly. A page dispatches a Redux 
 | Page | Purpose |
 |------|---------|
 | Login | Unlock the wallet with a password |
-| Dashboard | Balance of the selected account and quick actions |
+| Wallet | Balance of the selected account and quick actions |
 | Accounts | Account management |
 | Send | Send tokens to another address |
+| Bridge | Lock ASI on ASI Chain to move it to another network |
 | Receive | Show the address of the selected account |
-| History | Transaction history of the account |
+| Transactions | Transaction history of the account |
 | Deploy | Deploy Rholang code to the selected network |
 | Settings | Network and application settings |
 

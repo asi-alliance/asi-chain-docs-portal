@@ -16,10 +16,11 @@ The Python indexer extracts chain data and writes it to the database. Hasura add
 
 The indexer writes the tables below to PostgreSQL, as defined by migrations 000 to 007 in [github.com/asi-alliance/asi-chain-indexer](https://github.com/asi-alliance/asi-chain-indexer/tree/dev/migrations). The figure shows how the tables relate, and the two tables below list their keys, relations and main columns.
 
-Hasura serves every table except these three, and adds the `native_transfer_lifecycle` view:
+Hasura serves every table except these four. The init script also publishes six views, including `native_transfer_lifecycle`, and three functions.
 
 - `native_transfer_calls`
 - `native_transfer_results`
+- `native_transfer_result_aliases`
 - `network_metrics_buckets`
 
 The figure and the tables leave out the link table `native_transfer_result_aliases`, whose rows pair a `native_transfer_results` id with a `native_transfer_calls` id.
