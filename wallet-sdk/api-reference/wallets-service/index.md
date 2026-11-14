@@ -37,7 +37,7 @@ Returns `WalletMeta` with the `address`, `publicKey`, and `privateKey` fields. `
 createFirstWalletWithMnemonic(mnemonic?: string, index?: number): Promise<WalletMeta>
 ```
 
-Builds a wallet from a BIP-39 mnemonic phrase using BIP-44 hierarchical derivation. If `mnemonic` is omitted, a new mnemonic is generated. The returned `WalletMeta` always includes the mnemonic, which is only trimmed and split and joined again on single spaces. For input from a user, call `Mnemonic.normalizeMnemonic` first.
+Builds a wallet from a BIP-39 mnemonic phrase using BIP-44 hierarchical derivation. If `mnemonic` is omitted, a new mnemonic is generated. The returned `WalletMeta` always includes the mnemonic. The function trims it but does not lowercase it or collapse repeated spaces, so pass input from a user through `Mnemonic.normalizeMnemonic` first.
 
 | Name | Type | Description |
 |------|------|-------------|

@@ -185,7 +185,7 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 
 ## Bridge
 
-**Bridge** is the form for transfers from ASI Chain to another network. **Source** is always ASI Chain, and **Destination** lists Sepolia, Base Sepolia, FetchHub Dorado and Cardano Preprod. You pick the account and the **Amount**, connect a wallet of the destination network with **Connect EVM Wallet**, **Connect Cardano Wallet** or **Connect Fetch Wallet**, which fills in the recipient address, and start with **Lock on ASI Chain**.
+**Bridge** is the form for transfers from ASI:Chain to another network. **Source** is always **ASI Chain**, and **Destination** lists **Sepolia**, **Base Sepolia**, **FetchHub Dorado** and **Cardano Preprod**. You pick the account and the **Amount**, connect a wallet of the destination network with **Connect EVM Wallet**, **Connect Cardano Wallet** or **Connect Fetch Wallet**, which fills in the recipient address, and start with **Lock on ASI Chain**.
 
 ## Next Steps
 

@@ -64,7 +64,7 @@ Parses a hex string into a `Uint8Array`.
 
 Returns `Uint8Array` with the decoded bytes.
 
-The function does not validate its input. With an odd length the last digit is silently dropped, and a pair that does not start with a hex digit becomes the byte `0`, and a pair such as `1z` is read as `1`, so check the string before calling.
+The function does not validate its input. With an odd length the last digit is silently dropped. A pair that does not start with a hex digit becomes the byte `0`, and a pair such as `1z` is read as `1`. Check the string before calling.
 
 ### encodeBase16()
 

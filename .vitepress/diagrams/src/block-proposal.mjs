@@ -2,7 +2,7 @@
 export default {
   kind: 'flow',
   title: 'Block proposal',
-  desc: 'A validator starts when the heartbeat check fires every 3 seconds or a deploy is submitted. If it is not bonded and active, it waits. If the synchrony constraint is not met, it waits. If the height constraint is not met and the shard is not stalled, it waits too. Otherwise it creates a block from the deploy pool, executes the deploys, signs the block, adds it to the DAG, relays it to peers and waits again.',
+  desc: 'A validator starts when the heartbeat check fires every 3 seconds or a deploy is submitted. If it is not bonded and active, it waits. If the synchrony constraint is not met, it waits. If the height constraint is not met and the shard is not stalled, it waits too. Otherwise it creates a block from the deploy pool, or an empty recovery block when the shard is stalled, executes the deploys, signs the block, adds it to the DAG, relays it to peers and waits again.',
   legend: true,
   opts: { colGaps: [96], rowGaps: [34, 46, 46, 46, 30, 30, 30], wrap: 22, labelWrap: 0 },
   nodes: [
@@ -10,7 +10,7 @@ export default {
     { id: 'bonded', label: 'Bonded and active?', kind: 'decision', col: 0, row: 1, wrap: 18 },
     { id: 'sync', label: 'Synchrony constraint met?', kind: 'decision', col: 0, row: 2, wrap: 18 },
     { id: 'height', label: 'Height constraint met, or shard stalled?', kind: 'decision', col: 0, row: 3, wrap: 18 },
-    { id: 'create', label: 'Create block from deploy pool', col: 0, row: 4 },
+    { id: 'create', label: 'Create block from deploy pool (empty on a stalled shard)', col: 0, row: 4 },
     { id: 'exec', label: 'Execute deploys', col: 0, row: 5 },
     { id: 'sign', label: 'Sign block', col: 0, row: 6 },
     { id: 'relay', label: 'Add to DAG and relay to peers', col: 0, row: 7 },

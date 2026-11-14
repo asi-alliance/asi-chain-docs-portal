@@ -26,11 +26,11 @@ React components do not call the SDK client directly. A page dispatches a Redux 
 | Wallet | Balance of the selected account and quick actions |
 | Accounts | Account management |
 | Send | Send tokens to another address |
-| Bridge | Lock ASI on ASI Chain to move it to another network |
+| Bridge | Lock ASI on ASI:Chain to move it to another network |
 | Receive | Show the address of the selected account |
 | Transactions | Transaction history of the account |
 | Deploy | Deploy Rholang code to the selected network |
-| Settings | Network and application settings |
+| Network Settings | Network and application settings |
 
 ## State
 
