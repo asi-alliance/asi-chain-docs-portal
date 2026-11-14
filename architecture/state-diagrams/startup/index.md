@@ -20,8 +20,8 @@ The Rust node runs a fixed sequence of startup steps and then reaches the Runnin
 
 | Mode | Condition | Path to Running |
 |------|-----------|-----------------|
-| Reconnect | The block store holds an approved block, which is any restart on existing data. | Builds Casper from local storage and goes to Running directly, in about a second. |
-| Ceremony master | No approved block and `ceremony-master-mode` is set. A standalone node starts in this mode. | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
+| Reconnect | The block store holds an approved block, which is any restart on existing data. | Builds Casper from local storage and goes to Running directly. |
+| Ceremony master | No approved block, `ceremony-master-mode` is set and `genesis-validator-mode` is not. A standalone node starts in this mode. | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
 | Genesis validator | No approved block and `genesis-validator-mode` is set. | Verifies and signs the candidate genesis block and then moves to Initializing, where it waits for the approved block like a joining node. |
 | Join | No approved block and neither ceremony mode is set. | Moves to Initializing (see below). |
 
@@ -38,7 +38,7 @@ Approved block not found, connecting to existing network
 
 A node that joins an existing shard asks its peers for the approved block. If a peer has none yet and answers `NoApprovedBlockAvailable`, the node asks again after 10 seconds.
 
-Once it has the approved block, the node downloads the blocks and the state of the last finalized window from the bootstrap peer. Each request times out after 5 seconds, and the whole download has a 600-second deadline. Then it rebuilds the DAG, creates Casper and moves to Running. Against a healthy shard this takes one to two minutes and about a hundred fetched blocks.
+Once it has the approved block, the node downloads the blocks and the state of the last finalized window from the bootstrap peer. Each request times out after 5 seconds, and the whole download has a 600-second deadline. Then it rebuilds the DAG, creates Casper and moves to Running.
 
 A restart on the same data directory takes the Reconnect path and does not download anything again.
 

@@ -17,7 +17,7 @@ A bootstrap peer is not automatically a bonded validator. After the first connec
 
 <Diagram name="network-topology" caption="Clients call the validator on ports 40403 and 40401, nodes reach each other on 40400 and 40404, and the indexer feeds Hasura through PostgreSQL." />
 
-Applications and the indexer can talk to any node that exposes the API ports, including an observer. The diagram shows a validator because that is the entry point of DevNet.
+Applications and the indexer can talk to any node that exposes the API ports, including an observer. Balance queries (`/api/explore-deploy`) are accepted only by a read-only node or by a validator started with `--dev-mode`. The diagram shows a validator because that is the entry point of DevNet.
 
 ## Ports and Access
 
