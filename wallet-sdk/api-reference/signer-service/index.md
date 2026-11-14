@@ -18,7 +18,7 @@ import { SignerService } from "@asichain/asi-wallet-sdk";
 static deployDataProtobufSerialize(deployData: DeployData): Uint8Array
 ```
 
-Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId` is written as an empty string.
+Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId`, like any empty or zero value, is left out of the bytes.
 
 | Name | Type | Description |
 |------|------|-------------|

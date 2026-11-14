@@ -199,7 +199,7 @@ toAtomicAmount(amount: number | string): bigint // deprecated
 toExactAtomicAmount(amount: string): bigint
 ```
 
-`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units. The conversion methods use `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. For ASI call `toExactAtomicAmount(amount, 18)` from [Functions](/wallet-sdk/api-reference/functions/#toexactatomicamount). `toAtomicAmount` is deprecated, because it truncates excess fractional digits where `toExactAtomicAmount` rejects them. See [Token Amounts](/reference/token-amounts/).
+`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units. The conversion methods use `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. The `amount` and `gasCost` of pending entries in `getTransactionsHistory` are converted with `NATIVE_TOKEN_DECIMALS_AMOUNT` in the same way. For ASI call `toExactAtomicAmount(amount, 18)` from [Functions](/wallet-sdk/api-reference/functions/#toexactatomicamount). `toAtomicAmount` is deprecated, because it truncates excess fractional digits where `toExactAtomicAmount` rejects them. See [Token Amounts](/reference/token-amounts/).
 
 A balance that cannot be trusted throws `BalanceUnavailableError` with status `502`, carrying the address and a reason. It never resolves to `0n`, because an unreachable node, a vault that reports an error and an empty account are three different outcomes.
 

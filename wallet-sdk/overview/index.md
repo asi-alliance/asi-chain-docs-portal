@@ -214,7 +214,7 @@ The SDK has four layers. `Client` sits on top, and your application talks to it.
 ## Cryptography
 
 - Keys are secp256k1 key pairs, and the public key is 65 bytes, uncompressed.
-- The address is the keccak256 hash of the public key without its first byte, followed by the chain prefix, a blake2b checksum and Base58 encoding. Addresses start with `1111`.
+- The address starts from the keccak256 hash of the public key without its first byte. The last 20 bytes of that hash go through keccak256 again and the chain prefix is put before the result. The first 4 bytes of the blake2b hash of that payload are appended as a checksum, and the whole is Base58 encoded, so addresses start with `1111`.
 - Encryption is PBKDF2 with 100,000 iterations followed by AES-GCM.
 - Mnemonics follow BIP-39 and have 12 or 24 words.
 - The derivation path is BIP-44, `m/44'/coin'/account'/change/index`. For an HD wallet the root path is part of its identity, so the same mnemonic on another root path is a different wallet.
