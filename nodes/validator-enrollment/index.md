@@ -89,7 +89,7 @@ Go to [Run a Validator](/nodes/validator/#prepare-storage-configuration-and-keys
 - `--shard-name` equal to the shard's `shardId`.
 - `--host` with the address that other nodes use to reach this node.
 - `--validator-public-key` with `$VALIDATOR_PUBLIC_KEY` and `--validator-private-key-path` with the key converted from `private_key.hex` as shown in [Set Up the Validator Key](/nodes/validator/#set-up-the-validator-key). The node does not read `private_key.hex` itself.
-- The token flags with the values of the shard's genesis, `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` for ASI. A node with other values stops.
+- The token flags with the values of the shard's genesis, `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` for ASI. A node restarted with other values stops.
 
 The [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/rust/configuration/commandline/options.rs) list every flag. Keep management APIs and metrics private and confirm container-to-host port mappings.
 

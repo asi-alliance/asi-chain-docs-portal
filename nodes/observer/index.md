@@ -21,7 +21,7 @@ Ask the operator of the shard for these values.
 - The `--network-id` value, which must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node that joins with another network ID exits with a `Wrong network id` error.
 - The `--shard-name` value, which must equal the `shardId` that the bootstrap node reports. The default is `root`. With another value the node gets a peer but does not become ready, and `lastFinalizedBlockNumber` stays at `-1`.
 - The `--host` value, which is the address other nodes use to reach this node. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks.
-- The native-token settings of the shard. They are fixed at genesis, and the observer takes the same values: `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` for ASI. A node with other values stops.
+- The native-token settings of the shard. They are fixed at genesis, and the observer takes the same values: `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` for ASI. A node restarted with other values stops.
 
 ## Run the Observer
 

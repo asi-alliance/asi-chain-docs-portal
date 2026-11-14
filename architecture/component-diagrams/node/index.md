@@ -6,9 +6,9 @@ The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](http
 
 <Diagram name="node-components" caption="API calls enter the node crate, peer traffic goes through comm, and casper drives the Rholang interpreter and block storage." />
 
-The runtime binary is `/opt/docker/bin/node`, and it needs no Scala or JVM runtime configuration. [Node Image](/nodes/image/) covers the entrypoint, defaults, ports and access boundaries.
+The runtime binary is `/opt/docker/bin/node`. [Node Image](/nodes/image/) covers the entrypoint, defaults, ports and access boundaries.
 
-Native-token metadata is part of the shard and genesis configuration. The shard sets `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18`. The values are fixed in genesis, and a node started with other values stops. A node that joins a network uses the values of that network.
+Native-token metadata is part of the shard and genesis configuration. The shard sets `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18`. The values are fixed in genesis, and a node restarted with other values stops. A node that joins a network needs the values of that network.
 
 ## API
 

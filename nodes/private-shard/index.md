@@ -85,7 +85,7 @@ docker run -d --name my-shard-obs --network shard-net --platform linux/amd64 \
   --bootstrap "$BOOTSTRAP"
 ```
 
-Within 15 seconds after the container starts, `curl -s http://localhost:40453/api/status` reports `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. A node with other token values stops.
+Within 15 seconds after the container starts, `curl -s http://localhost:40453/api/status` reports `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. A node restarted with other token values stops.
 
 If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-connection).
 

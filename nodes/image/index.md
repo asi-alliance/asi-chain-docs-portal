@@ -55,7 +55,7 @@ Read the [defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blo
 - `--host` sets the public address that other nodes use to reach this one. By default the node guesses it from the public IP. If the address is wrong, the node connects out but receives nothing, and `peers` stays at 0.
 - `--bootstrap` names the bootstrap peer as `rnode://<node-id>@<host>?protocol=40400&discovery=40404` and has no default. The node ID is the `address` field of the peer's `GET /api/status`.
 - `--shard-name` sets the shard name, `root` by default.
-- `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` set the native token. They are fixed at genesis. For ASI pass `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` on every node of the shard, and a node with other values stops.
+- `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` set the native token. They are fixed at genesis. For ASI pass `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` on every node of the shard. A node restarted with other values stops.
 
 Add `--allow-private-addresses` when peers use container or private addresses, and `--no-upnp` when you forward ports by hand.
 
@@ -93,6 +93,9 @@ docker run -d --name my-node --platform linux/amd64 \
   "$NODE_IMAGE" run \
   --network-id <network-id> \
   --shard-name <shard-name> \
+  --native-token-name ASI \
+  --native-token-symbol ASI \
+  --native-token-decimals 18 \
   --host <public-address> \
   --bootstrap '<bootstrap-uri>'
 ```

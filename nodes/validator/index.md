@@ -36,7 +36,7 @@ The node keeps its state, its TLS certificate and its identity in `/var/lib/rnod
 
 - The node reads `/var/lib/rnode/f1r3fly.conf` without any flag. `run --config-file <path>` points to another file.
 - Do not pass `--profile`. The image entrypoint adds `--profile=docker`, and the node exits with an error if you pass `--profile` as well.
-- Match the shard and native-token settings to the target genesis. The shard name defaults to `root`. The native-token settings cannot change after genesis, and a node with other values stops.
+- Match the shard and native-token settings to the target genesis. The shard name defaults to `root`. The native-token settings cannot change after genesis, and a node restarted with other values stops.
 - Joining an existing shard does not use `--genesis-validator`, and a development `bonds.txt` is not an enrollment procedure. Genesis participation, joining and bonding are separate steps.
 
 ### Set Up the Validator Key
