@@ -169,9 +169,10 @@ Pro mode replaces the single field with an editor. A file panel on the left hold
 - **Create Account** derives a new account from the recovery phrase of an HD wallet and asks for the wallet password before it adds the account. A private key wallet has no such button.
 - **Import Wallet**, **Import Private Key** and **Import Wallet from keyfile** add another wallet.
 - **Export Keyfile**, in **Wallet backup**, saves the wallet to a keyfile that **Import Wallet from keyfile** can read back.
-- **Delete Wallet** removes the wallet and all its accounts from this browser. Restoring it needs the recovery phrase or the private key.
 
 The account selector in the header switches the active account on every page.
+
+The **Delete Wallet** icon in the header removes the wallet and all its accounts from this browser. Restoring it needs the recovery phrase or the private key.
 
 ## Network Settings
 
@@ -184,7 +185,7 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 
 ## Bridge
 
-**Bridge** is the form for transfers from ASI:Chain to an EVM network. On DevNet it offers **ASI Chain** as the source and **Sepolia** as the destination. You pick the account and the **Amount**, connect an EVM wallet with **Connect EVM Wallet**, enter the **ETH recipient address** and start with **Lock on ASI Chain**.
+**Bridge** is the form for transfers from ASI Chain to another network. **Source** is always ASI Chain, and **Destination** lists Sepolia, Base Sepolia, FetchHub Dorado and Cardano Preprod. You pick the account and the **Amount**, connect a wallet of the destination network with **Connect EVM Wallet**, **Connect Cardano Wallet** or **Connect Fetch Wallet**, which fills in the recipient address, and start with **Lock on ASI Chain**.
 
 ## Next Steps
 
@@ -194,5 +195,3 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 <DocCard title="ASI Block Explorer" href="/explorer/usage/">Look up blocks and transactions</DocCard>
 <DocCard title="Wallet Source" href="https://github.com/asi-alliance/asi-chain-wallet">github.com/asi-alliance/asi-chain-wallet</DocCard>
 </CardGrid>
-
-The block explorer is at [explorer.dev.asichain.io](https://explorer.dev.asichain.io).
