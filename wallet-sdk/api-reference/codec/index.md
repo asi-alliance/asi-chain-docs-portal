@@ -64,7 +64,7 @@ Parses a hex string into a `Uint8Array`.
 
 Returns `Uint8Array` with the decoded bytes.
 
-The function does not validate its input. With an odd length the last digit is silently dropped, and a non-hex pair becomes the byte `0`, so check the string before calling.
+The function does not validate its input. With an odd length the last digit is silently dropped, and a pair that does not start with a hex digit becomes the byte `0`, and a pair such as `1z` is read as `1`, so check the string before calling.
 
 ### encodeBase16()
 
@@ -146,7 +146,7 @@ Throws `SyntaxError` when `buffer` is empty.
 bigIntToBuffer(num: bigint): Uint8Array
 ```
 
-Writes a non-negative integer as big-endian bytes, left-padded with zeros to at least 32 bytes. It is the inverse of `bufferToBigInt` for 32-byte values such as private keys.
+Writes a non-negative integer as big-endian bytes, left-padded with zeros to at least 32 bytes. It is the inverse of `bufferToBigInt` for 32-byte values such as private keys, and it is meant for values up to 2^256 - 1.
 
 | Name | Type | Description |
 |------|------|-------------|

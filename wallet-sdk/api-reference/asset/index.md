@@ -64,7 +64,7 @@ getContractAddress(): string | null
 
 ## Default Asset
 
-`DEFAULT_ASSET` is the `Asset` that `Client.getBalance` and `Client.transfer` use. An `Account` also takes it as its primary asset unless another one is given. Its name is `"ASI"`, its `id` is random and generated when the SDK loads, and its `decimals` is the default `NATIVE_TOKEN_DECIMALS_AMOUNT`.
+`DEFAULT_ASSET` is the `Asset` that `Client.getBalance` and `Client.transfer` use. An `Account` also takes it as its primary asset unless another one is given. Its name is `"ASI"`, its `id` is random and generated when the SDK loads, and its `decimals` is the default `NATIVE_TOKEN_DECIMALS_AMOUNT`. An `Asset` for ASI with 18 decimal places is `new Asset({ id: "asi", name: "ASI", decimals: 18 })`.
 
 ## Example
 

@@ -37,11 +37,11 @@ Returns `WalletMeta` with the `address`, `publicKey`, and `privateKey` fields. `
 createFirstWalletWithMnemonic(mnemonic?: string, index?: number): Promise<WalletMeta>
 ```
 
-Builds a wallet from a BIP-39 mnemonic phrase using BIP-44 hierarchical derivation. If `mnemonic` is omitted, a new mnemonic is generated. The returned `WalletMeta` always includes the normalized mnemonic.
+Builds a wallet from a BIP-39 mnemonic phrase using BIP-44 hierarchical derivation. If `mnemonic` is omitted, a new mnemonic is generated. The returned `WalletMeta` always includes the mnemonic, which is only trimmed and split and joined again on single spaces. For input from a user, call `Mnemonic.normalizeMnemonic` first.
 
 | Name | Type | Description |
 |------|------|-------------|
-| `mnemonic` | `string` | Optional. BIP-39 mnemonic (12 or 24 words). Generates a new one if omitted. |
+| `mnemonic` | `string` | Optional. BIP-39 mnemonic. Generates a new one if omitted. |
 | `index` | `number` | Optional. BIP-44 address index. Defaults to `0`. |
 
 Returns `Promise<WalletMeta>` with `address`, `publicKey`, `privateKey`, and the normalized `mnemonic`.
@@ -72,7 +72,7 @@ Derives an address from a public key: applies keccak256 hashing, prepends the ch
 
 | Name | Type | Description |
 |------|------|-------------|
-| `publicKey` | `Uint8Array` | secp256k1 public key bytes. |
+| `publicKey` | `Uint8Array` | Uncompressed secp256k1 public key, 65 bytes starting with `0x04`. A compressed key gives a wrong address without an error. |
 
 Returns `Address`, a Base58-encoded address prefixed with `"1111"`.
 

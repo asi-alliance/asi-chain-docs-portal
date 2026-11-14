@@ -105,7 +105,7 @@ The result depends on the wallet type:
 
 Returns `Promise<IHDSecret | IPrivateKeyCredentials>`.
 
-Throws the errors of `decryptWithPassword`, and `CorruptedDataError` if the decrypted text is not a valid wallet secret.
+Throws the errors of `decryptWithPassword`, and `CorruptedDataError` if the decrypted text is not a valid wallet secret. An invalid `rootHDPath` throws an `Error` from `Bip44Path.parse`.
 
 ## Types
 

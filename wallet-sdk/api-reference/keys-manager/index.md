@@ -15,7 +15,7 @@ import { KeysManager } from "@asichain/asi-wallet-sdk";
 ### generateRandomKey()
 
 ```ts
-generateRandomKey(length?: number): Uint8Array
+static generateRandomKey(length?: number): Uint8Array
 ```
 
 Generates cryptographically secure random bytes.
@@ -31,7 +31,7 @@ Throws `Error("PrivateKeyLength must be a positive integer")` if `length` is not
 ### generateKeyPair()
 
 ```ts
-generateKeyPair(keyLength?: number): KeyPair
+static generateKeyPair(keyLength?: number): KeyPair
 ```
 
 Generates a random secp256k1 key pair.
@@ -47,7 +47,7 @@ Throws `Error("PrivateKeyLength must be a positive integer")` if `keyLength` is 
 ### getKeyPairFromPrivateKey()
 
 ```ts
-getKeyPairFromPrivateKey(privateKey: Uint8Array): KeyPair
+static getKeyPairFromPrivateKey(privateKey: Uint8Array): KeyPair
 ```
 
 Derives a `KeyPair` from an existing private key.
@@ -61,7 +61,7 @@ Returns `KeyPair` as `{ privateKey, publicKey }`.
 ### getPublicKeyFromPrivateKey()
 
 ```ts
-getPublicKeyFromPrivateKey(privateKey: Uint8Array): Uint8Array
+static getPublicKeyFromPrivateKey(privateKey: Uint8Array): Uint8Array
 ```
 
 Derives the public key from a private key.
@@ -75,7 +75,7 @@ Returns `Uint8Array` with the uncompressed public key (65 bytes, starting with `
 ### convertKeyToHex()
 
 ```ts
-convertKeyToHex(key: Uint8Array): string
+static convertKeyToHex(key: Uint8Array): string
 ```
 
 Converts a binary key to a lowercase hex string.
@@ -89,7 +89,7 @@ Returns `string` with the hex-encoded key.
 ### getInitialHDPathFromOptions()
 
 ```ts
-getInitialHDPathFromOptions(hdWalletOptions: TCreateHDPathWalletOptions): Promise<Bip44Path>
+static getInitialHDPathFromOptions(hdWalletOptions: TCreateHDPathWalletOptions): Promise<Bip44Path>
 ```
 
 Returns the BIP-44 path for a new HD wallet. With `{ index }` it builds a path from `ASI_COIN_TYPE`, account 0, change 0 and that index, and with `{ customHDPath }` it returns that path unchanged.
@@ -103,7 +103,7 @@ Returns `Promise<Bip44Path>`.
 ### getPrivateDataFromSeed()
 
 ```ts
-getPrivateDataFromSeed(seed: Uint8Array, path: Bip44Path): Promise<IHDWalletPrivateKeyDataFromSeed>
+static getPrivateDataFromSeed(seed: Uint8Array, path: Bip44Path): Promise<IHDWalletPrivateKeyDataFromSeed>
 ```
 
 Derives the private key at `path` from a BIP-39 seed.

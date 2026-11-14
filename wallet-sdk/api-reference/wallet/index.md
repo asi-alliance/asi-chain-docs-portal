@@ -11,7 +11,7 @@ A `Wallet` owns one `Signer` and a set of `Account` objects. It is either a priv
 ## Import
 
 ```ts
-import { Wallet, Account, Signer, SigningSession } from '@asichain/asi-wallet-sdk';
+import { Wallet, Account, Signer, SigningSession } from "@asichain/asi-wallet-sdk";
 ```
 
 ## Secrets
@@ -240,29 +240,29 @@ class SigningSession {
 ## Example
 
 ```ts
-import { KeysManager, Mnemonic, SecretsProvider, Wallet, WalletTypes } from '@asichain/asi-wallet-sdk';
+import { KeysManager, Mnemonic, SecretsProvider, Wallet, WalletTypes } from "@asichain/asi-wallet-sdk";
 
 const keyPair = KeysManager.generateKeyPair();
 const privateKey = keyPair.privateKey;
 const provider = new SecretsProvider(() => ({
-  password: 'example-password',
-  secret: { privateKey },
+    password: "example-password",
+    secret: { privateKey },
 }));
 
-const wallet = await Wallet.createPk({ name: 'Main' }, provider);
+const wallet = await Wallet.createPk({ name: "Main" }, provider);
 const [account] = wallet.getAccounts();
 
 console.log(wallet.getType() === WalletTypes.PRIVATE_KEY);
-console.log(account.getName(), account.getAddress().startsWith('1111'));
+console.log(account.getName(), account.getAddress().startsWith("1111"));
 
 const hdProvider = new SecretsProvider(() => ({
-  password: 'example-password',
-  secret: { seed: Mnemonic.generateMnemonic() },
+    password: "example-password",
+    secret: { seed: Mnemonic.generateMnemonic() },
 }));
 const hd = await Wallet.createHD(
-  { pathOptions: { index: 0 }, accountOptions: { name: 'Account 1' } },
-  hdProvider,
+    { pathOptions: { index: 0 }, accountOptions: { name: "Account 1" } },
+    hdProvider,
 );
-const derived = await hd.deriveAccount({ name: 'Account 2' }, hdProvider);
+const derived = await hd.deriveAccount({ name: "Account 2" }, hdProvider);
 console.log(hd.getAccounts().length, derived.account.getIndex());
 ```
