@@ -1,6 +1,6 @@
 # Run a Node
 
-Take part in the network as an observer or a validator. Both roles run the same Rust node image. Use the guides with a Rust shard that you or your operator run.
+Take part in a network as an observer or a validator. Both roles run the same Rust node image. Use the guides with a Rust shard that you or your operator run.
 
 ## Choose a Role
 

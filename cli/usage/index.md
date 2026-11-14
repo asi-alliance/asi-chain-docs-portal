@@ -139,13 +139,13 @@ Run these from the source directory after a build. With the image, put the comma
 
 `create --save` prints the private key and writes the wallet credentials to a file under `OUTPUT_DIR`. Protect both the printed output and the file. `balance`, `send` and `history` require a complete wallet file whose private key, public key and address match, and watch-only files are not supported.
 
-To send tokens, pass the recipient address and the amount in raw dust, the smallest unit:
+To send tokens, pass the recipient address and the amount in atomic units, the smallest unit. The CLI prints atomic units as `dust`:
 
 ```bash
 asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 ```
 
-| ASI Amount | Raw CLI Amount (18 Decimals) |
+| ASI Amount | Amount in Atomic Units (18 Decimals) |
 |---|---|
 | 0.5 | `500000000000000000` |
 | 1 | `1000000000000000000` |

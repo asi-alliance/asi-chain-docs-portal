@@ -24,7 +24,7 @@ Follow your transfers and deploys in the [explorer](/explorer/usage/).
 
 ## Run a Node
 
-You want to take part in the network as an observer or a validator.
+You want to take part in a network as an observer or a validator.
 
 - Start an [observer](/nodes/observer/) to follow the chain, or prepare a [validator](/nodes/validator/).
 - Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.

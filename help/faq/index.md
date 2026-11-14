@@ -14,7 +14,7 @@ Start at [Get Started](/quick-start/). It has one path for using the network, on
 
 ### What Does an ASI Address Look Like?
 
-It starts with `1111`. The faucet accepts addresses of 50 to 54 characters. ASI has 18 decimal places, so one ASI is `1000000000000000000` atomic units. See [Token Amounts](/reference/token-amounts/).
+It starts with `1111`. The faucet form accepts addresses of 50 to 54 characters. ASI has 18 decimal places, so one ASI is `1000000000000000000` atomic units. See [Token Amounts](/reference/token-amounts/).
 
 ## Wallet and Keys
 

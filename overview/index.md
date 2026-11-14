@@ -32,5 +32,5 @@ The native token is ASI. It has 18 decimal places, so 1 ASI is `1000000000000000
 <DocCard title="Get DevNet ASI" href="/quick-start/get-asi/">Open the wallet and get tokens from the faucet</DocCard>
 <DocCard title="ASI Wallet" href="/wallet/usage/">Create accounts, send tokens and deploy contracts</DocCard>
 <DocCard title="Technical Architecture" href="/architecture/">See how the parts exchange data</DocCard>
-<DocCard title="Run a Node" href="/nodes/">Take part in the network as an observer or a validator</DocCard>
+<DocCard title="Run a Node" href="/nodes/">Take part in a network as an observer or a validator</DocCard>
 </CardGrid>

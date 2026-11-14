@@ -38,14 +38,14 @@ The reply is JSON. These fields describe the network:
 The node also returns its own `address`, the `peers` count and the `nodes` count. The last two change over time.
 
 ::: warning Plain HTTP Only
-The node address uses `http://`. A web page served over HTTPS cannot call it directly, because browsers block mixed content. Use it from scripts, the SDK in Node.js or the [Wallet CLI](/cli/usage/). The hosted wallet at wallet.dev.asichain.io already contains its DevNet settings, so you enter nothing there.
+The node address uses `http://`. A web page served over HTTPS cannot call it directly, because browsers block mixed content. Use it from scripts or the SDK in Node.js. The hosted wallet at wallet.dev.asichain.io already contains its DevNet settings, so you enter nothing there.
 :::
 
 The other ports of a node (P2P, discovery, internal gRPC and admin HTTP) are not public entry points. They are described in [Default Container Ports](/nodes/image/#default-container-ports) for the Rust image.
 
 ## Wallet and SDK Roles
 
-The wallet and the [Wallet SDK](/wallet-sdk/overview/) take three addresses per network and a node profile. The last column gives the DevNet values for scripts, the SDK and the CLI.
+The wallet and the [Wallet SDK](/wallet-sdk/overview/) take three addresses per network and a node profile. The last column gives the DevNet values for scripts and the SDK.
 
 | Setting | Role | DevNet Value |
 |---|---|---|
