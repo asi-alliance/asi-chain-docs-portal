@@ -1,9 +1,9 @@
 # Run a Validator
 
-Run a validator node on a shard that an operator already runs, then bond it and wait until it joins consensus. You need Docker and a few values from the shard operator.
+Run a [validator node](/nodes/roles/) on a [shard](/reference/glossary/#shard) that an operator already runs, then [bond](/reference/glossary/#bond) it and wait until it joins consensus. You need Docker and a few values from the shard operator.
 
 ::: info Terminal
-The commands are written for bash. On Linux and macOS run them in a terminal. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
+The commands are written for bash. On Linux run them in a terminal. On macOS run `bash` in a terminal first, because commands with `read -rsp` do not work in zsh. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
 :::
 
 ## Before You Start
@@ -11,19 +11,21 @@ The commands are written for bash. On Linux and macOS run them in a terminal. On
 You need Docker and OpenSSL 3. Ask the shard operator for:
 
 - The node image and the client image the shard accepts.
-- The bootstrap URI.
-- The network ID and the shard name.
-- The gRPC and HTTP URLs of a bonded validator.
-- The gRPC and HTTP URLs of an observer.
-- The stake to bond, in atomic units.
+- The [bootstrap URI](/reference/glossary/#bootstrap-uri).
+- The [network ID](/reference/glossary/#network-id) and the [shard name](/reference/glossary/#shard-name).
+- The gRPC and HTTP URLs of a [bonded validator](/reference/glossary/#bonded-validator).
+- The gRPC and HTTP URLs of an [observer](/nodes/roles/).
+- The stake to bond, in [atomic units](/reference/token-amounts/).
 
 ## Run the Validator
+
+Run all steps in one bash terminal. In a new terminal, run the block of Set the Variables and the second block of Create the Validator Key again.
 
 <Steps>
 
 ### Set the Variables
 
-Replace each value in single quotes with the value from the operator. The bootstrap URI has the form `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. `PUBLIC_HOST` is the address at which other nodes reach this machine. `STAKE_ATOMIC_UNITS` is an integer, see [Token Amounts](/reference/token-amounts/).
+Replace each value in single quotes with the operator's value. The images come from the image catalog. Replace them if the operator names others. The bootstrap URI has the form `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. `PUBLIC_HOST` is the public IP or DNS name at which the shard nodes reach this machine, with TCP ports `40400` and `40404` open to them. `STAKE_ATOMIC_UNITS` is an integer (see [Token Amounts](/reference/token-amounts/)).
 
 ```bash
 NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6'
@@ -50,11 +52,11 @@ docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 docker pull --platform linux/amd64 "$NODE_IMAGE"
 ```
 
-The block defines the `client` function and pulls both images. Each `docker pull` prints a `Digest:` line.
+Each `docker pull` prints a `Digest:` line.
 
 ### Create the Validator Key
 
-Create the key directory and generate the key pair in it. The directory must not exist yet. If it does, set `KEY_DIR` to another path. The second block saves the public key and the vault address and prints the address, which starts with `1111`.
+Create the key directory and generate the key pair in it. The directory must not exist yet. If it does, set `KEY_DIR` to another path. The second block saves the [public key](/reference/glossary/#public-key) and the [vault address](/reference/glossary/#vault-address) and prints the address, which starts with `1111`.
 
 ```bash
 mkdir -m 700 "$KEY_DIR" && \
@@ -77,7 +79,7 @@ echo "$VALIDATOR_ADDRESS"
 
 ### Convert the Key
 
-Convert `private_key.hex` into the encrypted file `f1r3fly.key` that the node reads. `openssl pkcs8` asks twice for a new password, and you type the same password when the node starts.
+Convert `private_key.hex` into the encrypted file `f1r3fly.key` that the node reads. `openssl pkcs8` asks for a new password twice, and you type the same password when the node starts.
 
 ```bash
 umask 077
@@ -89,7 +91,7 @@ openssl pkcs8 -topk8 -v2 aes-256-cbc -in "$KEY_DIR/key.pem" -out "$KEY_DIR/f1r3f
 rm -f "$KEY_DIR/ec.conf" "$KEY_DIR/key.der" "$KEY_DIR/key.pem"
 ```
 
-The last line removes the temporary files with the plain key. `$KEY_DIR` now holds `f1r3fly.key`.
+The last line removes the temporary files that hold the plain key. `$KEY_DIR` now holds `f1r3fly.key`.
 
 ### Prepare the Data Volume
 
@@ -109,7 +111,7 @@ docker run --rm -u root --platform linux/amd64 --entrypoint install \
 
 ### Start the Node
 
-Type the key password at the prompt. `read` does not show it, and the node reads it from `F1R3NODE_VALIDATOR_PASSWORD`. The token flags repeat the token settings of the shard. Peers must reach TCP ports `40400` and `40404`. To restart the node later, run `docker restart validator`.
+Type the key password at the prompt. `read` does not show it, and the node reads it from `F1R3NODE_VALIDATOR_PASSWORD`. The token flags repeat the token settings of the shard. To restart the node later, run `docker restart validator`.
 
 ```bash
 read -rsp 'Key password: ' F1R3NODE_VALIDATOR_PASSWORD; echo
@@ -139,7 +141,7 @@ curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
 curl -s http://127.0.0.1:40403/api/status
 ```
 
-`/api/ready` returns `{"ready":true} HTTP 200`. The node is synchronized when `/api/status` shows `isReady: true`, a positive `peers` count and a growing `lastFinalizedBlockNumber`.
+`/api/ready` returns `{"ready":true} HTTP 200`. The node is synchronized when `/api/status` shows `"isReady":true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next.
 
 ### Fund the Validator
 
@@ -153,7 +155,7 @@ The output has the form `Balance for <address>: <atomic units>`.
 
 ### Submit the Bond
 
-Send the bond to the bonded validator from the operator, not to your own node. Status and result queries go to the observer. The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the deploy before you bond again.
+Send the bond to the operator's bonded validator, not to your own node. Status and result queries go to the observer. The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again.
 
 ```bash
 client bond-validator --stake "$STAKE_ATOMIC_UNITS" \
@@ -172,7 +174,7 @@ curl -s "$OBSERVER_HTTP/api/deploy/$DEPLOY_ID"
 
 ### Wait for Activation
 
-The bond takes effect at the next epoch boundary. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. `epoch-info` reads the epoch from the gRPC port of the observer and shows the progress through it. Repeat the commands until the status shows `ACTIVE: participating in consensus`.
+The bond takes effect at the next [epoch](/reference/glossary/#epoch) boundary. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. `epoch-info` reads the epoch from the observer's gRPC port and shows its progress. Repeat the commands until the status shows `ACTIVE: participating in consensus`. Then `active-validators` lists your public key.
 
 ```bash
 client epoch-info --grpc "$OBSERVER_GRPC"
@@ -194,7 +196,7 @@ client blocks --number 20 --http "$OBSERVER_HTTP"
 <CardGrid columns="2">
 <DocCard title="Troubleshooting" href="/help/troubleshooting/">What to check when the node does not start, find peers or activate</DocCard>
 <DocCard title="Node Image" href="/nodes/image/">Image selection, ports and configuration flags</DocCard>
-<DocCard title="Token Amounts" href="/reference/token-amounts/">Atomic units, decimals and vault addresses</DocCard>
+<DocCard title="Token Amounts" href="/reference/token-amounts/">Atomic units and decimals of the token</DocCard>
 </CardGrid>
 
 The [validator lifecycle guide](https://github.com/asi-alliance/asi-chain-client/blob/rust-dev/docs/guides/bonding-a-validator.md) of the client covers bonding, activation and withdrawal.

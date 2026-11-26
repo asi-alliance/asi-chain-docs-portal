@@ -3,7 +3,7 @@
 Start a shard of your own with one validator and a read-only node, then add a second validator. A private shard needs its own genesis, validator identities, bonds, token metadata, storage and network configuration. It does not reuse the bootstrap identity of an existing network.
 
 ::: info Terminal
-The commands are written for bash. On Linux and macOS run them in a terminal. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
+The commands are written for bash. On Linux run them in a terminal. On macOS run `bash` in a terminal first, because commands with `read -rsp` do not work in zsh. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
 :::
 
 Use the maintained [Rust source](https://github.com/asi-alliance/asi-chain-rust-node/tree/dev) and the published digest from the [node image](/nodes/image/#select-the-image) page.
@@ -164,11 +164,12 @@ client() {
 `PUBLIC_HOST` is the name of the container that you start for the new validator, so keep the container name `validator`. Then follow the steps of Run a Validator in this order.
 
 1. [Create the Validator Key](/nodes/validator/#create-the-validator-key).
-2. [Prepare the Data Volume](/nodes/validator/#prepare-the-data-volume).
-3. The block below instead of [Start the Node](/nodes/validator/#start-the-node).
-4. The two checks below instead of [Check Synchronization](/nodes/validator/#check-synchronization).
-5. [Fund the New Validator](#fund-the-new-validator) on this page.
-6. [Submit the Bond](/nodes/validator/#submit-the-bond) and [Wait for Activation](/nodes/validator/#wait-for-activation) on that page.
+2. [Convert the Key](/nodes/validator/#convert-the-key).
+3. [Prepare the Data Volume](/nodes/validator/#prepare-the-data-volume).
+4. The block below instead of [Start the Node](/nodes/validator/#start-the-node).
+5. The two checks below instead of [Check Synchronization](/nodes/validator/#check-synchronization).
+6. [Fund the New Validator](#fund-the-new-validator) on this page.
+7. [Submit the Bond](/nodes/validator/#submit-the-bond) and [Wait for Activation](/nodes/validator/#wait-for-activation) on that page.
 
 The block starts the validator in the Docker network of the shard. The container name resolves to a private address, so the node needs `--allow-private-addresses`, and there is no router to forward ports, so it needs `--no-upnp`. The shard already publishes host ports `40403` and `40453`, so the new node uses `40413` and publishes neither `40400` nor `40404`. Containers in `shard-net` reach each other without published ports.
 
