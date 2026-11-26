@@ -44,7 +44,6 @@ const sidebar = [
       { text: 'Node Image', link: '/nodes/image/' },
       { text: 'Run an Observer', link: '/nodes/observer/' },
       { text: 'Run a Validator', link: '/nodes/validator/' },
-      { text: 'Enroll a Validator', link: '/nodes/validator-enrollment/' },
       { text: 'Set Up a Private Shard', link: '/nodes/private-shard/' },
     ]
   },

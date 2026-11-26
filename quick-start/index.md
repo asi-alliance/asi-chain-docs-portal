@@ -26,9 +26,8 @@ Follow your transfers and deploys in the [explorer](/explorer/usage/).
 
 You want to take part in a network as an observer or a validator.
 
-- Start an [observer](/nodes/observer/) to follow the chain, or prepare a [validator](/nodes/validator/).
+- Start an [observer](/nodes/observer/) to follow the chain, or run a [validator](/nodes/validator/), which covers the key, the node, the funding and the bond.
 - Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.
-- Follow [validator enrollment](/nodes/validator-enrollment/) to bond a validator.
 - See [troubleshooting](/help/troubleshooting/) if a node does not connect or stays out of sync.
 
 DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the bootstrap identity before you connect a node.

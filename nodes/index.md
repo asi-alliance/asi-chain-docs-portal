@@ -1,13 +1,16 @@
 # Run a Node
 
-Take part in a network as an observer or a validator. Both roles run the same Rust node image. Use the guides with a Rust shard that you or your operator run.
+Take part in a shard as an observer or a validator, or start a shard of your own. All roles run the same Rust node image. The guides work with a shard that you or its operator run.
+
+::: info Terminal
+The commands are written for bash. On Linux and macOS run them in a terminal. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
+:::
 
 ## Choose a Role
 
 <CardGrid columns="2">
 <DocCard title="Run an Observer" href="/nodes/observer/">Follow the chain and answer read requests</DocCard>
-<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node that you later bond as a validator</DocCard>
-<DocCard title="Enroll a Validator" href="/nodes/validator-enrollment/">Create the validator key, fund the validator and submit the bond</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Create the key, start the node, fund it and submit the bond</DocCard>
 <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Start a shard with its own genesis, validators and network configuration</DocCard>
 </CardGrid>
 
