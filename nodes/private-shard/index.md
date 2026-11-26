@@ -139,7 +139,7 @@ If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-conn
 
 ### Add a Validator
 
-A second validator joins the running shard and becomes active at an epoch boundary. The steps are those of [Run a Validator](/nodes/validator/), with the values of this shard. First run the block of [Set the Variables](/nodes/validator/#set-the-variables) on that page as it is, without replacing the values in angle brackets. Then run the block below in the same terminal, and its values replace them. `BOOTSTRAP` is the variable from the previous step, so in a new terminal run the `BOOTSTRAP` line of [Start a Read-Only Node](#start-a-read-only-node) again first. The block also defines the `client` function again, this time with `--network shard-net`, because the shard and the read-only node are reachable by their container names only inside that network.
+A second validator joins the running shard and becomes active at an epoch boundary. The steps are those of [Run a Validator](/nodes/validator/), with the values of this shard. First run the block of [Set the Variables](/nodes/validator/#set-the-variables) on that page as it is, without replacing the values in angle brackets. Then run the block below in the same terminal. Its values override them. `BOOTSTRAP` is the variable from the previous step, so in a new terminal run the `BOOTSTRAP` line of [Start a Read-Only Node](#start-a-read-only-node) again first. The block also defines the `client` function again, this time with `--network shard-net`, because the shard and the read-only node are reachable by their container names only inside that network.
 
 ```bash
 NETWORK_ID='my-shard-net'
@@ -198,7 +198,7 @@ curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40413/api/ready
 curl -s http://127.0.0.1:40413/api/status
 ```
 
-The values to look for are the same as there. When the node is synchronized, fund it in the next step before you submit the bond.
+Look for the same values as in Check Synchronization. When the node is synchronized, fund it in the next step before you submit the bond.
 
 ### Fund the New Validator
 
@@ -223,7 +223,7 @@ For more validators, repeat Add a Validator with new container names, or see the
 ::: details Keep the Genesis Validator Key Off the Command Line
 Start a Single-Node Shard passes the hex key with `--validator-private-key`, and `docker inspect` shows it. To avoid that, create an encrypted key with `keygen` before the first start and let the node read it from the volume. The `keygen` command asks twice for a password, so run it in a terminal. It writes `f1r3fly.key`, `f1r3fly.pub.pem` and `f1r3fly.pub.hex` into the volume. The public key in `f1r3fly.pub.hex` is upper-case hex, and `bonds.txt` accepts it as it is.
 
-Run the block of [Start a Single-Node Shard](#start-a-single-node-shard) up to and including its `chown` command, then this block, and then the `docker run -d` command of that block. It replaces the `bonds.txt` file of the previous step.
+Run the block of [Start a Single-Node Shard](#start-a-single-node-shard) up to and including its `chown` command, then this block, and then the `docker run -d` command of that block. This block replaces the `bonds.txt` file of the previous step.
 
 ```bash
 docker run --rm -it --platform linux/amd64 \

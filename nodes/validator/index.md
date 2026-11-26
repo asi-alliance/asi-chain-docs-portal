@@ -1,6 +1,6 @@
 # Run a Validator
 
-Run a [validator node](/nodes/roles/) on ASI:Chain TestNet, then [bond](/reference/glossary/#bond) it and wait until it joins consensus. The commands carry the TestNet values, and a validator of another [shard](/reference/glossary/#shard) takes the values of its operator.
+Run a [validator node](/nodes/roles/) on ASI:Chain TestNet, then [bond](/reference/glossary/#bond) it and wait until it joins consensus. The commands carry the TestNet values, and a validator of another [shard](/reference/glossary/#shard) takes the values of its shard operator.
 
 ::: info Terminal
 The commands are written for bash. On Linux run them in a terminal. On macOS run `bash` in a terminal first, because commands with `read -rsp` do not work in zsh. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
@@ -8,7 +8,7 @@ The commands are written for bash. On Linux run them in a terminal. On macOS run
 
 ## Before You Start
 
-You need Docker and OpenSSL 3, and:
+You need Docker and OpenSSL 3, plus:
 
 - A public IP address or DNS name of this machine.
 - TCP ports `40400` and `40404` open to the internet.
@@ -173,7 +173,7 @@ curl -s "$OBSERVER_HTTP/api/deploy/$DEPLOY_ID"
 
 ### Wait for Activation
 
-The bond takes effect at the next [epoch](/reference/glossary/#epoch) boundary. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. Repeat the command until it shows `ACTIVE: participating in consensus` and a `PROPOSING` line with the blocks of your validator. If the status stays `NOT ACTIVE` after a boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
+The bond takes effect at the next [epoch](/reference/glossary/#epoch) boundary. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. Repeat the command until it shows `ACTIVE: participating in consensus` and `PROPOSING: blocks at …`. Before the first block of your validator it prints `NOT PROPOSING`. If the status stays `NOT ACTIVE` after the boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
 
 ```bash
 client validator-status --public-key "$VALIDATOR_PUBLIC_KEY" --http "$OBSERVER_HTTP"

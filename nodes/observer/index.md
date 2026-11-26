@@ -1,6 +1,6 @@
 # Run an Observer
 
-Run an [observer](/reference/glossary/#observer) on ASI:Chain TestNet. The observer follows the chain and answers read requests, but never creates blocks. The commands carry the TestNet values, and an observer of another [shard](/reference/glossary/#shard) takes the values of its operator.
+Run an [observer](/reference/glossary/#observer) on ASI:Chain TestNet. The observer follows the chain and answers read requests, but never creates blocks. The commands carry the TestNet values, and an observer of another [shard](/reference/glossary/#shard) takes the values of its shard operator.
 
 ::: info Terminal
 The commands are written for bash. On Linux run them in a terminal. On macOS run `bash` in a terminal first, because commands with `read -rsp` do not work in zsh. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
@@ -13,7 +13,7 @@ You need:
 - Docker.
 - A public IP address or DNS name of this machine.
 - TCP ports `40400` and `40404` open to the internet.
-- The CPU, memory and disk that a node needs, from the network operator.
+- The CPU, memory and disk sizes that the network operator recommends.
 
 ## Run the Observer
 
@@ -35,7 +35,7 @@ BOOTSTRAP_URI='rnode://4cadd9886def799dae30129419dd9fbd15da5dad@bootstrap.p2p.te
 
 ### Start the Observer
 
-This block creates the data volume, gives the node access to it and starts the node. The token flags repeat the token settings of the shard. If the shard nodes reach this machine at a private address, add `--allow-private-addresses` to the `run` command. If the shard runs in Docker on this machine, use the read-only node of [Set Up a Private Shard](/nodes/private-shard/) instead.
+This block creates the data volume, gives the node access to it and starts the node. The token flags repeat the token settings of the shard. If the other nodes of the shard reach this machine at a private address, add `--allow-private-addresses` to the `run` command. If the shard runs in Docker on this machine, use the read-only node of [Set Up a Private Shard](/nodes/private-shard/) instead.
 
 ```bash
 docker volume create observer-data
@@ -59,7 +59,7 @@ curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
 curl -s http://127.0.0.1:40403/api/status
 ```
 
-`/api/ready` returns `{"ready":true} HTTP 200`. The observer works when `/api/status` shows `"isReadOnly":true`, `"isReady":true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next. If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-connection).
+`/api/ready` returns `{"ready":true} HTTP 200`. The observer is synchronized when `/api/status` shows `"isReadOnly":true`, `"isReady":true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next. If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-connection).
 
 ### Manage the Node
 
@@ -70,7 +70,7 @@ docker logs --tail 100 observer
 docker restart observer
 ```
 
-To move to a new image, set `NODE_IMAGE` to the new digest from the operator, remove the container with `docker rm -f observer` and run the `docker run -d` command of [Start the Observer](#start-the-observer) again. Keep the volume `observer-data`. It holds the node identity.
+To move to a new image, set `NODE_IMAGE` to the new digest from the network operator, remove the container with `docker rm -f observer` and run the `docker run -d` command of [Start the Observer](#start-the-observer) again. Keep the volume `observer-data`. It holds the node identity.
 
 </Steps>
 
