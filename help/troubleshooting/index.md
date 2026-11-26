@@ -28,14 +28,6 @@ A transfer can fail for several reasons.
 - The recipient address is not a valid ASI address. Addresses start with `1111`.
 - The result is pending. Keep the original deploy ID and check it in the explorer before you send again. A timeout is not proof that the payment failed.
 
-## Set the Container Name
-
-The node commands below use the container name from the `docker run --name` option of [Run an Observer](/nodes/observer/) or [Run a Validator](/nodes/validator/):
-
-```bash
-NODE=observer
-```
-
 ## Image Pull or Startup Fails
 
 ### Requirements
@@ -44,9 +36,10 @@ Use a tag or digest from [Container Images](/reference/container-images/) and pa
 
 ### Inspect the Container
 
-Inspect your own container:
+Inspect your own container. Replace `observer` with the name that you gave your container in `docker run --name`:
 
 ```bash
+NODE=observer  # the name of your container
 docker inspect "$NODE" --format '{{.Config.Image}}'
 docker port "$NODE"
 docker logs --tail 100 "$NODE"
@@ -99,6 +92,7 @@ TCP connectivity alone does not establish the correct shard, synchronization or 
 Compare the endpoint with the host port mapping and the gateway base path. HTTP may use a different host port from the container default `40403`.
 
 ```bash
+NODE=observer  # the name of your container
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
 docker inspect "$NODE" --format '{{.State.Health.Status}}'
 ```
@@ -122,6 +116,39 @@ Compare peer progress, readiness and canonical finalization separately.
 ### Recovery
 
 Do not delete the data directory of a node that peers already know. The node identity is the TLS certificate in that directory, so a new directory produces a new identity and a full re-join, while peers keep the old identity in their routing tables. Back up state and private inputs before any recovery, and do not run Docker-wide prune commands as a troubleshooting step.
+
+## Bond Does Not Activate
+
+### Wait for the Epoch
+
+After a successful bond, `validator-status` reports `BONDED` and `NOT ACTIVE`. A bond becomes active only at the next epoch boundary, so this is the normal state between the bond and the boundary. The epoch is 10,000 blocks long unless the shard was started with another `--epoch-length`.
+
+The commands use the variables and the `client` function from [Run a Validator](/nodes/validator/#set-the-variables). To estimate the wait, read the blocks left in the epoch and the block rate:
+
+```bash
+curl -s "$OBSERVER_HTTP/api/epoch"
+curl -s "$OBSERVER_HTTP/api/status" | grep -o '"lastFinalizedBlockNumber":[0-9-]*'
+sleep 60
+curl -s "$OBSERVER_HTTP/api/status" | grep -o '"lastFinalizedBlockNumber":[0-9-]*'
+```
+
+Divide `blocksUntilNextEpoch` by the number of blocks that finalized in the minute to get the wait in minutes. In a shard with a single validator a block takes about 6 seconds, so a default epoch lasts about 16 hours. `client epoch-info --grpc "$OBSERVER_GRPC"` prints the same progress. See [Wait for Activation](/nodes/validator/#wait-for-activation).
+
+### Check the Bond Deploy
+
+If the status is `NOT ACTIVE` after the boundary, or the bond command timed out, look at the deploy before you send anything again. A timeout says nothing about the cause.
+
+```bash
+client deploy-status --sig <deploy signature> --http "$OBSERVER_HTTP"
+curl -s "$OBSERVER_HTTP/api/deploy/<deploy ID>"
+```
+
+- `Deploy payment failed: Insufficient funds` in `systemDeployError` means the vault could not pay for the stake and for `phlo_limit * phlo_price`, which is 5,000,000,000 by default. The deploy is spent and is not retried. Top up the vault as in [Fund the Validator](/nodes/validator/#fund-the-validator) and bond again.
+- A block hash and no error mean that the deploy is fine and its verdict is not written yet. Run `deploy-status` again and do not bond again.
+- No block at all means that the deploy went to a node that cannot include it, for example the joining node, a read-only node or a node that does not propose blocks. Send the bond to the gRPC and HTTP addresses of a bonded validator, as in [Submit the Bond](/nodes/validator/#submit-the-bond).
+- `already bonded` means that the key is in the bond set. Do not repeat the bond. Wait for the boundary.
+
+If the bond is recorded and the validator stays `NOT ACTIVE` after the boundary, the active set of the shard may be full. Ask the operator.
 
 ## Report a Problem
 

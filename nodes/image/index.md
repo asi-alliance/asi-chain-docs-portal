@@ -17,7 +17,7 @@ sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6
 It is published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The [catalog](/reference/container-images/) lists the images of the other components. A tag does not upgrade a running shard.
 
 ```bash
-NODE_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6
+NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6'
 docker pull --platform linux/amd64 "$NODE_IMAGE"
 docker image inspect "$NODE_IMAGE" --format '{{json .Config.Labels}}'
 docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" --version
@@ -76,49 +76,7 @@ Host mappings are independent of container defaults. Binding `40403` publicly ex
 
 ## Run a Node
 
-<Steps>
-
-### Start the Node
-
-A new Docker volume is owned by `root`, but the node runs as `daemon`. Without the `chown` below the container exits with code 1 and `The data dir must be a directory and have read and write permissions: /var/lib/rnode`.
-
-```bash
-docker volume create node-data
-docker run --rm --platform linux/amd64 -u root --entrypoint sh \
-  -v node-data:/var/lib/rnode "$NODE_IMAGE" -c 'chown daemon:daemon /var/lib/rnode'
-
-docker run -d --name my-node --platform linux/amd64 \
-  -v node-data:/var/lib/rnode \
-  -p 40400:40400 -p 40403:40403 -p 40404:40404 \
-  "$NODE_IMAGE" run \
-  --network-id <network-id> \
-  --shard-name <shard-name> \
-  --native-token-name ASI \
-  --native-token-symbol ASI \
-  --native-token-decimals 18 \
-  --host <public-address> \
-  --bootstrap '<bootstrap-uri>'
-```
-
-Replace `my-node` with your own container name in every later command.
-
-### Check the Node
-
-```bash
-docker inspect my-node --format '{{.State.Health.Status}}'
-curl -s http://localhost:40403/api/ready
-curl -s http://localhost:40403/api/status
-```
-
-`/api/ready` answers `{"ready":true}` with HTTP 200 once the node is ready and HTTP 503 with `{"ready":false}` before that. In `/api/status`, check `networkId`, `peers`, `isReady` and `lastFinalizedBlockNumber`. If `peers` stays at 0, check `--host` in [Network Settings](#network-settings) and see [Troubleshooting](/help/troubleshooting/#no-peer-connection). The image healthcheck always probes port `40403` inside the container. If you change the HTTP port with `--api-port-http`, the container reports `unhealthy` while the node works.
-
-</Steps>
-
-For a network of your own, add `--standalone` and a genesis directory as described in [private shard](/nodes/private-shard/).
-
-::: warning Restart Needs the Bootstrap
-After a restart the node reconnects only through `--bootstrap`. If the bootstrap is unreachable, the node waits at `Waiting for first connection...`.
-:::
+The commands that start a node are on the pages for each role. [Run an Observer](/nodes/observer/) starts a read-only node in an existing shard, [Run a Validator](/nodes/validator/) joins a shard as a validator, and [Set Up a Private Shard](/nodes/private-shard/) creates a shard of your own with `--standalone` and a genesis directory.
 
 ## Becoming a Validator
 
