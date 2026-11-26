@@ -325,6 +325,27 @@ html:not(#a) .vp-doc img.asi-img-wait {
   }
 }
 
+/* 11. Glossary term card. It answers a hover or a click, so it rises 4 px into place in 120 ms and fades
+   out in 80 ms. Placed above the term, it comes down instead. */
+.asi-term-card-enter-active {
+  transition:
+    opacity var(--asi-dur-1) var(--asi-ease-out),
+    transform var(--asi-dur-1) var(--asi-ease-out);
+}
+.asi-term-card-leave-active {
+  transition: opacity 80ms ease-in;
+}
+.asi-term-card-enter-from {
+  opacity: 0;
+  transform: translateY(4px);
+}
+.asi-term-card-enter-from.is-above {
+  transform: translateY(-4px);
+}
+.asi-term-card-leave-to {
+  opacity: 0;
+}
+
 /* With reduced motion set in the operating system, every rule above becomes an instant change. The
    durations are 0.01 ms and not 0, so transitionend and animationend still fire for scripts that wait
    for them. */

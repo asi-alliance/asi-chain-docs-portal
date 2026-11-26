@@ -7,6 +7,7 @@ import Diagram from "../../components/Diagram.vue";
 import NotFound from "../../components/NotFound.vue";
 import SectionDirectory from "../../components/SectionDirectory.vue";
 import LinkMenu from "../../components/LinkMenu.vue";
+import GlossaryTerms from "../../components/GlossaryTerms.vue";
 import type { Theme } from "vitepress";
 import { h } from "vue";
 import "./style.css";
@@ -26,6 +27,8 @@ export default {
             "layout-top": () => h(FeedbackForm),
             // The default 404 has a quote and a button, and no sidebar to find a section in.
             "not-found": () => h(NotFound),
+            // Definitions of glossary terms open in a card next to the term.
+            "layout-bottom": () => h(GlossaryTerms),
         });
     },
     enhanceApp(ctx) {
