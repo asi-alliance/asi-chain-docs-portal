@@ -434,6 +434,23 @@
   border-radius: 8px;
 }
 
+/* A terminal screenshot holds a 90-column session in 680 px. Below 640 px the column is so narrow that the scaled
+   text would shrink to about 5 px, so the image keeps its width there and scrolls sideways like a code block. */
+.vp-doc p:has(> img.console) {
+  overflow-x: auto;
+}
+
+.vp-doc img.console {
+  display: block;
+}
+
+@media (max-width: 639px) {
+  .vp-doc img.console {
+    max-width: none;
+    width: 680px;
+  }
+}
+
 /* A screenshot of an app with a light and a dark theme comes as a pair, and the page shows the image that
    matches the portal theme. The hidden image has no box, so with loading="lazy" the browser does not fetch it. */
 html:not(.dark) .vp-doc img.dark-only,

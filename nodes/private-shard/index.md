@@ -52,6 +52,8 @@ docker run --rm --platform linux/amd64 --network none --read-only --cap-drop ALL
 client generate-vault-address --private-key-file /keys/private_key.hex
 ```
 
+![Terminal output of generate-key-pair and generate-vault-address with the saved key files, a public key that starts with 04 and a vault address that starts with 1111.](/images/nodes/shard-genesis-key.webp){.console width=680 height=275}
+
 `generate-key-pair --save` writes `private_key.hex` and `public_key.hex` into `$KEY_DIR`. The public key has 130 hex characters and starts with `04`. The vault address starts with `1111`.
 
 ::: danger Protect the Private Key
@@ -70,6 +72,8 @@ echo "$(client generate-vault-address --private-key-file /keys/private_key.hex \
   | sed -n 's/^ *Vault address: //p'),1000000000000000000000000" > genesis/wallets.txt
 cat genesis/bonds.txt genesis/wallets.txt
 ```
+
+![Terminal output of the block. cat prints the bonds.txt line with the public key and the stake 1000000, then the wallets.txt line with the vault address and the balance.](/images/nodes/shard-genesis-files.webp){.console width=680 height=215}
 
 Keep the key directory. You need the same key later to send funds from the genesis wallet.
 
@@ -105,15 +109,18 @@ The `chown` command is required because a new Docker volume is owned by `root` a
 A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
 :::
 
-Half a minute after the container starts, `curl -s http://localhost:40403/api/status` will report the values you chose. The line below shows selected fields of the answer. The number in `lastFinalizedBlockNumber` differs on every run and keeps growing.
+Half a minute after the container starts, the command below will report the values you chose. It uses `jq` to print only the fields to check, and `address` is the value you need in the next step.
 
-```text
-"networkId":"my-shard-net","shardId":"my-shard","nativeTokenSymbol":"ASI","nativeTokenDecimals":18,"isValidator":true,"isReady":true,"lastFinalizedBlockNumber":2
+```bash
+curl -s http://localhost:40403/api/status \
+  | jq '{address, networkId, shardId, nativeTokenDecimals, isReady}'
 ```
+
+![Terminal output of curl and jq with the status of the single-node shard. It shows the node address, networkId my-shard-net, shardId my-shard, 18 decimals and isReady true.](/images/nodes/shard-status.webp){.console width=680 height=255}
 
 ### Start a Read-Only Node
 
-Balance queries run as exploratory deploys, and a validator refuses them with `HTTP 400 (readonly_node_required)`. Wallets, the SDK and the [Wallet CLI](/cli/usage/) read balances from a read-only node, so start one next to the validator. This is the observer that [Run an Observer](/nodes/observer/) describes, here placed in a Docker network on this machine. When the validator reports `"isReady":true`, copy the `address` field from its `/api/status`. It has the form `rnode://<node-id>@my-shard?protocol=40400&discovery=40404`.
+Balance queries run as exploratory deploys, and a validator refuses them with `HTTP 400 (readonly_node_required)`. Wallets, the SDK and the [Wallet CLI](/cli/usage/) read balances from a read-only node, so start one next to the validator. This is the observer that [Run an Observer](/nodes/observer/) describes, here placed in a Docker network on this machine. When the validator reports `"isReady": true`, copy the `address` field from its `/api/status`. It has the form `rnode://<node-id>@my-shard?protocol=40400&discovery=40404`.
 
 Replace each value in angle brackets with the value from your shard.
 
@@ -133,7 +140,16 @@ docker run -d --name my-shard-obs --network shard-net --platform linux/amd64 \
   --bootstrap "$BOOTSTRAP"
 ```
 
-Half a minute after the container starts, `curl -s http://localhost:40453/api/status` will report `"isReadOnly":true`, `"peers":1` and the finalized block height of the validator. Give the read-only node the same network ID, shard name and token flags as the validator. A node restarted with other token values stops.
+Half a minute after the container starts, the command below will report `"isReadOnly": true`, `"peers": 1` and the finalized block height of the validator.
+
+```bash
+curl -s http://localhost:40453/api/status \
+  | jq '{isReadOnly, peers, lastFinalizedBlockNumber}'
+```
+
+![Terminal output of curl and jq with the status of the read-only node. It shows isReadOnly true, 1 peer and the last finalized block.](/images/nodes/shard-readonly-status.webp){.console width=680 height=195}
+
+Give the read-only node the same network ID, shard name and token flags as the validator. A node restarted with other token values stops.
 
 If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-connection).
 
@@ -195,7 +211,8 @@ These two checks replace the ones on Run a Validator. They use port `40413`.
 
 ```bash
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40413/api/ready
-curl -s http://127.0.0.1:40413/api/status
+curl -s http://127.0.0.1:40413/api/status \
+  | jq '{isReady, peers, lastFinalizedBlockNumber}'
 ```
 
 Look for the same values as in Check Synchronization. When the node is synchronized, fund it in the next step before you submit the bond.
@@ -213,6 +230,8 @@ client transfer --to-address "$VALIDATOR_ADDRESS" --amount 1000000000000 \
 KEY_DIR="$HOME/validator-keys"
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
 ```
+
+![Terminal output of the block. The transfer from the genesis wallet prints its deploy ID and block hash and ends with Transfer complete, and wallet-balance shows 1000000000000 for the new validator.](/images/nodes/shard-fund.webp){.console width=680 height=495}
 
 The balance shows `1000000000000`. Go back to [Submit the Bond](/nodes/validator/#submit-the-bond) and finish with [Wait for Activation](/nodes/validator/#wait-for-activation). With the epoch flags from the first node, the validator becomes `ACTIVE` at the nearest epoch boundary, which is no later than 20 blocks after the bond.
 

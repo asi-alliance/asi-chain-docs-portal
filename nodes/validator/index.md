@@ -8,7 +8,7 @@ The commands are written for bash. On Linux run them in a terminal. On macOS run
 
 ## Before You Start
 
-You need Docker and OpenSSL 3, plus:
+You need Docker, OpenSSL 3 and jq, plus:
 
 - A public IP address or DNS name of this machine.
 - TCP ports `40400` and `40404` open to the internet.
@@ -17,7 +17,7 @@ You need Docker and OpenSSL 3, plus:
 
 ## Run the Validator
 
-Run all steps in one bash terminal. In a new terminal, run the block of Set the Variables and the second block of Create the Validator Key again.
+Run all steps in one bash terminal. In a new terminal, run the block of Set the Variables and the second block of Create the Validator Key again. The terminal screenshots come from a [private shard](/nodes/private-shard/), so the network names, amounts and block numbers in them differ from TestNet.
 
 <Steps>
 
@@ -66,10 +66,12 @@ docker run --rm --platform linux/amd64 --network none --read-only --cap-drop ALL
 
 ```bash
 VALIDATOR_PUBLIC_KEY="$(cat "$KEY_DIR/public_key.hex")"
-VALIDATOR_ADDRESS="$(client generate-vault-address --private-key-file /keys/private_key.hex \
-  | sed -n 's/^ *Vault address: //p')"
+VALIDATOR_ADDRESS="$(client generate-vault-address \
+  --private-key-file /keys/private_key.hex | sed -n 's/^ *Vault address: //p')"
 echo "$VALIDATOR_ADDRESS"
 ```
+
+![Terminal output of the two blocks. generate-key-pair saves private_key.hex and public_key.hex in /keys, and echo prints a vault address that starts with 1111.](/images/nodes/validator-key.webp){.console width=680 height=295}
 
 ::: danger Protect the Private Key
 `private_key.hex` is the signing key of the validator and holds its funds. Keep it with mode 0600 and save a protected backup. Never put it in a command argument, a container image, a log or Git.
@@ -81,13 +83,16 @@ Convert `private_key.hex` into the encrypted file `f1r3fly.key` that the node re
 
 ```bash
 umask 077
-printf 'asn1=SEQUENCE:ec_key\n[ec_key]\nversion=INTEGER:1\nprivateKey=FORMAT:HEX,OCTETSTRING:%s\nparameters=EXPLICIT:0,OID:secp256k1\n' \
-  "$(tr -d '\n' < "$KEY_DIR/private_key.hex")" > "$KEY_DIR/ec.conf"
+printf '%s\n' 'asn1=SEQUENCE:ec_key' '[ec_key]' 'version=INTEGER:1' \
+  "privateKey=FORMAT:HEX,OCTETSTRING:$(tr -d '\n' < "$KEY_DIR/private_key.hex")" \
+  'parameters=EXPLICIT:0,OID:secp256k1' > "$KEY_DIR/ec.conf"
 openssl asn1parse -genconf "$KEY_DIR/ec.conf" -noout -out "$KEY_DIR/key.der"
 openssl ec -inform DER -in "$KEY_DIR/key.der" -out "$KEY_DIR/key.pem"
 openssl pkcs8 -topk8 -v2 aes-256-cbc -in "$KEY_DIR/key.pem" -out "$KEY_DIR/f1r3fly.key"
 rm -f "$KEY_DIR/ec.conf" "$KEY_DIR/key.der" "$KEY_DIR/key.pem"
 ```
+
+![Terminal output of the conversion. openssl ec prints read EC key and writing EC key, and openssl pkcs8 asks for the password twice without showing it.](/images/nodes/validator-convert.webp){.console width=680 height=295}
 
 The last line removes the temporary files that hold the plain key. `$KEY_DIR` now holds `f1r3fly.key`.
 
@@ -136,10 +141,13 @@ Ask the node for its state and repeat until it is synchronized.
 
 ```bash
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
-curl -s http://127.0.0.1:40403/api/status
+curl -s http://127.0.0.1:40403/api/status \
+  | jq '{isReady, peers, lastFinalizedBlockNumber}'
 ```
 
-`/api/ready` returns `{"ready":true} HTTP 200`. The node is synchronized when `/api/status` shows `"isReady":true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next.
+![Terminal output of the two checks. The ready route answers HTTP 200, and jq prints isReady true, the number of peers and the last finalized block.](/images/nodes/validator-sync.webp){.console width=680 height=235}
+
+`/api/ready` returns `{"ready":true} HTTP 200`. The node is synchronized when `/api/status` shows `"isReady": true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next.
 
 ### Fund the Validator
 
@@ -148,6 +156,8 @@ Request test ASI from the [TestNet faucet](https://faucet.testnet.asichain.io/) 
 ```bash
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
 ```
+
+![Terminal output of wallet-balance. The line Balance for the validator address ends with the balance in atomic units.](/images/nodes/validator-balance.webp){.console width=680 height=215}
 
 The output has the form `Balance for <address>: <atomic units>`.
 
@@ -163,6 +173,8 @@ client bond-validator --stake "$STAKE_ATOMIC_UNITS" \
   --phlo-price "$PHLO_PRICE" --max-wait 300
 ```
 
+![Terminal output of bond-validator with the stake, the phlo limit, the deploy ID, the block hash, the total time and Bonding complete.](/images/nodes/validator-bond.webp){.console width=680 height=295}
+
 Replace the value in single quotes with the deploy ID and check the deploy. The bond is in the chain when `deploy-status` shows `State: Finalized` and `Rejection count: 0`.
 
 ```bash
@@ -171,6 +183,8 @@ client deploy-status --sig "$DEPLOY_ID" --http "$OBSERVER_HTTP"
 curl -s "$OBSERVER_HTTP/api/deploy/$DEPLOY_ID"
 ```
 
+![Terminal output of deploy-status for the bond with State Finalized and Rejection count 0.](/images/nodes/validator-deploy-status.webp){.console width=680 height=275}
+
 ### Wait for Activation
 
 The bond takes effect at the next [epoch](/reference/glossary/#epoch) boundary. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. Repeat the command until it shows `ACTIVE: participating in consensus` and `PROPOSING: blocks at …`. Before the first block of your validator it prints `NOT PROPOSING`. If the status stays `NOT ACTIVE` after the boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
@@ -178,6 +192,8 @@ The bond takes effect at the next [epoch](/reference/glossary/#epoch) boundary. 
 ```bash
 client validator-status --public-key "$VALIDATOR_PUBLIC_KEY" --http "$OBSERVER_HTTP"
 ```
+
+![Terminal output of validator-status after the epoch boundary with the lines BONDED, ACTIVE: participating in consensus and PROPOSING.](/images/nodes/validator-status-active.webp){.console width=680 height=295}
 
 </Steps>
 

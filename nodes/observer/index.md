@@ -10,14 +10,14 @@ The commands are written for bash. On Linux run them in a terminal. On macOS run
 
 You need:
 
-- Docker.
+- Docker and jq.
 - A public IP address or DNS name of this machine.
 - TCP ports `40400` and `40404` open to the internet.
 - The CPU, memory and disk sizes that the network operator recommends.
 
 ## Run the Observer
 
-Run all steps in one bash terminal. In a new terminal, run the block of Set the Variables again.
+Run all steps in one bash terminal. In a new terminal, run the block of Set the Variables again. The terminal screenshot comes from a read-only node of a [private shard](/nodes/private-shard/), so the network names and block numbers in it differ from TestNet.
 
 <Steps>
 
@@ -56,10 +56,13 @@ Ask the node for its state and repeat until it is ready.
 
 ```bash
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
-curl -s http://127.0.0.1:40403/api/status
+curl -s http://127.0.0.1:40403/api/status \
+  | jq '{isReadOnly, isReady, peers, lastFinalizedBlockNumber}'
 ```
 
-`/api/ready` returns `{"ready":true} HTTP 200`. The observer is synchronized when `/api/status` shows `"isReadOnly":true`, `"isReady":true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next. If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-connection).
+![Terminal output of the two checks. The ready route answers HTTP 200, and jq prints isReadOnly true, isReady true, the number of peers and the last finalized block.](/images/nodes/observer-check.webp){.console width=680 height=255}
+
+`/api/ready` returns `{"ready":true} HTTP 200`. The observer is synchronized when `/api/status` shows `"isReadOnly": true`, `"isReady": true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next. If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-connection).
 
 ### Manage the Node
 
