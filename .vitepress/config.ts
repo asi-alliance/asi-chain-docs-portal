@@ -150,6 +150,7 @@ const sidebar = [
       { text: 'Container Images', link: '/reference/container-images/' },
       { text: 'Token Amounts', link: '/reference/token-amounts/' },
       { text: 'Useful Links', link: '/reference/links/' },
+      { text: 'Glossary', link: '/reference/glossary/' },
     ]
   },
   {
