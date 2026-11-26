@@ -30,7 +30,7 @@ You want to take part in a network as an observer or a validator.
 - Look up the image versions and their source revisions in the [container images](/reference/container-images/) catalog.
 - See [troubleshooting](/help/troubleshooting/) if a node does not connect or stays out of sync.
 
-DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the bootstrap identity before you connect a node.
+DevNet services are listed on [Network Endpoints](/reference/endpoints/). Ask the shard operator for the bootstrap identity before you connect a node.
 
 ## Build on ASI:Chain
 

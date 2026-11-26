@@ -1,6 +1,6 @@
 # Run a Validator
 
-Run a validator on an existing shard. This page creates the validator key, starts the node and waits for it to synchronize, funds the validator, submits the bond and waits for the activation. Every step uses the values from the shard operator, so read it from top to bottom without leaving it.
+Run a validator on an existing shard. This page creates the validator key, starts the node and waits for it to synchronize, funds the validator, submits the bond and waits for activation. Every step uses the values from the shard operator, so read the page from top to bottom without skipping steps.
 
 ::: info Terminal
 The commands are written for bash. On Linux and macOS run them in a terminal. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
@@ -8,18 +8,18 @@ The commands are written for bash. On Linux and macOS run them in a terminal. On
 
 ## Before You Start
 
-You need Docker and OpenSSL 3 on the machine. Ask the shard operator for the following.
+You need Docker and OpenSSL 3 on the machine. Ask the operator for the following.
 
-- The exact node image and the client image that the shard accepts. The commands below use the digests that the [image catalog](/reference/container-images/) lists, and the operator confirms that this node and client pair works with the shard. Both images exist for `linux/amd64` only. [Node Image](/nodes/image/) shows how to pull the node image and read its labels.
+- The node image and the client image that the shard accepts. The commands below use the digests that the [image catalog](/reference/container-images/) lists, and the operator confirms that this node and client pair works with the shard. Both images are published for `linux/amd64` only. [Node Image](/nodes/image/) shows how to pull the node image and read its labels.
 - The bootstrap URI, which looks like `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. The node ID is the `address` field of `GET /api/status` on the bootstrap node.
 - The `networkId` of the shard. The `--network-id` value must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node that joins with another network ID exits with a `Wrong network id` error.
 - The shard ID, which is the `shardId` field of `GET /api/status` and the node option `casper.shard-name`. The `--shard-name` value must equal it. The default is `root`.
-- The native-token settings of the shard. They are fixed at genesis, and a node restarted with other values stops. The commands below use `ASI`, `ASI` and 18 decimals.
+- The native-token settings of the shard. They are fixed at genesis, and a node restarted with other values stops. The commands below use the name `ASI`, the symbol `ASI` and 18 decimals.
 - The gRPC and HTTP URLs of a bonded validator, in the form `http://host:40401` and `http://host:40403`. The bond goes to this node.
 - The gRPC and HTTP URLs of a read-only observer of the shard, in the same form. The observer answers all status and result queries.
-- The minimum stake and the stake you should bond. The shard sets the minimum with the node option `--bond-minimum` at genesis, and a stake below it is refused. The node reports the decimals of the shard token as `nativeTokenDecimals` in `/api/status`, and `STAKE_BASE_UNITS` depends on it. Amounts are integers in base units of the token. With 18 decimals one ASI is `1000000000000000000` base units, see [Token Amounts](/reference/token-amounts/).
-- The capacity of the active validator set. A full active set can prevent the activation.
-- Ask the operator how much CPU, memory and disk space a node of this network needs. Ask also for the data retention requirements.
+- The minimum stake and the stake to bond. The shard sets the minimum with the node option `--bond-minimum` at genesis, and a stake below it is refused. The node reports the decimals of the shard token as `nativeTokenDecimals` in `/api/status`, and `STAKE_ATOMIC_UNITS` depends on it. Amounts are integers in atomic units of the token. With 18 decimals one ASI is `1000000000000000000` atomic units (see [Token Amounts](/reference/token-amounts/)).
+- The capacity of the active validator set. A full active set can prevent activation.
+- The CPU, memory and disk space that a node of this network needs, and its data retention requirements.
 - How the operator funds a new validator, and how to send the vault address to the operator.
 
 A validator that is listed in the initial genesis bonds joins through the genesis ceremony of the network and does not need the bond transaction from this page.
@@ -43,7 +43,7 @@ BONDED_VALIDATOR_GRPC='<gRPC URL of a bonded validator>'
 BONDED_VALIDATOR_HTTP='<HTTP URL of a bonded validator>'
 OBSERVER_GRPC='<gRPC URL of the observer>'
 OBSERVER_HTTP='<HTTP URL of the observer>'
-STAKE_BASE_UNITS='<stake in base units>'
+STAKE_ATOMIC_UNITS='<stake in atomic units>'
 KEY_DIR="$HOME/validator-keys"
 
 client() {
@@ -57,23 +57,24 @@ docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 docker pull --platform linux/amd64 "$NODE_IMAGE"
 ```
 
-Keep this terminal open until the end of the page. In a new terminal run the block again, because the variables and the `client` function exist only in the terminal that defined them. After this block, also run the two lines from [Create the Validator Key](#create-the-validator-key) that set `VALIDATOR_PUBLIC_KEY` and `VALIDATOR_ADDRESS`, because the keys exist by then. The client image holds the ASI client built from the `rust-dev` branch of [asi-chain-client](https://github.com/asi-alliance/asi-chain-client/tree/rust-dev).
+Keep this terminal open until the end of the page. In a new terminal, run the block again, because the variables and the `client` function exist only in the terminal that defined them. Once the keys exist, also run the two lines from [Create the Validator Key](#create-the-validator-key) that set `VALIDATOR_PUBLIC_KEY` and `VALIDATOR_ADDRESS`. The client image holds the ASI client built from the `rust-dev` branch of [asi-chain-client](https://github.com/asi-alliance/asi-chain-client/tree/rust-dev).
 
 The client has a `--ca-cert` option for private HTTPS endpoints of the operator that use their own CA. Mount the CA file read-only. Inside the client container `localhost` means the container itself, not your machine. To run the commands against a Docker network of your own, add `--network <name>` to the `client` function and to the `docker run` of the node, and use container names in the URLs. [Set Up a Private Shard](/nodes/private-shard/#add-a-validator) does this for a shard on the same machine.
 
 ### Create the Validator Key
 
-The client saves the key as a hex file, and the node reads only an encrypted PEM file. So you create the key with the client first and convert it afterwards. The directory must not exist yet, so that a key you already hold is not overwritten. If it exists, set `KEY_DIR` to another path.
+The client saves the key as a hex file, and the node reads only an encrypted PEM file. Create the key with the client first and convert it afterwards. The directory must not exist yet, so that a key you already hold is not overwritten. If it exists, set `KEY_DIR` to another path.
 
 ```bash
-mkdir -m 700 "$KEY_DIR" && \ndocker run --rm --platform linux/amd64 --network none --read-only --cap-drop ALL \
+mkdir -m 700 "$KEY_DIR" && \
+docker run --rm --platform linux/amd64 --network none --read-only --cap-drop ALL \
   --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
   --mount "type=bind,src=$KEY_DIR,dst=/keys" \
   "$CLIENT_IMAGE" generate-key-pair --save --output-dir /keys
 ```
 
 ::: danger Protect the Private Key
-`private_key.hex` is the validator's signing key and holds its funds. Keep it owned by the signing user with mode 0600 and save a protected backup. Never place it in a command argument, in documentation, in a container image, in logs or in Git, and never publish the TLS files of the node either, and do not run the same validator identity on two machines. The signing identity and the P2P TLS identity of the node are different keys.
+`private_key.hex` is the validator's signing key and holds its funds. Keep it owned by the signing user with mode 0600 and save a protected backup. Never place it in a command argument, in documentation, in a container image, in logs or in Git. Never publish the TLS files of the node, and do not run the same validator identity on two machines. The signing identity and the P2P TLS identity of the node are different keys.
 :::
 
 `generate-key-pair --save` writes `public_key.hex` as 130 hex characters (uncompressed). The vault address starts with `1111`. The later steps use both, so keep them in variables:
@@ -85,7 +86,7 @@ VALIDATOR_ADDRESS="$(client generate-vault-address --private-key-file /keys/priv
 echo "$VALIDATOR_ADDRESS"
 ```
 
-Now convert `private_key.hex` to an encrypted PEM file with OpenSSL 3. `openssl pkcs8` asks twice for the password of the new file. Choose one, because you type the same password when the node starts. The `rm -f` line removes the temporary files that hold the plain key. The public key does not change.
+Now convert `private_key.hex` to an encrypted PEM file with OpenSSL 3. `openssl pkcs8` asks twice for the password of the new file. Choose a password, because you type the same one when the node starts. The `rm -f` line removes the temporary files that hold the plain key. The public key does not change.
 
 ```bash
 umask 077
@@ -99,12 +100,13 @@ rm -f "$KEY_DIR/ec.conf" "$KEY_DIR/key.der" "$KEY_DIR/key.pem"
 
 ### Prepare the Data Volume
 
-A new Docker volume is owned by `root`, but the image runs as `daemon` (uid 1). Change the owner before the first start, otherwise the node exits with `The data dir must be a directory and have read and write permissions`. The second command copies the encrypted key into the volume.
+A new Docker volume is owned by `root`, but the image runs as `daemon` (uid 1). Change the owner before the first start, otherwise the node exits with `The data dir must be a directory and have read and write permissions`. The last command copies the encrypted key into the volume. It runs only if `f1r3fly.key` exists, because otherwise Docker would create a directory of that name.
 
 ```bash
 docker volume create validator-data
 docker run --rm -u root --platform linux/amd64 --entrypoint chown \
   -v validator-data:/var/lib/rnode "$NODE_IMAGE" daemon:daemon /var/lib/rnode
+test -f "$KEY_DIR/f1r3fly.key" && \
 docker run --rm -u root --platform linux/amd64 --entrypoint install \
   -v validator-data:/var/lib/rnode \
   -v "$KEY_DIR/f1r3fly.key:/tmp/f1r3fly.key:ro" \
@@ -138,7 +140,7 @@ docker run -d --name validator --platform linux/amd64 \
 
 The node also accepts the hex key itself in the hidden option `--validator-private-key`, but then the key is visible in `docker inspect` and in the process list, so use the PEM file. The node does not check at start that the public key belongs to the private key, so both must come from the same key pair. For the errors when the node cannot read the key, see [Troubleshooting](/help/troubleshooting/#image-pull-or-startup-fails).
 
-Joining an existing shard does not use `--genesis-validator` or `--ceremony-master-mode`, so leave them out. A development `bonds.txt` is not an enrollment procedure. Add other flags only when you need them.
+Joining an existing shard does not use `--genesis-validator` or `--ceremony-master-mode`, so leave them out. A development `bonds.txt` does not enroll a validator in an existing shard. Add other flags only when you need them.
 
 - On a private network add `--allow-private-addresses`.
 - When the ports are forwarded by hand, add `--no-upnp`.
@@ -146,9 +148,9 @@ Joining an existing shard does not use `--genesis-validator` or `--ceremony-mast
 - The node reads `/var/lib/rnode/f1r3fly.conf` without any flag, and `run --config-file <path>` points to another file. Options are applied in this order: command line, configuration file, built-in defaults ([defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/main/resources/defaults.conf)).
 - The `--epoch-length` and `--quarantine-length` flags are read only by the node that creates the genesis. A joining node takes both values from the chain.
 
-Peers must reach TCP `40400` and `40404`, and the command above publishes them. It keeps the HTTP port `40403` on the local machine. Keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` closed. See the [port table](/nodes/image/#default-container-ports). The `api-server.host` setting applies to every API listener, so enforce boundaries with host port bindings, firewall rules and gateway routes. If a port on the left side of a `-p` pair is already taken on this machine, change that number and use the new one in the commands below. The [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/rust/configuration/commandline/options.rs) list every flag.
+Peers must reach TCP `40400` and `40404`, and the command above publishes them. It binds the HTTP port `40403` to the local machine only. Keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` closed. See the [port table](/nodes/image/#default-container-ports). The `api-server.host` setting applies to every API listener, so enforce boundaries with host port bindings, firewall rules and gateway routes. If a port on the left side of a `-p` pair is already taken on this machine, change that number and use the new one in the commands below. The [node option definitions](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/rust/configuration/commandline/options.rs) list every flag.
 
-`docker restart validator` keeps the password, because it is part of the container. A new container made with `docker run` needs the variable again, so run the `read` line first.
+`docker restart validator` keeps the password, because the container stores it. A new container made with `docker run` needs the variable again, so run the `read` line first.
 
 ### Check Synchronization
 
@@ -161,11 +163,11 @@ The node is synchronized when `/api/status` shows `isReady: true`, a positive `p
 
 ### Fund the Validator
 
-The vault of the new validator must cover the stake and the execution budget of the bond transaction: `stake + phlo_limit * phlo_price`. In this client `bond-validator` uses a phlo limit of 5,000,000,000 and a price of 1 by default. So ask for the stake plus 5,000,000,000 base units, which is 0.000000005 ASI at 18 decimals. The shard may require other prices, so confirm them with the operator.
+The vault of the new validator must cover the stake and the execution budget of the bond transaction: `stake + phlo_limit * phlo_price`. In this client `bond-validator` uses a phlo limit of 5,000,000,000 and a price of 1 by default. Ask for the stake plus 5,000,000,000 atomic units, which is 0.000000005 ASI at 18 decimals. The shard may require other prices, so confirm them with the operator.
 
 Send the address from `echo "$VALIDATOR_ADDRESS"` to the operator and ask them to fund it. A normal transfer does not require changing genesis wallets or restarting the network. On your own shard you make the transfer yourself, see [Fund the New Validator](/nodes/private-shard/#fund-the-new-validator).
 
-Check the balance on the observer and repeat the command until it shows the amount. The output has the form `Balance for <address>: <base units>`.
+Check the balance on the observer and repeat the command until it shows the amount. The output has the form `Balance for <address>: <atomic units>`.
 
 ```bash
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
@@ -173,12 +175,12 @@ client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
 
 ### Submit the Bond
 
-Send the bond to an already bonded validator, because a node that cannot propose accepts a deploy and never includes it. Do not send it to the joining node itself or to the bootstrap or ceremony-master node. The observer serves status and result queries. The stake must be at least the shard's minimum, and bonding the same key twice fails with `already bonded`.
+Send the bond to an already bonded validator, because a node that cannot propose accepts a deploy and never includes it. Do not send it to the joining node itself or to the bootstrap or ceremony-master node. Status and result queries go to the observer. The stake must be at least the shard's minimum, and bonding the same key twice fails with `already bonded`.
 
-`--max-wait 300` is the number of seconds that the client waits for the deploy to finalize. The activation comes later, at an epoch boundary.
+`--max-wait 300` is the number of seconds that the client waits for the deploy to finalize. Activation comes later, at an epoch boundary.
 
 ```bash
-client bond-validator --stake "$STAKE_BASE_UNITS" \
+client bond-validator --stake "$STAKE_ATOMIC_UNITS" \
   --private-key-file /keys/private_key.hex \
   --grpc "$BONDED_VALIDATOR_GRPC" --http "$BONDED_VALIDATOR_HTTP" \
   --observer "$OBSERVER_HTTP" --shard-id "$SHARD_NAME" --max-wait 300
@@ -204,7 +206,7 @@ The client's [validator lifecycle guide](https://github.com/asi-alliance/asi-cha
 
 ### Wait for Activation
 
-A bond and a withdrawal take effect only at an epoch boundary. Between boundaries a new bond is recorded but not active, so `validator-status` shows `BONDED` first and `ACTIVE` after the boundary. The client reads the epoch from the gRPC port of the observer:
+A bond and a withdrawal take effect only at an epoch boundary. Between boundaries a new bond is recorded but not active, so `validator-status` shows `BONDED` and `NOT ACTIVE` until the boundary, and `BONDED` and `ACTIVE` after it. The client reads the epoch from the gRPC port of the observer:
 
 ```bash
 client epoch-info --grpc "$OBSERVER_GRPC"
@@ -213,27 +215,27 @@ client bonds --http "$OBSERVER_HTTP"
 client active-validators --http "$OBSERVER_HTTP"
 ```
 
-`bonds` lists the bonded validators. `epoch-info` shows the current block and epoch, the epoch length and the quarantine length in blocks, and the progress through the epoch. In a shard with default settings the epoch is 10,000 blocks long and the quarantine is 50,000 blocks. A withdrawal also takes effect at a boundary, and the stake is paid out after the quarantine period.
+`bonds` lists the bonded validators. `epoch-info` reads the epoch length and the quarantine length from the chain and shows them in blocks, together with the current block, the epoch and the progress through the epoch. In a shard with default settings the epoch is 10,000 blocks long and the quarantine is 50,000 blocks. A withdrawal also takes effect at a boundary, and the stake is paid out after the quarantine period.
 
-To turn blocks into hours, read the epoch twice a minute apart. The difference of `lastFinalizedBlockNumber` is the number of blocks per minute, and `blocksUntilNextEpoch` divided by it is the wait in minutes.
+To estimate the wait, read the epoch twice, a minute apart. The difference of `lastFinalizedBlockNumber` is the number of blocks per minute, and `blocksUntilNextEpoch` divided by it is the wait in minutes.
 
 ```bash
 curl -s "$OBSERVER_HTTP/api/epoch"; sleep 60; curl -s "$OBSERVER_HTTP/api/epoch"
 ```
 
-The HTTP port of the node answers these endpoints.
+The HTTP port of the node serves these endpoints.
 
 - `GET /api/bond-status/{public key}` returns `{"publicKey": "...", "isBonded": true}` once the bond is active.
 - `GET /api/validators` lists the bonded validators and their stakes. A read-only node answers it, and a validator replies with `readonly_node_required`, so send it to the observer.
-- `GET /api/epoch` shows the epoch length and `blocksUntilNextEpoch`.
+- `GET /api/epoch` shows `blocksUntilNextEpoch`. Do not take `quarantineLength` from it, because the node reports its own local setting there, which on a joined node can differ from the chain. Use `client epoch-info` for the epoch length and the quarantine.
 
-Bonded membership and active membership are separate. The activation follows the shard's epoch and active-set rules, and a full active set can prevent it. After `validator-status` shows `ACTIVE`, confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The `blocks` command prints recent blocks from the observer as JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`. Look for your public key in `sender`.
+Bonded membership and active membership are separate. Activation follows the shard's epoch and active-set rules, and a full active set can prevent it. After `validator-status` shows `ACTIVE`, confirm that the node authors blocks, that its authored blocks finalize, and that the network continues finalizing. The `blocks` command prints recent blocks from the observer as JSON, including `blockInfo.sender`, `blockHash` and `isFinalized`. Look for your public key in `sender`.
 
 ```bash
 client blocks --number 20 --http "$OBSERVER_HTTP"
 ```
 
-If the state stays `BONDED` after a boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
+If the status stays `NOT ACTIVE` after a boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
 
 </Steps>
 

@@ -1,6 +1,6 @@
 # Run a Node
 
-Take part in a shard as an observer or a validator, or start a shard of your own. All roles run the same Rust node image. The guides work with a shard that you or its operator run.
+Take part in a shard as an observer or a validator, or start a shard of your own. All roles run the same Rust node image. The guides work with a shard that you run yourself or that another shard operator runs.
 
 ::: info Terminal
 The commands are written for bash. On Linux and macOS run them in a terminal. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.

@@ -1,6 +1,6 @@
 # Node Image
 
-The image contains the maintained Rust implementation of CBC Casper, Rholang and RSpace++. Run it in your own [private shard](/nodes/private-shard/) or in a network whose operator runs the Rust node.
+The image contains the maintained Rust implementation of CBC Casper, Rholang and RSpace++. Run it in your own [private shard](/nodes/private-shard/) or in a network whose shard operator runs the Rust node.
 
 ## Select the Image
 

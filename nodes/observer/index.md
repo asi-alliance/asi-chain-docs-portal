@@ -18,14 +18,14 @@ Which routes external clients can reach depends on the gateway in front of the n
 
 ## Before You Start
 
-Ask the operator of the shard for these values.
+Ask the shard operator for these values.
 
-- The image digest that the shard accepts. The [image catalog](/reference/container-images/) has no separate observer image, and [Node Image](/nodes/image/) explains how to pick one.
+- The image digest that the shard accepts. The [image catalog](/reference/container-images/) has no separate observer image, and [Node Image](/nodes/image/) explains how to choose the image.
 - The bootstrap URI, which looks like `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. The node ID is the `address` field of `GET /api/status` on the bootstrap node.
 - The `--network-id` value, which must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node that joins with another network ID exits with a `Wrong network id` error.
 - The `--shard-name` value, which must equal the `shardId` that the bootstrap node reports. The default is `root`. With another value the node gets a peer but does not become ready, and `lastFinalizedBlockNumber` stays at `-1`.
-- The `--host` value, which is the address other nodes use to reach this node. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks. On a home network write the public IP address of your router or a DNS name that points to it. Forward TCP `40400` and `40404` on the router to this machine, and allow both ports in the firewall of the host. You do not need to open `40403`.
-- Ask the operator how much CPU, memory and disk space a node of this network needs.
+- The `--host` value, which is the address other nodes use to reach this node. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks. On a home network, write the public IP address of your router or a DNS name that points to it. Forward TCP `40400` and `40404` on the router to this machine, and allow both ports in the firewall of the host. You do not need to open `40403`.
+- The CPU, memory and disk space that a node of this network needs.
 - The native-token settings of the shard. They are fixed at genesis, and the observer takes the same values: `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` for ASI. A node restarted with other values stops.
 
 ## Run the Observer
@@ -56,7 +56,7 @@ docker run -d --name observer --platform linux/amd64 \
   --native-token-name ASI --native-token-symbol ASI --native-token-decimals 18
 ```
 
-Run the block from any folder. The `chown` command prints nothing when it succeeds. The data of the node lives in the Docker volume `observer-data`, not in a folder of the host. If the name `observer` is already taken, remove the old container with `docker rm -f observer` and run the second command again.
+Run the block from any folder. The `chown` command prints nothing when it succeeds. The data of the node lives in the Docker volume `observer-data`, not in a folder of the host. If the name `observer` is already taken, remove the old container with `docker rm -f observer` and run the `docker run -d` command again.
 
 The container publishes `40400` and `40404` for peers and keeps the HTTP port `40403` on the local machine. Keep `40402` and `40405` closed. The `EXPOSE` line of the image lists `40400` to `40404` and leaves out the admin port `40405`. See the [port table](/nodes/image/#default-container-ports).
 
@@ -85,15 +85,13 @@ If `peers` stays at 0, follow [Troubleshooting](/help/troubleshooting/#no-peer-c
 
 ### Manage the Node
 
-Read the log, stop and start the node with these commands:
+These commands show the log and stop and start the node:
 
 ```bash
 docker logs --tail 100 observer
 docker stop observer
 docker start observer
 ```
-
-A restarted node reconnects only through its `--bootstrap` address, so the bootstrap node must be reachable.
 
 To move to a new image, get the new digest from the operator, then stop and remove the container:
 
@@ -102,7 +100,7 @@ docker stop observer
 docker rm observer
 ```
 
-After that run the `docker run -d` command of [Start the Observer](#start-the-observer) again with the new digest in `NODE_IMAGE`. Keep the volume, because the identity of the node is in it.
+After that, run the `docker run -d` command of [Start the Observer](#start-the-observer) again with the new digest in `NODE_IMAGE`. Keep the volume, because the identity of the node is in it.
 
 ::: warning Restart Needs the Bootstrap
 After a restart the node reconnects only through `--bootstrap`. If the bootstrap is unreachable, the node waits at `Waiting for first connection...`.
@@ -111,7 +109,7 @@ After a restart the node reconnects only through `--bootstrap`. If the bootstrap
 </Steps>
 
 ::: danger Keep the Data Volume
-Do not delete the volume `observer-data` of an observer that peers already know, and do not run `docker volume rm observer-data`. The node identity is the TLS certificate stored there, so a new volume means a new identity and a full re-join.
+Do not delete the volume `observer-data` of an observer that peers already know. The node identity is the TLS certificate stored there, so a new volume means a new identity and a full re-join.
 :::
 
 ## Who Reads the Observer
