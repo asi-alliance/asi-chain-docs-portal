@@ -13,7 +13,7 @@ Use the maintained [Rust source](https://github.com/asi-alliance/asi-chain-rust-
 | Input | Define Before Initialization |
 |---|---|
 | Node and client pair | Exact revisions, digests and API compatibility |
-| Network ID | `--network-id`, default `testnet`. Every node of the shard must use the same value, and a node with another ID exits with a `Wrong network id` error. |
+| Network ID | `--network-id`, default `testnet`. Every node of the shard must use the same value, and a node with another ID gets no peers, because its connections close with `Wrong network id`. |
 | Shard name | `--shard-name`, default `root`. It is reported as `shardId` in `/api/status`. |
 | Genesis | Allocations (`wallets.txt`), bonds (`bonds.txt`) and ceremony participants |
 | Native token | For ASI, explicitly set name `ASI`, symbol `ASI` and 18 decimals. These values cannot change after genesis. |

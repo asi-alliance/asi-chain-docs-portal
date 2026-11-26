@@ -74,7 +74,7 @@ Check these in order.
 
 1. The network runs the Rust node. A node started with the bootstrap of a network that does not run the Rust node lists other nodes in `/api/status` but keeps `peers` at 0.
 2. The bootstrap URI is complete and the node ID in it belongs to the bootstrap node. The ID is the `address` field of `/api/status` on that node.
-3. `--network-id` equals the `networkId` that the bootstrap node reports. The default is `testnet`, and a node that joins with another network ID exits with a `Wrong network id` error.
+3. `--network-id` equals the `networkId` that the bootstrap node reports. The default is `testnet`. A node with another network ID gets no peers, and its connections close with `Wrong network id`.
 4. `--shard-name` equals the `shardId` that the bootstrap node reports. The default is `root`. With another name the node gets a peer but does not become ready, and `lastFinalizedBlockNumber` stays at `-1`.
 5. `--host` is an address that the other nodes can reach. A joining node must be reachable as well as able to connect out, because the bootstrap node answers the handshake on the advertised address. Add `--allow-private-addresses` if the shard uses private or container addresses, and `--no-upnp` if you forward the ports by hand.
 6. TCP `40400` and TCP `40404` are open for peers. Discovery on `40404` uses TCP. Do not open the API and admin ports to fix P2P connectivity.

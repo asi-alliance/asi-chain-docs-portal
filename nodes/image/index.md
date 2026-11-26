@@ -51,7 +51,7 @@ Read the [defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blo
 
 ## Network Settings
 
-- `--network-id` sets the network ID, `testnet` by default. Both ends must match, because a node that joins with another ID exits with a `Wrong network id` error.
+- `--network-id` sets the network ID, `testnet` by default. Both ends must match. A node with another ID gets no peers, and its connections close with `Wrong network id`.
 - `--host` sets the public address that other nodes use to reach this one. By default the node guesses it from the public IP. If the address is wrong, the node connects out but receives nothing, and `peers` stays at 0.
 - `--bootstrap` names the bootstrap peer as `rnode://<node-id>@<host>?protocol=40400&discovery=40404` and has no default. The node ID is the `address` field of the peer's `GET /api/status`.
 - `--shard-name` sets the shard name, `root` by default.
