@@ -84,6 +84,6 @@ Do not delete the data directory of a node that its peers already know. The TLS 
 
 <CardGrid columns="2">
 <DocCard title="Running Node" href="/architecture/state-diagrams/operations/">What the node does after startup</DocCard>
-<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node to become a validator</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Create the key, start the node, fund it and submit the bond</DocCard>
 <DocCard title="Troubleshooting" href="/help/troubleshooting/">Checks for common node and wallet problems</DocCard>
 </CardGrid>

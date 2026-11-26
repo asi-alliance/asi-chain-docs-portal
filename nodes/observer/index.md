@@ -79,7 +79,7 @@ docker inspect observer --format '{{.State.Health.Status}}'
 
 The node is ready when `/api/ready` returns `{"ready":true}`. Before that it answers HTTP 503 with `{"ready":false}`. Also check that `/api/status` shows `isReady: true`, a positive `peers` count and a growing `lastFinalizedBlockNumber`.
 
-The image healthcheck calls `/api/ready` on container port `40403`, so a joining node reports `unhealthy` until it has a peer and reaches the Running state. The same happens if you move the HTTP port, even when the node works. A joining node takes the last finalized state and recent blocks from its peers and does not download the whole history. Compare `lastFinalizedBlockNumber` with a trusted peer before you serve reads from it.
+The image healthcheck calls `/api/ready` on container port `40403`, so a joining node reports `unhealthy` until it has a peer and reaches the Running state. The same happens if you move the HTTP port, even when the node works. A joining node takes the last finalized state and recent blocks from its peers and does not download the whole history. Compare `lastFinalizedBlockNumber` with a node of the operator before you serve reads from it.
 
 If `peers` stays at 0, follow [Troubleshooting](/help/troubleshooting/#no-peer-connection).
 
@@ -120,6 +120,6 @@ The HTTP port `40403` is bound to `127.0.0.1`, so only programs on the same mach
 
 <CardGrid columns="2">
 <DocCard title="Node Image" href="/nodes/image/">Image selection, ports and configuration flags</DocCard>
-<DocCard title="Run a Validator" href="/nodes/validator/">Prepare a Rust node that you later bond as a validator</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Create the key, start the node, fund it and submit the bond</DocCard>
 <DocCard title="Troubleshooting" href="/help/troubleshooting/">What to check when peers stay at 0</DocCard>
 </CardGrid>

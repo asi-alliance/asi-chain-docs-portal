@@ -85,7 +85,7 @@ The commands that start a node are on the pages for each role. [Run an Observer]
 ## Next Steps
 
 <CardGrid columns="2">
-<DocCard title="Run a Validator" href="/nodes/validator/">Checks before a node joins as a validator</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Create the key, start the node, fund it and submit the bond</DocCard>
 <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Run a node with your own genesis</DocCard>
 <DocCard title="Container Images" href="/reference/container-images/">Tags and digests of the published images</DocCard>
 </CardGrid>

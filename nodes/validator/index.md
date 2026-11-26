@@ -36,7 +36,7 @@ Replace each value in angle brackets with the value from the operator. `PUBLIC_H
 NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6'
 CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:5b192be72df772f2a0f446245d583f1f916e970b8a6fd6ad97d32b0ab8ef20f4'
 NETWORK_ID='<networkId of the shard>'
-SHARD_NAME='<shard ID>'
+SHARD_NAME='<shardId of the shard>'
 PUBLIC_HOST='<public IP or DNS name of this machine>'
 BOOTSTRAP_URI='<bootstrap URI from the shard operator>'
 BONDED_VALIDATOR_GRPC='<gRPC URL of a bonded validator>'
@@ -110,7 +110,8 @@ test -f "$KEY_DIR/f1r3fly.key" && \
 docker run --rm -u root --platform linux/amd64 --entrypoint install \
   -v validator-data:/var/lib/rnode \
   -v "$KEY_DIR/f1r3fly.key:/tmp/f1r3fly.key:ro" \
-  "$NODE_IMAGE" -o daemon -g daemon -m 600 /tmp/f1r3fly.key /var/lib/rnode/f1r3fly.key
+  "$NODE_IMAGE" -o daemon -g daemon -m 600 /tmp/f1r3fly.key /var/lib/rnode/f1r3fly.key \
+  || echo 'f1r3fly.key is missing, run the OpenSSL commands of Create the Validator Key again'
 ```
 
 The node keeps its state, its TLS certificate and its identity in `/var/lib/rnode/`.
@@ -225,7 +226,7 @@ curl -s "$OBSERVER_HTTP/api/epoch"; sleep 60; curl -s "$OBSERVER_HTTP/api/epoch"
 
 The HTTP port of the node serves these endpoints.
 
-- `GET /api/bond-status/{public key}` returns `{"publicKey": "...", "isBonded": true}` once the bond is active.
+- `GET /api/bond-status/{public key}` returns `{"publicKey": "...", "isBonded": true}` as soon as the bond is in a finalized block, before the validator becomes active.
 - `GET /api/validators` lists the bonded validators and their stakes. A read-only node answers it, and a validator replies with `readonly_node_required`, so send it to the observer.
 - `GET /api/epoch` shows `blocksUntilNextEpoch`. Do not take `quarantineLength` from it, because the node reports its own local setting there, which on a joined node can differ from the chain. Use `client epoch-info` for the epoch length and the quarantine.
 

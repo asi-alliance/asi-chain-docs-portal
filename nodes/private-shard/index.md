@@ -93,12 +93,13 @@ docker run -d --name my-shard --network shard-net --platform linux/amd64 \
   --network-id my-shard-net --shard-name my-shard \
   --host my-shard --no-upnp --allow-private-addresses \
   --native-token-name ASI --native-token-symbol ASI --native-token-decimals 18 \
+  --epoch-length 20 --quarantine-length 20 \
   --validator-private-key "$VALIDATOR_PRIVATE_KEY"
 ```
 
 The `chown` command is required because a new Docker volume is owned by `root` and the node runs as `daemon`. `--host` is the name under which other containers on `shard-net` reach the node. It resolves to a private address, so the node also needs `--allow-private-addresses`. The token flags explicitly select ASI with 18 decimals.
 
-An epoch lasts 10,000 blocks by default and a withdrawn stake is held for 50,000 blocks, so a new validator waits for hours. To let the second validator become active quickly in a test shard, add `--epoch-length 20 --quarantine-length 20` to the `run` command of this node. Only the node that creates the genesis reads these flags. Nodes that join later take the values from the chain.
+`--epoch-length 20 --quarantine-length 20` make epochs short, so that a validator you add later becomes active within minutes. Without them an epoch lasts 10,000 blocks and a withdrawn stake is held for 50,000 blocks. Only the node that creates the genesis reads these flags, and only at its first start. Nodes that join later take the values from the chain. Leave the flags out for a shard that should keep the defaults.
 
 ::: danger Throwaway Keys Only
 A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
@@ -138,7 +139,7 @@ If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-conn
 
 ### Add a Validator
 
-A second validator joins the running shard and becomes active at an epoch boundary. The steps are those of [Run a Validator](/nodes/validator/), with the values of this shard. First run the block of [Set the Variables](/nodes/validator/#set-the-variables) on that page, and then run the block below in the same terminal, so that the values below replace the placeholders. `BOOTSTRAP` is the variable from the previous step. The block also defines the `client` function again, this time with `--network shard-net`, because the shard and the read-only node are reachable by their container names only inside that network.
+A second validator joins the running shard and becomes active at an epoch boundary. The steps are those of [Run a Validator](/nodes/validator/), with the values of this shard. First run the block of [Set the Variables](/nodes/validator/#set-the-variables) on that page as it is, without replacing the values in angle brackets. Then run the block below in the same terminal, and its values replace them. `BOOTSTRAP` is the variable from the previous step, so in a new terminal run the `BOOTSTRAP` line of [Start a Read-Only Node](#start-a-read-only-node) again first. The block also defines the `client` function again, this time with `--network shard-net`, because the shard and the read-only node are reachable by their container names only inside that network.
 
 ```bash
 NETWORK_ID='my-shard-net'
@@ -221,7 +222,7 @@ For more validators, repeat Add a Validator with new container names, or see the
 ::: details Keep the Genesis Validator Key Off the Command Line
 Start a Single-Node Shard passes the hex key with `--validator-private-key`, and `docker inspect` shows it. To avoid that, create an encrypted key with `keygen` before the first start and let the node read it from the volume. The `keygen` command asks twice for a password, so run it in a terminal. It writes `f1r3fly.key`, `f1r3fly.pub.pem` and `f1r3fly.pub.hex` into the volume. The public key in `f1r3fly.pub.hex` is upper-case hex, and `bonds.txt` accepts it as it is.
 
-Run this after the `chown` command of [Start a Single-Node Shard](#start-a-single-node-shard) and before its `docker run` command. It replaces the `bonds.txt` file of the previous step.
+Run the block of [Start a Single-Node Shard](#start-a-single-node-shard) up to and including its `chown` command, then this block, and then the `docker run -d` command of that block. It replaces the `bonds.txt` file of the previous step.
 
 ```bash
 docker run --rm -it --platform linux/amd64 \
@@ -250,6 +251,6 @@ Do not reuse published development keys. Generate new credentials for every shar
 
 <CardGrid columns="2">
 <DocCard title="Run an Observer" href="/nodes/observer/">Start a read-only node and manage it</DocCard>
-<DocCard title="Run a Validator" href="/nodes/validator/">Join a shard, fund the validator and submit the bond</DocCard>
+<DocCard title="Run a Validator" href="/nodes/validator/">Create the key, start the node, fund it and submit the bond</DocCard>
 <DocCard title="Wallet CLI" href="/cli/usage/">Check balances against the shard's read-only node</DocCard>
 </CardGrid>
