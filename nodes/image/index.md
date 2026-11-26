@@ -8,16 +8,16 @@ The instructions on this site use the build of the `dev` branch of [github.com/a
 
 Pin the digest, not the tag. Tags in the registry can be removed, and the floating `dev` tag moves with every build, so do not use it.
 
-The build has the tag `0.4.46-dev.20261113-d57a3f450151` and this manifest digest:
+The build has the tag `0.4.46-dev.20261125-1caf7b8cfdf7` and this manifest digest:
 
 ```text
-sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6
+sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f
 ```
 
 It is published under `public.ecr.aws/l2u2v4a8/asi-chain/node-rust`. The [catalog](/reference/container-images/) lists the images of the other components. A tag does not upgrade a running shard.
 
 ```bash
-NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6'
+NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f'
 docker pull --platform linux/amd64 "$NODE_IMAGE"
 docker image inspect "$NODE_IMAGE" --format '{{json .Config.Labels}}'
 docker run --rm --platform linux/amd64 --network none "$NODE_IMAGE" --version

@@ -1,6 +1,6 @@
 # Run a Validator
 
-Run a [validator node](/nodes/roles/) on a [shard](/reference/glossary/#shard) that an operator already runs, then [bond](/reference/glossary/#bond) it and wait until it joins consensus. You need Docker and a few values from the shard operator.
+Run a [validator node](/nodes/roles/) on ASI:Chain TestNet, then [bond](/reference/glossary/#bond) it and wait until it joins consensus. The commands carry the TestNet values, and a validator of another [shard](/reference/glossary/#shard) takes the values of its operator.
 
 ::: info Terminal
 The commands are written for bash. On Linux run them in a terminal. On macOS run `bash` in a terminal first, because commands with `read -rsp` do not work in zsh. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
@@ -8,14 +8,12 @@ The commands are written for bash. On Linux run them in a terminal. On macOS run
 
 ## Before You Start
 
-You need Docker and OpenSSL 3. Ask the shard operator for:
+You need Docker and OpenSSL 3, and:
 
-- The node image and the client image the shard accepts.
-- The [bootstrap URI](/reference/glossary/#bootstrap-uri).
-- The [network ID](/reference/glossary/#network-id) and the [shard name](/reference/glossary/#shard-name).
-- The gRPC and HTTP URLs of a [bonded validator](/reference/glossary/#bonded-validator).
-- The gRPC and HTTP URLs of an [observer](/nodes/roles/).
-- The stake to bond, in [atomic units](/reference/token-amounts/).
+- A public IP address or DNS name of this machine.
+- TCP ports `40400` and `40404` open to the internet.
+- Test ASI for the stake and the fees.
+- The gRPC URL of a [bonded validator](/reference/glossary/#bonded-validator), from the network operator.
 
 ## Run the Validator
 
@@ -25,20 +23,20 @@ Run all steps in one bash terminal. In a new terminal, run the block of Set the 
 
 ### Set the Variables
 
-Replace each value in single quotes with the operator's value. The images come from the image catalog. Replace them if the operator names others. The bootstrap URI has the form `rnode://<node-id>@<host>?protocol=40400&discovery=40404`. `PUBLIC_HOST` is the public IP or DNS name at which the shard nodes reach this machine, with TCP ports `40400` and `40404` open to them. `STAKE_ATOMIC_UNITS` is an integer (see [Token Amounts](/reference/token-amounts/)).
+The block holds the TestNet values. Replace the two values in angle brackets: `PUBLIC_HOST` is the address at which other nodes reach this machine, and `BONDED_VALIDATOR_GRPC` comes from the network operator. `PHLO_PRICE` is the network minimum, and `STAKE_ATOMIC_UNITS` is 1000 ASI in [atomic units](/reference/token-amounts/).
 
 ```bash
-NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6'
-CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:5b192be72df772f2a0f446245d583f1f916e970b8a6fd6ad97d32b0ab8ef20f4'
-NETWORK_ID='<networkId of the shard>'
-SHARD_NAME='<shardId of the shard>'
+NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f'
+CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:9efdbf3937bc26d2fa0d461b953df5320fc733d138d8e7f2c916ebcae0bcc45c'
+NETWORK_ID='ASItestnet'
+SHARD_NAME='root'
 PUBLIC_HOST='<public IP or DNS name of this machine>'
-BOOTSTRAP_URI='<bootstrap URI from the shard operator>'
+BOOTSTRAP_URI='rnode://4cadd9886def799dae30129419dd9fbd15da5dad@bootstrap.p2p.testnet.asichain.io?protocol=40400&discovery=40404'
 BONDED_VALIDATOR_GRPC='<gRPC URL of a bonded validator>'
-BONDED_VALIDATOR_HTTP='<HTTP URL of a bonded validator>'
-OBSERVER_GRPC='<gRPC URL of the observer>'
-OBSERVER_HTTP='<HTTP URL of the observer>'
-STAKE_ATOMIC_UNITS='<stake in atomic units>'
+BONDED_VALIDATOR_HTTP='https://e0bnrhkdz5.execute-api.us-east-1.amazonaws.com/validator'
+OBSERVER_HTTP='https://e0bnrhkdz5.execute-api.us-east-1.amazonaws.com'
+PHLO_PRICE='100000000000'
+STAKE_ATOMIC_UNITS='1000000000000000000000'
 KEY_DIR="$HOME/validator-keys"
 
 client() {
@@ -145,7 +143,7 @@ curl -s http://127.0.0.1:40403/api/status
 
 ### Fund the Validator
 
-Send the address from `echo "$VALIDATOR_ADDRESS"` to the operator and ask them to fund it with the stake plus 5000000000 atomic units. Check the balance on the observer and repeat until it reaches this sum.
+Request test ASI from the [TestNet faucet](https://faucet.testnet.asichain.io/) for the address from `echo "$VALIDATOR_ADDRESS"`. One request gives 100 ASI, so repeat it until the balance reaches 1001 ASI, which is `1001000000000000000000` atomic units.
 
 ```bash
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
@@ -155,13 +153,14 @@ The output has the form `Balance for <address>: <atomic units>`.
 
 ### Submit the Bond
 
-Send the bond to the operator's bonded validator, not to your own node. Status and result queries go to the observer. The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again.
+Send the bond to a bonded validator of the network, not to your own node. Status and result queries go to the [observer](/reference/glossary/#observer). The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again.
 
 ```bash
 client bond-validator --stake "$STAKE_ATOMIC_UNITS" \
   --private-key-file /keys/private_key.hex \
   --grpc "$BONDED_VALIDATOR_GRPC" --http "$BONDED_VALIDATOR_HTTP" \
-  --observer "$OBSERVER_HTTP" --shard-id "$SHARD_NAME" --max-wait 300
+  --observer "$OBSERVER_HTTP" --shard-id "$SHARD_NAME" \
+  --phlo-price "$PHLO_PRICE" --max-wait 300
 ```
 
 Replace the value in single quotes with the deploy ID and check the deploy. The bond is in the chain when `deploy-status` shows `State: Finalized` and `Rejection count: 0`.
@@ -174,19 +173,10 @@ curl -s "$OBSERVER_HTTP/api/deploy/$DEPLOY_ID"
 
 ### Wait for Activation
 
-The bond takes effect at the next [epoch](/reference/glossary/#epoch) boundary. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. `epoch-info` reads the epoch from the observer's gRPC port and shows its progress. Repeat the commands until the status shows `ACTIVE: participating in consensus`. Then `active-validators` lists your public key.
+The bond takes effect at the next [epoch](/reference/glossary/#epoch) boundary. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. Repeat the command until it shows `ACTIVE: participating in consensus` and a `PROPOSING` line with the blocks of your validator. If the status stays `NOT ACTIVE` after a boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
 
 ```bash
-client epoch-info --grpc "$OBSERVER_GRPC"
 client validator-status --public-key "$VALIDATOR_PUBLIC_KEY" --http "$OBSERVER_HTTP"
-client bonds --http "$OBSERVER_HTTP"
-client active-validators --http "$OBSERVER_HTTP"
-```
-
-Then look for your public key in `blockInfo.sender` of the recent blocks. If the status stays `NOT ACTIVE` after a boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
-
-```bash
-client blocks --number 20 --http "$OBSERVER_HTTP"
 ```
 
 </Steps>

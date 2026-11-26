@@ -1,6 +1,6 @@
 # Run an Observer
 
-Run an [observer](/reference/glossary/#observer) on a [shard](/reference/glossary/#shard) that an operator already runs. The observer follows the chain and answers read requests, but never creates blocks. You need Docker and a few values from the shard operator.
+Run an [observer](/reference/glossary/#observer) on ASI:Chain TestNet. The observer follows the chain and answers read requests, but never creates blocks. The commands carry the TestNet values, and an observer of another [shard](/reference/glossary/#shard) takes the values of its operator.
 
 ::: info Terminal
 The commands are written for bash. On Linux run them in a terminal. On macOS run `bash` in a terminal first, because commands with `read -rsp` do not work in zsh. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
@@ -8,12 +8,12 @@ The commands are written for bash. On Linux run them in a terminal. On macOS run
 
 ## Before You Start
 
-You need Docker. Ask the shard operator for:
+You need:
 
-- The node image the shard accepts.
-- The [bootstrap URI](/reference/glossary/#bootstrap-uri).
-- The [network ID](/reference/glossary/#network-id) and the [shard name](/reference/glossary/#shard-name).
-- The CPU, memory and disk that a node of this shard needs.
+- Docker.
+- A public IP address or DNS name of this machine.
+- TCP ports `40400` and `40404` open to the internet.
+- The CPU, memory and disk that a node needs, from the network operator.
 
 ## Run the Observer
 
@@ -23,14 +23,14 @@ Run all steps in one bash terminal. In a new terminal, run the block of Set the 
 
 ### Set the Variables
 
-Replace each value in single quotes with the operator's value. The image comes from the [image catalog](/reference/container-images/). Replace it if the operator names another. `PUBLIC_HOST` is the public IP or DNS name at which the shard nodes reach this machine, with TCP ports `40400` and `40404` open to them. On a home network, forward both ports on the router to this machine.
+The block holds the TestNet values and the image from the [image catalog](/reference/container-images/). Replace `PUBLIC_HOST` with the address at which other nodes reach this machine. On a home network, forward TCP `40400` and `40404` on the router to this machine.
 
 ```bash
-NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6'
-NETWORK_ID='<networkId of the shard>'
-SHARD_NAME='<shardId of the shard>'
+NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f'
+NETWORK_ID='ASItestnet'
+SHARD_NAME='root'
 PUBLIC_HOST='<public IP or DNS name of this machine>'
-BOOTSTRAP_URI='<bootstrap URI from the shard operator>'
+BOOTSTRAP_URI='rnode://4cadd9886def799dae30129419dd9fbd15da5dad@bootstrap.p2p.testnet.asichain.io?protocol=40400&discovery=40404'
 ```
 
 ### Start the Observer

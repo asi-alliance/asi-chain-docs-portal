@@ -35,7 +35,7 @@ The number of nodes in a sample topology is not a minimum and does not guarantee
 The genesis validator needs a key pair and the genesis wallet needs a vault address. Both come from the ASI client. This step uses one key for both roles, which is enough for a test shard.
 
 ```bash
-CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:5b192be72df772f2a0f446245d583f1f916e970b8a6fd6ad97d32b0ab8ef20f4'
+CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:9efdbf3937bc26d2fa0d461b953df5320fc733d138d8e7f2c916ebcae0bcc45c'
 KEY_DIR="$HOME/shard-keys"
 client() {
   docker run --rm --platform linux/amd64 --read-only --cap-drop ALL \
@@ -78,7 +78,7 @@ Keep the key directory. You need the same key later to send funds from the genes
 A single node can create its own genesis with `--standalone`. This is enough to check the setup before you plan several validators. Run the block from the folder that contains the `genesis` directory of the previous step.
 
 ```bash
-NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:f46bc3542ae9cab873f3a6e4f40651546bfeba47fb3d1d65966564b18d3123b6'
+NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f'
 VALIDATOR_PRIVATE_KEY="$(tr -d '\n' < "$KEY_DIR/private_key.hex")"
 docker network create shard-net
 docker volume create shard-data
@@ -148,8 +148,8 @@ PUBLIC_HOST='validator'
 BOOTSTRAP_URI="$BOOTSTRAP"
 BONDED_VALIDATOR_GRPC='http://my-shard:40401'
 BONDED_VALIDATOR_HTTP='http://my-shard:40403'
-OBSERVER_GRPC='http://my-shard-obs:40401'
 OBSERVER_HTTP='http://my-shard-obs:40403'
+PHLO_PRICE='1'
 STAKE_ATOMIC_UNITS='1000000'
 KEY_DIR="$HOME/validator-keys"
 
