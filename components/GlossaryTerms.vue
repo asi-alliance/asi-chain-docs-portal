@@ -16,7 +16,7 @@ const CLOSE_DELAY = 200;
 const route = useRoute();
 const mounted = ref(false);
 const term = ref<(Term & { id: string }) | null>(null);
-const box = ref({ top: 0, left: 0, width: 360, above: false });
+const box = ref({ top: 0, left: 0, width: 360, above: false, maxHeight: 0 });
 const card = ref<HTMLElement | null>(null);
 let trigger: HTMLAnchorElement | null = null;
 let pinned = false;
@@ -32,7 +32,6 @@ function mark(a: HTMLAnchorElement) {
     a.setAttribute("target", "_self");
     a.setAttribute("role", "button");
     a.setAttribute("aria-haspopup", "dialog");
-    a.setAttribute("aria-controls", ID);
     a.setAttribute("aria-expanded", "false");
 }
 
@@ -58,31 +57,44 @@ async function open(a: HTMLAnchorElement, pin: boolean, focus: boolean) {
     clearTimeout(openTimer);
     clearTimeout(closeTimer);
     const id = a.getAttribute("href")!.slice(PREFIX.length);
-    trigger?.setAttribute("aria-expanded", "false");
+    if (trigger) {
+        trigger.setAttribute("aria-expanded", "false");
+        trigger.removeAttribute("aria-controls");
+    }
     trigger = a;
     a.setAttribute("aria-expanded", "true");
+    a.setAttribute("aria-controls", ID);
     pinned = pin;
     const vw = document.documentElement.clientWidth;
-    box.value = { ...box.value, width: Math.min(360, vw - 32) };
+    box.value = { ...box.value, width: Math.min(360, vw - 32), maxHeight: 0 };
     term.value = { id, ...terms[id] };
     await nextTick();
     place();
     if (focus) card.value?.focus();
 }
 
-// Below the last line of the term, or above it when the card does not fit under it in the window.
+// Below the last line of the term, or above it when the card fits only there. In a window too low for
+// either, the card takes the larger side and scrolls inside. 72 px keeps it clear of the top bar.
 function place() {
     if (!trigger || !card.value) return;
     const rects = trigger.getClientRects();
     const r = rects[rects.length - 1];
     const vw = document.documentElement.clientWidth;
-    const h = card.value.offsetHeight;
     const w = box.value.width;
-    const below = r.bottom + 8 + h <= window.innerHeight - 8;
-    const above = !below && r.top - 8 - h >= 72;
+    const roomBelow = window.innerHeight - r.bottom - 16;
+    const roomAbove = r.top - 72 - 8;
+    let h = card.value.scrollHeight + 2;
+    let maxHeight = 0;
+    const above = h > roomBelow && (h <= roomAbove || roomAbove > roomBelow);
+    const room = above ? roomAbove : roomBelow;
+    if (h > room) {
+        maxHeight = Math.max(room, 96);
+        h = maxHeight;
+    }
     box.value = {
         width: w,
         above,
+        maxHeight,
         top: (above ? r.top - 8 - h : r.bottom + 8) + window.scrollY,
         left: Math.max(16, Math.min(r.left - 16, vw - w - 16)) + window.scrollX,
     };
@@ -95,6 +107,7 @@ function close(refocus = false) {
     term.value = null;
     pinned = false;
     trigger?.setAttribute("aria-expanded", "false");
+    trigger?.removeAttribute("aria-controls");
     if (refocus) trigger?.focus();
     trigger = null;
 }
@@ -147,7 +160,9 @@ function onClick(e: MouseEvent) {
 function onKeyDown(e: KeyboardEvent) {
     if (e.key === "Escape" && term.value) {
         e.preventDefault();
-        close(true);
+        // Focus goes back to the term only from the card or the term, not from a card opened by hover.
+        const active = document.activeElement;
+        close(inCard(active) || active === trigger);
         return;
     }
     // The card sits at the end of the body, so Tab out of it would land at the bottom of the page.
@@ -164,27 +179,42 @@ function onKeyDown(e: KeyboardEvent) {
         return;
     }
     // A link answers Enter only. role=button promises Space as well.
-    if (e.key === " " && !e.repeat) {
+    if (e.key === " " && !e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
         const a = termOf(e.target);
         if (!a) return;
         e.preventDefault();
+        if (e.repeat) return;
         if (a === trigger && pinned) close();
         else open(a, true, true);
     }
 }
 
+// Focus and pointerdown come before the click that the router takes on window, so a term that the page
+// rendered after markAll is marked in time for Enter and for a tap.
 function onFocusIn(e: FocusEvent) {
+    termOf(e.target);
     if (term.value && !inCard(e.target) && e.target !== trigger) close();
 }
 
-const onResize = () => close();
+const onPointerDown = (e: PointerEvent) => void termOf(e.target);
+
+// On a phone the address bar changes the height while the page scrolls, so only a new width closes the card.
+let lastWidth = 0;
+function onResize() {
+    const w = document.documentElement.clientWidth;
+    if (w !== lastWidth) close();
+    else place();
+    lastWidth = w;
+}
 
 watch(() => route.path, () => close());
 onContentUpdated(markAll);
 
 onMounted(() => {
     mounted.value = true;
+    lastWidth = document.documentElement.clientWidth;
     markAll();
+    document.addEventListener("pointerdown", onPointerDown, true);
     document.addEventListener("pointerover", onPointerOver);
     document.addEventListener("pointerout", onPointerOut);
     document.addEventListener("click", onClick, true);
@@ -194,6 +224,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+    document.removeEventListener("pointerdown", onPointerDown, true);
     document.removeEventListener("pointerover", onPointerOver);
     document.removeEventListener("pointerout", onPointerOut);
     document.removeEventListener("click", onClick, true);
@@ -215,7 +246,13 @@ onBeforeUnmount(() => {
                 role="dialog"
                 aria-labelledby="asi-term-card-title"
                 tabindex="-1"
-                :style="{ top: box.top + 'px', left: box.left + 'px', width: box.width + 'px' }"
+                :style="{
+                    top: box.top + 'px',
+                    left: box.left + 'px',
+                    width: box.width + 'px',
+                    maxHeight: box.maxHeight ? box.maxHeight + 'px' : undefined,
+                    overflowY: box.maxHeight ? 'auto' : undefined,
+                }"
             >
                 <p id="asi-term-card-title" class="asi-term-card-title" v-html="term.title" />
                 <div class="asi-term-card-body" v-html="term.html" />
