@@ -132,15 +132,18 @@ sleep 60
 curl -s "$OBSERVER_HTTP/api/status" | grep -o '"lastFinalizedBlockNumber":[0-9-]*'
 ```
 
-Divide `blocksUntilNextEpoch` by the number of blocks that finalized in the minute to get the wait in minutes. In a shard with a single validator a block takes about 6 seconds, so a default epoch lasts about 16 hours. `client epoch-info --grpc "$OBSERVER_GRPC"` prints the same progress. See [Wait for Activation](/nodes/validator/#wait-for-activation).
+Divide `blocksUntilNextEpoch` by the number of blocks that finalized in the minute to get the wait in minutes. With the default epoch of 10,000 blocks the wait usually takes hours. `client epoch-info --grpc "$OBSERVER_GRPC"` prints the same progress. See [Wait for Activation](/nodes/validator/#wait-for-activation).
 
 ### Check the Bond Deploy
 
 If the status is `NOT ACTIVE` after the boundary, or the bond command timed out, look at the deploy before you send anything again. A timeout says nothing about the cause.
 
+Replace the value in angle brackets with the deploy ID from the output of `bond-validator`.
+
 ```bash
-client deploy-status --sig <deploy signature> --http "$OBSERVER_HTTP"
-curl -s "$OBSERVER_HTTP/api/deploy/<deploy ID>"
+DEPLOY_ID='<deploy ID>'
+client deploy-status --sig "$DEPLOY_ID" --http "$OBSERVER_HTTP"
+curl -s "$OBSERVER_HTTP/api/deploy/$DEPLOY_ID"
 ```
 
 - `Deploy payment failed: Insufficient funds` in `systemDeployError` means the vault could not pay for the stake and for `phlo_limit * phlo_price`, which is 5,000,000,000 by default. The deploy is spent and is not retried. Top up the vault as in [Fund the Validator](/nodes/validator/#fund-the-validator) and bond again.

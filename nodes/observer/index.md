@@ -25,7 +25,7 @@ Ask the operator of the shard for these values.
 - The `--network-id` value, which must equal the `networkId` that the bootstrap node reports. The default is `testnet`, and a node that joins with another network ID exits with a `Wrong network id` error.
 - The `--shard-name` value, which must equal the `shardId` that the bootstrap node reports. The default is `root`. With another value the node gets a peer but does not become ready, and `lastFinalizedBlockNumber` stays at `-1`.
 - The `--host` value, which is the address other nodes use to reach this node. If you leave it out, the node tries to guess its public address, which fails behind NAT and on container networks. On a home network write the public IP address of your router or a DNS name that points to it. Forward TCP `40400` and `40404` on the router to this machine, and allow both ports in the firewall of the host. You do not need to open `40403`.
-- The disk space, memory and CPU that the operator recommends for the node.
+- Ask the operator how much CPU, memory and disk space a node of this network needs.
 - The native-token settings of the shard. They are fixed at genesis, and the observer takes the same values: `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` for ASI. A node restarted with other values stops.
 
 ## Run the Observer
@@ -77,7 +77,7 @@ curl -s http://127.0.0.1:40403/api/status
 docker inspect observer --format '{{.State.Health.Status}}'
 ```
 
-The node is ready when `/api/ready` returns `{"ready":true}` and `/api/status` shows `isReady: true`, a positive `peers` count and a growing `lastFinalizedBlockNumber`.
+The node is ready when `/api/ready` returns `{"ready":true}`. Before that it answers HTTP 503 with `{"ready":false}`. Also check that `/api/status` shows `isReady: true`, a positive `peers` count and a growing `lastFinalizedBlockNumber`.
 
 The image healthcheck calls `/api/ready` on container port `40403`, so a joining node reports `unhealthy` until it has a peer and reaches the Running state. The same happens if you move the HTTP port, even when the node works. A joining node takes the last finalized state and recent blocks from its peers and does not download the whole history. Compare `lastFinalizedBlockNumber` with a trusted peer before you serve reads from it.
 
@@ -95,12 +95,14 @@ docker start observer
 
 A restarted node reconnects only through its `--bootstrap` address, so the bootstrap node must be reachable.
 
-To move to a new image, get the new digest from the operator, stop and remove the container, and run the `docker run -d` command of [Start the Observer](#start-the-observer) again with the new digest in `NODE_IMAGE`. Keep the volume, because the identity of the node is in it.
+To move to a new image, get the new digest from the operator, then stop and remove the container:
 
 ```bash
 docker stop observer
 docker rm observer
 ```
+
+After that run the `docker run -d` command of [Start the Observer](#start-the-observer) again with the new digest in `NODE_IMAGE`. Keep the volume, because the identity of the node is in it.
 
 ::: warning Restart Needs the Bootstrap
 After a restart the node reconnects only through `--bootstrap`. If the bootstrap is unreachable, the node waits at `Waiting for first connection...`.

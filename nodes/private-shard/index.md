@@ -138,7 +138,7 @@ If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-conn
 
 ### Add a Validator
 
-A second validator joins the running shard and becomes active at an epoch boundary. The steps are those of [Run a Validator](/nodes/validator/), with the values of this shard. In the terminal where you follow [Set the Variables](/nodes/validator/#set-the-variables), use the values below instead of the operator values. `BOOTSTRAP` is the variable from the previous step.
+A second validator joins the running shard and becomes active at an epoch boundary. The steps are those of [Run a Validator](/nodes/validator/), with the values of this shard. First run the block of [Set the Variables](/nodes/validator/#set-the-variables) on that page, and then run the block below in the same terminal, so that its values replace the placeholders. `BOOTSTRAP` is the variable from the previous step. The block also defines the `client` function again, this time with `--network shard-net`, because the shard and the read-only node are reachable by their container names only inside that network.
 
 ```bash
 NETWORK_ID='my-shard-net'
@@ -151,13 +151,29 @@ OBSERVER_GRPC='http://my-shard-obs:40401'
 OBSERVER_HTTP='http://my-shard-obs:40403'
 STAKE_BASE_UNITS='1000000'
 KEY_DIR="$HOME/validator-keys"
+
+client() {
+  docker run --rm --platform linux/amd64 --network shard-net --read-only --cap-drop ALL     --security-opt no-new-privileges --user "$(id -u):$(id -g)"     --mount "type=bind,src=$KEY_DIR,dst=/keys,readonly"     "$CLIENT_IMAGE" "$@"
+}
 ```
 
-`PUBLIC_HOST` is the name of the container that you start for the new validator, so keep the container name `validator` from that page. Then follow the steps from [Create the Validator Key](/nodes/validator/#create-the-validator-key) to [Check Synchronization](/nodes/validator/#check-synchronization), with these changes.
+`PUBLIC_HOST` is the name of the container that you start for the new validator, so keep the container name `validator`. Then follow the steps on Run a Validator in this order.
 
-- Add `--network shard-net` to the `docker run` command in the `client` function. The shard and the read-only node are reachable by their container names only inside this network.
-- Add `--network shard-net --allow-private-addresses --no-upnp` to the `docker run` command that starts the node. The container name resolves to a private address, so the node needs the flag, and there is no router to forward ports.
-- The shard already publishes host ports `40403` and `40453`. Publish the new node on other ports, for example `-p 127.0.0.1:40413:40403`, or leave out the `-p` options, and use your port in the checks of that step. Containers in `shard-net` reach each other without published ports.
+1. [Create the Validator Key](/nodes/validator/#create-the-validator-key).
+2. [Prepare the Data Volume](/nodes/validator/#prepare-the-data-volume).
+3. The block below instead of [Start the Node](/nodes/validator/#start-the-node).
+4. [Check Synchronization](/nodes/validator/#check-synchronization), with port `40413` in the checks.
+5. [Fund the New Validator](#fund-the-new-validator) here.
+6. [Submit the Bond](/nodes/validator/#submit-the-bond) and [Wait for Activation](/nodes/validator/#wait-for-activation) there.
+
+The block starts the validator in the Docker network of the shard. The container name resolves to a private address, so the node needs `--allow-private-addresses`, and there is no router to forward ports, so it needs `--no-upnp`. The shard already publishes host ports `40403` and `40453`, so the new node uses `40413` and publishes neither `40400` nor `40404`. Containers in `shard-net` reach each other without published ports.
+
+```bash
+read -rsp 'Key password: ' F1R3NODE_VALIDATOR_PASSWORD; echo
+export F1R3NODE_VALIDATOR_PASSWORD
+
+docker run -d --name validator --network shard-net --platform linux/amd64   -e F1R3NODE_VALIDATOR_PASSWORD   -v validator-data:/var/lib/rnode   -p 127.0.0.1:40413:40403   "$NODE_IMAGE" run --network-id "$NETWORK_ID" --shard-name "$SHARD_NAME"   --host "$PUBLIC_HOST" --bootstrap "$BOOTSTRAP_URI"   --allow-private-addresses --no-upnp   --validator-public-key "$VALIDATOR_PUBLIC_KEY"   --validator-private-key-path /var/lib/rnode/f1r3fly.key   --native-token-name ASI --native-token-symbol ASI --native-token-decimals 18
+```
 
 When the node is synchronized, fund it in the next step before you submit the bond.
 
@@ -175,7 +191,7 @@ KEY_DIR="$HOME/validator-keys"
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
 ```
 
-The balance shows `1000000000000`. Go back to [Submit the Bond](/nodes/validator/#submit-the-bond) and finish with [Wait for Activation](/nodes/validator/#wait-for-activation). With the epoch flags from the first node, the validator becomes `ACTIVE` about a minute and a half after the bond.
+The balance shows `1000000000000`. Go back to [Submit the Bond](/nodes/validator/#submit-the-bond) and finish with [Wait for Activation](/nodes/validator/#wait-for-activation). With the epoch flags from the first node, the validator becomes `ACTIVE` at the nearest epoch boundary, which is no later than 20 blocks after the bond.
 
 </Steps>
 
