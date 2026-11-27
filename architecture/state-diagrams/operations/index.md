@@ -25,7 +25,9 @@ The proposer checks every `casper.heartbeat.check-interval` (3 seconds by defaul
 
 - There are pending deploys.
 - New blocks from peers arrive. The proposer paces these proposals and skips them while the validator is too far ahead of the last finalized block.
-- The shard is stalled, which means the last finalized block is older than `max-lfb-age` (the maximum age of the last finalized block, 3 seconds by default). Every bonded validator then proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval.
+- The shard is stalled, which means the last finalized block is older than `max-lfb-age`. By default that age is 3 seconds.
+
+  Every bonded validator then proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval.
 
 A validator waits at least `self-propose-cooldown` (3 seconds by default) between its own proposals.
 
@@ -43,7 +45,9 @@ Voting is not a separate step. A validator endorses blocks by listing them in th
 
 The node has no Disconnected or Reconnecting state. Two background loops keep the peer list current.
 
-- The clear-connections loop checks peers every `cleanup-interval` (10 seconds) and drops a peer after `heartbeat-failure-threshold` (3) failed checks in a row. A single success resets the count.
+- The clear-connections loop checks peers every `cleanup-interval` (10 seconds).
+
+  It drops a peer after `heartbeat-failure-threshold` (3) failed checks in a row. A single success resets the count.
 - The node discovery loop looks up new peers through Kademlia, so a dropped peer can return when it answers again.
 
 Read the peer count and the last finalized block from the status endpoint.

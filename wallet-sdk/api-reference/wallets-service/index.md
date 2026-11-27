@@ -29,7 +29,11 @@ Creates wallet metadata from an existing or randomly generated secp256k1 private
 | `privateKey` | `Uint8Array` | Optional. Private key (32 bytes). Generates a new key pair if omitted. |
 | `options` | `CreateWalletOptions` | Optional. Accepts `name?: string`, but `createWallet` does not read it, so it has no effect. |
 
-Returns `WalletMeta` with the `address`, `publicKey`, and `privateKey` fields. `publicKey` is the 65-byte uncompressed key.
+Returns `WalletMeta` with these fields:
+
+- `address`
+- `publicKey`, the 65-byte uncompressed key
+- `privateKey`
 
 ### createFirstWalletWithMnemonic()
 
@@ -44,7 +48,12 @@ Builds a wallet from a BIP-39 mnemonic phrase using BIP-44 hierarchical derivati
 | `mnemonic` | `string` | Optional. BIP-39 mnemonic. Generates a new one if omitted. |
 | `index` | `number` | Optional. BIP-44 address index. Defaults to `0`. |
 
-Returns `Promise<WalletMeta>` with `address`, `publicKey`, `privateKey`, and the normalized `mnemonic`.
+Returns `Promise<WalletMeta>` with these fields:
+
+- `address`
+- `publicKey`
+- `privateKey`
+- the normalized `mnemonic`
 
 Throws `Error("WalletsService.createFirstWalletWithMnemonic: Recovery mnemonic is missing or invalid")` if the provided mnemonic fails BIP-39 validation.
 

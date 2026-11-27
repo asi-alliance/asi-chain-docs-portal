@@ -56,7 +56,12 @@ The genesis ceremony is the start of a new shard, when one node builds the genes
 
 ## gRPC and HTTP API
 
-A node answers requests on two interfaces. gRPC on ports `40401` (external) and `40402` (internal) serves tools such as the client, and HTTP on port `40403` serves `/api/status` and `/api/ready`. See [Default Container Ports](/nodes/image/#default-container-ports).
+A node answers requests on two interfaces.
+
+- gRPC on port `40401` (external) and port `40402` (internal) serves tools such as the client.
+- HTTP on port `40403` serves `/api/status` and `/api/ready`.
+
+See [Default Container Ports](/nodes/image/#default-container-ports).
 
 ## Healthcheck
 
@@ -76,7 +81,13 @@ A joining node is a new node that connects to a running shard through its bootst
 
 ## Native Token
 
-The native token is the coin of the shard. Its name, symbol and number of decimals are set at genesis. For ASI, the node needs `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18`. See [Token Amounts](/reference/token-amounts/).
+The native token is the coin of the shard. Its name, symbol and number of decimals are set at genesis. For ASI, the node needs these flags:
+
+```text
+--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18
+```
+
+See [Token Amounts](/reference/token-amounts/).
 
 ## Network ID
 

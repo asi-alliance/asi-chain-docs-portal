@@ -40,14 +40,21 @@ The [Dockerfile](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/no
 | Healthcheck | `curl -fsS 127.0.0.1:40403/api/ready`, every 30 s, the first 120 s are a grace period |
 | Configuration | Built-in HOCON defaults, then the override file, then command-line flags |
 
-The entrypoint always adds `--profile=docker`, so do not pass `--profile` yourself. This matters when you copy flags from a command written for another node. A second `--profile` after `run` fails with the first error below, and before `run` with the second:
+The entrypoint always adds `--profile=docker`, so do not pass `--profile` yourself.
+
+This matters when you copy flags from a command written for another node. A second `--profile` after `run` fails with the first error below, and before `run` with the second:
 
 ```text
 unexpected argument '--profile' found
 the argument '--profile <PROFILE>' cannot be used multiple times
 ```
 
-Read the [defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/main/resources/defaults.conf). The node reads `/var/lib/rnode/f1r3fly.conf` when it exists. `run --config-file /path/to/node.conf` selects a file explicitly and takes priority. The upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/docker/conf/default.conf) show the structure. Do not use the development keys and genesis files from that directory to join another network.
+Read the [defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/node/src/main/resources/defaults.conf).
+
+- The node reads `/var/lib/rnode/f1r3fly.conf` when it exists.
+- `run --config-file /path/to/node.conf` selects a file explicitly and takes priority.
+
+The upstream [shard overrides](https://github.com/asi-alliance/asi-chain-rust-node/blob/dev/docker/conf/default.conf) show the structure. Do not use the development keys and genesis files from that directory to join another network.
 
 ## Network Settings
 
@@ -55,9 +62,15 @@ Read the [defaults.conf](https://github.com/asi-alliance/asi-chain-rust-node/blo
 - `--host` sets the public address that other nodes use to reach this one. By default the node guesses it from the public IP. If the address is wrong, the node connects out but receives nothing, and `peers` stays at 0.
 - `--bootstrap` names the bootstrap peer as `rnode://<node-id>@<host>?protocol=40400&discovery=40404` and has no default. The node ID is the `address` field of the peer's `GET /api/status`.
 - `--shard-name` sets the shard name, `root` by default.
-- `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` set the native token. They are fixed at genesis. For ASI pass `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18` on every node of the shard. A node restarted with other values stops.
+- `--native-token-name`, `--native-token-symbol` and `--native-token-decimals` set the native token. They are fixed at genesis, and a node restarted with other values stops. For ASI pass these values on every node of the shard:
 
-Add `--allow-private-addresses` when peers use container or private addresses, and `--no-upnp` when you forward ports by hand.
+  ```text
+  --native-token-name ASI --native-token-symbol ASI --native-token-decimals 18
+  ```
+
+Add `--allow-private-addresses` when peers use container or private addresses.
+
+Add `--no-upnp` when you forward ports by hand.
 
 ## Default Container Ports
 
@@ -70,9 +83,15 @@ Add `--allow-private-addresses` when peers use container or private addresses, a
 | 40404 | Peer discovery | Reachable by intended peers |
 | 40405 | Admin HTTP | Private operator access |
 
-The image declares `EXPOSE` only for `40400` to `40404`. The node also listens on `40405` inside the container. `docker run -P` does not publish that port, while an explicit `-p 40405:40405` does.
+The image declares `EXPOSE` only for `40400` to `40404`. The node also listens on `40405` inside the container.
 
-Host mappings are independent of container defaults. Binding `40403` publicly exposes all enabled routes on that listener unless a gateway filters them. Do not open the entire `40400:40405` range or copy all development mappings to a public host.
+- `docker run -P` does not publish `40405`.
+- An explicit `-p 40405:40405` does.
+
+Host mappings are independent of container defaults.
+
+- Binding `40403` publicly exposes all enabled routes on that listener unless a gateway filters them.
+- Do not open the entire `40400:40405` range or copy all development mappings to a public host.
 
 ## Run a Node
 

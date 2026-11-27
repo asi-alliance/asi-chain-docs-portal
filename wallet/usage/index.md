@@ -159,7 +159,9 @@ new stdout(`rho:io:stdout`), deployerId(`rho:rchain:deployerId`) in {
 ![The Deploy Rholang Contract page in Lite mode with the Phlo Limit and Phlo Price fields, the Load Example button and the Rholang code field.](/images/wallet/deploy-page.light.webp){.light-only width=900 height=906}
 ![The Deploy Rholang Contract page in Lite mode with the Phlo Limit and Phlo Price fields, the Load Example button and the Rholang code field.](/images/wallet/deploy-page.dark.webp){.dark-only width=900 height=906}
 
-**Deploy** and **Explore** first open a confirmation dialog. For a deploy it shows the account, the length of the code, the phlo limit and price, the estimated cost and the code itself, with a warning that the deployment will consume gas (the dialog's word for phlo) and cannot be reversed. **Deploy Contract** then asks for the wallet password.
+**Deploy** and **Explore** first open a confirmation dialog.
+
+For a deploy it shows the account, the length of the code, the phlo limit and price, the estimated cost and the code itself. It also warns that the deployment will consume gas (the dialog's word for phlo) and cannot be reversed. **Deploy Contract** then asks for the wallet password.
 
 ![The Confirm Deployment dialog with the account, code length, phlo limit and price, and estimated cost.](/images/wallet/deploy-confirmation.light.webp){.light-only width=648 height=823}
 ![The Confirm Deployment dialog with the account, code length, phlo limit and price, and estimated cost.](/images/wallet/deploy-confirmation.dark.webp){.dark-only width=648 height=823}
