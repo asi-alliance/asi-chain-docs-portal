@@ -8,13 +8,26 @@ The maintained Rust source at [github.com/asi-alliance/asi-chain-rust-node](http
 
 The runtime binary is `/opt/docker/bin/node`. [Node Image](/nodes/image/) covers the entrypoint, defaults, ports and access boundaries.
 
-Native-token metadata is part of the shard and genesis configuration. The shard sets `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18`. The values are fixed in genesis, and a node restarted with other values stops. A node that joins a network needs the values of that network.
+Native-token metadata is part of the shard and genesis configuration. The shard sets these flags:
+
+- `--native-token-name ASI`
+- `--native-token-symbol ASI`
+- `--native-token-decimals 18`
+
+The values are fixed in genesis, and a node restarted with other values stops. A node that joins a network needs the values of that network.
 
 ## API
 
-The HTTP API listens on port 40403. Most routes are under `/api`, while `/status`, `/version`, `/metrics` and the `/ws/events` WebSocket sit at the root. Swagger UI is at `/swagger-ui`.
+The HTTP API listens on port 40403.
 
-The block routes (`/api/block/{hash}`, `/api/last-finalized-block` and the `/api/blocks` routes) and `/api/deploy/{deploy_id}` take `?view=full|summary`.
+- Most routes are under `/api`.
+- `/status`, `/version`, `/metrics` and the `/ws/events` WebSocket sit at the root.
+- Swagger UI is at `/swagger-ui`.
+
+These routes take `?view=full|summary`:
+
+- the block routes: `/api/block/{hash}`, `/api/last-finalized-block` and the `/api/blocks` routes
+- `/api/deploy/{deploy_id}`
 
 | Endpoints | Purpose |
 |---|---|
@@ -30,7 +43,10 @@ The block routes (`/api/block/{hash}`, `/api/last-finalized-block` and the `/api
 | `GET /status`, `/version`, `/metrics`, `/ws/events` | Status, version, Prometheus metrics and an event stream |
 | `/api/v1/*` | Versioned variants of status, deploy, explore-deploy and block routes |
 
-The admin HTTP API on port 40405 has `POST /api/propose` and the admin variants under `/api/v1`. The external gRPC server on 40401 serves only the Deploy service. The internal gRPC server on 40402 serves Repl, Deploy, Propose and Lsp. Peer transport uses port 40400 and discovery uses port 40404.
+- The admin HTTP API on port 40405 has `POST /api/propose` and the admin variants under `/api/v1`.
+- The external gRPC server on 40401 serves only the Deploy service.
+- The internal gRPC server on 40402 serves Repl, Deploy, Propose and Lsp.
+- Peer transport uses port 40400 and discovery uses port 40404.
 
 ## Configuration
 

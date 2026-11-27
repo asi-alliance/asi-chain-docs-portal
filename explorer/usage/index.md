@@ -60,13 +60,21 @@ The details page has four tabs: **Overview**, **Code**, **Transfers** and **Bloc
 
 - **Overview** shows the transaction ID, deployer, type and timestamp. Under **Execution Details** it lists the phlo cost, phlo price, phlo limit, the block after which the deploy is valid, and the signature. **Blockchain Information** gives the number and hash of the block that contains the transaction.
 - **Code** shows the deployed Rholang source.
-- **Transfers** lists the transfers made by that deployment. When the deployment started or completed native transfer calls, the tab also has a **Native Transfer Calls** block with the tables **Calls started by this deploy** and **Calls completed by this deploy**. A call is **Pending**, **Completed**, **Rejected** or **Coalesced**.
+- **Transfers** lists the transfers made by that deployment. When the deployment started or completed native transfer calls, the tab also has a **Native Transfer Calls** block with two tables, **Calls started by this deploy** and **Calls completed by this deploy**.
+
+  A call is **Pending**, **Completed**, **Rejected** or **Coalesced**.
 
 ## Pending
 
 The **Pending** page is titled **Pending Deploys** and shows a counter. It lists the newest deploys, 20 at most, that sit in the node deploy buffers and are not in a block yet, and it refreshes every 5 seconds. If no deploy is waiting, the page shows `No deploys are waiting for a block.`
 
-The table has the columns **Deploy**, **Deployer**, **Submitted**, **Phlo Limit**, **Phlo Price** and **Status**. The status is **Included**, **Pending** or **Retrying after rejection**. Click a deploy to open its details page, which refreshes every 5 seconds until the deploy is in a block.
+The table has these columns:
+
+- **Deploy**, **Deployer** and **Submitted**
+- **Phlo Limit** and **Phlo Price**
+- **Status**, which is **Included**, **Pending** or **Retrying after rejection**
+
+Click a deploy to open its details page, which refreshes every 5 seconds until the deploy is in a block.
 
 ## Validators
 
@@ -81,7 +89,15 @@ The **Validators** page starts with three cards, **Total Validators**, **Total A
 
 Stakes are shown in full, without rounding.
 
-If some validators are not in the current bond set, the **Inactive Validators** section appears below the table and lists them. Its columns are **Public Key**, **Last Recorded Stake (ASI)**, **Blocks Proposed**, **First Seen**, **Last Seen** and **Status**. Their last recorded stake is not counted in the totals above.
+If some validators are not in the current bond set, the **Inactive Validators** section appears below the table and lists them. Its columns are:
+
+- **Public Key**
+- **Last Recorded Stake (ASI)**
+- **Blocks Proposed**
+- **First Seen** and **Last Seen**
+- **Status**
+
+Their last recorded stake is not counted in the totals above.
 
 ASI has 18 decimal places. The explorer formats amounts using their recorded precision. See [Token Amounts](/reference/token-amounts/).
 
@@ -107,7 +123,13 @@ Four cards show the latest block, the average block time, transactions per secon
 
 The indexer is the service that reads blocks from the node and stores them in the database that the explorer queries. The **Indexer** page shows how far it has progressed.
 
-- The label in the top right is **Synced**, **Syncing**, **Ahead of node**, **Waiting for first block**, **Stopped** or **Unavailable**. **Stopped** means that the indexer process is not running, and **Unavailable** means that the indexer cannot reach the node.
+- The label in the top right is one of these:
+  - **Synced**
+  - **Syncing**
+  - **Ahead of node**
+  - **Waiting for first block**
+  - **Stopped**, which means that the indexer process is not running
+  - **Unavailable**, which means that the indexer cannot reach the node
 - The cards show **Sync Progress**, the **Last Indexed Block** with the number of blocks it is behind, the **Node Finalized Block** and the age of the **Last Update**.
 - The table at the bottom repeats the last indexed block, the node finalized block and the sync status.
 
@@ -117,7 +139,10 @@ The page reads the indexer status endpoint and refreshes every 5 seconds.
 
 ## Export
 
-The green icon next to the page title downloads a CSV file with up to 5,000 records. On the **Blocks** page it sits next to **Recent Blocks** and saves `recent_blocks.csv`. On the **Transactions** page it exports the open tab and saves `recent_deployments.csv` or `recent_transfers.csv`.
+The green icon next to the page title downloads a CSV file with up to 5,000 records.
+
+- On the **Blocks** page it sits next to **Recent Blocks** and saves `recent_blocks.csv`.
+- On the **Transactions** page it exports the open tab and saves `recent_deployments.csv` or `recent_transfers.csv`.
 
 ## Data Source
 

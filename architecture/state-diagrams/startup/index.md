@@ -21,7 +21,7 @@ The Rust node runs a fixed sequence of startup steps and then reaches the Runnin
 | Mode | Condition | Path to Running |
 |------|-----------|-----------------|
 | Reconnect | The block store holds an approved block, which is any restart on existing data. | Builds Casper from local storage and goes to Running directly. |
-| Ceremony master | No approved block, `ceremony-master-mode` is set and `genesis-validator-mode` is not. A standalone node starts in this mode. | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
+| Ceremony master | No approved block. `ceremony-master-mode` is set, `genesis-validator-mode` is not. A standalone node starts in this mode. | Builds the genesis block, waits for approvals from the genesis validators (zero in standalone mode), and checks every 2 seconds for the approved block before going to Running. |
 | Genesis validator | No approved block and `genesis-validator-mode` is set. | Verifies and signs the candidate genesis block and then moves to Initializing, where it waits for the approved block like a joining node. |
 | Join | No approved block and neither ceremony mode is set. | Moves to Initializing (see below). |
 
@@ -50,7 +50,12 @@ The transition to Running is logged as one line.
 Making a transition to Running state. Approved Block #<height> (<hash>...)
 ```
 
-Until that line appears, `GET /api/ready` returns 503 and `GET /api/status` reports `"isReady": false` and `lastFinalizedBlockNumber: -1`. A node that waits for the genesis ceremony stays in this state for the whole ceremony.
+Until that line appears:
+
+- `GET /api/ready` returns 503.
+- `GET /api/status` reports `"isReady": false` and `lastFinalizedBlockNumber: -1`.
+
+A node that waits for the genesis ceremony stays in this state for the whole ceremony.
 
 ```bash
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:40403/api/ready

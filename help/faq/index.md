@@ -46,7 +46,11 @@ Create a wallet account, copy its address and paste it into the faucet at [fauce
 
 ### Is There a Waiting Period Between Requests?
 
-No. The faucet API sets no time limit between requests. Each request sends the amount that the faucet operator configured. The faucet refuses an address when its balance is equal to or above the eligibility limit, and the page then shows `Your balance must be below <limit> ASI to claim tokens.`
+No. The faucet API sets no time limit between requests. Each request sends the amount that the faucet operator configured.
+
+The faucet refuses an address when its balance is equal to or above the eligibility limit. The page then shows this message:
+
+`Your balance must be below <limit> ASI to claim tokens.`
 
 ### The Tokens Have Not Arrived. What Should I Do?
 
@@ -86,7 +90,11 @@ Peers connect over TCP on `40400` and `40404`. Clients need access to the extern
 
 ### Does an Observer Reject Writes?
 
-Yes. A node started without a validator key runs in read-only mode. It rejects deploys with `Deploy was rejected because node is running in read-only mode.` and does not propose blocks, but it answers queries. Exploratory deploys, which balance queries use, run only on a read-only node or on a node started in developer mode.
+Yes. A node started without a validator key runs in read-only mode. It does not propose blocks, but it answers queries. It rejects deploys with this message:
+
+`Deploy was rejected because node is running in read-only mode.`
+
+Exploratory deploys, which balance queries use, run only on a read-only node or on a node started in developer mode.
 
 ## Tools
 

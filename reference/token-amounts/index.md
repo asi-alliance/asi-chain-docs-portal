@@ -4,11 +4,21 @@ ASI has 18 decimal places, so 1 ASI is 1,000,000,000,000,000,000 atomic units. T
 
 ## Check the Network Configuration
 
-A Rust node reports its token in `GET /api/status`, in the fields `nativeTokenName`, `nativeTokenSymbol` and `nativeTokenDecimals`.
+A Rust node reports its token in `GET /api/status`, in these fields:
+
+- `nativeTokenName`
+- `nativeTokenSymbol`
+- `nativeTokenDecimals`
 
 The symbol alone does not identify a network. Check `networkId` and `shardId` in the same response as well.
 
-For ASI, start every node with `--native-token-name ASI --native-token-symbol ASI --native-token-decimals 18`. `GET /api/status` then reports `ASI` and `18`. See [Set Up a Private Shard](/nodes/private-shard/).
+For ASI, start every node with these flags:
+
+- `--native-token-name ASI`
+- `--native-token-symbol ASI`
+- `--native-token-decimals 18`
+
+`GET /api/status` then reports `ASI` and `18`. See [Set Up a Private Shard](/nodes/private-shard/).
 
 The token values are fixed at genesis. A node that joins a network needs the values of that network, and a node restarted with other values stops. Records keep the decimals of the network they come from, so do not rescale them.
 
@@ -29,9 +39,15 @@ One atomic unit is `0.000000000000000001` ASI. For example, the raw amount `1500
 
 ## Keep Amounts Exact
 
-A JavaScript `number` holds integers exactly only up to `9007199254740991` (`2^53 - 1`). One ASI with 18 decimals is already larger. The largest signed int64 is `9223372036854775807`, which is `9.223372036854775807` ASI with 18 decimals.
+A JavaScript `number` holds integers exactly only up to `9007199254740991` (`2^53 - 1`). One ASI with 18 decimals is already larger.
 
-Keep amounts as decimal strings and do the arithmetic with `bigint`. Build the `bigint` from the original string, because `BigInt(number)` cannot bring back digits that the `number` has already lost. Do not use `Number` or `parseFloat` for signing, balances or fees.
+The largest signed int64 is `9223372036854775807`, which is `9.223372036854775807` ASI with 18 decimals.
+
+Keep amounts as decimal strings and do the arithmetic with `bigint`.
+
+Build the `bigint` from the original string, because `BigInt(number)` cannot bring back digits that the `number` has already lost.
+
+Do not use `Number` or `parseFloat` for signing, balances or fees.
 
 The example formats an amount and sends nothing:
 
