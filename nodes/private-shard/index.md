@@ -293,7 +293,11 @@ client deploy-status --sig "$DEPLOY_ID" --http http://my-shard-obs:40403
 
 ### Wait for Activation
 
-The bond takes effect at the next epoch boundary, which comes no later than 20 blocks after the bond because of the epoch flags of the first node. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. Repeat the command until it shows `ACTIVE: participating in consensus` and `PROPOSING: blocks at …`. If the status stays `NOT ACTIVE` after the boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
+The bond takes effect at the next epoch boundary. With the epoch flags of the first node, it comes no later than 20 blocks after the bond. Repeat the command until its output has these lines:
+
+- `BONDED: stake …` shows that the bond is in the chain.
+- `ACTIVE: participating in consensus` appears after the epoch boundary. Until then the line reads `NOT ACTIVE`. If it stays so after the boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
+- `PROPOSING: blocks at …` appears after the first block of your validator. Until then the line reads `NOT PROPOSING`.
 
 ```bash
 client validator-status --public-key "$VALIDATOR_PUBLIC_KEY" \
