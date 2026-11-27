@@ -115,13 +115,18 @@ interface ICreatePrivateKeyWalletPayload {
 }
 ```
 
-`createHDWallet` and `createPrivateKeyWallet` store the wallet encrypted with the password and return it open but locked. `openWallet` takes the signer id of a stored wallet, which `getWalletManager().getPublicWalletsMetadata()` lists. It rejects a signer that is already open, decrypts the signer, and with the default policy starts a session.
+`createHDWallet` and `createPrivateKeyWallet` store the wallet encrypted with the password and return it open but locked.
+
+`openWallet` takes the signer id of a stored wallet, which `getWalletManager().getPublicWalletsMetadata()` lists. It rejects a signer that is already open, decrypts the signer, and with the default policy starts a session.
 
 A wallet is open when it is in memory and unlocked when a session holds its secret. `closeWallet` and `closeAllWallets` drop wallets from memory without touching storage and lock them first. Only `removeWallet` deletes stored data.
 
 Creation is protected against duplicates. A secret that is already stored throws `DuplicateWalletError`, and a key that already belongs to a stored account throws `DuplicateAccountError`. Both errors carry the ids of the existing owner, and the check works even while every wallet is locked. An HD wallet is identified by its mnemonic together with its root HD path, so the same mnemonic on another root path is a different wallet.
 
-If setup fails after the wallet loads, for example because the reservations cannot be restored, the client drops the wallet from memory again. A failed `openWallet` can be repeated as it is. A failed `createHDWallet`, `createPrivateKeyWallet` or `importWalletKeyfile` has already stored the wallet, so repeating it throws `DuplicateWalletError`. Call `openWallet` instead.
+If setup fails after the wallet loads, for example because the reservations cannot be restored, the client drops the wallet from memory again.
+
+- A failed `openWallet` can be repeated as it is.
+- A failed `createHDWallet`, `createPrivateKeyWallet` or `importWalletKeyfile` has already stored the wallet, so repeating it throws `DuplicateWalletError`. Call `openWallet` instead.
 
 `removeWallet` and `clearPersistence` run exclusively. While one of them runs, new operations are refused with `OperationsSuspendedError`, and operations in flight are waited for first.
 
@@ -165,9 +170,14 @@ isNetworkBusy(networkId?: NetworkId): boolean
 hasNetworkReservations(networkId?: NetworkId): boolean
 ```
 
-The networks passed to `Client.create` are built in. They have `isDefault: true`, and `updateNetwork` and `removeNetwork` reject them. A network added with `addNetwork` is custom, gets a generated id, and is stored, so it survives a restart. Address a network by its id, because the name can be edited.
+The networks passed to `Client.create` are built in. They have `isDefault: true`, and `updateNetwork` and `removeNetwork` reject them.
 
-A network with an operation in flight cannot be switched, updated or removed. `setNetwork`, `updateNetwork` and `removeNetwork` throw `NetworkBusyError` until the network is idle. `isNetworkBusy` and the `networkBusyChanged` event let a UI disable those controls. `hasNetworkReservations` tells whether open wallets still hold funds reserved on the network, and removing the network drops those reservations.
+A network added with `addNetwork` is custom, gets a generated id, and is stored, so it survives a restart. Address a network by its id, because the name can be edited.
+
+A network with an operation in flight cannot be switched, updated or removed. `setNetwork`, `updateNetwork` and `removeNetwork` throw `NetworkBusyError` until the network is idle.
+
+- `isNetworkBusy` and the `networkBusyChanged` event let a UI disable those controls.
+- `hasNetworkReservations` tells whether open wallets still hold funds reserved on the network, and removing the network drops those reservations.
 
 Every change to the list or the selection emits one `networksChanged` event with the full state, `{ networks, selectedNetwork }`. A failed storage write changes nothing and emits nothing.
 
@@ -202,7 +212,11 @@ toDisplayAmount(atomicAmount: bigint): string
 toExactAtomicAmount(amount: string): bigint
 ```
 
-`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units. The conversion methods use `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. The `amount` and `gasCost` of pending entries in `getTransactionsHistory` are converted with `NATIVE_TOKEN_DECIMALS_AMOUNT` in the same way. For ASI call `toExactAtomicAmount(amount, 18)` from [Functions](/wallet-sdk/api-reference/functions/#toexactatomicamount). See [Token Amounts](/reference/token-amounts/).
+`getBalance` returns the total balance of an address on the current network. `getAvailableBalance` subtracts the funds that pending reservations hold. Amounts are `bigint` values in atomic units.
+
+The conversion methods use `NATIVE_TOKEN_DECIMALS_AMOUNT` and do not read the decimals of the network. The `amount` and `gasCost` of pending entries in `getTransactionsHistory` are converted with `NATIVE_TOKEN_DECIMALS_AMOUNT` in the same way.
+
+For ASI call `toExactAtomicAmount(amount, 18)` from [Functions](/wallet-sdk/api-reference/functions/#toexactatomicamount). See [Token Amounts](/reference/token-amounts/).
 
 A balance that cannot be trusted throws `BalanceUnavailableError` with status `502`, carrying the address and a reason. It never resolves to `0n`, because an unreachable node, a vault that reports an error and an empty account are three different outcomes.
 
@@ -273,7 +287,15 @@ interface IDeployWatchCallbacks {
 
 `DeploySubmissionRejectedError` extends `ApiRequestError`, so a handler for `ApiRequestError` also catches it.
 
-`signDeploy` builds the deploy, signs it and returns `{ data, deployer, signature, sigAlgorithm }` without sending anything and without creating a reservation. Use it when you submit the deploy yourself, and pair it with `addTransactionReservation`. Unlike `deploy`, its request carries `phloPrice` and `shardId`. The defaults are `DEFAULT_PHLO_LIMIT` (500000), `DEFAULT_PHLO_PRICE` (1) and the shard `"root"`. The call reads the current block number from the network. A blank `term` or a non-positive phlo value is rejected before anything is signed.
+`signDeploy` builds the deploy, signs it and returns `{ data, deployer, signature, sigAlgorithm }` without sending anything and without creating a reservation. Use it when you submit the deploy yourself, and pair it with `addTransactionReservation`.
+
+Unlike `deploy`, its request carries `phloPrice` and `shardId`. The defaults are:
+
+- `DEFAULT_PHLO_LIMIT` (500000)
+- `DEFAULT_PHLO_PRICE` (1)
+- the shard `"root"`
+
+The call reads the current block number from the network. A blank `term` or a non-positive phlo value is rejected before anything is signed.
 
 `exploreDeploy` runs read-only Rholang and needs no password. `watchDeploy` polls the status of a deploy and returns `{ cancel, done }`.
 
@@ -341,7 +363,9 @@ interface ITransactionsHistoryOptions {
 }
 ```
 
-`getTransactionsHistory` merges the indexed history of the account with its pending transactions on the current network. It removes duplicates by deploy id, so the indexed row wins once the deploy is confirmed, and sorts newest first. `sources` is `["pending", "executed"]` by default. `["pending"]` reads reservations only and never calls the indexer.
+`getTransactionsHistory` merges the indexed history of the account with its pending transactions on the current network. It removes duplicates by deploy id, so the indexed row wins once the deploy is confirmed, and sorts newest first.
+
+The `sources` option is `["pending", "executed"]` by default. With `["pending"]` the method reads reservations only and never calls the indexer.
 
 The two sides come from different backends, because a reservation is released when the node confirms the deploy and the indexer ingests the block later. For a short time a transaction can therefore be in both lists or in neither.
 
@@ -365,7 +389,16 @@ interface IImportWalletKeyfileOptions {
 
 There are two kinds of keyfile, told apart by `type`. A wallet keyfile (`asi-wallet-keyfile`) holds the encrypted secret and the encrypted account list, and it restores a wallet. An account keyfile (`asi-account-keyfile`) from `getExportedAccountData` is a public descriptor with the name, address and index. It holds no key material and restores nothing.
 
-`previewWalletKeyfileImport` writes nothing. It decrypts the keyfile, derives its accounts and marks each one `"new"` or `"already-imported"`. `source` can be the object or its JSON string. A keyfile is matched to a stored wallet by its secret and, for HD wallets, its root HD path, so accounts are never merged into a wallet that would derive other keys. The account list is limited to `MAX_KEYFILE_ACCOUNTS` (1000) entries with names of at most `MAX_KEYFILE_ACCOUNT_NAME_LENGTH` (128) characters, and the SDK does not apply those limits when you create or rename an account.
+`previewWalletKeyfileImport` writes nothing. It decrypts the keyfile, derives its accounts and marks each one `"new"` or `"already-imported"`. `source` can be the object or its JSON string.
+
+A keyfile is matched to a stored wallet by its secret and, for HD wallets, its root HD path, so accounts are never merged into a wallet that would derive other keys.
+
+The account list is limited to:
+
+- `MAX_KEYFILE_ACCOUNTS` (1000) entries;
+- account names of at most `MAX_KEYFILE_ACCOUNT_NAME_LENGTH` (128) characters.
+
+The SDK does not apply those limits when you create or rename an account.
 
 ```ts
 import { Client, KeyfileImportAccountStatus } from "@asichain/asi-wallet-sdk";
@@ -393,7 +426,9 @@ export async function restoreKeyfile(client: Client, keyfile: unknown, password:
 getEventBus(): IClientEventSource
 ```
 
-`getEventBus()` returns a typed source with `on(name, listener)` and `off(name, listener)`. `on` returns an unsubscribe function. You can subscribe and unsubscribe at any time. A listener that throws or rejects does not break the other listeners or the operation that emitted the event. Its error goes to `onListenerError`.
+`getEventBus()` returns a typed source with `on(name, listener)` and `off(name, listener)`. `on` returns an unsubscribe function. You can subscribe and unsubscribe at any time.
+
+A listener that throws or rejects does not break the other listeners or the operation that emitted the event. Its error goes to `onListenerError`.
 
 | Event | Payload | Emitted when |
 |-------|---------|--------------|

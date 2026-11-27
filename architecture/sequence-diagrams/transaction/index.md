@@ -58,7 +58,11 @@ The result is a signed deploy: the serialized data, the public key of the deploy
 
 If the node refuses the deploy with a 4xx response, the reservation is released (messages 5 and 6). If the outcome is unknown, for example after a network error, the reservation stays, because the deploy may reach the network later.
 
-The validator answers `400` for a malformed request or a bad term and `409` for a duplicate deploy. Other failures come back as `422`, `500` or `502`.
+The validator answers with one of these codes:
+
+- `400` for a malformed request or a bad term.
+- `409` for a duplicate deploy.
+- `422`, `500` or `502` for other failures.
 
 ## Phase 4: Confirmation
 
@@ -76,9 +80,16 @@ The SDK maps every answer to a status.
 
 If the deploy is not finalized within 180 seconds, the watch ends with `DeployTimeoutError`. When it ends, the wallet invalidates the cached balance and history.
 
-For a Scala node the SDK reads the `faultTolerance` field of the answer and treats the deploy as finalized at 0.99 or above. For a Rust node the SDK reads `finalizationState` from the same answer and at the same time asks the validator for `GET /api/deploy-finalization-status/{sig}`. The first final status from either answer ends the check.
+How the SDK decides that a deploy is finalized depends on the node:
 
-A Rust node returns the deploy as soon as a block it knows contains it, with `isFinalized: false` until that block is finalized. If no known block contains the deploy, the node answers `404 deploy_not_found`, and the SDK reports `CheckingError`.
+- For a Scala node the SDK reads the `faultTolerance` field of the answer and treats the deploy as finalized at 0.99 or above.
+- For a Rust node the SDK reads `finalizationState` from the same answer and at the same time asks the validator for `GET /api/deploy-finalization-status/{sig}`.
+
+The first final status from either answer ends the check.
+
+A Rust node returns the deploy as soon as a block it knows contains it. Until that block is finalized, the answer has `isFinalized: false`.
+
+If no known block contains the deploy, the node answers `404 deploy_not_found`, and the SDK reports `CheckingError`.
 
 ## Errors
 

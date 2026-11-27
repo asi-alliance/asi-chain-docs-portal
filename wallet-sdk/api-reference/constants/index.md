@@ -14,9 +14,10 @@ import { GasFee, SCALA_FAULT_TOLERANCE_THRESHOLD } from "@asichain/asi-wallet-sd
 
 ### Chain and Token
 
+`ASI_CHAIN_PREFIX` has the type `{ coinId: string; version: string }` and the value `{ coinId: "000000", version: "00" }`. It is prepended to the address payload before the checksum is calculated.
+
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
-| `ASI_CHAIN_PREFIX` | `{ coinId: string; version: string }` | `{ coinId: "000000", version: "00" }` | Chain prefix prepended to the address payload before the checksum is calculated. |
 | `ASI_DECIMALS` | `number` | `8` | Exponent used to compute `ASI_BASE_UNIT`. The conversion functions take `decimals` as an argument instead. |
 | `NATIVE_TOKEN_DECIMALS_AMOUNT` | `number` | `8` | Default precision of an [`Asset`](/wallet-sdk/api-reference/asset/) and of the `Client` conversion methods. For ASI pass `18`. |
 | `POWER_BASE` | `number` | `10` | Base used to compute `ASI_BASE_UNIT`. |
@@ -58,11 +59,12 @@ The SDK uses this threshold only for a network with the `SCALA` node API profile
 
 ### Enums and Limits
 
+- `RequirePassword` is `{ ONCE_PER_SESSION: "once-per-session", EVERY_SIGNATURE: "every-signature" }`. It sets whether signing asks for the password once per session or on every signature.
+- `ExportFormat` is `{ JSON: "json", CSV: "csv" }`. It is the output format of `ExportKeyfileService` exports.
+- `KeyfileTypes` is `{ WALLET: "asi-wallet-keyfile", ACCOUNT: "asi-account-keyfile" }`. It is the type field of an exported keyfile.
+
 | Constant | Value | Description |
 |----------|-------|-------------|
-| `RequirePassword` | `{ ONCE_PER_SESSION: "once-per-session", EVERY_SIGNATURE: "every-signature" }` | Whether signing asks for the password once per session or on every signature. |
-| `ExportFormat` | `{ JSON: "json", CSV: "csv" }` | Output format of `ExportKeyfileService` exports. |
-| `KeyfileTypes` | `{ WALLET: "asi-wallet-keyfile", ACCOUNT: "asi-account-keyfile" }` | Type field of an exported keyfile. |
 | `ASI_WALLET_KEYFILE_VERSION` | `1` | Version of the keyfile format. |
 | `MAX_KEYFILE_ACCOUNTS` | `1000` | Maximum number of accounts in one keyfile. |
 | `MAX_KEYFILE_ACCOUNT_NAME_LENGTH` | `128` | Maximum length of an account name in a keyfile, in characters. |
