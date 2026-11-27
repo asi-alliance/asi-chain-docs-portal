@@ -5,8 +5,8 @@ The ASI wallet CLI creates wallets, queries balances, sends tokens and reads and
 ## Published Image
 
 ```text
-public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli:0.1.0-dev.20261112-971f6ba2ac85
-public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:c05db1874773b0e740299439e3e900852ae341f5f8bda228234f6835c40cc252
+public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli:0.1.0-dev.20261125-95d4b635c2b3
+public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:cd7a5ed29d1f2d0c55884340e6213f02ed87d6af82032f134cd4c5309672c834
 ```
 
 The CLI compiles the ASI client library into its own binary. The standalone `client` container is a different tool, so do not swap one for the other.
@@ -14,7 +14,7 @@ The CLI compiles the ASI client library into its own binary. The standalone `cli
 To show the help text without connecting to a network, pull the image and run it with `--network none`:
 
 ```bash
-WALLET_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:c05db1874773b0e740299439e3e900852ae341f5f8bda228234f6835c40cc252
+WALLET_IMAGE=public.ecr.aws/l2u2v4a8/asi-chain/wallet-cli@sha256:cd7a5ed29d1f2d0c55884340e6213f02ed87d6af82032f134cd4c5309672c834
 docker pull --platform linux/amd64 "$WALLET_IMAGE"
 docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" --help
 docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --help
@@ -45,13 +45,16 @@ DEPLOY_CHECK_INTERVAL_SECONDS=5
 NODE_CONNECT_TIMEOUT_SECONDS=10
 NODE_TIMEOUT_SECONDS=30
 GRAPHQL_URL=
+GRAPHQL_TIMEOUT_SECONDS=30
 ```
 
-The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports.
+The values after `OUTPUT_DIR` are the defaults. `DEPLOY_MAX_WAIT_SECONDS` is how long `send` waits for finalization, and `DEPLOY_CHECK_INTERVAL_SECONDS` is the pause between checks. The timeouts and both deploy values must be positive integers, and the check interval must not exceed the wait. Otherwise the CLI stops at startup before it sends anything. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports.
 
 `send` submits through the external gRPC port of a validator (`40401` by default). Open it only to the clients that need it. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
 
-`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. Ask the network operator for the endpoint.
+`GRAPHQL_URL` is needed only by `history` and `export`. The CLI opens it as a GraphQL WebSocket, so it must start with `ws://` or `wss://`, and the endpoint has to accept the `graphql-ws` protocol. With an `https://` URL both commands end with `Failed to connect to WebSocket`. Ask the network operator for the endpoint, and do not use a URL that carries an admin secret.
+
+`GRAPHQL_TIMEOUT_SECONDS` must be a positive number of seconds. It limits the WebSocket connection and its acknowledgement for both commands, and for `export` also the whole query until it completes. It does not limit a `history` session after the connection is up, because `history` keeps running to show new deploys. If the endpoint reports an error, sends an invalid response or closes early, `export` exits with an error and writes no file. Without `GRAPHQL_URL` both commands stop with `GRAPHQL_URL is required for history/export`.
 
 ### Private Shard
 
@@ -111,7 +114,7 @@ The repository pins a nightly Rust toolchain in `rust-toolchain.toml`, and `rust
 ```bash
 git clone --branch dev https://github.com/asi-alliance/asi-chain-wallet-cli.git
 cd asi-chain-wallet-cli
-git checkout --detach 971f6ba2ac852073699c4666eb9ec49444cc75fe
+git checkout --detach 95d4b635c2b30b9db404badf9c2e7c8af450222b
 cargo build --release --locked
 ```
 
@@ -131,7 +134,9 @@ Run these from the source directory after a build. With the image, put the comma
 ./target/release/asi-chain-wallet-cli export --format json --limit 10
 ```
 
-`create --save` prints the private key and writes the wallet credentials to a file under `OUTPUT_DIR`. Protect both the printed output and the file. `balance`, `send` and `history` require a complete wallet file whose private key, public key and address match, and watch-only files are not supported.
+`create --save` prints the private key and writes the wallet credentials to a file under `OUTPUT_DIR`. Protect both the printed output and the file. On Unix the file is created with owner-only permissions. `create --save` does not replace an existing `wallet_info.json` and stops with `Could not save a new wallet`, so choose another `OUTPUT_DIR` for a second wallet.
+
+`send` requires a complete wallet file whose private key, public key and address match, and stops with `Wallet private key does not match its public key` or `Wallet public key does not match its address` otherwise. `balance`, `history` and `export` only need a matching `public_key` and `address`, so a watch-only `wallet_info.json` without `private_key` is enough for them.
 
 To send tokens, pass the recipient address and the amount in atomic units, the smallest unit, which the CLI prints as `dust`:
 
@@ -147,7 +152,20 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 
 ASI has 18 decimal places. See [Token Amounts](/reference/token-amounts/).
 
-Give amounts as exact integers. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
+Give amounts as exact integers greater than zero. `send` checks the balance first and prints `Deploy ID: <id>` before it submits, so you have the ID even if the connection drops. It reports `Transfer complete.` only after the deploy is finalized and the vault reports a successful transfer. The signed transfer expires 30 minutes after signing.
+
+When the node refuses the deploy, the error starts with `Transfer not accepted for deploy <id>`. It may add `Retry after <n> s.` and one of these causes:
+
+- `Cause: deployer_share`, the queue limit for your deployer is full. Only retry the same signed deploy, because running `send` again signs a new transfer.
+- `Cause: validator`, `Cause: validator_idle`, `Cause: shard` or `Cause: storage`, the queue is full for that reason. Wait, then run `send` again, which signs with a current block height.
+
+Add `--retry-deployer-share` to let `send` handle the first case. On a `deployer_share` refusal that carries a retry time, it waits and sends the same signed transfer once more. If the transfer would expire before the wait ends, it skips the retry and shows the original error. Other refusals are never retried.
+
+```bash
+asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT> --retry-deployer-share
+```
+
+A deploy that fails after the queue accepted it ends with `Transfer failed for deploy <id>`. If the deploy is finalized but its result cannot be read, the error is `Transfer result unreadable for deploy <id>`. Do not resubmit that deploy. Read its result by the deploy ID instead. For any other outcome, including a timeout, the error is `Transfer outcome unknown for deploy <id>`. Keep the deploy ID and check the result before you send again.
 
 ## Next Steps
 

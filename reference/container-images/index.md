@@ -18,7 +18,7 @@ Repository paths are relative to the namespace above. Each source link points to
 | Wallet frontend | `wallet` | [b2e3a45f70d1](https://github.com/asi-alliance/asi-chain-wallet/tree/b2e3a45f70d17c05979de38290d7a4fb7e8c42dd) |
 | Faucet frontend | `faucet` | [d2d271d27e93](https://github.com/asi-alliance/asi-chain-faucet/tree/d2d271d27e93936624e5ed3c6e0e4200605a6299) |
 | Faucet API | `faucet-api` | [0487b1f366a6](https://github.com/asi-alliance/asi-chain-faucet/tree/0487b1f366a6f42b4c715d89a5f2668069edde06) |
-| Wallet CLI | `wallet-cli` | [971f6ba2ac85](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/971f6ba2ac852073699c4666eb9ec49444cc75fe) |
+| Wallet CLI | `wallet-cli` | [95d4b635c2b3](https://github.com/asi-alliance/asi-chain-wallet-cli/tree/95d4b635c2b30b9db404badf9c2e7c8af450222b) |
 | ASI client | `client` | [2fedf97e66a5](https://github.com/asi-alliance/asi-chain-client/tree/2fedf97e66a56b7a0b4cce06eb546d36c221b58e) |
 
 Each line below gives the repository, the versioned tag and the manifest digest of one artifact, in the order of the table. The end of each tag matches the commit in the Source column.
@@ -30,7 +30,7 @@ explorer:0.1.0-dev.20261112-0dcafbf3b28c@sha256:9b0f3a41e81c1814d330cac4d15bfa5d
 wallet:0.2.0-dev.20261102-b2e3a45f70d1@sha256:b4222f3676cb24a2c7c20fdd805aa46e5744ad2c867ff25f67e1c96554f3afa7
 faucet:0.1.0-dev.20261111-d2d271d27e93@sha256:8dee8d04ab9b230c052ec79c20fafd7f72af1cf7dcdf8ee1ab30a9eb044271df
 faucet-api:0.1.0-dev.20261112-0487b1f366a6@sha256:e0fd2cf9262004af88428bdd5d6e0db5d0d4f162d2adf3f59c96b101323e7c35
-wallet-cli:0.1.0-dev.20261112-971f6ba2ac85@sha256:c05db1874773b0e740299439e3e900852ae341f5f8bda228234f6835c40cc252
+wallet-cli:0.1.0-dev.20261125-95d4b635c2b3@sha256:cd7a5ed29d1f2d0c55884340e6213f02ed87d6af82032f134cd4c5309672c834
 client:0.3.1-rust-dev.20261124-2fedf97e66a5@sha256:9efdbf3937bc26d2fa0d461b953df5320fc733d138d8e7f2c916ebcae0bcc45c
 ```
 
