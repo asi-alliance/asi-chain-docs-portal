@@ -32,7 +32,11 @@ import {
 toExactAtomicAmount(amount: string, decimals: number): bigint
 ```
 
-Converts a decimal string to atomic units without rounding. It trims surrounding whitespace, accepts a leading `-` and rejects thousands separators. Trailing zeros beyond `decimals` are allowed, so `toExactAtomicAmount("1.50", 1)` is `15n`.
+Converts a decimal string to atomic units without rounding.
+
+- It trims surrounding whitespace.
+- It accepts a leading `-` and rejects thousands separators.
+- Trailing zeros beyond `decimals` are allowed, so `toExactAtomicAmount("1.50", 1)` is `15n`.
 
 | Name | Type | Description |
 |------|------|-------------|
@@ -68,7 +72,11 @@ Returns `string`.
 fromAtomicAmountToNumber(atomicAmount: bigint, decimals: number): number
 ```
 
-Converts atomic units to a JavaScript `number`. When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Fraction digits can also be lost below that value. Use `fromAtomicAmount` when exact digits matter. Do not use this function for signing, balance comparisons or fee calculations.
+Converts atomic units to a JavaScript `number`.
+
+When the integer part is larger than `Number.MAX_SAFE_INTEGER`, it logs a warning and returns an imprecise value. Fraction digits can also be lost below that value.
+
+Use `fromAtomicAmount` when exact digits matter. Do not use this function for signing, balance comparisons or fee calculations.
 
 | Name | Type | Description |
 |------|------|-------------|
@@ -143,4 +151,9 @@ console.log(parseAtomicAmount("42")); // 42n
 console.log(parseAtomicAmount("1.5")); // null
 ```
 
-The package also exports other helpers that the SDK uses internally, for example `getErrorMessage`, `runProtected`, `selectByField` and `withSchemaVersion`. Their signatures are in the package typings.
+The package also exports other helpers that the SDK uses internally. Their signatures are in the package typings. For example:
+
+- `getErrorMessage`
+- `runProtected`
+- `selectByField`
+- `withSchemaVersion`

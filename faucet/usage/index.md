@@ -14,7 +14,13 @@ For the short path from a new wallet to a balance, see [Get DevNet ASI](/quick-s
 - There is no waiting time between requests. You can ask again as soon as the earlier request has finished.
 - A request is refused when the balance of the address is equal to or above the eligibility limit.
 
-The frontend reads `native_token_decimals`, `faucet_amount` and `eligibility_ceiling` from the API's `/config` endpoint. See [Token Amounts](/reference/token-amounts/).
+The frontend reads these values from the `/config` endpoint of the API:
+
+- `native_token_decimals`
+- `faucet_amount`
+- `eligibility_ceiling`
+
+See [Token Amounts](/reference/token-amounts/).
 
 ## Request Tokens
 
@@ -30,7 +36,10 @@ As soon as the address is valid, the page loads its balance and shows it under *
 
 ### Request the Tokens
 
-Press **FAUCET**. When the faucet accepts the request, the page shows `Tokens requested successfully.`, and the **TX status check** field on the right shows the `deploy_id` of the transfer. To follow an earlier request, paste its `deploy_id` into that field yourself.
+Press **FAUCET**. When the faucet accepts the request, the page shows:
+
+- `Tokens requested successfully.`
+- The `deploy_id` of the transfer in the **TX status check** field on the right. To follow an earlier request, paste its `deploy_id` into that field yourself.
 
 If the balance is equal to or above the limit, the button stays disabled and the page shows `Your balance must be below <limit> ASI to claim tokens.`, with the limit of the faucet in place of `<limit>`.
 

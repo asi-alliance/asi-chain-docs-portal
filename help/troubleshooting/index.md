@@ -18,13 +18,21 @@ See [ASI Wallet](/wallet/usage/) for the screens.
 
 ### Faucet Limits
 
-Each request sends the amount that the faucet operator configured. The faucet refuses an address when its balance is equal to or above the eligibility limit, and the page then shows `Your balance must be below <limit> ASI to claim tokens.` See [Faucet](/faucet/usage/) for how the page checks a request and what each status means. Do not send a second request until you have checked the first.
+Each request sends the amount that the faucet operator configured.
+
+The faucet refuses an address when its balance is equal to or above the eligibility limit. The page then shows:
+
+- `Your balance must be below <limit> ASI to claim tokens.`
+
+See [Faucet](/faucet/usage/) for how the page checks a request and what each status means. Do not send a second request until you have checked the first.
 
 ### Failed Transfers
 
 A transfer can fail for several reasons.
 
-- The sender's balance does not cover the amount and the fee. The wallet warns with `Insufficient balance to cover the estimated fee.` A deploy that runs out of funds after it was accepted fails inside its block with `Deploy payment failed: Insufficient funds`.
+- The sender's balance does not cover the amount and the fee. There are two messages for this case:
+  - The wallet warns with `Insufficient balance to cover the estimated fee.`
+  - A deploy that runs out of funds after it was accepted fails inside its block with `Deploy payment failed: Insufficient funds`.
 - The recipient address is not a valid ASI address. Addresses start with `1111`.
 - The result is pending. Keep the original deploy ID and check it in the explorer before you send again. A timeout is not proof that the payment failed.
 
@@ -48,7 +56,8 @@ docker logs --tail 100 "$NODE"
 The first lines of the log usually name the cause. The most common messages are listed below with their fixes.
 
 - `The data dir must be a directory and have read and write permissions` means the volume belongs to `root`. Change its owner to `daemon` (uid 1) with the `chown` command from [Run an Observer](/nodes/observer/#start-the-observer).
-- `unexpected argument '--profile' found` means a `--profile` option was passed after `run`, and `the argument '--profile <PROFILE>' cannot be used multiple times` means one was passed before `run`. The image entrypoint already adds `--profile=docker`, so remove yours.
+- `unexpected argument '--profile' found` means a `--profile` option was passed after `run`.
+- `the argument '--profile <PROFILE>' cannot be used multiple times` means one was passed before `run`. In both cases the image entrypoint already adds `--profile=docker`, so remove yours.
 - `Failed to parse bootstrap peer address: Parse error: missing node ID` means the bootstrap URI lacks the node ID. The form is `rnode://<node-id>@<host>?protocol=40400&discovery=40404`.
 - `No such device or address` with `--validator-private-key-path` means the node asked for the key password and found no terminal. Set the `F1R3NODE_VALIDATOR_PASSWORD` environment variable.
 - `Could not decrypt PEM file` means that the password does not match the key file.
@@ -101,7 +110,11 @@ docker inspect "$NODE" --format '{{.State.Health.Status}}'
 
 The route returns `{"ready":true}` with HTTP 200 when the node is up, and `{"ready":false}` with HTTP 503 while it starts or has no peers. A `503` means the node answered. A refused or timed-out connection is a transport failure. Public gateways may omit this route.
 
-The image healthcheck calls `/api/ready` on container port `40403` every 30 seconds, with a 120-second start period. A joining node reports `unhealthy` until it has a peer and reaches the Running state. It also reports `unhealthy` after you move the HTTP port with `--api-port-http`, even if the node works.
+The image healthcheck calls `/api/ready` on container port `40403` every 30 seconds, with a 120-second start period.
+
+A joining node reports `unhealthy` until it has a peer and reaches the Running state.
+
+It also reports `unhealthy` after you move the HTTP port with `--api-port-http`, even if the node works.
 
 Keep internal gRPC `40402`, admin HTTP `40405` and `/metrics` private. Do not disable TLS or expose privileged listeners as a diagnostic shortcut.
 
@@ -123,7 +136,12 @@ Do not delete the data directory of a node that peers already know. The node ide
 
 After a successful bond, `validator-status` reports `BONDED` and `NOT ACTIVE`. A bond becomes active only at the next epoch boundary, so this is the normal state between the bond and the boundary. The epoch length is fixed at genesis and is 10,000 blocks by default.
 
-The commands use the variables and the `client` function from [Run a Validator](/nodes/validator/#set-the-variables). To estimate the wait, read the blocks left in the epoch and the block rate. Take `blocksUntilNextEpoch` from `/api/epoch` and ignore its `quarantineLength`, which is a local setting of the node:
+The commands use the variables and the `client` function from [Run a Validator](/nodes/validator/#set-the-variables).
+
+To estimate the wait, read the blocks left in the epoch and the block rate:
+
+- Take `blocksUntilNextEpoch` from `/api/epoch`.
+- Ignore `quarantineLength` in the same response, which is a local setting of the node.
 
 ```bash
 curl -s "$OBSERVER_HTTP/api/epoch"
@@ -146,7 +164,9 @@ client deploy-status --sig "$DEPLOY_ID" --http "$OBSERVER_HTTP"
 curl -s "$OBSERVER_HTTP/api/deploy/$DEPLOY_ID"
 ```
 
-- An error about funds in `systemDeployError` means the vault could not pay for the stake and the fee. The fee is at most `phlo_limit * phlo_price`, and the bond uses a phlo limit of 10,000,000. The deploy has failed, and the node does not retry it. Fund the vault again as in [Fund the Validator](/nodes/validator/#fund-the-validator) and bond again.
+- An error about funds in `systemDeployError` means the vault could not pay for the stake and the fee. The deploy has failed, and the node does not retry it.
+  - The fee is at most `phlo_limit * phlo_price`, and the bond uses a phlo limit of 10,000,000.
+  - Fund the vault again as in [Fund the Validator](/nodes/validator/#fund-the-validator) and bond again.
 - A block hash and no error mean that the deploy is in a block and has no verdict yet. Run `deploy-status` again and do not bond again.
 - No block at all means that the deploy went to a node that cannot include it, for example your own node, a read-only node or any node that does not propose blocks. Send the bond to the gRPC and HTTP addresses of a bonded validator, as in [Submit the Bond](/nodes/validator/#submit-the-bond).
 - `already bonded` means that the key is in the bond set. Do not repeat the bond. Wait for the boundary.

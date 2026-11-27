@@ -11,7 +11,9 @@ Learn which role each node and service plays, which ports a node listens on by d
 | Observer | Follows chain state and serves queries without proposing blocks |
 | Indexer | Reads node APIs and stores derived chain data in PostgreSQL |
 | Hasura | Exposes approved database data through GraphQL |
-| Applications | Wallet, SDK, CLI and faucet send requests to a node API. The wallet and SDK read history through GraphQL, and the CLI uses GraphQL only for `history` and `export` |
+| Applications | Wallet, SDK, CLI and faucet send requests to a node API. The wallet and SDK read history through GraphQL. |
+
+The CLI uses GraphQL only for `history` and `export`.
 
 A bootstrap peer is not automatically a bonded validator. After the first connection every node talks to its peers through discovery, so the bootstrap peer is not a hub for traffic.
 
@@ -33,7 +35,9 @@ Applications and the indexer can talk to any node that exposes the API ports, in
 These are the Rust node defaults. Container ports and host mappings differ between setups, and [Node Image](/nodes/image/#default-container-ports) lists the container side.
 
 ::: warning API Listeners Are Not Local
-All API listeners bind to `0.0.0.0` by default (`api-server.host`), so the node does not keep 40402 or 40405 local by itself. Restrict them with a firewall or by setting `api-server.host`. The `/metrics` route is registered on the public HTTP router, so it is reachable on 40403. A public gateway in front of the node should pass only the routes you intend to publish.
+All API listeners bind to `0.0.0.0` by default (`api-server.host`), so the node does not keep 40402 or 40405 local by itself.
+
+Restrict them with a firewall or by setting `api-server.host`. The `/metrics` route is registered on the public HTTP router, so it is reachable on 40403. A public gateway in front of the node should pass only the routes you intend to publish.
 :::
 
 ## Firewall

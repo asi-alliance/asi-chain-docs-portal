@@ -25,7 +25,11 @@ class SecretsProvider {
 }
 ```
 
-For `Wallet.createPk` the closure returns `{ password, secret: { privateKey } }`. For `Wallet.createHD` it returns `{ password, secret: { seed } }`, where `seed` is the recovery phrase. For calls that only check or unlock, `{ password }` is enough.
+What the closure returns depends on the call:
+
+- `Wallet.createPk` returns `{ password, secret: { privateKey } }`.
+- `Wallet.createHD` returns `{ password, secret: { seed } }`, where `seed` is the recovery phrase.
+- A call that only checks or unlocks needs just `{ password }`.
 
 ## Methods
 
@@ -81,7 +85,10 @@ enum WalletTypes {
 }
 ```
 
-A wallet has no active account. `getAccount` resolves the id on every call and throws `UnknownAccountError` when the id belongs to another wallet. `runAccountOperation` resolves the account and marks it busy while the callback runs, so `removeAccount` refuses an account that is signing.
+A wallet has no active account.
+
+- `getAccount` resolves the id on every call and throws `UnknownAccountError` when the id belongs to another wallet.
+- `runAccountOperation` resolves the account and marks it busy while the callback runs, so `removeAccount` refuses an account that is signing.
 
 ### Session
 
@@ -101,7 +108,11 @@ interface ISigningSessionOptions {
 }
 ```
 
-`unlock` decrypts the secret once and keeps it in memory until `lock` or the auto-lock timer. When `autoLockMs` is omitted, the session lasts 15 minutes (`DEFAULT_AUTO_LOCK_MS`). A value of zero or less holds no session, so the wallet stays locked. The timer is fixed and does not restart on activity.
+`unlock` decrypts the secret once and keeps it in memory until `lock` or the auto-lock timer.
+
+- When `autoLockMs` is omitted, the session lasts 15 minutes (`DEFAULT_AUTO_LOCK_MS`).
+- A value of zero or less holds no session, so the wallet stays locked.
+- The timer is fixed and does not restart on activity.
 
 `isPasswordValid` returns `false` only for a wrong password. A storage failure, damaged data or an unsupported encryption version is rethrown, so a broken store is not reported as a typo.
 
@@ -122,7 +133,11 @@ interface ICreatedAccountData {
 ```
 
 - `deriveAccount` takes the next free derivation index. On a private-key wallet it throws `HDWalletOnlyOperationError`.
-- `removeAccount` works only on HD wallets. It throws `AccountBusyError` while the account has an operation in flight and `LastAccountRemovalError` for the last account. To drop a whole wallet use `Client.removeWallet`.
+- `removeAccount` works only on HD wallets. It throws:
+  - `AccountBusyError` while the account has an operation in flight.
+  - `LastAccountRemovalError` for the last account.
+
+  To drop a whole wallet use `Client.removeWallet`.
 - `updateAccount` changes the account name, which is the only editable field (`TEditableAccountOptions` is `{ name? }`).
 - `addAccounts` adds several accounts at once and keeps them ordered by derivation index.
 
@@ -195,7 +210,9 @@ class Account {
 
 [Source](https://github.com/asi-alliance/asi-chain-wallet-sdk/blob/dev/src/domains/Signer/index.ts)
 
-A `Signer` is the signing boundary. It holds the encrypted secret and produces signatures without handing key bytes to callers. `HDSigner` and `PrivateKeySigner` implement it. `Wallet.getSigner()` returns the wallet's signer.
+A `Signer` is the signing boundary. It holds the encrypted secret and produces signatures without handing key bytes to callers.
+
+The classes `HDSigner` and `PrivateKeySigner` implement it, and `Wallet.getSigner()` returns the wallet's signer.
 
 ```ts
 abstract class Signer {
@@ -237,7 +254,9 @@ class SigningSession {
 }
 ```
 
-`release` always raises the generation counter and is safe to call twice. `unlock` reads the generation before it decrypts, and `hold` compares it afterwards. If the wallet was locked while the decryption was running, `hold` zeroes the fresh secret and throws `WalletOperationCancelledError`, so a slow unlock cannot reopen a wallet the user has just locked.
+`release` always raises the generation counter and is safe to call twice.
+
+`unlock` reads the generation before it decrypts, and `hold` compares it afterwards. If the wallet was locked while the decryption was running, `hold` zeroes the fresh secret and throws `WalletOperationCancelledError`. So a slow unlock cannot reopen a wallet the user has just locked.
 
 ## Example
 
