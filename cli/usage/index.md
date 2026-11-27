@@ -207,7 +207,7 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 
 A deploy that fails after the queue accepted it ends with one of these errors:
 
-- `Transfer failed for deploy <id>` means the deploy failed.
+- `Transfer failed for deploy <id>` means the deploy failed, expired or was rejected.
 - `Transfer result unreadable for deploy <id>` means the deploy is finalized but its result cannot be read. Do not resubmit that deploy. Read its result by the deploy ID instead.
 - `Transfer outcome unknown for deploy <id>` is the error for any other outcome, including a timeout. Keep the deploy ID and check the result before you send again.
 

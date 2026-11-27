@@ -20,9 +20,11 @@ See [ASI Wallet](/wallet/usage/) for the screens.
 
 Each request sends the amount that the faucet operator configured.
 
-The faucet refuses an address when its balance is equal to or above the eligibility limit. The page then shows:
+The faucet refuses an address when its balance is equal to or above the eligibility limit. The page then shows this message:
 
-- `Your balance must be below <limit> ASI to claim tokens.`
+```text
+Your balance must be below <limit> ASI to claim tokens.
+```
 
 See [Faucet](/faucet/usage/) for how the page checks a request and what each status means. Do not send a second request until you have checked the first.
 

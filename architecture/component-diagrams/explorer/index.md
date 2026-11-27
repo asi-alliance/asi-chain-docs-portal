@@ -57,15 +57,15 @@ The figure and the tables leave out the link table `native_transfer_result_alias
 | `transfers` | `deploy_id` varchar<br>`block_hash` varchar<br>`from_address` varchar<br>`to_address` varchar<br>`amount_dust` numeric<br>`event_index` int<br>`native_result_id` varchar |
 | `native_transfer_calls` | `block_hash` varchar<br>`deploy_id` varchar<br>`event_index` int<br>`requested_amount` text |
 | `native_transfer_results` | `call_id` varchar<br>`block_hash` varchar<br>`deploy_id` varchar<br>`phase` varchar<br>`success` boolean |
-| `validator_bonds` | `block_hash` varchar, `validator_public_key` varchar, `stake` numeric |
+| `validator_bonds` | `block_hash` varchar<br>`validator_public_key` varchar<br>`stake` numeric |
 | `block_validators` | none besides the key |
 | `balance_states` | `address` varchar<br>`block_hash` varchar<br>`unbonded_balance_dust` numeric<br>`bonded_balance_dust` numeric |
-| `validators` | `status` varchar, `total_stake` numeric |
-| `pending_deploys` | `deployer_address` varchar, `is_rejected` boolean |
-| `epoch_transitions` | `epoch_number` bigint, `start_block` bigint, `end_block` bigint |
-| `network_stats` | `block_number` bigint, `active_validators` int, `consensus_status` varchar |
+| `validators` | `status` varchar<br>`total_stake` numeric |
+| `pending_deploys` | `deployer_address` varchar<br>`is_rejected` boolean |
+| `epoch_transitions` | `epoch_number` bigint<br>`start_block` bigint<br>`end_block` bigint |
+| `network_stats` | `block_number` bigint<br>`active_validators` int<br>`consensus_status` varchar |
 | `indexer_state` | `value` text |
-| `network_metrics_buckets` | `deployments_count` bigint, `transfers_count` bigint |
+| `network_metrics_buckets` | `deployments_count` bigint<br>`transfers_count` bigint |
 
 The schema also follows these rules.
 
@@ -76,8 +76,7 @@ Amounts in the smallest token unit are `NUMERIC(78,0)` and limited to the unsign
 - `total_stake`
 - `bonded_balance_dust`
 - `unbonded_balance_dust`
-
-So is `phlo_price` in `deployments` and `pending_deploys`.
+- `phlo_price` in `deployments` and `pending_deploys`
 
 The matching `*_asi` columns are `NUMERIC(155,77)`, and the generated totals in `balance_states` are one digit wider.
 

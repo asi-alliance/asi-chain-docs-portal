@@ -43,11 +43,7 @@ A JavaScript `number` holds integers exactly only up to `9007199254740991` (`2^5
 
 The largest signed int64 is `9223372036854775807`, which is `9.223372036854775807` ASI with 18 decimals.
 
-Keep amounts as decimal strings and do the arithmetic with `bigint`.
-
-Build the `bigint` from the original string, because `BigInt(number)` cannot bring back digits that the `number` has already lost.
-
-Do not use `Number` or `parseFloat` for signing, balances or fees.
+Keep amounts as decimal strings and do the arithmetic with `bigint`. Build the `bigint` from the original string, because `BigInt(number)` cannot bring back digits that the `number` has already lost. Do not use `Number` or `parseFloat` for signing, balances or fees.
 
 The example formats an amount and sends nothing:
 

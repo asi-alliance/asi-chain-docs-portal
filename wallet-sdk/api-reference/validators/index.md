@@ -39,7 +39,7 @@ validateAccountName(name: string, maxLength?: number): { isValid: boolean; error
 
 Checks a wallet or account name. `maxLength` defaults to `30`.
 
-These characters are forbidden: `<` `>` `:` `"` `/` `\` `|` `?` `*`
+These characters are forbidden: `<`, `>`, `:`, `"`, `/`, `\`, `|`, `?` and `*`.
 
 | Check | `error` |
 |-------|---------|

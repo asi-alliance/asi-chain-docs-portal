@@ -99,7 +99,7 @@ docker restart observer
 
 1. To move to a new image, set `NODE_IMAGE` to the new digest from the network operator.
 2. Remove the container with `docker rm -f observer`.
-3. Run the `docker run -d` command of [Start the Observer](#start-the-observer) again. Keep the volume `observer-data`, because it holds the node identity.
+3. Run the `docker run -d` command of [Start the Observer](#start-the-observer) again. Keep the volume `observer-data`. It holds the node identity.
 
 </Steps>
 

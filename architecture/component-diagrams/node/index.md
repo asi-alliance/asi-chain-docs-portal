@@ -43,6 +43,8 @@ These routes take `?view=full|summary`:
 | `GET /status`, `/version`, `/metrics`, `/ws/events` | Status, version, Prometheus metrics and an event stream |
 | `/api/v1/*` | Versioned variants of status, deploy, explore-deploy and block routes |
 
+The node also listens on other ports:
+
 - The admin HTTP API on port 40405 has `POST /api/propose` and the admin variants under `/api/v1`.
 - The external gRPC server on 40401 serves only the Deploy service.
 - The internal gRPC server on 40402 serves Repl, Deploy, Propose and Lsp.

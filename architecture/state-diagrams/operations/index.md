@@ -25,7 +25,7 @@ The proposer checks every `casper.heartbeat.check-interval` (3 seconds by defaul
 
 - There are pending deploys.
 - New blocks from peers arrive. The proposer paces these proposals and skips them while the validator is too far ahead of the last finalized block.
-- The shard is stalled, which means the last finalized block is older than `max-lfb-age`. By default that age is 3 seconds.
+- The shard is stalled, which means the last finalized block is older than `max-lfb-age`. This setting is the maximum age of the last finalized block, 3 seconds by default.
 
   Every bonded validator then proposes at most one empty recovery block per `stale-recovery-min-interval` until finalization resumes. That interval defaults to 1.5 times the check interval.
 
