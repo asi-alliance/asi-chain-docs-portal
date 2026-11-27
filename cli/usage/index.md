@@ -170,7 +170,7 @@ A deploy that fails after the queue accepted it ends with `Transfer failed for d
 ## Next Steps
 
 <CardGrid columns="2">
-  <DocCard title="Network Endpoints" href="/reference/endpoints/">DevNet applications and node addresses</DocCard>
+  <DocCard title="Network Endpoints" href="/reference/endpoints/">DevNet applications and network settings</DocCard>
   <DocCard title="Container Images" href="/reference/container-images/">Published images, tags and digests</DocCard>
   <DocCard title="Set Up a Private Shard" href="/nodes/private-shard/">Start a shard to try balance and send</DocCard>
   <DocCard title="Troubleshooting" href="/help/troubleshooting/">Find a symptom and work through its checks</DocCard>

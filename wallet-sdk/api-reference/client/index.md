@@ -71,7 +71,7 @@ export function createClient(validatorUrl: string, indexerUrl: string): Promise<
                 ValidatorURL: validatorUrl,
                 ReadOnlyURL: validatorUrl,
                 IndexerURL: indexerUrl,
-                nodeApiProfile: NodeApiProfile.SCALA,
+                nodeApiProfile: NodeApiProfile.RUST,
             },
         },
         defaultNetwork: "DevNet",
@@ -181,7 +181,7 @@ export async function addStaging(client: Client, validatorUrl: string, indexerUr
         ValidatorURL: validatorUrl,
         ReadOnlyURL: validatorUrl,
         IndexerURL: indexerUrl,
-        nodeApiProfile: NodeApiProfile.SCALA,
+        nodeApiProfile: NodeApiProfile.RUST,
     });
     client.setNetwork(staging.id);
 

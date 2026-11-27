@@ -17,7 +17,7 @@ The Python indexer calls node gRPC and HTTP directly, then writes to PostgreSQL.
 
 ## Connection Details
 
-DevNet addresses for wallets, tools and the explorer are on [network endpoints](/reference/endpoints/). DevNet does not publish a separate observer address, and reads go through the same validator as writes. For any other network, request the bootstrap URI, approved image digest, shard and genesis settings, API URLs and resource requirements from its operator.
+DevNet applications are on [Network Endpoints](/reference/endpoints/). For the nodes of a network, request the bootstrap URI, approved image digest, shard and genesis settings, API URLs and resource requirements from its operator.
 
 ## Next Steps
 

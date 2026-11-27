@@ -11,7 +11,7 @@ Open the ASI:Chain applications, the npm package and the source repositories.
 | Explorer | [explorer.dev.asichain.io](https://explorer.dev.asichain.io) |
 | Faucet | [faucet.dev.asichain.io](https://faucet.dev.asichain.io) |
 
-Node addresses are on [Network Endpoints](/reference/endpoints/).
+The network settings of the wallet and the SDK are on [Network Endpoints](/reference/endpoints/).
 
 ## Packages
 

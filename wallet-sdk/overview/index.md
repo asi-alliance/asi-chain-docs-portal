@@ -31,7 +31,7 @@ The package ships ES module and CommonJS builds with type declarations.
 - `IndexerURL` is the GraphQL indexer that serves transaction history.
 - `nodeApiProfile` selects the request format of the node, `NodeApiProfile.SCALA` or `NodeApiProfile.RUST`.
 
-`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. For DevNet use `NodeApiProfile.SCALA`. The DevNet node addresses are listed on [Network Endpoints](/reference/endpoints/). Ask the network operator for the indexer address if you need transaction history.
+`nodeApiProfile` has no default. A missing or unknown value makes `Client.create` throw, because a guessed profile would send Scala-shaped requests to a Rust node. For DevNet use `NodeApiProfile.RUST`. Ask the network operator for the node and indexer addresses.
 
 ```ts
 import { NodeApiProfile, type TNetworksConfig } from "@asichain/asi-wallet-sdk";
@@ -41,7 +41,7 @@ export const networksConfig: TNetworksConfig = {
         ValidatorURL: "<validator-url>",
         ReadOnlyURL: "<validator-url>",
         IndexerURL: "<indexer-url>",
-        nodeApiProfile: NodeApiProfile.SCALA,
+        nodeApiProfile: NodeApiProfile.RUST,
     },
 };
 
@@ -67,14 +67,13 @@ import {
     type TNetworksConfig,
 } from "@asichain/asi-wallet-sdk";
 
-// A local node URL keeps the example offline. For DevNet, take the values from
-// Network Endpoints.
+// A local node URL keeps the example offline.
 const networksConfig: TNetworksConfig = {
     Local: {
         ValidatorURL: "http://localhost:40403",
         ReadOnlyURL: "http://localhost:40403",
         IndexerURL: "http://localhost:8080",
-        nodeApiProfile: NodeApiProfile.SCALA,
+        nodeApiProfile: NodeApiProfile.RUST,
     },
 };
 

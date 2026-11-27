@@ -74,7 +74,7 @@ The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/
 
 ### Where Do I Find a Node Address?
 
-Take the DevNet addresses from [Network Endpoints](/reference/endpoints/). For any other network, ask its operator for the URLs and the bootstrap identity. Host port mappings can differ from the container defaults.
+Ask the network operator for the node URLs and the bootstrap identity. Host port mappings can differ from the container defaults.
 
 ### Which Ports Must Be Reachable?
 
@@ -82,7 +82,7 @@ Peers connect over TCP on `40400` and `40404`. Clients need access to the extern
 
 ### Does an Observer Reject Writes?
 
-Yes. A node started without a validator key runs in read-only mode. It rejects deploys with `Deploy was rejected because node is running in read-only mode.` and does not propose blocks, but it answers queries. Exploratory deploys, which balance queries use, run only on a read-only node or on a node started in developer mode, such as DevNet Validator 1.
+Yes. A node started without a validator key runs in read-only mode. It rejects deploys with `Deploy was rejected because node is running in read-only mode.` and does not propose blocks, but it answers queries. Exploratory deploys, which balance queries use, run only on a read-only node or on a node started in developer mode.
 
 ## Tools
 
