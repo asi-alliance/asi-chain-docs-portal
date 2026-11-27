@@ -58,7 +58,9 @@ Click a deployment to open the transaction details. The header of that page has 
 
 The details page has four tabs: **Overview**, **Code**, **Transfers** and **Block Info**.
 
-The **Overview** tab shows the transaction ID, deployer, type and timestamp. Under **Execution Details** it lists the phlo cost, phlo price, phlo limit, the block after which the deploy is valid, and the signature. **Blockchain Information** gives the number and hash of the block that contains the transaction. The **Code** tab shows the deployed Rholang source, and the **Transfers** tab lists the transfers made by that deployment. When the deployment started or completed native transfer calls, the tab also has a **Native Transfer Calls** block with the tables **Calls started by this deploy** and **Calls completed by this deploy**. A call is **Pending**, **Completed**, **Rejected** or **Coalesced**.
+- **Overview** shows the transaction ID, deployer, type and timestamp. Under **Execution Details** it lists the phlo cost, phlo price, phlo limit, the block after which the deploy is valid, and the signature. **Blockchain Information** gives the number and hash of the block that contains the transaction.
+- **Code** shows the deployed Rholang source.
+- **Transfers** lists the transfers made by that deployment. When the deployment started or completed native transfer calls, the tab also has a **Native Transfer Calls** block with the tables **Calls started by this deploy** and **Calls completed by this deploy**. A call is **Pending**, **Completed**, **Rejected** or **Coalesced**.
 
 ## Pending
 
@@ -105,7 +107,11 @@ Four cards show the latest block, the average block time, transactions per secon
 
 The indexer is the service that reads blocks from the node and stores them in the database that the explorer queries. The **Indexer** page shows how far it has progressed.
 
-The label in the top right is **Synced**, **Syncing**, **Ahead of node**, **Waiting for first block**, **Stopped** or **Unavailable**. **Stopped** means that the indexer process is not running, and **Unavailable** means that the indexer cannot reach the node. The cards show **Sync Progress**, the **Last Indexed Block** with the number of blocks it is behind, the **Node Finalized Block** and the age of the **Last Update**. The table at the bottom repeats the last indexed block, the node finalized block and the sync status. The page reads the indexer status endpoint and refreshes every 5 seconds.
+- The label in the top right is **Synced**, **Syncing**, **Ahead of node**, **Waiting for first block**, **Stopped** or **Unavailable**. **Stopped** means that the indexer process is not running, and **Unavailable** means that the indexer cannot reach the node.
+- The cards show **Sync Progress**, the **Last Indexed Block** with the number of blocks it is behind, the **Node Finalized Block** and the age of the **Last Update**.
+- The table at the bottom repeats the last indexed block, the node finalized block and the sync status.
+
+The page reads the indexer status endpoint and refreshes every 5 seconds.
 
 ![The Indexer page with the sync status label, progress cards and the table of block numbers.](/images/explorer/indexer-status.webp){width=976 height=765}
 

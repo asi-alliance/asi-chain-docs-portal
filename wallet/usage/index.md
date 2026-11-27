@@ -41,7 +41,11 @@ Click **Continue**. The wallet opens on the **Accounts** page with your first ac
 
 </Steps>
 
-To use an existing wallet, click **Import Wallet** and enter the recovery phrase, or click **Import Wallet from keyfile** and pick a keyfile exported earlier with **Export Keyfile**. A single private key is imported from the **Accounts** page with **Import Private Key**. It becomes its own wallet, with its own password.
+To use an existing wallet, import it in one of three ways:
+
+- **Import Wallet** takes the recovery phrase.
+- **Import Wallet from keyfile** takes a keyfile exported earlier with **Export Keyfile**.
+- **Import Private Key** on the **Accounts** page takes a single private key. It becomes its own wallet, with its own password.
 
 The wallet asks for the password every time you open it in a browser that already holds a wallet (**Unlock Wallet**, then **Unlock**). **Logout** in the header locks the wallet again.
 
@@ -116,7 +120,14 @@ Send only ASI tokens to this address, and check that the wallet is on the right 
 
 **Transactions** lists the transactions of the selected account and refreshes itself every 30 seconds. The history comes from the indexer.
 
-Each row has a date, a type (**Send**, **Receive** or **Deploy**), a status (**Pending**, **Completed** or **Failed**), the sender (**From**), the recipient (**To**), the amount and a **Details** value.
+Each row shows:
+
+- the date
+- the type, **Send**, **Receive** or **Deploy**
+- the status, **Pending**, **Completed** or **Failed**
+- the sender (**From**) and the recipient (**To**)
+- the amount
+- a **Details** value
 
 ![The Transactions page with the account selector, the column filters and one Send and one Receive row.](/images/wallet/history.light.webp){.light-only width=1026 height=349}
 ![The Transactions page with the account selector, the column filters and one Send and one Receive row.](/images/wallet/history.dark.webp){.dark-only width=1026 height=349}
@@ -155,7 +166,14 @@ new stdout(`rho:io:stdout`), deployerId(`rho:rchain:deployerId`) in {
 
 ### Pro Mode
 
-Pro mode replaces the single field with an editor. A file panel on the left holds your files and a folder of **Examples**, the editor opens files in tabs, and the **Console** under it prints the result of **Explore** and **Deploy**. **Import Workspace** and **Export Workspace** load and save the whole file tree. The phlo fields and the **Load Example**, **Deploy**, **Explore** and **Clear** buttons work as in Lite mode.
+Pro mode replaces the single field with an editor.
+
+- A file panel on the left holds your files and a folder of **Examples**.
+- The editor opens files in tabs.
+- The **Console** under the editor prints the result of **Explore** and **Deploy**.
+- **Import Workspace** and **Export Workspace** load and save the whole file tree.
+
+The phlo fields and the **Load Example**, **Deploy**, **Explore** and **Clear** buttons work as in Lite mode.
 
 ## Accounts
 
@@ -176,7 +194,13 @@ The **Delete Wallet** icon in the header removes the wallet and all its accounts
 
 ## Network Settings
 
-DevNet is built into the wallet, so it does not appear on this page and cannot be edited. **Network Settings** is for networks of your own. The form **Custom Network Configuration** takes a **Network Name**, a **Node API Profile** (the node type the network runs), and the **Validator URL**, **Read-only URL** and **Indexer URL**. All three addresses are required, and **Save Custom Network** reports every field that is empty or invalid. Saved networks are listed under **Existing Custom Networks**.
+DevNet is built into the wallet, so it does not appear on this page and cannot be edited. **Network Settings** is for networks of your own. The form **Custom Network Configuration** takes:
+
+- a **Network Name**
+- a **Node API Profile**, the node type the network runs
+- the **Validator URL**, **Read-only URL** and **Indexer URL**
+
+All three addresses are required, and **Save Custom Network** reports every field that is empty or invalid. Saved networks are listed under **Existing Custom Networks**.
 
 ![The Network Settings page with the Custom Network Configuration form.](/images/wallet/settings-network.light.webp){.light-only width=648 height=1011}
 ![The Network Settings page with the Custom Network Configuration form.](/images/wallet/settings-network.dark.webp){.dark-only width=648 height=1011}
@@ -185,7 +209,13 @@ DevNet is built into the wallet, so it does not appear on this page and cannot b
 
 ## Bridge
 
-**Bridge** is the form for transfers from ASI:Chain to another network. **Source** is always **ASI Chain**, and **Destination** lists **Sepolia**, **Base Sepolia**, **FetchHub Dorado** and **Cardano Preprod**. You pick the account and the **Amount**, connect a wallet of the destination network with **Connect EVM Wallet**, **Connect Cardano Wallet** or **Connect Fetch Wallet**, which fills in the recipient address, and start with **Lock on ASI Chain**.
+**Bridge** is the form for transfers from ASI:Chain to another network.
+
+- **Source** is always **ASI Chain**.
+- **Destination** lists **Sepolia**, **Base Sepolia**, **FetchHub Dorado** and **Cardano Preprod**.
+- You pick the account and the **Amount**.
+- **Connect EVM Wallet**, **Connect Cardano Wallet** or **Connect Fetch Wallet** connects a wallet of the destination network and fills in the recipient address.
+- **Lock on ASI Chain** starts the transfer.
 
 ## Next Steps
 

@@ -48,7 +48,13 @@ GRAPHQL_URL=
 GRAPHQL_TIMEOUT_SECONDS=30
 ```
 
-The values after `OUTPUT_DIR` are the defaults. `DEPLOY_MAX_WAIT_SECONDS` is how long `send` waits for finalization, and `DEPLOY_CHECK_INTERVAL_SECONDS` is the pause between checks. The timeouts and both deploy values must be positive integers, and the check interval must not exceed the wait. Otherwise the CLI stops at startup before it sends anything. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports.
+The values after `OUTPUT_DIR` are the defaults. `.env.example` ships local mappings (`127.0.0.1:40412`, `40413`, `40453`) that fit only a node started with exactly those host ports.
+
+- `DEPLOY_MAX_WAIT_SECONDS` is how long `send` waits for finalization.
+- `DEPLOY_CHECK_INTERVAL_SECONDS` is the pause between checks. It must not exceed the wait.
+- The timeouts and both deploy values must be positive integers.
+
+With a value that breaks these rules, the CLI stops at startup before it sends anything.
 
 `send` submits through the external gRPC port of a validator (`40401` by default). Open it only to the clients that need it. The HTTP ports are mapped separately from the gRPC port. HTTPS URLs use TLS, and `NODE_CA_CERT` points to a private CA certificate.
 

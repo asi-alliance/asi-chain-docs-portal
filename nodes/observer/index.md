@@ -68,7 +68,11 @@ docker run -d --name observer --platform linux/amd64 \
 
 ### Check the Node
 
-Ask the node for its state and repeat until it is ready.
+Ask the node for its state and repeat until it is synchronized. `/api/ready` answers `{"ready":true} HTTP 200`, and `/api/status` of a synchronized observer shows:
+
+- `"isReadOnly": true` and `"isReady": true`
+- a `"peers"` value above 0 (if it stays at 0, see [No Peer Connection](/help/troubleshooting/#no-peer-connection))
+- a `"lastFinalizedBlockNumber"` that grows from one run to the next
 
 ```bash
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
@@ -77,8 +81,6 @@ curl -s http://127.0.0.1:40403/api/status \
 ```
 
 ![Terminal output of the two checks. The ready route answers HTTP 200, and jq prints isReadOnly true, isReady true, the number of peers and the last finalized block.](/images/nodes/observer-check.webp){.console width=680 height=255}
-
-`/api/ready` returns `{"ready":true} HTTP 200`. The observer is synchronized when `/api/status` shows `"isReadOnly": true`, `"isReady": true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next. If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-connection).
 
 ### Manage the Node
 

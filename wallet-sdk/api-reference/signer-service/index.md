@@ -18,7 +18,16 @@ import { SignerService } from "@asichain/asi-wallet-sdk";
 static deployDataProtobufSerialize(deployData: DeployData): Uint8Array
 ```
 
-Encodes a deploy as protobuf bytes. It writes `term` (field 2), `timestamp` (3), `phloPrice` (7), `phloLimit` (8), `validAfterBlockNumber` (10) and `shardId` (11) with `BinaryWriter`. An omitted `shardId`, like any empty or zero value, is left out of the bytes.
+Encodes a deploy as protobuf bytes with `BinaryWriter`. It writes these fields:
+
+- `term`, field 2
+- `timestamp`, field 3
+- `phloPrice`, field 7
+- `phloLimit`, field 8
+- `validAfterBlockNumber`, field 10
+- `shardId`, field 11
+
+An omitted `shardId`, like any empty or zero value, is left out of the bytes.
 
 | Name | Type | Description |
 |------|------|-------------|
@@ -51,7 +60,11 @@ interface SignedResult {
 }
 ```
 
-`SignedResult` is what a signing call returns: `deployer` is the hex-encoded public key, `signature` is the hex-encoded secp256k1 signature, and `sigAlgorithm` is `"secp256k1"`.
+`SignedResult` is what a signing call returns.
+
+- `deployer` is the hex-encoded public key.
+- `signature` is the hex-encoded secp256k1 signature.
+- `sigAlgorithm` is `"secp256k1"`.
 
 ## Signing
 

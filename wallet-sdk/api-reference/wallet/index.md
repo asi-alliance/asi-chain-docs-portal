@@ -187,7 +187,9 @@ class Account {
 }
 ```
 
-`getIndex` is `null` for a private-key account. `getFingerprint` returns the hex SHA-256 of the public key, which identifies the key pair without decrypting anything. `getBalance` and `getTransactionsHistory` read from the active network and need an initialized `Client`. The history combines transfers matched by address with deploys matched by the deployer public key, newest first.
+- `getIndex` is `null` for a private-key account.
+- `getFingerprint` returns the hex SHA-256 of the public key, which identifies the key pair without decrypting anything.
+- `getBalance` and `getTransactionsHistory` read from the active network and need an initialized `Client`. The history combines transfers matched by address with deploys matched by the deployer public key, newest first.
 
 ### Signer
 

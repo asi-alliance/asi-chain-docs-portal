@@ -101,7 +101,9 @@ docker run -d --name my-shard --network shard-net --platform linux/amd64 \
   --validator-private-key "$VALIDATOR_PRIVATE_KEY"
 ```
 
-The `chown` command is required because a new Docker volume is owned by `root` and the node runs as `daemon`. `--host` is the name under which other containers on `shard-net` reach the node. It resolves to a private address, so the node also needs `--allow-private-addresses`. The token flags explicitly select ASI with 18 decimals.
+- The `chown` command is required because a new Docker volume is owned by `root` and the node runs as `daemon`.
+- `--host` is the name under which other containers on `shard-net` reach the node. It resolves to a private address, so the node also needs `--allow-private-addresses`.
+- The token flags explicitly select ASI with 18 decimals.
 
 `--epoch-length 20 --quarantine-length 20` make epochs short, so that a validator you add later becomes active within minutes. Without them an epoch lasts 10,000 blocks and a withdrawn stake is held for 50,000 blocks. Only the node that creates the genesis reads these flags, and only at its first start. Nodes that join later take the values from the chain. Leave the flags out for a shard that should keep the defaults.
 
@@ -187,7 +189,11 @@ client() {
 6. [Fund the New Validator](#fund-the-new-validator) on this page.
 7. [Submit the Bond](/nodes/validator/#submit-the-bond) and [Wait for Activation](/nodes/validator/#wait-for-activation) on that page.
 
-The block starts the validator in the Docker network of the shard. The container name resolves to a private address, so the node needs `--allow-private-addresses`, and there is no router to forward ports, so it needs `--no-upnp`. The shard already publishes host ports `40403` and `40453`, so the new node uses `40413` and publishes neither `40400` nor `40404`. Containers in `shard-net` reach each other without published ports.
+The block starts the validator in the Docker network of the shard.
+
+- The container name resolves to a private address, so the node needs `--allow-private-addresses`.
+- There is no router to forward ports, so the node needs `--no-upnp`.
+- The shard already publishes host ports `40403` and `40453`, so the new node uses `40413` and publishes neither `40400` nor `40404`. Containers in `shard-net` reach each other without published ports.
 
 ```bash
 read -rsp 'Key password: ' F1R3NODE_VALIDATOR_PASSWORD; echo
@@ -205,7 +211,12 @@ docker run -d --name validator --network shard-net --platform linux/amd64 \
   --native-token-name ASI --native-token-symbol ASI --native-token-decimals 18
 ```
 
-Container names resolve only inside `shard-net`, so `curl` on the host cannot use the name in `$OBSERVER_HTTP`. It goes to the published ports instead. The read-only node answers on `http://localhost:40453` and the new validator on `http://127.0.0.1:40413`. The `client` commands run inside `shard-net` and use the container names as they are. Wherever Run a Validator calls `curl` with `$OBSERVER_HTTP`, write `http://localhost:40453` in its place.
+Container names resolve only inside `shard-net`, so `curl` on the host cannot use the name in `$OBSERVER_HTTP` and goes to the published ports instead:
+
+- the read-only node answers on `http://localhost:40453`
+- the new validator answers on `http://127.0.0.1:40413`
+
+The `client` commands run inside `shard-net` and use the container names as they are. Wherever Run a Validator calls `curl` with `$OBSERVER_HTTP`, write `http://localhost:40453` in its place.
 
 These two checks replace the ones on Run a Validator. They use port `40413`.
 

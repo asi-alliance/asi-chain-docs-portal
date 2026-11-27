@@ -53,7 +53,8 @@ interface ISessionPolicy {
 }
 ```
 
-`requirePassword` is `"once-per-session"` (the default) or `"every-signature"`. In the first mode, `openWallet`, `unlockWallet` or the first call that carries a password starts a session, and later operations reuse the decrypted secret until the session ends. `autoLockMs` is the length of the session and defaults to `DEFAULT_AUTO_LOCK_MS`, 15 minutes. Activity does not extend a session.
+- `requirePassword` is `"once-per-session"` (the default) or `"every-signature"`. In the first mode, `openWallet`, `unlockWallet` or the first call that carries a password starts a session, and later operations reuse the decrypted secret until the session ends.
+- `autoLockMs` is the length of the session and defaults to `DEFAULT_AUTO_LOCK_MS`, 15 minutes. Activity does not extend a session.
 
 In the second mode no session is ever held, every signature needs the password, and `unlockWallet` throws. A non-positive `autoLockMs` switches the client to this mode regardless of `requirePassword`.
 
@@ -132,7 +133,10 @@ unlockWallet(walletId: string, password: string): Promise<void>
 lockWallet(walletId: string): void
 ```
 
-`unlockWallet` takes the wallet id of a wallet that is already open, not the signer id of a stored one. `lockWallet` ends the session and clears the secret from memory, and the `walletLocked` event fires. Signing without a password after the session has expired throws `WalletLockedError` with status `403`, so a UI can handle it like an expired token and ask for the password again.
+- `unlockWallet` takes the wallet id of a wallet that is already open, not the signer id of a stored one.
+- `lockWallet` ends the session and clears the secret from memory, and the `walletLocked` event fires.
+
+Signing without a password after the session has expired throws `WalletLockedError` with status `403`, so a UI can handle it like an expired token and ask for the password again.
 
 ## Accounts
 
@@ -411,4 +415,6 @@ getInsensitiveAccountsData(): Promise<IInsensitiveCacheRecord[]>
 close(): Promise<void>
 ```
 
-`clearPersistence` closes the open wallets, deletes all stored data and emits `walletsChanged`. Wallets that are still being opened, created or imported are discarded, and their calls reject with `WalletOperationCancelledError`. `getInsensitiveAccountsData` needs the `withInsensitiveCacheStorage` flag. `close` locks and drops every open wallet, removes the event listeners, and shuts down the storage and the network clients. Closing twice does nothing.
+- `clearPersistence` closes the open wallets, deletes all stored data and emits `walletsChanged`. Wallets that are still being opened, created or imported are discarded, and their calls reject with `WalletOperationCancelledError`.
+- `getInsensitiveAccountsData` needs the `withInsensitiveCacheStorage` flag.
+- `close` locks and drops every open wallet, removes the event listeners, and shuts down the storage and the network clients. Closing twice does nothing.

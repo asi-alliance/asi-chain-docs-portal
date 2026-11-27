@@ -184,7 +184,12 @@ validateWalletKeyfile(source: unknown): { isValid: boolean; error?: string }
 validateWalletKeyfileAccounts(source: unknown, walletType: WalletTypes): { isValid: boolean; error?: string }
 ```
 
-`validateWalletKeyfileAccounts` checks the account list of a keyfile for its `walletType`. The list holds from 1 to `MAX_KEYFILE_ACCOUNTS` (1000) accounts, and each name is non-empty and at most `MAX_KEYFILE_ACCOUNT_NAME_LENGTH` (128) characters long. A private key keyfile holds a single account without an index. In an HD keyfile every account has an integer index from 0 to `Bip44Path.MAX_COMPONENT_VALUE`, and no index repeats.
+`validateWalletKeyfileAccounts` checks the account list of a keyfile for its `walletType`:
+
+- The list holds from 1 to `MAX_KEYFILE_ACCOUNTS` (1000) accounts.
+- Each name is non-empty and at most `MAX_KEYFILE_ACCOUNT_NAME_LENGTH` (128) characters long.
+- A private key keyfile holds a single account without an index.
+- In an HD keyfile every account has an integer index from 0 to `Bip44Path.MAX_COMPONENT_VALUE`, and no index repeats.
 
 ### ensureValid()
 

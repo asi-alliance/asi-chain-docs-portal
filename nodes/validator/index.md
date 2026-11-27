@@ -155,7 +155,11 @@ Anyone with access to Docker on this machine can read the password with `docker 
 
 ### Check Synchronization
 
-Ask the node for its state and repeat until it is synchronized.
+Ask the node for its state and repeat until it is synchronized. `/api/ready` answers `{"ready":true} HTTP 200`, and `/api/status` of a synchronized node shows:
+
+- `"isReady": true`
+- a `"peers"` value above 0
+- a `"lastFinalizedBlockNumber"` that grows from one run to the next
 
 ```bash
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40403/api/ready
@@ -164,8 +168,6 @@ curl -s http://127.0.0.1:40403/api/status \
 ```
 
 ![Terminal output of the two checks. The ready route answers HTTP 200, and jq prints isReady true, the number of peers and the last finalized block.](/images/nodes/validator-sync.webp){.console width=680 height=235}
-
-`/api/ready` returns `{"ready":true} HTTP 200`. The node is synchronized when `/api/status` shows `"isReady": true`, a `"peers"` value above 0 and a `"lastFinalizedBlockNumber"` that grows from one run to the next.
 
 ### Fund the Validator
 
