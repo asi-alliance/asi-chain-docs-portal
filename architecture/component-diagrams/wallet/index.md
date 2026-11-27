@@ -62,7 +62,7 @@ The SDK reads three addresses and a node profile for every network from its conf
 | `ValidatorURL` | Node that accepts signed deploys |
 | `ReadOnlyURL` | Node that answers balance queries and deploy status. There is no fallback to `ValidatorURL` |
 | `IndexerURL` | GraphQL endpoint with transaction history |
-| `nodeApiProfile` | `scala` or `rust`. It selects the Rholang terms, the request body of balance queries and the finalization threshold |
+| `nodeApiProfile` | `scala` or `rust`. It selects the Rholang terms, the request body of balance queries and how the SDK reads deploy finalization |
 
 The preinstalled network of the hosted wallet uses addresses that are built into the application. For the endpoints of DevNet, see [Network Endpoints](/reference/endpoints/).
 

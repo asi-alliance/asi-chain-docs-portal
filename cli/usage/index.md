@@ -22,9 +22,7 @@ docker run --rm --platform linux/amd64 --network none "$WALLET_IMAGE" send --hel
 
 ## Configuration
 
-The CLI is written for the HTTP and gRPC API of the Rust node.
-
-Use a Rust node, such as one started from the [node image](/nodes/image/) or a [private shard](/nodes/private-shard/), for `balance` and `send`.
+The CLI works with the HTTP and gRPC API of a Rust node, such as one started from the [node image](/nodes/image/) or a [private shard](/nodes/private-shard/).
 
 Copy the [`.env.example`](https://github.com/asi-alliance/asi-chain-wallet-cli/blob/dev/.env.example) to a private `.env`. The CLI has no default node addresses, and every command, including `create`, stops at startup if these four values are missing:
 
@@ -119,10 +117,6 @@ cargo build --release --locked
 
 The build downloads its dependencies from crates.io and GitHub.
 
-::: warning Select the dev Branch
-This guide follows the `dev` branch. A plain clone checks out the default branch `main` instead, so pass `--branch dev`.
-:::
-
 </Steps>
 
 ## Commands
@@ -154,8 +148,6 @@ asi-chain-wallet-cli send --to <RECIPIENT_ADDRESS> --amount <RAW_INTEGER_AMOUNT>
 ASI has 18 decimal places. See [Token Amounts](/reference/token-amounts/).
 
 Give amounts as exact integers. `send` reports success only after the deploy is finalized and the vault reports a successful transfer. If the outcome is unknown, keep the deploy ID and check the result before you send again.
-
-The node's native-token configuration and expected symbol must match the target shard.
 
 ## Next Steps
 

@@ -50,10 +50,6 @@ console.log(Object.keys(networksConfig));
 
 `Client.create` rejects an invalid URL, so replace the placeholders above before you create a client.
 
-::: warning Rust Nodes
-With `NodeApiProfile.RUST`, `watchDeploy` never reports a deploy as finalized, because a Rust node does not send the fault tolerance field that the SDK reads. See [Transaction Flow](/architecture/sequence-diagrams/transaction/).
-:::
-
 ## Try the SDK
 
 ### Create a Wallet

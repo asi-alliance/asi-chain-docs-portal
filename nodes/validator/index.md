@@ -50,8 +50,6 @@ docker pull --platform linux/amd64 "$CLIENT_IMAGE"
 docker pull --platform linux/amd64 "$NODE_IMAGE"
 ```
 
-Each `docker pull` prints a `Digest:` line.
-
 ### Create the Validator Key
 
 Create the key directory and generate the key pair in it. The directory must not exist yet. If it does, set `KEY_DIR` to another path. The second block saves the [public key](/reference/glossary/#public-key) and the [vault address](/reference/glossary/#vault-address) and prints the address, which starts with `1111`.

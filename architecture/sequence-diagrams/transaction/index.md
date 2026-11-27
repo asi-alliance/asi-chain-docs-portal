@@ -72,16 +72,13 @@ The SDK maps every answer to a status.
 | `IncludedInBlock` | The deploy is in a block that is not finalized |
 | `Finalized` | The block is finalized. The transfer is confirmed |
 | `CheckingError` | The request failed. Polling goes on |
+| `Rejected`, `Expired`, `Failed` | A Rust node reports that the deploy was rejected, expired or failed. The watch ends with `DeployVerdictError` |
 
 If the deploy is not finalized within 180 seconds, the watch ends with `DeployTimeoutError`. When it ends, the wallet invalidates the cached balance and history.
 
-For a Scala node the SDK reads the `faultTolerance` field of the answer and treats the deploy as finalized at 0.99 or above. For a Rust node the SDK looks for the same field with a threshold of 0.33, but a Rust node does not send it.
+For a Scala node the SDK reads the `faultTolerance` field of the answer and treats the deploy as finalized at 0.99 or above. For a Rust node the SDK reads `finalizationState` from the same answer and at the same time asks the validator for `GET /api/deploy-finalization-status/{sig}`. The first final status from either answer ends the check.
 
-::: warning Finalization on Rust Nodes
-A Rust node answers `GET /api/deploy/{id}` with `isFinalized` and `finalizationState` instead of `faultTolerance`. With the `rust` profile the SDK keeps the status at `IncludedInBlock` for a deploy that the node already reports as `Finalized`, and the watch ends with `DeployTimeoutError`.
-
-The node returns the deploy as soon as a block it knows contains it, with `isFinalized: false` until that block is finalized. If no known block contains the deploy, the node answers `404 deploy_not_found`, and the SDK reports `CheckingError`.
-:::
+A Rust node returns the deploy as soon as a block it knows contains it, with `isFinalized: false` until that block is finalized. If no known block contains the deploy, the node answers `404 deploy_not_found`, and the SDK reports `CheckingError`.
 
 ## Errors
 
@@ -90,6 +87,7 @@ The node returns the deploy as soon as a block it knows contains it, with `isFin
 | `BalanceUnavailableError` | The balance could not be read in phase 1 |
 | `DeploySubmissionRejectedError` | The validator refused the deploy with a 4xx response. The reservation is released |
 | `ApiRequestError` | A request to a node failed |
+| `DeployVerdictError` | A Rust node reported the deploy as `Rejected`, `Expired` or `Failed` |
 | `DeployTimeoutError` | The deploy was not finalized within the watch time |
 
 ## Deploying a Contract

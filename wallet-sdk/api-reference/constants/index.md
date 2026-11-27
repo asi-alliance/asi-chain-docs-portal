@@ -32,10 +32,9 @@ ASI has 18 decimal places. Pass `18` as `decimals` to the functions in [Function
 | Constant | Type | Value | Description |
 |----------|------|-------|-------------|
 | `SCALA_FAULT_TOLERANCE_THRESHOLD` | `number` | `0.99` | A deploy counts as finalized on a Scala node when its fault tolerance is at least this value. |
-| `RUST_FAULT_TOLERANCE_THRESHOLD` | `number` | `0.33` | The same check for a Rust node. |
 | `INVALID_BLOCK_NUMBER` | `number` | `-1` | Returned by `BlockService.getLatestBlockNumber()` when the block number cannot be read. |
 
-The SDK picks the threshold from the node API profile of the active network (`SCALA` or `RUST`).
+The SDK uses this threshold only for a network with the `SCALA` node API profile. With `RUST` it reads the finalization state that the node reports.
 
 ### Gas
 
