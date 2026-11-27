@@ -46,7 +46,7 @@ Create a wallet account, copy its address and paste it into the faucet at [fauce
 
 ### Is There a Waiting Period Between Requests?
 
-No. The faucet API sets no time limit between requests. Each request sends the amount that the faucet operator configured. The faucet refuses an address when its balance is equal to or above the eligibility limit, and the page then shows `Your address is not eligible`.
+No. The faucet API sets no time limit between requests. Each request sends the amount that the faucet operator configured. The faucet refuses an address when its balance is equal to or above the eligibility limit, and the page then shows `Your balance must be below <limit> ASI to claim tokens.`
 
 ### The Tokens Have Not Arrived. What Should I Do?
 

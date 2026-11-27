@@ -92,7 +92,7 @@ A Rust node returns the deploy as soon as a block it knows contains it, with `is
 
 ## Deploying a Contract
 
-The Deploy page follows the same four phases. It differs in two places. The term is the user's Rholang code, and the reserved amount is `phloLimit * phloPrice`. The page sets the phlo limit to 100000000 by default.
+The Deploy page follows the same four phases. It differs in two places. The term is the user's Rholang code, and the reserved amount is `phloLimit * phloPrice`. The page sets the phlo limit to 20000000 by default.
 
 ## Next Steps
 

@@ -32,7 +32,7 @@ As soon as the address is valid, the page loads its balance and shows it under *
 
 Press **FAUCET**. When the faucet accepts the request, the page shows `Tokens requested successfully.`, and the **TX status check** field on the right shows the `deploy_id` of the transfer. To follow an earlier request, paste its `deploy_id` into that field yourself.
 
-If the balance is equal to or above the limit, the button stays disabled and the page shows `Your address is not eligible`.
+If the balance is equal to or above the limit, the button stays disabled and the page shows `Your balance must be below <limit> ASI to claim tokens.`, with the limit of the faucet in place of `<limit>`.
 
 ### Follow the Status
 
@@ -55,7 +55,7 @@ If the transfer is not finalized after 15 minutes, the page stops checking and s
 
 ## Troubleshooting
 
-### Your Address Is Not Eligible
+### Your Balance Must Be Below the Limit
 
 The balance of the address is equal to or above the eligibility limit of the faucet. Send some tokens to another address or use a different address.
 

@@ -129,7 +129,7 @@ The column headers open filters: a time range (the last hour up to the last 180 
 
 ### Lite Mode
 
-Lite mode is a single code field with the **Phlo Limit** (100000000 by default) and the **Phlo Price** (1, fixed by the network and read-only).
+Lite mode is a single code field with the **Phlo Limit** (20000000 by default) and the **Phlo Price** (1, fixed by the network and read-only).
 
 - **Load Example** fills the field with a sample contract.
 - **Explore** runs the code read-only, without a deploy.
