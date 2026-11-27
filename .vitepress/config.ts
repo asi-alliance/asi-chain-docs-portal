@@ -42,8 +42,8 @@ const sidebar = [
     items: [
       { text: 'Shard and Node Roles', link: '/nodes/roles/' },
       { text: 'Node Image', link: '/nodes/image/' },
-      { text: 'Run an Observer', link: '/nodes/observer/' },
       { text: 'Run a Validator', link: '/nodes/validator/' },
+      { text: 'Run an Observer', link: '/nodes/observer/' },
       { text: 'Set Up a Private Shard', link: '/nodes/private-shard/' },
     ]
   },
