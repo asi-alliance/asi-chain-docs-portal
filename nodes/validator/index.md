@@ -1,6 +1,6 @@
 # Run a Validator
 
-Run a [validator node](/nodes/roles/) on ASI:Chain TestNet, then [bond](/reference/glossary/#bond) it and wait until it joins consensus. The commands carry the TestNet values, and a validator of another [shard](/reference/glossary/#shard) takes the values of its shard operator.
+Run a [validator node](/nodes/roles/) on ASI:Chain DevNet, then [bond](/reference/glossary/#bond) it and wait until it joins consensus.
 
 ::: info Terminal
 The commands are written for bash. On Linux run them in a terminal. On macOS run `bash` in a terminal first, because commands with `read -rsp` do not work in zsh. On Windows run them in a WSL terminal such as Ubuntu with the WSL integration of Docker Desktop turned on, and keep key files in the Linux home directory, not under `/mnt/c`, because the client refuses a key file that other users can read.
@@ -12,31 +12,31 @@ You need Docker, OpenSSL 3 and jq, plus:
 
 - A public IP address or DNS name of this machine.
 - TCP ports `40400` and `40404` open to the internet.
-- Test ASI for the stake and the fees.
-- The gRPC URL of a [bonded validator](/reference/glossary/#bonded-validator), from the network operator.
+- ASI for the stake and the fees.
+- The values of [Set the Variables](#set-the-variables) from the network operator.
 
 ## Run the Validator
 
-Run all steps in one bash terminal. In a new terminal, run the block of Set the Variables and the second block of Create the Validator Key again. The terminal screenshots come from a [private shard](/nodes/private-shard/), so the network names, amounts and block numbers in them differ from TestNet.
+Run all steps in one bash terminal. In a new terminal, run the block of Set the Variables and the second block of Create the Validator Key again. The terminal screenshots come from a [private shard](/nodes/private-shard/), so the network names, amounts and block numbers in them differ from DevNet.
 
 <Steps>
 
 ### Set the Variables
 
-The block holds the TestNet values. Replace the two values in angle brackets: `PUBLIC_HOST` is the address at which other nodes reach this machine, and `BONDED_VALIDATOR_GRPC` comes from the network operator. `PHLO_PRICE` is the network minimum, and `STAKE_ATOMIC_UNITS` is 1000 ASI in [atomic units](/reference/token-amounts/).
+Replace the values in angle brackets. `PUBLIC_HOST` is the address at which other nodes reach this machine, and the other values come from the network operator. `PHLO_PRICE` is the minimum [phlo](/reference/glossary/#phlo) price of the network, which an [observer](/reference/glossary/#observer) reports as `minPhloPrice` in `/api/status`. `STAKE_ATOMIC_UNITS` is the stake in [atomic units](/reference/token-amounts/).
 
 ```bash
 NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f'
 CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:9efdbf3937bc26d2fa0d461b953df5320fc733d138d8e7f2c916ebcae0bcc45c'
-NETWORK_ID='ASItestnet'
-SHARD_NAME='root'
+NETWORK_ID='<network ID>'
+SHARD_NAME='<shard name>'
 PUBLIC_HOST='<public IP or DNS name of this machine>'
-BOOTSTRAP_URI='rnode://4cadd9886def799dae30129419dd9fbd15da5dad@bootstrap.p2p.testnet.asichain.io?protocol=40400&discovery=40404'
+BOOTSTRAP_URI='rnode://<node ID>@<bootstrap host>?protocol=40400&discovery=40404'
 BONDED_VALIDATOR_GRPC='<gRPC URL of a bonded validator>'
-BONDED_VALIDATOR_HTTP='https://e0bnrhkdz5.execute-api.us-east-1.amazonaws.com/validator'
-OBSERVER_HTTP='https://e0bnrhkdz5.execute-api.us-east-1.amazonaws.com'
-PHLO_PRICE='100000000000'
-STAKE_ATOMIC_UNITS='1000000000000000000000'
+BONDED_VALIDATOR_HTTP='<HTTP URL of a bonded validator>'
+OBSERVER_HTTP='<HTTP URL of an observer>'
+PHLO_PRICE='<minimum phlo price>'
+STAKE_ATOMIC_UNITS='<stake in atomic units>'
 KEY_DIR="$HOME/validator-keys"
 
 client() {
@@ -149,7 +149,7 @@ curl -s http://127.0.0.1:40403/api/status \
 
 ### Fund the Validator
 
-Request test ASI from the [TestNet faucet](https://faucet.testnet.asichain.io/) for the address from `echo "$VALIDATOR_ADDRESS"`. One request gives 100 ASI, so repeat it until the balance reaches 1001 ASI, which is `1001000000000000000000` atomic units.
+Request ASI from the [faucet](/faucet/usage/) for the address from `echo "$VALIDATOR_ADDRESS"` until the balance covers `STAKE_ATOMIC_UNITS` and the fee of the bond. The fee is at most 10,000,000 phlo times `PHLO_PRICE`.
 
 ```bash
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
@@ -161,7 +161,7 @@ The output has the form `Balance for <address>: <atomic units>`.
 
 ### Submit the Bond
 
-Send the bond to a bonded validator of the network, not to your own node. Status and result queries go to the [observer](/reference/glossary/#observer). The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again.
+Send the bond to a [bonded validator](/reference/glossary/#bonded-validator) of the network, not to your own node. Status and result queries go to the observer. The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again.
 
 ```bash
 client bond-validator --stake "$STAKE_ATOMIC_UNITS" \

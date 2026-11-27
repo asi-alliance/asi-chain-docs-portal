@@ -121,7 +121,7 @@ Do not delete the data directory of a node that peers already know. The node ide
 
 ### Wait for the Epoch
 
-After a successful bond, `validator-status` reports `BONDED` and `NOT ACTIVE`. A bond becomes active only at the next epoch boundary, so this is the normal state between the bond and the boundary. The epoch length is fixed at genesis. It is 10 blocks on TestNet and 10,000 blocks by default.
+After a successful bond, `validator-status` reports `BONDED` and `NOT ACTIVE`. A bond becomes active only at the next epoch boundary, so this is the normal state between the bond and the boundary. The epoch length is fixed at genesis and is 10,000 blocks by default.
 
 The commands use the variables and the `client` function from [Run a Validator](/nodes/validator/#set-the-variables). To estimate the wait, read the blocks left in the epoch and the block rate. Take `blocksUntilNextEpoch` from `/api/epoch` and ignore its `quarantineLength`, which is a local setting of the node:
 
@@ -132,7 +132,7 @@ sleep 60
 curl -s "$OBSERVER_HTTP/api/status" | grep -o '"lastFinalizedBlockNumber":[0-9-]*'
 ```
 
-Divide `blocksUntilNextEpoch` by the number of blocks that finalized in the minute to get the wait in minutes. With the default epoch of 10,000 blocks the wait usually takes hours, and on TestNet it takes minutes. See [Wait for Activation](/nodes/validator/#wait-for-activation).
+Divide `blocksUntilNextEpoch` by the number of blocks that finalized in the minute to get the wait in minutes. With the default epoch of 10,000 blocks the wait usually takes hours. See [Wait for Activation](/nodes/validator/#wait-for-activation).
 
 ### Check the Bond Deploy
 
@@ -146,7 +146,7 @@ client deploy-status --sig "$DEPLOY_ID" --http "$OBSERVER_HTTP"
 curl -s "$OBSERVER_HTTP/api/deploy/$DEPLOY_ID"
 ```
 
-- An error about funds in `systemDeployError` means the vault could not pay for the stake and the fee. The fee is at most `phlo_limit * phlo_price`, which is 1 ASI on TestNet for the bond. The deploy has failed, and the node does not retry it. Fund the vault again as in [Fund the Validator](/nodes/validator/#fund-the-validator) and bond again.
+- An error about funds in `systemDeployError` means the vault could not pay for the stake and the fee. The fee is at most `phlo_limit * phlo_price`, and the bond uses a phlo limit of 10,000,000. The deploy has failed, and the node does not retry it. Fund the vault again as in [Fund the Validator](/nodes/validator/#fund-the-validator) and bond again.
 - A block hash and no error mean that the deploy is in a block and has no verdict yet. Run `deploy-status` again and do not bond again.
 - No block at all means that the deploy went to a node that cannot include it, for example your own node, a read-only node or any node that does not propose blocks. Send the bond to the gRPC and HTTP addresses of a bonded validator, as in [Submit the Bond](/nodes/validator/#submit-the-bond).
 - `already bonded` means that the key is in the bond set. Do not repeat the bond. Wait for the boundary.
