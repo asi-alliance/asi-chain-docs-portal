@@ -4,7 +4,16 @@
 
 `BrowserStorage` wraps the browser's IndexedDB. It keeps records in named tables and implements `ITableService<ITableRecord>`. You only need it directly when you want your own tables next to the SDK's.
 
-The class needs `indexedDB`, so it works only in a browser. The SDK's storage repositories use it to persist wallets, accounts and reservations in a browser. In Node.js they use `NodeStorage`, which has the same interface and keeps files in a directory (`DEFAULT_NODE_STORAGE_DIR`). All methods are asynchronous except `getVersion`, `getDatabaseName`, `getTableNamesList` and `isInitialized`.
+The class needs `indexedDB`, so it works only in a browser. The SDK's storage repositories use it to persist wallets, accounts and reservations in a browser.
+
+In Node.js they use `NodeStorage`, which has the same interface and keeps files in a directory (`DEFAULT_NODE_STORAGE_DIR`).
+
+All methods are asynchronous except these four:
+
+- `getVersion`
+- `getDatabaseName`
+- `getTableNamesList`
+- `isInitialized`
 
 ## Import
 
@@ -28,7 +37,11 @@ BrowserStorage.getInstance(name?: string): BrowserStorage
 
 ## Methods
 
-Methods that work with a table throw `Error("Table '<name>' does not exist. Use createTable() first.")` when the table is missing.
+Methods that work with a table throw an error when the table is missing:
+
+```text
+Error("Table '<name>' does not exist. Use createTable() first.")
+```
 
 ### init()
 
@@ -44,7 +57,9 @@ init(): Promise<IDBDatabase>
 createTable(tableName: string, keyPath?: string): Promise<void>
 ```
 
-`createTable` creates a table whose key is `keyPath` (default `"id"`) with an index on `createdAt`. IndexedDB can change its set of tables only in a version upgrade, so `createTable` and `dropTable` close the database and reopen it with the next version number.
+`createTable` creates a table whose key is `keyPath` (default `"id"`) with an index on `createdAt`.
+
+IndexedDB can change its set of tables only in a version upgrade, so `createTable` and `dropTable` close the database and reopen it with the next version number.
 
 ### dropTable()
 
@@ -114,7 +129,13 @@ getAll(tableName: string): Promise<ITableRecord[]>
 update(tableName: string, id: string | number, data: Partial<ITableRecord>): Promise<void>
 ```
 
-`update` merges `data` into the stored record and keeps its `id`. It throws `Error("Record with id '<id>' not found in table '<name>'")` when the record does not exist.
+`update` merges `data` into the stored record and keeps its `id`.
+
+It throws this error when the record does not exist:
+
+```text
+Error("Record with id '<id>' not found in table '<name>'")
+```
 
 ### delete()
 
@@ -174,7 +195,10 @@ getTableNamesList(): string[]
 
 ### ITableRecord
 
-`ITableRecord` is an object with a string `id` and any other fields. The `id` is the table key unless you pick another `keyPath` in `createTable`. `insert` and `insertMany` add the fields `createdAt` and `updatedAt` (Unix time in milliseconds), and `update` refreshes `updatedAt`.
+`ITableRecord` is an object with a string `id` and any other fields. The `id` is the table key unless you pick another `keyPath` in `createTable`.
+
+- `insert` and `insertMany` add the fields `createdAt` and `updatedAt` (Unix time in milliseconds).
+- `update` refreshes `updatedAt`.
 
 ## Example
 

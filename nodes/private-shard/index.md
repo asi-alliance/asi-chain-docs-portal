@@ -32,7 +32,10 @@ The number of nodes in a sample topology is not a minimum and does not guarantee
 
 ### Create the Genesis Key
 
-The genesis validator needs a key pair and the genesis wallet needs a [vault address](/reference/glossary/#vault-address). Both come from the ASI client, and one key serves both roles, which is enough for a test shard. `generate-key-pair --save` writes `private_key.hex` and `public_key.hex` into `$KEY_DIR`. The [public key](/reference/glossary/#public-key) has 130 hex characters and starts with `04`, and the vault address starts with `1111`.
+- The genesis validator needs a key pair and the genesis wallet needs a [vault address](/reference/glossary/#vault-address). Both come from the ASI client, and one key serves both roles, which is enough for a test shard.
+- `generate-key-pair --save` writes `private_key.hex` and `public_key.hex` into `$KEY_DIR`.
+- The [public key](/reference/glossary/#public-key) has 130 hex characters and starts with `04`.
+- The vault address starts with `1111`.
 
 ```bash
 CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:9efdbf3937bc26d2fa0d461b953df5320fc733d138d8e7f2c916ebcae0bcc45c'
@@ -187,7 +190,10 @@ echo "$VALIDATOR_ADDRESS"
 
 ### Convert the Key
 
-Convert `private_key.hex` into the encrypted file `f1r3fly.key` that the node reads. `openssl pkcs8` asks for a new password twice, and you type the same password when the node starts. The last line removes the temporary files that hold the plain key.
+Convert `private_key.hex` into the encrypted file `f1r3fly.key` that the node reads.
+
+- `openssl pkcs8` asks for a new password twice, and you type the same password when the node starts.
+- The last line removes the temporary files that hold the plain key.
 
 ```bash
 umask 077
@@ -204,7 +210,10 @@ rm -f "$KEY_DIR/ec.conf" "$KEY_DIR/key.der" "$KEY_DIR/key.pem"
 
 ### Start the Validator
 
-The first block creates the data volume, gives the node access to it and copies `f1r3fly.key` into it. The second asks for the key password and starts the node in `shard-net`. The node publishes host port `40413`, because the shard uses `40403` and `40453`, and like the other nodes of the shard it needs `--allow-private-addresses` and `--no-upnp`.
+The first block creates the data volume, gives the node access to it and copies `f1r3fly.key` into it. The second asks for the key password and starts the node in `shard-net`.
+
+- The node publishes host port `40413`, because the shard uses `40403` and `40453`.
+- Like the other nodes of the shard, it needs `--allow-private-addresses` and `--no-upnp`.
 
 ```bash
 docker volume create validator-data

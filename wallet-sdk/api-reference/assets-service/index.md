@@ -4,7 +4,9 @@
 
 `AssetsService` reads the balance of an address through an exploratory deploy (see [Balance Query Flow](/architecture/sequence-diagrams/balance/)). The service has one method. Transfers are not part of it: they go through [`Client`](/wallet-sdk/api-reference/client/), which signs and submits them.
 
-The package exports the class as `AssetsService`. You rarely build it yourself, because `ApiServiceRegistry.getInstance().assets` holds an instance. `Client.getBalance(address)` calls it and returns the amount as a `bigint`.
+The package exports the class as `AssetsService`. You rarely build it yourself, because `ApiServiceRegistry.getInstance().assets` holds an instance.
+
+`Client.getBalance(address)` calls it and returns the amount as a `bigint`.
 
 ## Import
 

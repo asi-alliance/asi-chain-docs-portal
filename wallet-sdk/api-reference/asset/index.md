@@ -64,7 +64,9 @@ getContractAddress(): string | null
 
 ## Default Asset
 
-`DEFAULT_ASSET` is the `Asset` that `Client.getBalance` and `Client.transfer` use. An `Account` also takes it as its primary asset unless another one is given. Its fields are:
+`DEFAULT_ASSET` is the `Asset` that `Client.getBalance` and `Client.transfer` use.
+
+An `Account` also takes it as its primary asset unless another one is given. Its fields are:
 
 - `name`, which is `"ASI"`
 - `id`, which is random and generated when the SDK loads

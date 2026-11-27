@@ -21,7 +21,11 @@ class CustomError extends Error {
 }
 ```
 
-Check errors with `instanceof` or `code`, not with `name`. The SDK sets `name` from the class name, but the published bundle is minified, so the name comes out as a short string such as `Je`. The `status` field is a hint for the UI and not a response from a server. For example, `403` on `WalletLockedError` means "ask for the password again".
+Check errors with `instanceof` or `code`, not with `name`.
+
+The SDK sets `name` from the class name, but the published bundle is minified, so the name comes out as a short string such as `Je`.
+
+The `status` field is a hint for the UI and not a response from a server. For example, `403` on `WalletLockedError` means "ask for the password again".
 
 ### CustomErrorCode
 
@@ -148,13 +152,17 @@ A well-formed keyfile with a wrong password gives `InvalidKeyfilePasswordError`,
 - `DomainClosedError` means the `Client` was closed for good. Create a new one instead of retrying.
 - `OperationsSuspendedError` is thrown while `clearPersistence` or `removeWallet` runs. The operation can be retried after that call finishes.
 - `NetworkBusyError` is thrown when a network is switched, updated or removed while it still has an operation in flight.
-- `DeploySubmissionRejectedError` extends `ApiRequestError` and means the node refused the deploy with a 4xx status. The deploy will not land and its reservation is released. Any other submission failure is a plain `ApiRequestError`, and the deploy may still have been accepted. `isRejectedByServer(error)` applies the same rule.
+- `DeploySubmissionRejectedError` extends `ApiRequestError` and means the node refused the deploy with a 4xx status. The deploy will not land and its reservation is released.
+- Any other submission failure is a plain `ApiRequestError`, and the deploy may still have been accepted. `isRejectedByServer(error)` applies the same rule.
 - `DeployTimeoutError` means the deploy was not finalized within the watch timeout. It may still be processed by the network.
 - `BalanceUnavailableError` means the balance could not be read, which is not the same as a zero balance.
 
 ### Storage Schema Errors
 
-These errors are thrown while a `Client` is created, before any wallet exists. All of them except `StorageMigrationChainError` extend `StorageSchemaError`, which adds `isStorageIntact: boolean`. When it is `true`, the stored data is untouched, so update the SDK and do not wipe anything. When it is `false`, storage may be partly migrated and has to be restored from an export.
+These errors are thrown while a `Client` is created, before any wallet exists. All of them except `StorageMigrationChainError` extend `StorageSchemaError`, which adds `isStorageIntact: boolean`.
+
+- When it is `true`, the stored data is untouched, so update the SDK and do not wipe anything.
+- When it is `false`, storage may be partly migrated and has to be restored from an export.
 
 | Class and Code | Status | `isStorageIntact` | Extra fields |
 |---|---|---|---|
