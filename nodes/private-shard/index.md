@@ -32,7 +32,7 @@ The number of nodes in a sample topology is not a minimum and does not guarantee
 
 ### Create the Genesis Key
 
-The genesis validator needs a key pair and the genesis wallet needs a vault address. Both come from the ASI client. This step uses one key for both roles, which is enough for a test shard.
+The genesis validator needs a key pair and the genesis wallet needs a [vault address](/reference/glossary/#vault-address). Both come from the ASI client, and one key serves both roles, which is enough for a test shard. `generate-key-pair --save` writes `private_key.hex` and `public_key.hex` into `$KEY_DIR`. The [public key](/reference/glossary/#public-key) has 130 hex characters and starts with `04`, and the vault address starts with `1111`.
 
 ```bash
 CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:9efdbf3937bc26d2fa0d461b953df5320fc733d138d8e7f2c916ebcae0bcc45c'
@@ -54,16 +54,16 @@ client generate-vault-address --private-key-file /keys/private_key.hex
 
 ![Terminal output of generate-key-pair and generate-vault-address with the saved key files, a public key that starts with 04 and a vault address that starts with 1111.](/images/nodes/shard-genesis-key.webp){.console width=680 height=275}
 
-`generate-key-pair --save` writes `private_key.hex` and `public_key.hex` into `$KEY_DIR`. The public key has 130 hex characters and starts with `04`. The vault address starts with `1111`.
-
 ::: danger Protect the Private Key
 `private_key.hex` is the signing key of the genesis validator and controls the genesis funds. Keep it in the directory with mode 700, and never paste its content into a command, a document or Git.
 :::
 
-Create the two genesis files in a directory named `genesis`.
+### Write the Genesis Files
 
-- `bonds.txt` has one line per bonded validator, `<public-key> <stake>`. The stake here is 1000000.
-- `wallets.txt` has one line per funded vault, `<vault-address>,<balance>`, with the balance in atomic units (10^-18 ASI). The balance here is 10^24, which is 1,000,000 ASI. Keep it large, because you later send funds from this wallet to the second validator.
+Create the two genesis files in a directory named `genesis`. The genesis wallet later funds the second validator, so its balance is large.
+
+- `bonds.txt` has one line per [bonded validator](/reference/glossary/#bonded-validator), `<public-key> <stake>`. The stake here is 1000000.
+- `wallets.txt` has one line per funded vault, `<vault-address>,<balance>`. The balance is in [atomic units](/reference/token-amounts/), and 10^24 is 1,000,000 ASI.
 
 ```bash
 mkdir genesis
@@ -75,11 +75,9 @@ cat genesis/bonds.txt genesis/wallets.txt
 
 ![Terminal output of the block. cat prints the bonds.txt line with the public key and the stake 1000000, then the wallets.txt line with the vault address and the balance.](/images/nodes/shard-genesis-files.webp){.console width=680 height=215}
 
-Keep the key directory. You need the same key later to send funds from the genesis wallet.
-
 ### Start a Single-Node Shard
 
-A single node can create its own genesis with `--standalone`. This is enough to check the setup before you plan several validators. Run the block from the folder that contains the `genesis` directory of the previous step.
+A single node creates its own genesis with `--standalone`. Run the block from the folder that contains the `genesis` directory.
 
 ```bash
 NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f'
@@ -101,17 +99,14 @@ docker run -d --name my-shard --network shard-net --platform linux/amd64 \
   --validator-private-key "$VALIDATOR_PRIVATE_KEY"
 ```
 
-- The `chown` command is required because a new Docker volume is owned by `root` and the node runs as `daemon`.
-- `--host` is the name under which other containers on `shard-net` reach the node. It resolves to a private address, so the node also needs `--allow-private-addresses`.
-- The token flags explicitly select ASI with 18 decimals.
+- `chown` gives the node, which runs as `daemon`, access to the new volume.
+- `--host` names the node inside `shard-net`. The name resolves to a private address, so the node needs `--allow-private-addresses`.
+- `--epoch-length 20 --quarantine-length 20` shorten [epochs](/reference/glossary/#epoch) from the default 10,000 blocks, so a validator added later becomes active within minutes. Only this node reads them.
+- `--validator-private-key` shows the key to anyone who can run `docker inspect`, so use it only for a throwaway shard. The box after the steps keeps the key off the command line.
 
-`--epoch-length 20 --quarantine-length 20` make epochs short, so that a validator you add later becomes active within minutes. Without them an epoch lasts 10,000 blocks and a withdrawn stake is held for 50,000 blocks. Only the node that creates the genesis reads these flags, and only at its first start. Nodes that join later take the values from the chain. Leave the flags out for a shard that should keep the defaults.
+### Check the Shard
 
-::: danger Throwaway Keys Only
-A hex key on the command line is visible to everyone who can run `docker inspect` on the host, so use this form only for a throwaway shard and never put a production key on a command line.
-:::
-
-Half a minute after the container starts, the command below will report the values you chose. It uses `jq` to print only the fields to check, and `address` is the value you need in the next step.
+Half a minute after the container starts, the node reports the values you chose. `address` is the bootstrap address of the shard, and the next steps read it from here.
 
 ```bash
 curl -s http://localhost:40403/api/status \
@@ -122,12 +117,10 @@ curl -s http://localhost:40403/api/status \
 
 ### Start a Read-Only Node
 
-Balance queries run as exploratory deploys, and a validator refuses them with `HTTP 400 (readonly_node_required)`. Wallets, the SDK and the [Wallet CLI](/cli/usage/) read balances from a read-only node, so start one next to the validator. This is the observer that [Run an Observer](/nodes/observer/) describes, here placed in a Docker network on this machine. When the validator reports `"isReady": true`, copy the `address` field from its `/api/status`. It has the form `rnode://<node-id>@my-shard?protocol=40400&discovery=40404`.
-
-Replace each value in angle brackets with the value from your shard.
+Balance queries run as exploratory deploys, and a validator refuses them with `HTTP 400 (readonly_node_required)`. Wallets, the SDK and the Wallet CLI read balances from a read-only node, so start one next to the validator. It is the [observer](/nodes/observer/) of this shard and connects through the `address` of the validator.
 
 ```bash
-BOOTSTRAP='rnode://<node-id>@my-shard?protocol=40400&discovery=40404'
+BOOTSTRAP="$(curl -s http://localhost:40403/api/status | jq -r .address)"
 docker volume create shard-obs-data
 docker run --rm --platform linux/amd64 -u root --entrypoint sh \
   -v shard-obs-data:/var/lib/rnode "$NODE_IMAGE" -c 'chown daemon:daemon /var/lib/rnode'
@@ -142,7 +135,7 @@ docker run -d --name my-shard-obs --network shard-net --platform linux/amd64 \
   --bootstrap "$BOOTSTRAP"
 ```
 
-Half a minute after the container starts, the command below will report `"isReadOnly": true`, `"peers": 1` and the finalized block height of the validator.
+Half a minute after the container starts, the command below will report `"isReadOnly": true`, `"peers": 1` and the finalized block height of the validator. If `peers` stays at 0, see [No Peer Connection](/help/troubleshooting/#no-peer-connection).
 
 ```bash
 curl -s http://localhost:40453/api/status \
@@ -151,49 +144,79 @@ curl -s http://localhost:40453/api/status \
 
 ![Terminal output of curl and jq with the status of the read-only node. It shows isReadOnly true, 1 peer and the last finalized block.](/images/nodes/shard-readonly-status.webp){.console width=680 height=195}
 
-Give the read-only node the same network ID, shard name and token flags as the validator. A node restarted with other token values stops.
-
-If `peers` stays at 0, see [Troubleshooting](/help/troubleshooting/#no-peer-connection).
-
 ### Add a Validator
 
-A second validator joins the running shard and becomes active at an epoch boundary. The steps are those of [Run a Validator](/nodes/validator/), with the values of this shard. First run the block of [Set the Variables](/nodes/validator/#set-the-variables) on that page as it is, without replacing the values in angle brackets. Then run the block below in the same terminal. Its values override them. `BOOTSTRAP` is the variable from the previous step, so in a new terminal run the `BOOTSTRAP` line of [Start a Read-Only Node](#start-a-read-only-node) again first. The block also defines the `client` function again, this time with `--network shard-net`, because the shard and the read-only node are reachable by their container names only inside that network.
+A second validator joins the running shard and becomes active at an epoch boundary. The next steps are those of [Run a Validator](/nodes/validator/) with the values of this shard. Run them in one terminal, and in a new terminal run the block below again.
 
 ```bash
-NETWORK_ID='my-shard-net'
-SHARD_NAME='my-shard'
-PUBLIC_HOST='validator'
-BOOTSTRAP_URI="$BOOTSTRAP"
-BONDED_VALIDATOR_GRPC='http://my-shard:40401'
-BONDED_VALIDATOR_HTTP='http://my-shard:40403'
-OBSERVER_HTTP='http://my-shard-obs:40403'
-PHLO_PRICE='1'
-STAKE_ATOMIC_UNITS='1000000'
+NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f'
+CLIENT_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/client@sha256:9efdbf3937bc26d2fa0d461b953df5320fc733d138d8e7f2c916ebcae0bcc45c'
 KEY_DIR="$HOME/validator-keys"
+BOOTSTRAP="$(curl -s http://localhost:40403/api/status | jq -r .address)"
 
 client() {
-  docker run --rm --platform linux/amd64 --network shard-net --read-only --cap-drop ALL \
-    --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
+  docker run --rm --platform linux/amd64 --network shard-net --read-only \
+    --cap-drop ALL --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
     --mount "type=bind,src=$KEY_DIR,dst=/keys,readonly" \
     "$CLIENT_IMAGE" "$@"
 }
 ```
 
-`PUBLIC_HOST` is the name of the container that you start for the new validator, so keep the container name `validator`. Then follow the steps of Run a Validator in this order.
+`client` runs in `shard-net`, where the validator answers as `my-shard` and the read-only node as `my-shard-obs`.
 
-1. [Create the Validator Key](/nodes/validator/#create-the-validator-key).
-2. [Convert the Key](/nodes/validator/#convert-the-key).
-3. [Prepare the Data Volume](/nodes/validator/#prepare-the-data-volume).
-4. The block below instead of [Start the Node](/nodes/validator/#start-the-node).
-5. The two checks below instead of [Check Synchronization](/nodes/validator/#check-synchronization).
-6. [Fund the New Validator](#fund-the-new-validator) on this page.
-7. [Submit the Bond](/nodes/validator/#submit-the-bond) and [Wait for Activation](/nodes/validator/#wait-for-activation) on that page.
+### Create the Validator Key
 
-The block starts the validator in the Docker network of the shard.
+Create the key directory of the new validator and generate its key pair. The directory must not exist yet. The second block saves the [public key](/reference/glossary/#public-key) and the [vault address](/reference/glossary/#vault-address) and prints the address, which starts with `1111`.
 
-- The container name resolves to a private address, so the node needs `--allow-private-addresses`.
-- There is no router to forward ports, so the node needs `--no-upnp`.
-- The shard already publishes host ports `40403` and `40453`, so the new node uses `40413` and publishes neither `40400` nor `40404`. Containers in `shard-net` reach each other without published ports.
+```bash
+mkdir -m 700 "$KEY_DIR" && \
+docker run --rm --platform linux/amd64 --network none --read-only --cap-drop ALL \
+  --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
+  --mount "type=bind,src=$KEY_DIR,dst=/keys" \
+  "$CLIENT_IMAGE" generate-key-pair --save --output-dir /keys
+```
+
+```bash
+VALIDATOR_PUBLIC_KEY="$(cat "$KEY_DIR/public_key.hex")"
+VALIDATOR_ADDRESS="$(client generate-vault-address \
+  --private-key-file /keys/private_key.hex | sed -n 's/^ *Vault address: //p')"
+echo "$VALIDATOR_ADDRESS"
+```
+
+![Terminal output of the two blocks. generate-key-pair saves private_key.hex and public_key.hex in /keys, and echo prints a vault address that starts with 1111.](/images/nodes/shard-validator-key.webp){.console width=680 height=295}
+
+### Convert the Key
+
+Convert `private_key.hex` into the encrypted file `f1r3fly.key` that the node reads. `openssl pkcs8` asks for a new password twice, and you type the same password when the node starts. The last line removes the temporary files that hold the plain key.
+
+```bash
+umask 077
+printf '%s\n' 'asn1=SEQUENCE:ec_key' '[ec_key]' 'version=INTEGER:1' \
+  "privateKey=FORMAT:HEX,OCTETSTRING:$(tr -d '\n' < "$KEY_DIR/private_key.hex")" \
+  'parameters=EXPLICIT:0,OID:secp256k1' > "$KEY_DIR/ec.conf"
+openssl asn1parse -genconf "$KEY_DIR/ec.conf" -noout -out "$KEY_DIR/key.der"
+openssl ec -inform DER -in "$KEY_DIR/key.der" -out "$KEY_DIR/key.pem"
+openssl pkcs8 -topk8 -v2 aes-256-cbc -in "$KEY_DIR/key.pem" -out "$KEY_DIR/f1r3fly.key"
+rm -f "$KEY_DIR/ec.conf" "$KEY_DIR/key.der" "$KEY_DIR/key.pem"
+```
+
+![Terminal output of the conversion. openssl ec prints read EC key and writing EC key, and openssl pkcs8 asks for the password twice without showing it.](/images/nodes/shard-validator-convert.webp){.console width=680 height=295}
+
+### Start the Validator
+
+The first block creates the data volume, gives the node access to it and copies `f1r3fly.key` into it. The second asks for the key password and starts the node in `shard-net`. The node publishes host port `40413`, because the shard uses `40403` and `40453`, and like the other nodes of the shard it needs `--allow-private-addresses` and `--no-upnp`.
+
+```bash
+docker volume create validator-data
+docker run --rm -u root --platform linux/amd64 --entrypoint chown \
+  -v validator-data:/var/lib/rnode "$NODE_IMAGE" daemon:daemon /var/lib/rnode
+test -f "$KEY_DIR/f1r3fly.key" && \
+docker run --rm -u root --platform linux/amd64 --entrypoint install \
+  -v validator-data:/var/lib/rnode \
+  -v "$KEY_DIR/f1r3fly.key:/tmp/f1r3fly.key:ro" \
+  "$NODE_IMAGE" -o daemon -g daemon -m 600 /tmp/f1r3fly.key /var/lib/rnode/f1r3fly.key \
+  || echo 'f1r3fly.key is missing, run the OpenSSL commands of Convert the Key again'
+```
 
 ```bash
 read -rsp 'Key password: ' F1R3NODE_VALIDATOR_PASSWORD; echo
@@ -203,22 +226,21 @@ docker run -d --name validator --network shard-net --platform linux/amd64 \
   -e F1R3NODE_VALIDATOR_PASSWORD \
   -v validator-data:/var/lib/rnode \
   -p 127.0.0.1:40413:40403 \
-  "$NODE_IMAGE" run --network-id "$NETWORK_ID" --shard-name "$SHARD_NAME" \
-  --host "$PUBLIC_HOST" --bootstrap "$BOOTSTRAP_URI" \
+  "$NODE_IMAGE" run --network-id my-shard-net --shard-name my-shard \
+  --host validator --bootstrap "$BOOTSTRAP" \
   --allow-private-addresses --no-upnp \
   --validator-public-key "$VALIDATOR_PUBLIC_KEY" \
   --validator-private-key-path /var/lib/rnode/f1r3fly.key \
   --native-token-name ASI --native-token-symbol ASI --native-token-decimals 18
 ```
 
-Container names resolve only inside `shard-net`, so `curl` on the host cannot use the name in `$OBSERVER_HTTP` and goes to the published ports instead:
+### Check the Validator
 
-- the read-only node answers on `http://localhost:40453`
-- the new validator answers on `http://127.0.0.1:40413`
+Ask the new validator for its state and repeat until it is synchronized. `/api/ready` answers `{"ready":true} HTTP 200`, and `/api/status` of a synchronized node shows:
 
-The `client` commands run inside `shard-net` and use the container names as they are. Wherever Run a Validator calls `curl` with `$OBSERVER_HTTP`, write `http://localhost:40453` in its place.
-
-These two checks replace the ones on Run a Validator. They use port `40413`.
+- `"isReady": true`
+- a `"peers"` value above 0
+- a `"lastFinalizedBlockNumber"` that grows from one run to the next
 
 ```bash
 curl -s -w ' HTTP %{http_code}\n' http://127.0.0.1:40413/api/ready
@@ -226,11 +248,11 @@ curl -s http://127.0.0.1:40413/api/status \
   | jq '{isReady, peers, lastFinalizedBlockNumber}'
 ```
 
-Look for the same values as in Check Synchronization. When the node is synchronized, fund it in the next step before you submit the bond.
+![Terminal output of the two checks on port 40413. The ready route answers HTTP 200, and jq prints isReady true, the number of peers and the last finalized block.](/images/nodes/shard-validator-checks.webp){.console width=680 height=235}
 
 ### Fund the New Validator
 
-The new validator needs funds for the stake and for the cost of the bond transaction. Send them from the genesis wallet. The `client` function reads the key from `$KEY_DIR`, so point it at the genesis key for this one command and then back at the validator key. `VALIDATOR_ADDRESS` is the vault address of the new validator from the step that created its key.
+The new validator needs funds for the stake and for the cost of the bond transaction. Send them from the genesis wallet. `client` reads the key from `$KEY_DIR`, so the block points it at the genesis key for the transfer and then back at the key of the new validator.
 
 ```bash
 KEY_DIR="$HOME/shard-keys"
@@ -239,12 +261,46 @@ client transfer --to-address "$VALIDATOR_ADDRESS" --amount 1000000000000 \
   --grpc http://my-shard:40401 --http http://my-shard:40403 \
   --observer http://my-shard-obs:40403 --shard-id my-shard --max-wait 300
 KEY_DIR="$HOME/validator-keys"
-client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
+client wallet-balance --address "$VALIDATOR_ADDRESS" --http http://my-shard-obs:40403
 ```
 
 ![Terminal output of the block. The transfer from the genesis wallet prints its deploy ID and block hash and ends with Transfer complete, and wallet-balance shows 1000000000000 for the new validator.](/images/nodes/shard-fund.webp){.console width=680 height=495}
 
-The balance shows `1000000000000`. Go back to [Submit the Bond](/nodes/validator/#submit-the-bond) and finish with [Wait for Activation](/nodes/validator/#wait-for-activation). With the epoch flags from the first node, the validator becomes `ACTIVE` at the nearest epoch boundary, which is no later than 20 blocks after the bond.
+The balance shows `1000000000000`.
+
+### Submit the Bond
+
+Send the bond to the first validator, `my-shard`. Status and result queries go to the read-only node. The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`.
+
+```bash
+client bond-validator --stake 1000000 \
+  --private-key-file /keys/private_key.hex \
+  --grpc http://my-shard:40401 --http http://my-shard:40403 \
+  --observer http://my-shard-obs:40403 --shard-id my-shard \
+  --phlo-price 1 --max-wait 300
+```
+
+![Terminal output of bond-validator with the stake, the phlo limit, the deploy ID, the block hash, the total time and Bonding complete.](/images/nodes/shard-validator-bond.webp){.console width=680 height=295}
+
+Replace the value in single quotes with the deploy ID and check the deploy. The bond is in the chain when `deploy-status` shows `State: Finalized` and `Rejection count: 0`.
+
+```bash
+DEPLOY_ID='<deploy ID>'
+client deploy-status --sig "$DEPLOY_ID" --http http://my-shard-obs:40403
+```
+
+![Terminal output of deploy-status for the bond with State Finalized and Rejection count 0.](/images/nodes/shard-validator-deploy-status.webp){.console width=680 height=275}
+
+### Wait for Activation
+
+The bond takes effect at the next epoch boundary, which comes no later than 20 blocks after the bond because of the epoch flags of the first node. Until then `validator-status` shows `BONDED` and `NOT ACTIVE`. Repeat the command until it shows `ACTIVE: participating in consensus` and `PROPOSING: blocks at …`. If the status stays `NOT ACTIVE` after the boundary, see [Bond Does Not Activate](/help/troubleshooting/#bond-does-not-activate).
+
+```bash
+client validator-status --public-key "$VALIDATOR_PUBLIC_KEY" \
+  --http http://my-shard-obs:40403
+```
+
+![Terminal output of validator-status after the epoch boundary with the lines BONDED, ACTIVE: participating in consensus and PROPOSING.](/images/nodes/shard-validator-active.webp){.console width=680 height=315}
 
 </Steps>
 
@@ -272,10 +328,6 @@ Then add `-e F1R3NODE_VALIDATOR_PASSWORD` to `docker run`, and pass these option
 ```
 
 The password stays in the container environment, so `docker inspect` shows it to anyone with access to Docker on the host.
-:::
-
-::: danger Use Fresh Credentials
-Do not reuse published development keys. Generate new credentials for every shard.
 :::
 
 ## Next Steps
