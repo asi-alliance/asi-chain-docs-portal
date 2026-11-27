@@ -53,7 +53,9 @@ It throws one of these errors.
 | `InvalidPasswordError` | AES-GCM rejects the data. This happens with a wrong password and with a modified ciphertext. |
 | `KeyDerivationError` | The key cannot be derived. |
 
-The message of `UnsupportedEncryptionVersionError` is `Unsupported version <v> of the encrypted payload, this SDK build supports version 2`.
+The message of `UnsupportedEncryptionVersionError` reads:
+
+`Unsupported version <v> of the encrypted payload, this SDK build supports version 2`
 
 ### deriveKey()
 

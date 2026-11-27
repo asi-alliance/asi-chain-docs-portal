@@ -31,12 +31,12 @@ The figure and the tables leave out the link table `native_transfer_result_alias
 
 | Table and Key | Related Tables |
 |---|---|
-| `blocks`<br>Key `block_hash` varchar | `block_parents`, `deployments`, `transfers`, `validator_bonds`, `block_validators`, `balance_states`, `native_transfer_calls` and `native_transfer_results`, each by `block_hash` |
+| `blocks`<br>Key `block_hash` varchar | Each by `block_hash`:<br>`block_parents`<br>`deployments`<br>`transfers`<br>`validator_bonds`<br>`block_validators`<br>`balance_states`<br>`native_transfer_calls`<br>`native_transfer_results` |
 | `block_parents`<br>Key `block_hash` varchar, `parent_hash` varchar | `blocks` by `block_hash` |
-| `deployments`<br>Key `deploy_id` varchar | `blocks` by `block_hash`. `transfers`, `native_transfer_calls` and `native_transfer_results` by `deploy_id` |
-| `transfers`<br>Key `id` bigint | `blocks` by `block_hash`, `deployments` by `deploy_id`, and at most one `native_transfer_results` row by `native_result_id` |
-| `native_transfer_calls`<br>Key `id` varchar | `blocks` by `block_hash`, `deployments` by `deploy_id`, and `native_transfer_results` by `call_id` |
-| `native_transfer_results`<br>Key `id` varchar | `blocks` by `block_hash`, `deployments` by `deploy_id`, `native_transfer_calls` by `call_id`, and at most one `transfers` row by `native_result_id` |
+| `deployments`<br>Key `deploy_id` varchar | `blocks` by `block_hash`<br>`transfers` by `deploy_id`<br>`native_transfer_calls` by `deploy_id`<br>`native_transfer_results` by `deploy_id` |
+| `transfers`<br>Key `id` bigint | `blocks` by `block_hash`<br>`deployments` by `deploy_id`<br>at most one `native_transfer_results` row by `native_result_id` |
+| `native_transfer_calls`<br>Key `id` varchar | `blocks` by `block_hash`<br>`deployments` by `deploy_id`<br>`native_transfer_results` by `call_id` |
+| `native_transfer_results`<br>Key `id` varchar | `blocks` by `block_hash`<br>`deployments` by `deploy_id`<br>`native_transfer_calls` by `call_id`<br>at most one `transfers` row by `native_result_id` |
 | `validator_bonds`<br>Key `id` bigint | `blocks` by `block_hash` |
 | `block_validators`<br>Key `block_hash` varchar, `validator_public_key` varchar | `blocks` by `block_hash` |
 | `balance_states`<br>Key `id` bigint | `blocks` by `block_hash` |
@@ -51,15 +51,15 @@ The figure and the tables leave out the link table `native_transfer_result_alias
 
 | Table | Main Columns |
 |---|---|
-| `blocks` | `block_number` bigint, `proposer` varchar, `finalization_status` varchar, `deployment_count` int, `token_decimals` int |
+| `blocks` | `block_number` bigint<br>`proposer` varchar<br>`finalization_status` varchar<br>`deployment_count` int<br>`token_decimals` int |
 | `block_parents` | `parent_index` int |
-| `deployments` | `block_hash` varchar, `deployer_address` varchar, `phlo_cost` bigint, `errored` boolean, `status` varchar |
-| `transfers` | `deploy_id` varchar, `block_hash` varchar, `from_address` varchar, `to_address` varchar, `amount_dust` numeric, `event_index` int, `native_result_id` varchar |
-| `native_transfer_calls` | `block_hash` varchar, `deploy_id` varchar, `event_index` int, `requested_amount` text |
-| `native_transfer_results` | `call_id` varchar, `block_hash` varchar, `deploy_id` varchar, `phase` varchar, `success` boolean |
+| `deployments` | `block_hash` varchar<br>`deployer_address` varchar<br>`phlo_cost` bigint<br>`errored` boolean<br>`status` varchar |
+| `transfers` | `deploy_id` varchar<br>`block_hash` varchar<br>`from_address` varchar<br>`to_address` varchar<br>`amount_dust` numeric<br>`event_index` int<br>`native_result_id` varchar |
+| `native_transfer_calls` | `block_hash` varchar<br>`deploy_id` varchar<br>`event_index` int<br>`requested_amount` text |
+| `native_transfer_results` | `call_id` varchar<br>`block_hash` varchar<br>`deploy_id` varchar<br>`phase` varchar<br>`success` boolean |
 | `validator_bonds` | `block_hash` varchar, `validator_public_key` varchar, `stake` numeric |
 | `block_validators` | none besides the key |
-| `balance_states` | `address` varchar, `block_hash` varchar, `unbonded_balance_dust` numeric, `bonded_balance_dust` numeric |
+| `balance_states` | `address` varchar<br>`block_hash` varchar<br>`unbonded_balance_dust` numeric<br>`bonded_balance_dust` numeric |
 | `validators` | `status` varchar, `total_stake` numeric |
 | `pending_deploys` | `deployer_address` varchar, `is_rejected` boolean |
 | `epoch_transitions` | `epoch_number` bigint, `start_block` bigint, `end_block` bigint |
@@ -67,12 +67,39 @@ The figure and the tables leave out the link table `native_transfer_result_alias
 | `indexer_state` | `value` text |
 | `network_metrics_buckets` | `deployments_count` bigint, `transfers_count` bigint |
 
-The schema also follows these rules:
+The schema also follows these rules.
 
-- Amounts in the smallest token unit (`amount_dust`, `stake`, `total_stake`, `bonded_balance_dust` and `unbonded_balance_dust`) are `NUMERIC(78,0)` and limited to the unsigned 256-bit range. So is `phlo_price` in `deployments` and `pending_deploys`.
-- The matching `*_asi` columns are `NUMERIC(155,77)`, and the generated totals in `balance_states` are one digit wider.
-- The tables `blocks`, `transfers`, `validators`, `validator_bonds`, `balance_states` and `native_transfer_calls` carry a `token_decimals` column.
-- The tables `validators`, `pending_deploys`, `epoch_transitions`, `network_stats`, `indexer_state` and `network_metrics_buckets` have no foreign keys. A `validators` row is linked to `validator_bonds` only by the public key value.
+Amounts in the smallest token unit are `NUMERIC(78,0)` and limited to the unsigned 256-bit range. These columns are:
+
+- `amount_dust`
+- `stake`
+- `total_stake`
+- `bonded_balance_dust`
+- `unbonded_balance_dust`
+
+So is `phlo_price` in `deployments` and `pending_deploys`.
+
+The matching `*_asi` columns are `NUMERIC(155,77)`, and the generated totals in `balance_states` are one digit wider.
+
+These tables carry a `token_decimals` column:
+
+- `blocks`
+- `transfers`
+- `validators`
+- `validator_bonds`
+- `balance_states`
+- `native_transfer_calls`
+
+These tables have no foreign keys:
+
+- `validators`
+- `pending_deploys`
+- `epoch_transitions`
+- `network_stats`
+- `indexer_state`
+- `network_metrics_buckets`
+
+A `validators` row is linked to `validator_bonds` only by the public key value.
 
 ## Next Steps
 

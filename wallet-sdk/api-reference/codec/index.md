@@ -114,7 +114,12 @@ Returns `ArrayBuffer`.
 toUint8Array(value: unknown): Uint8Array
 ```
 
-Converts the byte containers that appear after JSON round trips into a `Uint8Array`. It accepts a `Uint8Array` (returned as is), a Node.js `Buffer` serialized as `{ type: 'Buffer', data: number[] }`, an array of bytes, and an object with consecutive numeric keys `"0"`, `"1"`, and so on.
+Converts the byte containers that appear after JSON round trips into a `Uint8Array`. It accepts:
+
+- a `Uint8Array`, which is returned as is
+- a Node.js `Buffer` serialized as `{ type: 'Buffer', data: number[] }`
+- an array of bytes
+- an object with consecutive numeric keys `"0"`, `"1"`, and so on
 
 | Name | Type | Description |
 |------|------|-------------|
@@ -122,7 +127,9 @@ Converts the byte containers that appear after JSON round trips into a `Uint8Arr
 
 Returns `Uint8Array`.
 
-Throws `Error("Invalid byte value")` if an element is not an integer from 0 to 255 or if the keys of an object are not the consecutive indexes `"0"`, `"1"` and so on. It throws `Error("Unsupported data format")` for any other input, such as a string, a number or `null`.
+Throws `Error("Invalid byte value")` if an element is not an integer from 0 to 255 or if the keys of an object are not the consecutive indexes `"0"`, `"1"` and so on.
+
+It throws `Error("Unsupported data format")` for any other input, such as a string, a number or `null`.
 
 ### bufferToBigInt()
 

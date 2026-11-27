@@ -35,7 +35,12 @@ DevNet is built into the wallet. It is not listed on this page and cannot be edi
 
 Each URL must use `http` or `https` and contain a host. Do not add a path such as `/api`, because the wallet appends `/api/...` to the address itself. The **Direct Links** block under the fields lists the filled URLs as links, so you can open each one in a new tab.
 
-**Save Custom Network** checks every field and shows an error next to each one that fails, for example `Network name is required.` or `Validator URL: URL must use http or https protocol`. After a successful save the form is cleared. **Clear form** does the same at any time and restores the default profile.
+**Save Custom Network** checks every field and shows an error next to each one that fails, for example:
+
+- `Network name is required.`
+- `Validator URL: URL must use http or https protocol`
+
+After a successful save the form is cleared. **Clear form** does the same at any time and restores the default profile.
 
 ## Switch to the Network
 
@@ -90,7 +95,11 @@ server {
 }
 ```
 
-`proxy_pass` has no path after the port, so nginx forwards the request path unchanged and `/api/status` reaches the node as `/api/status`. With `proxy_pass http://127.0.0.1:40403/;` nginx would cut the `/api/` prefix, so the node would receive `/deploy` instead of `/api/deploy` and answer 404. The status check would still pass, because the node also serves `/status`, and the header would show `Connected` while deploys and queries fail.
+`proxy_pass` has no path after the port, so nginx forwards the request path unchanged and `/api/status` reaches the node as `/api/status`.
+
+With `proxy_pass http://127.0.0.1:40403/;` nginx would cut the `/api/` prefix, so the node would receive `/deploy` instead of `/api/deploy` and answer 404.
+
+The status check would still pass, because the node also serves `/status`, and the header would show `Connected` while deploys and queries fail.
 
 Then fill in the form with the domain only.
 
@@ -114,7 +123,11 @@ When the header shows `Disconnected`, open the browser console on the wallet pag
 
 ## Run the Wallet Yourself
 
-A wallet served from `http://localhost:3000` talks to nodes on `localhost` without the mixed content and local network prompts. The wallet reads its built-in networks from the `NETWORKS` variable at build time, and the build fails without it. Follow the Local Development steps in the wallet repository, [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet#local-development), and fill `NETWORKS` and the bridge variables in `.env` before `npm start`. The published Docker image always serves the networks it was built with, so your own configuration needs your own image.
+A wallet served from `http://localhost:3000` talks to nodes on `localhost` without the mixed content and local network prompts.
+
+The wallet reads its built-in networks from the `NETWORKS` variable at build time, and the build fails without it. Follow the Local Development steps in the wallet repository, [github.com/asi-alliance/asi-chain-wallet](https://github.com/asi-alliance/asi-chain-wallet#local-development), and fill `NETWORKS` and the bridge variables in `.env` before `npm start`.
+
+The published Docker image always serves the networks it was built with, so your own configuration needs your own image.
 
 ## Next Steps
 

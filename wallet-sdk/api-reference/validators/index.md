@@ -37,7 +37,9 @@ import {
 validateAccountName(name: string, maxLength?: number): { isValid: boolean; error?: string }
 ```
 
-Checks a wallet or account name. `maxLength` defaults to `30`. The forbidden characters are `<`, `>`, `:`, `"`, `/`, `\`, `|`, `?` and `*`.
+Checks a wallet or account name. `maxLength` defaults to `30`.
+
+These characters are forbidden: `<` `>` `:` `"` `/` `\` `|` `?` `*`
 
 | Check | `error` |
 |-------|---------|
@@ -80,7 +82,12 @@ Runs the same check as `validateAddress` and works as a type guard: after `if (i
 validateUrl(url: string): { isValid: boolean; error?: string }
 ```
 
-`validateUrl` accepts only `http:` and `https:` URLs with a host. The possible errors are `URL is required`, `URL is not valid`, `URL must use http or https protocol` and `URL must contain a host`.
+`validateUrl` accepts only `http:` and `https:` URLs with a host. The possible errors are:
+
+- `URL is required`
+- `URL is not valid`
+- `URL must use http or https protocol`
+- `URL must contain a host`
 
 ### isValidUrl()
 
@@ -152,7 +159,11 @@ validatePositiveAmount(amount: bigint): { isValid: boolean; error?: string }
 validateDeployPayload({ term, phloLimit, phloPrice, shardId }: TDeployDetails): { isValid: boolean; error?: string }
 ```
 
-`validateDeployPayload` requires a non-empty `term`, positive safe integers for `phloLimit` and `phloPrice` when they are set, and a non-empty `shardId` when it is set.
+`validateDeployPayload` requires:
+
+- a non-empty `term`
+- positive safe integers for `phloLimit` and `phloPrice` when they are set
+- a non-empty `shardId` when it is set
 
 ### validateReservationPayload()
 
@@ -168,7 +179,10 @@ validateReservationPayload(payload: TCreateTransactionReservationPayload): { isV
 validateReservationUpdateTarget(currentReservation: ITransactionReservation, payload: TCreateTransactionReservationPayload): { isValid: boolean; error?: string }
 ```
 
-`validateReservationUpdateTarget` checks that an updated reservation keeps the account and the network of `currentReservation`. The errors are `Reservation cannot be moved to another account` and `Reservation cannot be moved to another network`.
+`validateReservationUpdateTarget` checks that an updated reservation keeps the account and the network of `currentReservation`. The errors are:
+
+- `Reservation cannot be moved to another account`
+- `Reservation cannot be moved to another network`
 
 ### validateWalletKeyfile()
 
