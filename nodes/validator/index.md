@@ -24,7 +24,7 @@ One node needs this hardware.
 |---|---|---|
 | CPU | 4 cores | 8 cores |
 | Memory | 16 GB | 32 GB |
-| Disk | 500 GB SSD | 1 TB NVMe SSD |
+| Disk | 500 GB SSD | 1 TB SSD |
 
 The chain data grows with the traffic of the network, so keep it on a volume that you can extend and leave at least 30% of the volume free.
 
@@ -36,7 +36,14 @@ Run all steps in one bash terminal. In a new terminal, run the block of Set the 
 
 ### Set the Variables
 
-Replace the values in angle brackets. `PUBLIC_HOST` is the address at which other nodes reach this machine, and the other values come from the network operator. `PHLO_PRICE` is the minimum [phlo](/reference/glossary/#phlo) price of the network, which an [observer](/reference/glossary/#observer) reports as `minPhloPrice` in `/api/status`. `STAKE_ATOMIC_UNITS` is the stake in [atomic units](/reference/token-amounts/).
+Replace the values in angle brackets. The network operator gives all of them except `PUBLIC_HOST`.
+
+- `PUBLIC_HOST` is the public IP address or DNS name of this machine.
+- `NETWORK_ID`, `SHARD_NAME` and `BOOTSTRAP_URI` identify the network and its entry node.
+- `BONDED_VALIDATOR_GRPC` and `BONDED_VALIDATOR_HTTP` point to a [bonded validator](/reference/glossary/#bonded-validator) that receives the bond.
+- `OBSERVER_HTTP` points to an [observer](/reference/glossary/#observer) that answers status and balance queries.
+- `PHLO_PRICE` is the minimum [phlo](/reference/glossary/#phlo) price that an observer reports as `minPhloPrice` in `/api/status`.
+- `STAKE_ATOMIC_UNITS` is the stake in [atomic units](/reference/token-amounts/).
 
 ```bash
 NODE_IMAGE='public.ecr.aws/l2u2v4a8/asi-chain/node-rust@sha256:a0e619e48a88418d0d5caf12123a97d9c6a096dbfc45db60616f0276f700fb5f'
@@ -174,7 +181,7 @@ The output has the form `Balance for <address>: <atomic units>`.
 
 ### Submit the Bond
 
-Send the bond to a [bonded validator](/reference/glossary/#bonded-validator) of the network, not to your own node. Status and result queries go to the observer. The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again.
+Send the bond to a bonded validator of the network, not to your own node. Status and result queries go to the observer. The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again.
 
 ```bash
 client bond-validator --stake "$STAKE_ATOMIC_UNITS" \

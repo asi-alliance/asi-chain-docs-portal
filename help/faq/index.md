@@ -70,7 +70,7 @@ The Rust node, [github.com/asi-alliance/asi-chain-rust-node](https://github.com/
 
 ### What Hardware Does a Node Need?
 
-A validator and an observer need at least 4 CPU cores, 16 GB of memory and a 500 GB SSD. The recommended machine has 8 cores, 32 GB of memory and a 1 TB NVMe SSD. The chain data keeps growing, so put it on a volume that you can extend. See [System Requirements](/nodes/validator/#system-requirements).
+A validator and an observer need at least 4 CPU cores, 16 GB of memory and a 500 GB SSD. The recommended machine has 8 cores, 32 GB of memory and a 1 TB SSD. The chain data keeps growing, so put it on a volume that you can extend. See [System Requirements](/nodes/validator/#system-requirements).
 
 ### Which Container Registry Should I Use?
 
