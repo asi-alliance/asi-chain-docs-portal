@@ -287,7 +287,9 @@ interface IDeployWatchCallbacks {
 
 `DeploySubmissionRejectedError` extends `ApiRequestError`, so a handler for `ApiRequestError` also catches it.
 
-`signDeploy` builds the deploy, signs it and returns `{ data, deployer, signature, sigAlgorithm }` without sending anything and without creating a reservation. Use it when you submit the deploy yourself, and pair it with `addTransactionReservation`.
+`signDeploy` builds the deploy, signs it and returns `{ data, deployer, signature, sigAlgorithm }` without sending anything and without creating a reservation.
+
+Use it when you submit the deploy yourself, and pair it with `addTransactionReservation`.
 
 Unlike `deploy`, its request carries `phloPrice` and `shardId`. The defaults are:
 
@@ -387,7 +389,10 @@ interface IImportWalletKeyfileOptions {
 }
 ```
 
-There are two kinds of keyfile, told apart by `type`. A wallet keyfile (`asi-wallet-keyfile`) holds the encrypted secret and the encrypted account list, and it restores a wallet. An account keyfile (`asi-account-keyfile`) from `getExportedAccountData` is a public descriptor with the name, address and index. It holds no key material and restores nothing.
+There are two kinds of keyfile, told apart by `type`:
+
+- A wallet keyfile (`asi-wallet-keyfile`) holds the encrypted secret and the encrypted account list, and it restores a wallet.
+- An account keyfile (`asi-account-keyfile`) from `getExportedAccountData` is a public descriptor with the name, address and index. It holds no key material and restores nothing.
 
 `previewWalletKeyfileImport` writes nothing. It decrypts the keyfile, derives its accounts and marks each one `"new"` or `"already-imported"`. `source` can be the object or its JSON string.
 

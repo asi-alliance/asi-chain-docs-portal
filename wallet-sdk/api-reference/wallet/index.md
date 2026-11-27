@@ -234,7 +234,9 @@ type THDSigningContext = { passwordProvider?: SecretsProvider; index: number }
 type TSigningContext = TPKSigningContext | THDSigningContext
 ```
 
-`sign` uses the in-memory secret when a session is active and otherwise decrypts with `signingContext.passwordProvider`. It throws `WalletLockedError` when neither is available. The private key is zeroed after an ephemeral decrypt. `resolveDataKey` returns the second secret that encrypts non-secret user data at rest, such as transaction reservations. It is never used for signing.
+`sign` uses the in-memory secret when a session is active and otherwise decrypts with `signingContext.passwordProvider`. It throws `WalletLockedError` when neither is available. The private key is zeroed after an ephemeral decrypt.
+
+`resolveDataKey` returns the second secret that encrypts non-secret user data at rest, such as transaction reservations. It is never used for signing.
 
 ### SigningSession
 

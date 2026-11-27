@@ -55,7 +55,9 @@ It throws one of these errors.
 
 The message of `UnsupportedEncryptionVersionError` reads:
 
-`Unsupported version <v> of the encrypted payload, this SDK build supports version 2`
+```text
+Unsupported version <v> of the encrypted payload, this SDK build supports version 2
+```
 
 ### deriveKey()
 

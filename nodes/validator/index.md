@@ -177,7 +177,7 @@ curl -s http://127.0.0.1:40403/api/status \
 
 ### Fund the Validator
 
-Request ASI from the [faucet](/faucet/usage/) for the address from `echo "$VALIDATOR_ADDRESS"` until the balance covers `STAKE_ATOMIC_UNITS` and the fee of the bond. The fee is at most 10,000,000 phlo times `PHLO_PRICE`.
+Request ASI from the [faucet](/faucet/usage/) for the address that `echo "$VALIDATOR_ADDRESS"` prints. Repeat until the balance covers `STAKE_ATOMIC_UNITS` and the fee of the bond, which is at most 10,000,000 phlo times `PHLO_PRICE`.
 
 ```bash
 client wallet-balance --address "$VALIDATOR_ADDRESS" --http "$OBSERVER_HTTP"
@@ -189,7 +189,7 @@ The output has the form `Balance for <address>: <atomic units>`.
 
 ### Submit the Bond
 
-Send the bond to a bonded validator of the network, not to your own node. Status and result queries go to the observer. The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again.
+Send the bond to a bonded validator of the network, not to your own node. Status and result queries go to the observer.
 
 ```bash
 client bond-validator --stake "$STAKE_ATOMIC_UNITS" \
@@ -201,7 +201,7 @@ client bond-validator --stake "$STAKE_ATOMIC_UNITS" \
 
 ![Terminal output of bond-validator with the stake, the phlo limit, the deploy ID, the block hash, the total time and Bonding complete.](/images/nodes/validator-bond.webp){.console width=680 height=295}
 
-Replace the value in single quotes with the deploy ID and check the deploy. The bond is in the chain when `deploy-status` shows `State: Finalized` and `Rejection count: 0`.
+The command prints `Deploy ID`, `Block hash` and `Total time`, and ends with `Bonding complete`. If the command times out, check the [deploy](/reference/glossary/#deploy) before you bond again. Replace the value in single quotes with the deploy ID and check the deploy. The bond is in the chain when `deploy-status` shows `State: Finalized` and `Rejection count: 0`.
 
 ```bash
 DEPLOY_ID='<deploy ID>'

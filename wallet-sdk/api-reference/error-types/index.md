@@ -159,7 +159,9 @@ A well-formed keyfile with a wrong password gives `InvalidKeyfilePasswordError`,
 
 ### Storage Schema Errors
 
-These errors are thrown while a `Client` is created, before any wallet exists. All of them except `StorageMigrationChainError` extend `StorageSchemaError`, which adds `isStorageIntact: boolean`.
+These errors are thrown while a `Client` is created, before any wallet exists. All of them except `StorageMigrationChainError` extend `StorageSchemaError`.
+
+`StorageSchemaError` adds `isStorageIntact: boolean`:
 
 - When it is `true`, the stored data is untouched, so update the SDK and do not wipe anything.
 - When it is `false`, storage may be partly migrated and has to be restored from an export.

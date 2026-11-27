@@ -72,7 +72,11 @@ An `Account` also takes it as its primary asset unless another one is given. Its
 - `id`, which is random and generated when the SDK loads
 - `decimals`, which is the default `NATIVE_TOKEN_DECIMALS_AMOUNT`
 
-An `Asset` for ASI with 18 decimal places is `new Asset({ id: "asi", name: "ASI", decimals: 18 })`.
+An `Asset` for ASI with 18 decimal places is created like this:
+
+```ts
+new Asset({ id: "asi", name: "ASI", decimals: 18 });
+```
 
 ## Example
 

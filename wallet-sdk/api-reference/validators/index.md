@@ -55,7 +55,9 @@ validateAddress(address: string): AddressValidationResult
 
 `validateAddress` runs the full decode and checksum check and reports the first failing step.
 
-`AddressValidationResult` is `{ isValid: boolean; errorCode?: AddressValidationErrorCode }`. `AddressValidationErrorCode` is an enum exported from the package root, and its member values equal their names.
+`AddressValidationResult` is `{ isValid: boolean; errorCode?: AddressValidationErrorCode }`.
+
+`AddressValidationErrorCode` is an enum exported from the package root, and its member values equal their names.
 
 | Step | `errorCode` | Passes When |
 |------|-------------|-------|
