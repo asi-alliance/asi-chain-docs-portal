@@ -14,7 +14,19 @@ You need:
 - A public IP address or DNS name of this machine.
 - TCP ports `40400` and `40404` open to the internet.
 - The values of [Set the Variables](#set-the-variables) from the network operator.
-- The CPU, memory and disk sizes that the network operator recommends.
+- A machine that meets the [system requirements](#system-requirements).
+
+## System Requirements
+
+One node needs this hardware.
+
+| Resource | Minimum | Recommended |
+|---|---|---|
+| CPU | 4 cores | 8 cores |
+| Memory | 16 GB | 32 GB |
+| Disk | 500 GB SSD | 1 TB NVMe SSD |
+
+The chain data grows with the traffic of the network, so keep it on a volume that you can extend and leave at least 30% of the volume free.
 
 ## Run the Observer
 
